@@ -38,8 +38,30 @@ Current phase. What's blocked, what's next.
 - 2026-05-06 — project initialized
 
 ## Links to shared-intelligence used by this project
+
+Manually-curated links (add by hand as you adopt patterns / tools / lessons):
+
 - [[ ]]
 - [[ ]]
+
+### Suggested by VIS extractions
+
+Source notes flagged with this project in their `relevant-projects:` frontmatter. Review periodically; if a source's content is genuinely useful, promote a link to it (or to one of its derived artifacts) into the manual list above.
+
+*(v1 scope: surfaces source notes only. Tools, tactics, and patterns derived from a relevant source are reachable via that source's "Extracted artifacts" section. See `phase-3-plus-queue.md` item #2 for the v2 upgrade criteria.)*
+
+```dataview
+TABLE WITHOUT ID
+  file.link AS "Suggested",
+  type AS "Type",
+  ingested AS "Ingested",
+  tier AS "Tier"
+FROM "00_inbox" OR "03_domains" OR "05_shared-intelligence"
+WHERE contains(relevant-projects, this.project-name)
+  AND !contains(this.file.outlinks, file.link)
+SORT ingested DESC
+LIMIT 10
+```
 
 ## Lessons promoted from this project
 - [[ ]]
