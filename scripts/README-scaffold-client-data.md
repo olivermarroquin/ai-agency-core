@@ -92,9 +92,25 @@ python scaffold-client-data.py \
     --tier3-template-out ~/workspace/second-brain-tier3/clients/s-and-h-contracting/credentials.md
 ```
 
-The script always writes the file the operator points it at — it doesn't try
-to read the tier-3 vault back. (Per the standing convention, Cowork doesn't
-read tier-3.)
+**The script always prompts before writing to tier-3** — `--overwrite` does
+not bypass this. Two prompts are possible:
+
+- **If the destination file does NOT exist:**
+  `Create new tier-3 credentials file at <path>? [y/N]:` — default no. Type
+  `y` to create.
+- **If the destination file already exists:**
+  `Tier-3 file already exists at <path> (N bytes) — Cowork can't read it
+  to confirm it's empty. Overwrite with a fresh empty template? [y/N]:` —
+  default no. The size hint helps you remember whether you've already
+  populated it.
+
+On any answer other than `y`/`yes`, the script skips the write and prints
+the template to stdout so you can copy individual sections by hand without
+losing existing credentials.
+
+This is the standing rule because Cowork (and the script when invoked from
+Cowork) cannot read the tier-3 vault back — there's no way to verify "is
+this safe to overwrite" without operator confirmation.
 
 ### Regenerate an existing client (sanity check)
 

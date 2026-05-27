@@ -1329,15 +1329,40 @@ def scaffold(
 
     tier3_body = render_tier3_template(client_slug, data.get("name"))
     if tier3_template_out:
-        tier3_template_out.parent.mkdir(parents=True, exist_ok=True)
-        if tier3_template_out.exists() and not overwrite:
-            print(
-                f"→ Tier-3 template path already exists at {tier3_template_out} "
-                f"(use --overwrite to replace; otherwise nothing written)."
+        # ALWAYS prompt before writing to tier-3, regardless of --overwrite.
+        # The script cannot read the tier-3 vault back, so we cannot tell
+        # whether an existing file holds real credentials. Default to skip
+        # on Enter; the operator types 'y' explicitly to confirm.
+        if tier3_template_out.exists():
+            try:
+                size = tier3_template_out.stat().st_size
+            except OSError:
+                size = None
+            size_str = f"{size} bytes" if size is not None else "unknown size"
+            prompt = (
+                f"\n  Tier-3 file already exists at {tier3_template_out}\n"
+                f"  ({size_str}) — Cowork can't read it to confirm it's empty.\n"
+                f"  Overwrite with a fresh empty template? [y/N]: "
             )
         else:
+            prompt = (
+                f"\n  Create new tier-3 credentials file at\n"
+                f"  {tier3_template_out}? [y/N]: "
+            )
+        try:
+            answer = input(prompt).strip().lower()
+        except EOFError:
+            answer = ""
+        if answer == "y" or answer == "yes":
+            tier3_template_out.parent.mkdir(parents=True, exist_ok=True)
             tier3_template_out.write_text(tier3_body, encoding="utf-8")
             print(f"→ Wrote tier-3 template:      {tier3_template_out}")
+        else:
+            print("→ Tier-3 template NOT written (you said no, or no answer given).")
+            print("  The template is printed below — copy any sections you need.")
+            print("-" * 70)
+            print(tier3_body)
+            print("-" * 70)
     else:
         print()
         print("Tier-3 template (paste into ~/workspace/second-brain-tier3/clients/"
