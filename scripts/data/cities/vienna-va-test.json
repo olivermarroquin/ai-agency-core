@@ -1,0 +1,114 @@
+{
+  "_comment": "Per-city data for Vienna, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "vienna-va",
+  "name": "Vienna",
+  "name_with_state": "Vienna, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Fairfax County",
+  "county_full": "Fairfax County, Virginia",
+  "distance_from_hq_phrase": "Vienna is 15 min from our home base in Fairfax",
+  "geographic_anchor_paragraph": "Vienna, VA sits at an interesting electrical crossroads. The town runs roughly between the Wolf Trap area to the west, the Tysons-edge to the east, Hunter Mill Road as its southern spine, and the Maple Avenue corridor at the center. Vienna is 10-15 minutes from most Fairfax County reference points and 25-40 minutes from downtown DC, depending on traffic.",
+  "audience_descriptor": "Residential homeowners in Vienna, VA and surrounding Northern Fairfax County neighborhoods including Vienna Woods, Hunter Mill, Tysons-edge, and Wolf Trap.",
+  "no_trip_charge_cities": [
+    "Vienna",
+    "McLean",
+    "Oakton",
+    "Tysons",
+    "Fairfax"
+  ],
+  "neighborhoods": [
+    {
+      "name": "Vienna Woods",
+      "blurb": "the postwar neighborhood north and west of Maple Avenue"
+    },
+    {
+      "name": "Country Club Hills / Westwood Country Club area",
+      "blurb": "mid-century homes near the Westwood golf grounds"
+    },
+    {
+      "name": "Hunter Mill District",
+      "blurb": "south of the Vienna town line, between the W&amp;OD trail and Hunter Mill Road"
+    },
+    {
+      "name": "Tysons-edge",
+      "blurb": "the Vienna sliver of the Tysons commercial district, including newer townhomes off Route 7"
+    },
+    {
+      "name": "Wolf Trap area",
+      "blurb": "the western edge of Vienna near the Wolf Trap National Park boundary"
+    },
+    {
+      "name": "Maple Avenue corridor",
+      "blurb": "the central commercial spine, plus the adjacent residential blocks"
+    },
+    {
+      "name": "Dunn Loring-edge",
+      "blurb": "the southern Vienna blocks near Dunn Loring Metro"
+    }
+  ],
+  "other_areas_paragraph": "Outside Vienna, we serve <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Oakton, Tysons, Burke, Annandale, Falls Church, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
+  "housing_patterns": [
+    {
+      "title": "1950s-1970s split-levels &amp; ranches",
+      "neighborhood_examples": "Vienna Woods, Country Club area, neighborhoods near Westwood",
+      "context_paragraph": "Built with 100-amp panels and circuits sized for the appliances of the era — toaster, fridge, color TV, a window unit if you were lucky. Plumbing is original galvanized steel running to copper at the fixtures; gas service was an afterthought in many homes. Insulation is thin (R-13 walls at best, often less). Fast-forward to 2026: induction range, central AC, two refrigerators, a tankless water heater, and an EV charger in the garage. Modern load and load patterns overwhelm circuits the original builder never planned for.",
+      "symptoms": "100-amp panels with circuits sized for 1960s loads; frequent breaker trips when modern appliances run simultaneously; pre-1985 Federal Pacific or Pushmatic panels often flagged by insurance at renewal."
+    },
+    {
+      "title": "1970s-1990s colonials &amp; traditionals",
+      "neighborhood_examples": "Hunter Mill District, Vienna proper, north of Maple Avenue",
+      "context_paragraph": "200-amp service standard but wired with the now-deprecated aluminum branch wiring for a window in the mid-1970s (NEC banned aluminum branch circuits in 1972 but installation continued for several years), or with GFCI gaps in kitchens and bathrooms that predate the 1996 code requirement (NEC 1996 made GFCIs mandatory at every kitchen counter receptacle; pre-1996 builds usually have one or two if any). Plumbing is mostly copper with early PEX appearing in the 1990s. Central AC is standard.",
+      "symptoms": "150A panels original at construction; some replaced with Federal Pioneer in the 1980s carrying the same risk profile; EV charger or whole-house renovation usually triggers the 200A upgrade."
+    },
+    {
+      "title": "2000s-2020s townhomes &amp; newer detached",
+      "neighborhood_examples": "Tysons-edge, Wolf Trap area, newer subdivisions",
+      "context_paragraph": "Newer homes are not exempt from electrical or plumbing issues. AFCI breakers (the arc-fault interrupters required by NEC 2008 and tightened in subsequent code cycles) are sensitive by design and trip on any noisy load. Smart-home wiring done by the previous owner's 'handy friend' can leave neutral wires bonded incorrectly. Tankless water heaters and high-efficiency heat pumps are common — both pull continuous high loads the original branch circuits sometimes can't sustain. The 2010-2019 'McMansion' tear-down wave added many of these homes on lots originally built for 1960s ranches; the service drop from the utility was sized for the original house and sometimes hasn't been upgraded.",
+      "symptoms": "200A or 400A original service; upgrades here are usually about adding capacity for a second EV or pool equipment, not safety replacement."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How much does a panel upgrade cost in Vienna, VA?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: AJ Long answers $3,500-$5,500 for 200A; estimate-only per Keelworks default (2026-05-26 decision) means we reframe to \"how estimates work\" -->"
+      },
+      {
+        "summary": "Do I need a Town of Vienna permit AND a Fairfax County permit for a panel upgrade?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Vienna-specific moat question; competitors skip the depth -->"
+      },
+      {
+        "summary": "What are the signs I need a panel upgrade?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Tier 1 §10a symptom list; voice in Vienna-buyer language -->"
+      },
+      {
+        "summary": "Should I upgrade to 200A or 400A in my Vienna home?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: NEC 220 load calc anchor; 200A is the default for Vienna's 1960s-80s colonials, 400A only if multi-EV / pool / generator -->"
+      },
+      {
+        "summary": "My 1970s Vienna home has a Federal Pacific / Pushmatic panel — should I replace it?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Vienna-prevalent in 1950s-80s housing; named brands are SEO-cite-worthy -->"
+      },
+      {
+        "summary": "How long does a Vienna panel upgrade take and how long will I be without power?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: One-day install; 4-6 hour Dominion outage; this is the Tier 1 brief's identified moat question -->"
+      },
+      {
+        "summary": "Will Dominion Energy disconnect my power for the upgrade?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Yes; same-day coordination; AJLE pulls; differentiator vs. \"we don't talk to the utility\" framings -->"
+      },
+      {
+        "summary": "Can my Vienna panel handle an EV charger?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Tier 1 §7 universal question + Vienna's above-average EV adoption density -->"
+      }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "panel-upgrade": "In Vienna, two patterns dominate panel-upgrade calls. First: 1960s-80s colonials in Vienna Woods, Hunters Branch, and Country Club Hills with original 100A panels that can't carry today's loads — induction range plus central AC plus EV charger plus tankless water heater overruns what the original builder planned for. Second: pre-1985 homes with Federal Pacific Stab-Lok or Pushmatic panels — both documented failure-to-trip brands now flagged by State Farm, Allstate, USAA, and Erie at policy renewal. Either pattern usually drives the upgrade."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "Vienna has more EV drivers per square mile than most Fairfax County ZIPs, and the median Vienna home was built in 1971 — before central AC, modern 200-amp panels, or AFCI requirements. Most Vienna panel-upgrade calls are about closing that gap."
+  },
+  "ev_charger_homes_phrase": "the 1960s-80s Vienna colonials weren't built for"
+}
