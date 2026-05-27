@@ -1,0 +1,13 @@
+{
+  "_comment": "Example config for publish-core-30-page.py against s-and-h-contracting. Copy to s-and-h-contracting.config.json (gitignored) and fill in wp_username. The application password lives in $WP_APP_PASSWORD or the tier-3 vault, not in this file.",
+  "wp_base_url": "https://shcontractingunlimited.com",
+  "wp_username": "",
+  "wp_app_password_env": "WP_APP_PASSWORD",
+  "default_status": "draft",
+  "default_template": "",
+  "default_author_id": null,
+  "aioseo_defaults": {
+    "schema_local_business": false
+  },
+  "client_slug": "s-and-h-contracting"
+}

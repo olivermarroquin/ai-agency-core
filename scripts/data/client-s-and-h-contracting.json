@@ -1,0 +1,77 @@
+{
+  "_comment": "Client-level facts for S&H Contracting Unlimited. Used by scaffold-core-30-page.py to fill the LocalBusiness JSON-LD block, About section, hero phone CTA, and final CTA across all Core 30 pages. One file per client.",
+  "_scaffolded": {
+    "from_brief": true,
+    "needs_confirmation": [
+      "accent_yellow",
+      "hero_gradient_mid",
+      "hero_gradient_bright",
+      "address.street",
+      "address.locality",
+      "address.postal_code",
+      "geo.latitude",
+      "geo.longitude",
+      "hours",
+      "license.category",
+      "owner_bio_paragraphs"
+    ]
+  },
+  "client_slug": "s-and-h-contracting",
+  "name": "S&H Contracting Unlimited",
+  "alternate_name": "S&H Contracting",
+  "owner_name": "Mohammad Adam",
+  "owner_first_name": "Mohammad",
+  "owner_title": "Licensed Electrical Contractor",
+  "website_url": "https://shcontractingunlimited.com/",
+  "website_url_no_slash": "https://shcontractingunlimited.com",
+  "phone_display": "703-972-5571",
+  "phone_tel": "7039725571",
+  "phone_e164": "+1-703-972-5571",
+  "email": "shcontractingunlimitedllc@gmail.com",
+  "primary_color": "#39823c",
+  "navy": "#92003b",
+  "accent_yellow": null,
+  "heading_color": "#1d4a1f",
+  "hero_gradient_dark": "#39823c",
+  "hero_gradient_mid": null,
+  "hero_gradient_bright": null,
+  "address": {
+    "street": null,
+    "locality": null,
+    "region": "VA",
+    "postal_code": null,
+    "country": "US"
+  },
+  "geo": {
+    "latitude": null,
+    "longitude": null
+  },
+  "hours": [],
+  "license": {
+    "category": null,
+    "issuer": "Virginia DPOR",
+    "state": "Virginia",
+    "state_full": "Commonwealth of Virginia"
+  },
+  "business_description_schema": "Licensed and insured electrical contractor serving Northern Virginia, Washington DC, and Maryland. Residential and commercial work — installations, repairs, panel upgrades, and 24/7 emergency electrical service.",
+  "brand_image_url": "https://shcontractingunlimited.com/wp-content/uploads/2025/03/sh-image-2.jpg",
+  "brand_logo_url": "https://shcontractingunlimited.com/wp-content/uploads/2025/03/cropped-sh-image-3-192x192.png",
+  "price_range_token": "$$",
+  "review_count": 68,
+  "review_rating": "4.9",
+  "review_count_phrase": "4.9-star average across 68 customer reviews",
+  "review_pitch": "Real reviews from Northern Virginia, DC, and Maryland customers across residential and commercial jobs. 4.9-star average across 68 verified Google reviews.",
+  "brand_areas_served": [
+    "Oakton",
+    "Fairfax Station",
+    "Alexandria",
+    "McLean"
+  ],
+  "brand_area_county": "Fairfax County, VA",
+  "brand_extended_coverage_phrase": "We cover Northern Virginia (Fairfax County and the 50-mile radius around it including Sterling, Ashburn, Chantilly, Loudoun, and Waldorf), Washington DC, and Maryland.",
+  "owner_bio_paragraphs": [],
+  "contact_page_path": "/contact/",
+  "secondary_cta_label": "Request a Quote",
+  "primary_cta_label_template": "Call {phone}",
+  "final_cta_response_promise": "We respond within one business day."
+}
