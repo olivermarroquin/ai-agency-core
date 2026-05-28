@@ -150,6 +150,14 @@ class PublishResult:
     error_message: Optional[str] = None
 
 
+# Default staleness window for the output-quality-loop pre-publish gate.
+# A PASS verdict older than this many days is treated as stale and the publish
+# is refused until the page is re-evaluated. Override via config field
+# `quality_gate_staleness_days`. Spec source:
+# ~/workspace/second-brain/_meta/handoffs/output-quality-loop/phase-3-page-level-integration.md
+DEFAULT_QUALITY_GATE_STALENESS_DAYS = 7
+
+
 # ----------------------------------------------------------------------------
 # File discovery
 # ----------------------------------------------------------------------------
@@ -755,6 +763,217 @@ def _find_workspace_root() -> Optional[Path]:
 
 
 # ----------------------------------------------------------------------------
+# output-quality-loop pre-publish gate
+# ----------------------------------------------------------------------------
+
+
+def _quality_frontmatter(md_path: Path) -> dict[str, Any]:
+    """Pull just the quality-loop tracking fields from the draft frontmatter.
+
+    Reuses parse_frontmatter() and extracts `last-verdict:`, `last-evaluated:`,
+    and `quality-log:`. Returns empty dict if no frontmatter or the fields
+    aren't present yet.
+    """
+    fm = parse_frontmatter(md_path)
+    return {
+        "last_verdict": fm.get("last-verdict", "").strip() if isinstance(fm.get("last-verdict"), str) else "",
+        "last_evaluated": fm.get("last-evaluated", "").strip() if isinstance(fm.get("last-evaluated"), str) else "",
+        "quality_log": fm.get("quality-log", "").strip() if isinstance(fm.get("quality-log"), str) else "",
+    }
+
+
+def check_quality_gate(
+    md_path: Path,
+    config: dict[str, Any],
+    bypass: bool,
+) -> tuple[bool, str]:
+    """Return (allowed, reason).
+
+    The gate refuses publication unless the draft's frontmatter shows
+    `last-verdict: PASS` AND `last-evaluated` is within the configured
+    staleness window (default 7 days; configurable via
+    config["quality_gate_staleness_days"]).
+
+    When `bypass` is True, the gate allows the publish but the reason string
+    flags the bypass so the caller can log a warning + write a bypass record
+    to the folder log per the audit-trail discipline.
+
+    Spec source:
+    ~/workspace/skills/output-quality-loop/SKILL.md § Phase 3 publish gate
+    ~/workspace/skills/output-quality-loop/references/folder-quality-log-shape.md
+    """
+    qm = _quality_frontmatter(md_path)
+    last_verdict = qm["last_verdict"]
+    last_evaluated_raw = qm["last_evaluated"]
+    quality_log_link = qm["quality_log"]
+
+    # Bypass short-circuits — but never silently. The caller logs + writes a
+    # bypass record to the folder log so the audit trail captures the override.
+    if bypass:
+        return True, (
+            "BYPASSED — operator used --bypass-quality-gate. "
+            f"Frontmatter at publish time: last-verdict={last_verdict or '(missing)'}, "
+            f"last-evaluated={last_evaluated_raw or '(missing)'}, "
+            f"quality-log={quality_log_link or '(missing)'}."
+        )
+
+    if not last_verdict:
+        return False, (
+            "page never evaluated by output-quality-loop — run quality-check "
+            f"on `{md_path}` first. Refusing to publish until the draft has a "
+            "`last-verdict:` frontmatter field. To override in an emergency, "
+            "re-run with --bypass-quality-gate."
+        )
+
+    verdict_upper = last_verdict.upper().strip()
+    if "FAIL" in verdict_upper:
+        log_pointer = quality_log_link or "(no folder-log pointer)"
+        return False, (
+            f"page failed quality-loop (last-verdict: {last_verdict}) — see "
+            f"folder log at {log_pointer} for diagnosis. Refusing to publish. "
+            "Re-run quality-check after applying the revision prompt's fixes, "
+            "or re-run with --bypass-quality-gate."
+        )
+    if "NEEDS REVISION" in verdict_upper:
+        log_pointer = quality_log_link or "(no folder-log pointer)"
+        return False, (
+            f"page is iterating through quality-loop (last-verdict: {last_verdict}) "
+            f"— see folder log at {log_pointer} for the open revision prompt. "
+            "Refusing to publish until verdict is PASS, or re-run with "
+            "--bypass-quality-gate."
+        )
+
+    if "PASS" not in verdict_upper:
+        return False, (
+            f"unexpected last-verdict value: '{last_verdict}'. Expected PASS, "
+            "NEEDS REVISION (minor), NEEDS REVISION (substantive), or FAIL. "
+            "Refusing to publish. Either re-evaluate via quality-loop or "
+            "re-run with --bypass-quality-gate."
+        )
+
+    # PASS — check staleness.
+    if not last_evaluated_raw:
+        return False, (
+            "page has last-verdict: PASS but no last-evaluated date. The gate "
+            "needs the date to enforce the staleness window. Re-run quality-check "
+            "to land both fields, or re-run with --bypass-quality-gate."
+        )
+
+    staleness_days = int(
+        config.get("quality_gate_staleness_days", DEFAULT_QUALITY_GATE_STALENESS_DAYS)
+    )
+
+    try:
+        last_evaluated = datetime.strptime(last_evaluated_raw[:10], "%Y-%m-%d")
+    except ValueError:
+        return False, (
+            f"could not parse last-evaluated: '{last_evaluated_raw}'. Expected "
+            "YYYY-MM-DD. Re-run quality-check to land a valid date, or "
+            "re-run with --bypass-quality-gate."
+        )
+
+    age_days = (datetime.now() - last_evaluated).days
+    if age_days > staleness_days:
+        return False, (
+            f"page PASS verdict is {age_days} days old (>{staleness_days}-day "
+            "staleness window). Re-evaluate via output-quality-loop before "
+            "publishing, or re-run with --bypass-quality-gate. Artifacts can "
+            "drift; old PASS verdicts go stale."
+        )
+
+    return True, (
+        f"PASS verdict from {last_evaluated_raw} ({age_days} days old, within "
+        f"{staleness_days}-day staleness window)."
+    )
+
+
+def write_bypass_record(md_path: Path, page_slug: str, reason: str) -> Optional[Path]:
+    """Append a bypass-record entry to the folder's `_quality-log.md`.
+
+    Run only when --bypass-quality-gate fires. Captures the operator override
+    in the audit trail per the folder-quality-log shape's "Ship record" /
+    "Bypass record" convention.
+
+    Returns the folder-log path if a write happened, else None.
+
+    Spec source:
+    ~/workspace/skills/output-quality-loop/references/folder-quality-log-shape.md
+    """
+    folder = md_path.parent
+    log_path = folder / "_quality-log.md"
+    today_iso = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+    bypass_line = (
+        f"\n**Bypassed:** {today_iso} — published via "
+        f"`publish-core-30-page.py --bypass-quality-gate`. Reason captured: "
+        f"{reason}\n"
+    )
+
+    if not log_path.exists():
+        # Create a minimal folder-log so the bypass record has a home.
+        # Per folder-quality-log-shape.md "What to do if the folder log
+        # doesn't exist yet" section.
+        seed = (
+            "---\n"
+            "type: folder-quality-log\n"
+            "status: active\n"
+            f"created: {datetime.now(timezone.utc).strftime('%Y-%m-%d')}\n"
+            f"last-updated: {datetime.now(timezone.utc).strftime('%Y-%m-%d')}\n"
+            "artifacts-tracked: 1\n"
+            "shipped: 0\n"
+            "iterating: 0\n"
+            "escalated: 0\n"
+            "bypassed: 1\n"
+            "tags: [folder-quality-log, quality-loop]\n"
+            "---\n\n"
+            f"# Quality log — {folder.name}\n\n"
+            "This file tracks every output-quality-loop evaluation for "
+            "artifacts in this folder. One section per artifact; iteration "
+            "history inside each section.\n\n"
+            "See [[output-quality-loop|the skill]] for evaluation methodology "
+            "and the verdict-rollup thresholds.\n\n"
+            "---\n\n"
+            f"## {page_slug}\n\n"
+            "**Latest:** BYPASSED — never formally evaluated by quality-loop "
+            "before publish.\n"
+            + bypass_line
+        )
+        log_path.write_text(seed, encoding="utf-8")
+        return log_path
+
+    # Folder log exists — find or create the per-artifact section, append the
+    # bypass record at the end of that section.
+    existing = log_path.read_text(encoding="utf-8")
+    section_header = f"## {page_slug}"
+    if section_header in existing:
+        # Append the bypass line at the end of that section. Simpler than
+        # parsing the markdown tree: find the section, find the next "## " or
+        # end-of-file, insert before that boundary.
+        idx = existing.find(section_header)
+        # Find the next top-level "##" after this section, if any.
+        next_section = existing.find("\n## ", idx + len(section_header))
+        if next_section < 0:
+            new_content = existing.rstrip() + "\n" + bypass_line
+        else:
+            new_content = (
+                existing[:next_section].rstrip() + "\n" + bypass_line +
+                existing[next_section:]
+            )
+    else:
+        # Append a new per-artifact section at the end of the file.
+        new_content = (
+            existing.rstrip()
+            + "\n\n---\n\n"
+            + f"## {page_slug}\n\n"
+            + "**Latest:** BYPASSED — never formally evaluated by quality-loop "
+              "before publish.\n"
+            + bypass_line
+        )
+
+    log_path.write_text(new_content, encoding="utf-8")
+    return log_path
+
+
+# ----------------------------------------------------------------------------
 # Main publish flow
 # ----------------------------------------------------------------------------
 
@@ -765,6 +984,7 @@ def publish(
     version: Optional[str] = None,
     dry_run: bool = False,
     request_indexing: bool = False,
+    bypass_quality_gate: bool = False,
 ) -> PublishResult:
     started = datetime.now()
 
@@ -772,6 +992,7 @@ def publish(
 
     html_path = find_canonical_html(page_folder, version=version)
     html = html_path.read_text(encoding="utf-8")
+    md_path = find_v1_markdown(page_folder)
     metadata = build_page_metadata(page_folder)
 
     print(f"→ Page folder:   {page_folder}")
@@ -780,6 +1001,32 @@ def publish(
     print(f"→ WP title:      {metadata.wordpress_page_title or '(derived from slug)'}")
     print(f"→ AIOSEO title:  {metadata.aioseo_title or '(empty — manual entry required)'}")
     print(f"→ Position #:    {metadata.position}")
+
+    # output-quality-loop pre-publish gate. Refuses publication unless the
+    # draft's frontmatter shows `last-verdict: PASS` within the configured
+    # staleness window. --bypass-quality-gate overrides + writes a bypass
+    # record to the folder log.
+    gate_allowed, gate_reason = check_quality_gate(
+        md_path, config, bypass=bypass_quality_gate
+    )
+    if bypass_quality_gate:
+        print(f"→ Quality gate:  ⚠ BYPASSED — {gate_reason}")
+        bypass_log = write_bypass_record(md_path, metadata.slug, gate_reason)
+        if bypass_log:
+            print(f"   bypass record written to: {bypass_log}")
+    else:
+        print(f"→ Quality gate:  {'✓ allowed' if gate_allowed else '✗ REFUSED'} — {gate_reason}")
+    if not gate_allowed:
+        duration = (datetime.now() - started).total_seconds()
+        return PublishResult(
+            success=False,
+            page_id=None,
+            live_url=None,
+            schema_valid=False,
+            schema_errors=[],
+            duration_seconds=duration,
+            error_message=f"output-quality-loop pre-publish gate refused: {gate_reason}",
+        )
 
     schema_valid, schema_errors = validate_jsonld(html)
     print(f"→ Schema valid:  {schema_valid}")
@@ -958,6 +1205,20 @@ def main() -> int:
             "flag is redundant. See sop-gsc-indexing-api-setup.md."
         ),
     )
+    p.add_argument(
+        "--bypass-quality-gate",
+        action="store_true",
+        help=(
+            "Override the output-quality-loop pre-publish gate. The gate "
+            "normally refuses to publish a page whose `last-verdict:` "
+            "frontmatter isn't PASS, or whose `last-evaluated:` date is "
+            "older than `quality_gate_staleness_days` (default 7). With "
+            "this flag the publish proceeds anyway; a 'bypass record' is "
+            "written to the folder's _quality-log.md so the audit trail "
+            "captures the override. Emergency use only — bypassed pages "
+            "have not been quality-checked."
+        ),
+    )
 
     args = p.parse_args()
 
@@ -975,10 +1236,14 @@ def main() -> int:
             version=args.version,
             dry_run=args.dry_run,
             request_indexing=args.request_indexing,
+            bypass_quality_gate=args.bypass_quality_gate,
         )
     except Exception as e:
         sys.stderr.write(f"FATAL: {e}\n")
         return 1
+
+    if result.error_message and not result.success:
+        sys.stderr.write(f"ERROR: {result.error_message}\n")
 
     return 0 if result.success else 1
 

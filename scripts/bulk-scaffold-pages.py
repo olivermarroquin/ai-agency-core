@@ -493,9 +493,60 @@ def main() -> int:
             for line in reason_lines:
                 sys.stderr.write(f"        {line}\n")
         sys.stderr.write("\n")
-        return 1
 
+    # Consolidated output-quality-loop auto-invoke block for the whole batch.
+    # Each scaffold subprocess already emits a per-page block via the replayed
+    # stderr stream above (so the orchestrating chat can act on individual
+    # pages mid-batch if it wants). The consolidated block below is the
+    # cleaner handoff for chats that prefer one batch-level evaluation pass.
+    if scaffolded:
+        emit_quality_loop_invoke_block_batch(scaffolded, args.client)
+
+    if failed:
+        return 1
     return 0
+
+
+# ----------------------------------------------------------------------------
+# output-quality-loop auto-invoke recommendation (batch-level)
+# ----------------------------------------------------------------------------
+
+
+def emit_quality_loop_invoke_block_batch(scaffolded: list[dict], client: str) -> None:
+    """Emit one consolidated auto-invoke block listing every successful page.
+
+    The orchestrating Cowork chat reads this block from stderr and runs
+    output-quality-loop in EVALUATE mode against each artifact triple, then
+    feeds revision prompts back into the same chat (or a per-page subchat) as
+    NEEDS REVISION / FAIL verdicts return.
+
+    Per-page blocks also emit from the scaffold subprocesses (replayed via
+    proc.stderr above); this batch block is the one the chat acts on for the
+    whole run.
+
+    Spec: ~/workspace/skills/output-quality-loop/references/auto-invoke-convention.md
+    """
+    sys.stderr.write("\n## Auto-invoke output-quality-loop (batch)\n\n")
+    sys.stderr.write(
+        f"The bulk scaffolder produced the following artifact(s) for client "
+        f"`{client}`:\n\n"
+    )
+    for p_ in scaffolded:
+        folder = p_["output_folder"]
+        sys.stderr.write(f"### Page {p_['position']:02d} — `{p_['page_slug']}`\n")
+        sys.stderr.write(f"- `{folder / 'draft-v1.md'}`\n")
+        sys.stderr.write(f"- `{folder / 'draft-v1-WP-WRAPPED.html'}`\n")
+        sys.stderr.write(f"- `{folder / '_VERSION-LOG.md'}`\n\n")
+    sys.stderr.write(
+        "[output-quality-loop:eval] — for each artifact above, run "
+        "output-quality-loop in EVALUATE mode. If PASS, mark the page "
+        "ready-to-publish. If NEEDS REVISION or FAIL, ingest the revision "
+        "prompt as if it were operator input and regenerate the page, then "
+        "re-invoke output-quality-loop. Cap at 3 iterations per page; on the "
+        "3rd FAIL, escalate to the operator with the evaluation report. The "
+        "publish-core-30-page.py quality-gate refuses to publish any page "
+        "whose `last-verdict:` frontmatter is not PASS.\n"
+    )
 
 
 def _summarize_dryrun(plan: list[dict]) -> str:
