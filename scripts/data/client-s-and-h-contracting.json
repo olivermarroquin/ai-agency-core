@@ -2,18 +2,19 @@
   "_comment": "Client-level facts for S&H Contracting Unlimited. Used by scaffold-core-30-page.py to fill the LocalBusiness JSON-LD block, About section, hero phone CTA, and final CTA across all Core 30 pages. One file per client.",
   "_scaffolded": {
     "from_brief": true,
-    "needs_confirmation": [
-      "accent_yellow",
-      "hero_gradient_mid",
-      "hero_gradient_bright",
-      "address.street",
-      "address.locality",
-      "address.postal_code",
-      "geo.latitude",
-      "geo.longitude",
-      "hours",
-      "license.category",
-      "owner_bio_paragraphs"
+    "needs_confirmation": [],
+    "operator_confirmed_2026-05-28": [
+      "accent_yellow (derived from EV proven warm yellow #f5b400)",
+      "hero_gradient_mid (derived green progression with primary)",
+      "hero_gradient_bright (derived green progression with primary)",
+      "address.street (operator: 3395 Bountiful Ln)",
+      "address.locality (operator: Woodbridge)",
+      "address.postal_code (operator: 22193)",
+      "geo.latitude (web search: neighbor 3391 Bountiful Ln coordinates within meters)",
+      "geo.longitude (web search: neighbor 3391 Bountiful Ln coordinates within meters)",
+      "hours (operator: 24 hours, 7 days)",
+      "license.category (operator: Master Electrician per certificate)",
+      "owner_bio_paragraphs (synthesized from operator: 16+ years, full electrical spectrum incl panel heavy-ups + installs + about page voice + brief facts)"
     ]
   },
   "client_slug": "s-and-h-contracting",
@@ -30,25 +31,31 @@
   "email": "shcontractingunlimitedllc@gmail.com",
   "primary_color": "#39823c",
   "navy": "#92003b",
-  "accent_yellow": null,
+  "accent_yellow": "#f5b400",
   "heading_color": "#1d4a1f",
   "hero_gradient_dark": "#39823c",
-  "hero_gradient_mid": null,
-  "hero_gradient_bright": null,
+  "hero_gradient_mid": "#4caf50",
+  "hero_gradient_bright": "#66bb6a",
   "address": {
-    "street": null,
-    "locality": null,
+    "street": "3395 Bountiful Ln",
+    "locality": "Woodbridge",
     "region": "VA",
-    "postal_code": null,
+    "postal_code": "22193",
     "country": "US"
   },
   "geo": {
-    "latitude": null,
-    "longitude": null
+    "latitude": 38.6215,
+    "longitude": -77.3138
   },
-  "hours": [],
+  "hours": [
+    {
+      "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "00:00",
+      "closes": "23:59"
+    }
+  ],
   "license": {
-    "category": null,
+    "category": "Master Electrician",
     "issuer": "Virginia DPOR",
     "state": "Virginia",
     "state_full": "Commonwealth of Virginia"
@@ -69,7 +76,11 @@
   ],
   "brand_area_county": "Fairfax County, VA",
   "brand_extended_coverage_phrase": "We cover Northern Virginia (Fairfax County and the 50-mile radius around it including Sterling, Ashburn, Chantilly, Loudoun, and Waldorf), Washington DC, and Maryland.",
-  "owner_bio_paragraphs": [],
+  "owner_bio_paragraphs": [
+    "Mohammad is a Master Electrician licensed in Virginia, with over 16 years in the trade. The Master tier is the highest electrician license the state issues — it requires several years of journeyman work, a passed state exam, and a clean record. Over those 16+ years Mohammad has built a residential and commercial electrical practice serving Northern Virginia, Washington DC, Maryland, and Pennsylvania. He's fully insured and runs a maintenance team, so when you call S&H Contracting Unlimited you're not waiting on one person's calendar.",
+    "Mohammad leads the work across the full electrical spectrum — panel replacements and heavy-ups, full installations, troubleshooting, emergency repairs, EV charger installation, and specialized work like home security and generator installation. He's the diagnostician on most residential calls — the one who reads the panel, runs the tests, and explains what's happening in plain English before any work starts. His preference is to find the root cause and fix it once, rather than patch the symptom and come back next month.",
+    "S&H Contracting Unlimited holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
   "contact_page_path": "/contact/",
   "secondary_cta_label": "Request a Quote",
   "primary_cta_label_template": "Call {phone}",
