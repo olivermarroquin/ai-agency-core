@@ -9,5 +9,7 @@
   "aioseo_defaults": {
     "schema_local_business": false
   },
-  "client_slug": "s-and-h-contracting"
+  "client_slug": "s-and-h-contracting",
+  "_comment_gsc": "OPTIONAL. When true, every publish auto-submits the live URL to the GSC Indexing API via Application Default Credentials (ADC) — no key files. One-time per-Mac setup: gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/indexing. The gcloud-authed account must be Owner on the client's GSC property. See sop-gsc-indexing-api-setup.md. Omit or set to false to keep the manual click-through-GSC workflow.",
+  "gsc_indexing": true
 }

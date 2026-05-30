@@ -51,11 +51,16 @@ INPUTS
       },
       "client_slug": "ev-electric-services",
 
-      // OPTIONAL — when present, every publish automatically submits the
-      // live URL to the Google Search Console Indexing API. Setup procedure
-      // lives in sop-gsc-indexing-api-setup.md. Omit the field to keep the
-      // manual-click workflow.
-      "gsc_service_account_path": "~/workspace/second-brain-tier3/keelworks-gsc-indexing-ev-electric.json"
+      // OPTIONAL — when true, every publish automatically submits the live
+      // URL to the Google Search Console Indexing API via Application
+      // Default Credentials (ADC). One-time setup on the operator's Mac:
+      //   gcloud auth application-default login \
+      //     --scopes=https://www.googleapis.com/auth/cloud-platform,\
+      //              https://www.googleapis.com/auth/indexing
+      // The calling identity (the gcloud-authed Google account) must be
+      // Owner on the client's GSC property. See sop-gsc-indexing-api-setup.md.
+      // Omit or set to false to keep the manual-click workflow.
+      "gsc_indexing": true
     }
 
 - WP_APP_PASSWORD env var: the WordPress application password generated at
@@ -67,9 +72,10 @@ OUTPUTS
 - Live published page URL (stdout)
 - Schema validation result (stdout + log file)
 - GSC indexing request submission (stdout). Fires automatically on every
-  publish when the config has `gsc_service_account_path`; otherwise only
-  fires when `--request-indexing` is passed (which falls through to the
-  manual-submission stub). See request_gsc_indexing() for details.
+  publish when the config has `gsc_indexing: true`; otherwise only fires
+  when `--request-indexing` is passed (which falls through to the manual-
+  submission stub). Uses Application Default Credentials — no key file.
+  See request_gsc_indexing() for details.
 - Execution log entry written to:
     repos/<client_slug>/.kos/execution-logs/execution-log-YYYY-MM-DD-core-30-page-<NN>-<slug>.md
 
@@ -553,13 +559,28 @@ _GSC_INDEXING_ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:pu
 _GSC_INDEXING_SCOPE = "https://www.googleapis.com/auth/indexing"
 
 
-def _load_gsc_access_token(service_account_json_path: str) -> str:
-    """Lazy-load google-auth and return a fresh OAuth2 access token for the
-    Indexing API. Raises RuntimeError with a helpful message if the library is
-    not installed.
+def _load_gsc_access_token() -> tuple[str, Optional[str]]:
+    """Lazy-load google-auth and return (access_token, quota_project_id) for
+    the Indexing API via Application Default Credentials (ADC).
+
+    Reads credentials from gcloud's ADC file, typically at
+    ~/.config/gcloud/application_default_credentials.json. One-time setup:
+
+        gcloud auth application-default login \\
+            --scopes=https://www.googleapis.com/auth/cloud-platform,\\
+                     https://www.googleapis.com/auth/indexing
+        gcloud auth application-default set-quota-project <gcp-project-id>
+
+    The gcloud-authed Google account must be Owner on the target GSC
+    property — GSC, not GCP, authorizes the Indexing API request. The quota
+    project is required for user-credential ADC on the Indexing API (Google
+    bills request quota against that project; the request 403s without it).
+
+    Raises RuntimeError with a helpful message if google-auth is not
+    installed or if ADC is not configured.
     """
     try:
-        from google.oauth2 import service_account
+        import google.auth
         from google.auth.transport.requests import Request as GoogleAuthRequest
     except ImportError as e:
         raise RuntimeError(
@@ -568,21 +589,29 @@ def _load_gsc_access_token(service_account_json_path: str) -> str:
             "--break-system-packages"
         ) from e
 
-    credentials = service_account.Credentials.from_service_account_file(
-        service_account_json_path,
-        scopes=[_GSC_INDEXING_SCOPE],
-    )
+    try:
+        credentials, _project = google.auth.default(scopes=[_GSC_INDEXING_SCOPE])
+    except Exception as e:
+        raise RuntimeError(
+            "Application Default Credentials not configured. Run: "
+            "gcloud auth application-default login "
+            "--scopes=https://www.googleapis.com/auth/cloud-platform,"
+            "https://www.googleapis.com/auth/indexing "
+            f"(underlying error: {e})"
+        ) from e
+
     credentials.refresh(GoogleAuthRequest())
-    return credentials.token
+    quota_project_id = getattr(credentials, "quota_project_id", None)
+    return credentials.token, quota_project_id
 
 
 def request_gsc_indexing(live_url: str, config: dict[str, Any]) -> str:
-    """Submit a URL to the Google Search Console Indexing API.
+    """Submit a URL to the Google Search Console Indexing API via ADC.
 
-    Reads `config["gsc_service_account_path"]` for the service account JSON
-    key file. If the field is missing (legacy configs) or the file does not
-    exist on disk, falls back to the manual-submission stub message — the
-    publish still succeeds.
+    Reads `config["gsc_indexing"]` (boolean). When true, uses Application
+    Default Credentials — set up via `gcloud auth application-default login`
+    on the operator's Mac — to authenticate. When false or absent, returns
+    the manual-submission stub message; the publish still succeeds.
 
     Returns a single-line status string suitable for printing. Never raises:
     indexing is a nice-to-have, not load-bearing, so any failure (missing
@@ -595,34 +624,35 @@ def request_gsc_indexing(live_url: str, config: dict[str, Any]) -> str:
     request fails cleanly and the operator falls back to the manual "Request
     Indexing" click in GSC (see sop-gsc-request-indexing.md).
 
-    Setup procedure (one-time per client):
+    Setup procedure (one-time per Mac, covers all clients):
     see second-brain/05_shared-intelligence/workflows/
         workflow-marketing-seo-engagement/sops/sop-gsc-indexing-api-setup.md
     """
-    service_account_path = config.get("gsc_service_account_path")
-    if not service_account_path:
+    if not config.get("gsc_indexing"):
         return (
-            "[skipped] no gsc_service_account_path in config — "
+            "[skipped] gsc_indexing not enabled in config — "
             "submit manually at search.google.com/search-console → URL Inspection"
         )
 
-    key_path = Path(service_account_path).expanduser()
-    if not key_path.is_file():
-        return (
-            f"[skipped] gsc_service_account_path set to {key_path} but file not "
-            f"found — submit manually"
-        )
-
     try:
-        access_token = _load_gsc_access_token(str(key_path))
+        access_token, quota_project_id = _load_gsc_access_token()
     except RuntimeError as e:
         return f"[error] {e}"
     except Exception as e:
-        return f"[error] could not load GSC service account credentials: {e}"
+        return f"[error] could not load ADC credentials: {e}"
+
+    if not quota_project_id:
+        return (
+            "[error] ADC has no quota project set — Indexing API will 403. Run: "
+            "gcloud auth application-default set-quota-project <gcp-project-id>"
+        )
 
     headers = {
         "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json",
+        # Required for user-credential ADC paths — Google bills request quota
+        # against this project, and Indexing API 403s without it.
+        "x-goog-user-project": quota_project_id,
     }
     body = {"url": live_url, "type": "URL_UPDATED"}
 
@@ -1095,11 +1125,11 @@ def publish(
     print(f"→ Published:     {live_url}")
     print(f"→ WP page ID:    {page_id}")
 
-    # Submit to the GSC Indexing API automatically when the client config has
-    # a service account path; otherwise fire only when --request-indexing is
+    # Submit to the GSC Indexing API automatically when gsc_indexing is true
+    # in the client config; otherwise fire only when --request-indexing is
     # passed (which falls through to the manual-submission stub message). This
     # keeps the indexing step nice-to-have — failures here don't break publish.
-    gsc_configured = bool(config.get("gsc_service_account_path"))
+    gsc_configured = bool(config.get("gsc_indexing"))
     if gsc_configured or request_indexing:
         msg = request_gsc_indexing(live_url, config)
         print(f"→ GSC indexing:  {msg}")
@@ -1199,10 +1229,10 @@ def main() -> int:
         "--request-indexing",
         action="store_true",
         help=(
-            "Force a GSC indexing-API submission attempt even if the config "
-            "has no gsc_service_account_path. When the config DOES have a "
-            "path, submission fires automatically on every publish and this "
-            "flag is redundant. See sop-gsc-indexing-api-setup.md."
+            "Force a GSC indexing-API submission attempt even when the config "
+            "does not set gsc_indexing: true. When the config DOES have "
+            "gsc_indexing: true, submission fires automatically on every "
+            "publish and this flag is redundant. See sop-gsc-indexing-api-setup.md."
         ),
     )
     p.add_argument(

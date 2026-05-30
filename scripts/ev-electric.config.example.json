@@ -11,6 +11,6 @@
   },
   "client_slug": "ev-electric-services",
 
-  "_comment_gsc": "OPTIONAL. When present and the file exists, every publish auto-submits the live URL to the Google Search Console Indexing API. One-time setup procedure in sop-gsc-indexing-api-setup.md. JSON key file lives in the Tier-3 vault, never in this repo. Omit the field to keep the manual click-through-GSC workflow.",
-  "gsc_service_account_path": "~/workspace/second-brain-tier3/keelworks-gsc-indexing-ev-electric.json"
+  "_comment_gsc": "OPTIONAL. When true, every publish auto-submits the live URL to the GSC Indexing API via Application Default Credentials (ADC) — no key files. One-time per-Mac setup: gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/indexing. The gcloud-authed account must be Owner on the client's GSC property. See sop-gsc-indexing-api-setup.md. Omit or set to false to keep the manual click-through-GSC workflow.",
+  "gsc_indexing": true
 }
