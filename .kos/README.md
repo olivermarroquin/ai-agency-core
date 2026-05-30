@@ -3,8 +3,11 @@ type: project-readme
 project-name: ai-agency-core
 status: active
 created: 2026-05-06
+updated: 2026-05-27
 client: false
 sensitivity: standard
+archetypes: [infrastructure-tooling, ai-tooling, personal-system]
+applicability-confidence: high
 tags: [project, vault-root]
 ---
 
@@ -61,6 +64,26 @@ WHERE contains(relevant-projects, this.project-name)
   AND !contains(this.file.outlinks, file.link)
 SORT ingested DESC
 LIMIT 10
+```
+
+## Open tasks for this project
+
+Tasks where `relevant-projects:` includes this project's slug and status is not yet closed. Captured automatically from `06_tasks/`. Per-project lens — the cross-project view lives at [[backlog]].
+
+```dataview
+TABLE WITHOUT ID
+  file.link AS "Task",
+  kind AS "Kind",
+  status AS "Status",
+  tier AS "Tier",
+  due AS "Due"
+FROM "06_tasks"
+WHERE type = "task"
+  AND contains(relevant-projects, this.project-name)
+  AND status != "done"
+  AND status != "parked"
+  AND status != "killed"
+SORT tier ASC, due ASC
 ```
 
 ## Lessons promoted from this project

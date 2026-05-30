@@ -1,0 +1,67 @@
+{
+  "_comment": "Client-level facts for EV Electric Services. Used by scaffold-core-30-page.py to fill the LocalBusiness JSON-LD block, About section, hero phone CTA, and final CTA across all Core 30 pages. One file per client. Future Keelworks clients get their own client-<slug>.json.",
+
+  "client_slug": "ev-electric-services",
+  "name": "EV Electric Services",
+  "alternate_name": "EV Electric",
+  "owner_name": "Ahmad Shaban",
+  "owner_first_name": "Ahmad",
+  "owner_title": "Master Electrician",
+  "website_url": "https://evelectric.pro/",
+  "website_url_no_slash": "https://evelectric.pro",
+  "phone_display": "571-500-6637",
+  "phone_tel": "5715006637",
+  "phone_e164": "+1-571-500-6637",
+  "email": "Contact@evelectric.pro",
+  "primary_color": "#0871bc",
+  "navy": "#123075",
+  "accent_yellow": "#f5b400",
+  "heading_color": "#0a2540",
+  "hero_gradient_dark": "#022840",
+  "hero_gradient_mid": "#0871bc",
+  "hero_gradient_bright": "#1591d9",
+
+  "address": {
+    "street": "9488 Fairfax Blvd",
+    "locality": "Fairfax",
+    "region": "VA",
+    "postal_code": "22031",
+    "country": "US"
+  },
+  "geo": { "latitude": 38.8462, "longitude": -77.3064 },
+
+  "hours": [
+    { "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:00", "closes": "18:00" },
+    { "days": ["Saturday"], "opens": "09:00", "closes": "16:00" }
+  ],
+
+  "license": {
+    "category": "Master Electrician License",
+    "issuer": "Commonwealth of Virginia, Department of Professional and Occupational Regulation",
+    "state": "Virginia",
+    "state_full": "Commonwealth of Virginia"
+  },
+
+  "business_description_schema": "Residential electrical contractor serving Fairfax County, VA and the Northern Virginia / DC / Montgomery County MD region. Master electrician, fully insured, troubleshooting-led.",
+  "brand_image_url": "https://evelectric.pro/wp-content/uploads/2026/05/ahmad-shaban-master-electrician.jpg",
+  "brand_logo_url": "https://evelectric.pro/wp-content/uploads/2026/05/ev-electric-logo.png",
+  "price_range_token": "$$",
+  "review_count": 148,
+  "review_rating": "5.0",
+  "review_count_phrase": "5.0-star average across 148 customer reviews",
+  "review_pitch": "Our review base is real, recent, and from Northern Virginia homeowners. We don't ghost-write reviews or recycle them across business directories.",
+
+  "brand_areas_served": ["Vienna", "Fairfax", "McLean", "Oakton", "Tysons", "Falls Church", "Burke", "Annandale"],
+  "brand_area_county": "Fairfax County, VA",
+  "brand_extended_coverage_phrase": "We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
+
+  "owner_bio_paragraphs": [
+    "Ahmad is a Master Electrician licensed in Virginia. The Master tier is the highest electrician license the state issues — it requires several years of journeyman work, a passed state exam, and a clean record. Ahmad waited roughly four years for his Master license before opening EV Electric Services. He's fully insured and runs a maintenance team, so when you call us you're not waiting on one person's calendar.",
+    "Ahmad is the person who shows up at most residential {service_lowercase} calls. He's the diagnostician — the one who reads the panel, runs the tests, and explains what's happening. His preference is to find the root cause and repair it once, rather than patch the symptom and come back next month."
+  ],
+
+  "contact_page_path": "/contact/",
+  "secondary_cta_label": "Request a Quote",
+  "primary_cta_label_template": "Call {phone}",
+  "final_cta_response_promise": "We respond within one business day."
+}

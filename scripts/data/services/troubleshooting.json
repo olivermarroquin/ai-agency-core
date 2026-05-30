@@ -1,0 +1,115 @@
+{
+  "_comment": "Per-service data for residential electrical troubleshooting. Used by scaffold-core-30-page.py for every troubleshooting page across the Core 30 (Vienna, Fairfax, McLean, Oakton, etc.). One file per service. {city} and {client} placeholders inside text strings are substituted at render time.",
+
+  "slug": "troubleshooting",
+  "page_slug_template": "electrical-troubleshooting-{city_slug}",
+  "name": "Electrical Troubleshooting",
+  "name_with_city": "Electrical Troubleshooting in {city_name_with_state}",
+  "service_type_phrase": "Electrical troubleshooting and diagnostics",
+  "quoted_phrase": "electrical troubleshooting",
+  "lowercase_phrase": "troubleshooting",
+  "tag_short": "troubleshooting",
+
+  "aioseo_page_title_template": "Electrical Troubleshooting in {city_name_with_state} | EV Electric",
+  "aioseo_meta_description_template": "Master electrician in {city_name_with_state} for residential electrical troubleshooting. Same-day diagnosis with a written on-site estimate. Call {phone_display}.",
+  "aioseo_focus_keyword_template": "electrical troubleshooting {city_slug}",
+  "aioseo_additional_keywords_template": ["electrician {city_slug}", "electrical diagnostics {city_name}", "circuit breaker tripping {city_slug}", "flickering lights {city_name}", "dead outlet {city_slug}"],
+  "wordpress_page_title_template": "Electrical Troubleshooting in {city_name_with_state}",
+
+  "hero_eyebrow_template": "Electrical Troubleshooting in {city_name_with_state}",
+  "hero_heading": "Same-Day Diagnosis from a Master Electrician",
+  "hero_subheading_template": "Lights flickering? Breaker tripping? Outlets gone dead? {owner_name} — {license_state}-licensed Master Electrician — finds the cause and fixes it. Residential service across {city_name} and surrounding areas.",
+  "hero_image_alt_template": "{owner_name}, master electrician, troubleshooting an open residential electrical panel in {city_name_with_state}",
+  "hero_image_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-troubleshooting-hero-PLACEHOLDER.png",
+
+  "what_it_means_heading": "What \"electrical troubleshooting\" actually means",
+  "what_it_means_paragraphs": [
+    "Most homeowners call an electrician when something stops working — a row of outlets goes dead, a breaker keeps tripping, lights flicker every time the AC kicks on. \"Troubleshooting\" is what we do before we fix it. It's the diagnostic step where we find the root cause, not just the symptom.",
+    "A blown breaker is the symptom. The cause could be a loose neutral wire behind a 1960s outlet box, an overloaded circuit because a new microwave shares a line with the toaster, or a damaged conductor inside a wall the previous owner finished without a permit. Each cause has a different fix. Pinpointing the right one is the work that saves you from paying twice — once for a wrong guess, and again for the real repair.",
+    "{owner_name} is a {license_state}-licensed Master Electrician with a maintenance team behind him. He runs diagnostics on residential electrical systems across {city_name} and the rest of Northern {county_short}. The work isn't \"swap and pray.\" It's read the panel, test the circuits, trace the fault, then explain what's happening in plain English before any repair starts."
+  ],
+
+  "quick_ref_heading_template": "Common signs you need to call a {city_name} electrician",
+  "quick_ref_intro": "Six symptoms we see every week. Tap any to learn what it might mean.",
+  "quick_ref_footer_html_template": "Don't see your issue?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll diagnose it.",
+
+  "why_city_heading_template": "Why {city_name} homeowners call us for diagnostics",
+  "why_city_closing_note_template": "If your home falls in any of these patterns, the diagnostic step is what tells you whether you need a quick fix, a bigger repair, or a panel upgrade. Guessing costs more than knowing. That's why people call.",
+
+  "problems_heading_template": "Specific problems we diagnose every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    { "title": "Breaker trips and won't reset", "body": "A breaker that trips once is doing its job. A breaker that trips daily, or that pops the moment you reset it, points to a short, an overloaded circuit, or a failed breaker itself. We trace the circuit, isolate the load, and find which of the three it is." },
+    { "title": "Outlets dead in one room, fine in another", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. Diagnostic time matters — we trace the circuit map and find the break in 15-30 minutes instead of opening every box in the house." },
+    { "title": "Flickering lights when the AC or fridge cycles", "body": "This points to a voltage drop, often from a loose neutral at the meter base or a damaged feeder. Persistent voltage drops shorten the life of every motor in your house and are a real fire-risk signal. We pull the meter cover, test the service entrance, and identify the source." },
+    { "title": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us today. We treat this as an urgent diagnostic, not a routine appointment. The cause is almost always heat at a loose connection — and loose connections in walls cause house fires. We find the heat source and repair it before damage spreads." },
+    { "title": "EV charger circuit issues", "body": "{city_ev_neighborhood_phrase} EV charging puts continuous high-amp draw on circuits that may not be sized for it. If your charger throttles itself, trips a breaker, or warms the outlet, the cause is upstream of the charger and worth diagnosing before you blame the car. See our <a href=\"/ev-charger-{city_slug}/\">EV charger installation in {city_name} page</a> for permanent solutions." },
+    { "title": "Whole-house or partial outages", "body": "If half your house has power and half doesn't, you may have an open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point." },
+    { "title": "Three-way switch that doesn't work right", "body": "Switches at two ends of a hallway or staircase use a different wiring topology than single switches. When a previous repair scrambled the travelers, you get switches that work sometimes, or only in one combination, or that buzz. Diagnostic and repair is a 1-2 hour job." },
+    { "title": "Sub-panel that's been added and is unreliable", "body": "Garage and basement sub-panels added during renovations are a frequent source of intermittent problems. We verify the feeder size, check the grounding and bonding, and confirm the panel is wired to current code." }
+  ],
+
+  "process_heading_template": "Our troubleshooting process — what happens when you call",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    { "title": "A real conversation, not a script", "body": "{owner_first_name} or someone from his team picks up. We ask about the symptom, when it started, what you've already tried, and whether there's any safety concern (burning smell, sparking, warm walls). If anything you describe is urgent, we'll tell you to shut off the breaker until we can be there." },
+    { "title": "Same-day or next-day appointment in most cases", "body": "{city_distance_phrase}. We don't promise 24/7 service — but for residential troubleshooting during weekday business hours, same-day or next-day is the norm. We confirm the appointment time and give you a one-hour window." },
+    { "title": "On-site diagnostic with the homeowner present", "body": "We arrive, walk to the affected area with you, and ask you to demonstrate the problem. Then we set up the diagnostic. Tools: multimeter, circuit tracer, AFCI/GFCI tester, IR thermal camera if heat is suspected. We open panels, test circuits at rest and under load, and trace the fault to its origin." },
+    { "title": "A plain-English explanation before any repair", "body": "Before we do a single repair, we sit down with you and show you what we found. We tell you the cause, the fix, the cost, and what happens if you defer the fix. You decide whether to proceed today or schedule a return visit." },
+    { "title": "The repair, if you authorize it", "body": "Most diagnostic visits include the repair on the same call. We carry common parts — breakers, GFCIs, outlets, switches, wire nuts, and standard sizes of wire. Larger jobs (panel replacement, sub-panel install, full circuit re-run) get a written estimate and a separate appointment." },
+    { "title": "A clean exit, with documentation", "body": "When we leave, you get a written record of what was diagnosed, what was repaired, and what (if anything) we recommend you address next." }
+  ],
+
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "We come to the house, look at the actual work, and give a written estimate before any job is scheduled. The estimate is firm — no surprise charges at the end. No charge for the diagnostic visit in our primary service area.",
+  "pricing_items": [
+    "<strong>Residential troubleshooting visit.</strong> A diagnostic visit (typically 1-2 hours) plus most minor repairs that can be done on the same call — replacement GFCI outlet, replacement breaker, tightened lug, re-pulled neutral. The written estimate covers parts plus labor and is given before any repair starts.",
+    "<strong>Diagnostic-only visit.</strong> If you want a written estimate and a separate visit for the repair, we'll diagnose the problem on the first visit and leave you with the estimate. You decide whether to schedule the repair.",
+    "<strong>Major repairs — separate written estimate.</strong> Panel upgrades, sub-panel installs, full circuit re-runs, EV charger installs, whole-house rewires get a written estimate before we start. We don't begin major work without your written authorization.",
+    "<strong>After-hours service available on request.</strong> Most troubleshooting calls don't need it. We mention it for visibility — if you need it, ask when you call."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}. We don't charge to drive to your house for the estimate.",
+  "pricing_closing_note": "",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "{owner_name} is a Master Electrician licensed in {license_state}. The Master tier is the highest electrician license the state issues — it requires several years of journeyman work, a passed state exam, and a clean record. {owner_first_name} waited roughly four years for his Master license before opening {client_name}. He's fully insured and runs a maintenance team, so when you call us you're not waiting on one person's calendar.",
+    "{owner_first_name} is the person who shows up at most residential troubleshooting calls. He's the diagnostician — the one who reads the panel, runs the tests, and explains what's happening. His preference is to find the root cause and repair it once, rather than patch the symptom and come back next month.",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-troubleshooting-about-PLACEHOLDER.png",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "Troubleshooting is the front door. If your diagnosis leads to a larger repair, these are the next steps we handle:",
+  "related_cards": [
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
+    { "href_slug": "ev-charger-{city_slug}", "label": "EV Charger Installation" },
+    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures &amp; Chandeliers" },
+    { "href_slug": "smoke-alarm-{city_slug}", "label": "Smoke Alarm Installation" },
+    { "href_slug": "outlet-installation-{city_slug}", "label": "Outlet &amp; Switch Installation" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    { "question": "How does pricing work for electrical troubleshooting in {city_name_with_state}?", "answer_html": "We come to the house, look at the actual work, and give a written estimate before any repair starts. Diagnostic visits include most minor on-the-spot repairs. Major repairs (panels, sub-panels, full circuit re-runs) get a separate written estimate. No charge for the diagnostic visit in our primary service area.", "answer_schema": "We come to the house, look at the actual work, and give a written estimate before any repair starts. Diagnostic visits include most minor on-the-spot repairs. Major repairs get a separate written estimate. No charge for the diagnostic visit in our primary service area." },
+    { "question": "How quickly can you come out for a troubleshooting call in {city_name}?", "answer_html": "Same-day or next-day in most cases during weekday business hours. {city_distance_phrase}. If your situation is urgent (burning smell, sparking, warm walls), we'll triage you to the earliest available slot and tell you what to shut off in the meantime.", "answer_schema": "Same-day or next-day in most cases during weekday business hours. {city_distance_phrase}. If your situation is urgent — burning smell, sparking, warm walls — we will triage you to the earliest available slot and tell you what to shut off in the meantime." },
+    { "question": "What's included in a troubleshooting visit?", "question_schema": "What is included in a troubleshooting visit?", "answer_html": "A real diagnostic — not a guess. We use a multimeter, circuit tracer, AFCI/GFCI tester, and IR thermal camera if heat is suspected. We open panels, test circuits at rest and under load, trace the fault to its source, then explain what we found in plain English before any repair starts.", "answer_schema": "A real diagnostic — not a guess. We use a multimeter, circuit tracer, AFCI/GFCI tester, and IR thermal camera if heat is suspected. We open panels, test circuits at rest and under load, trace the fault to its source, then explain what we found in plain English before any repair starts." },
+    { "question": "When should I call an electrician vs. trying to fix it myself?", "question_schema": "When should I call an electrician versus trying to fix it myself?", "answer_html": "Call an electrician if you smell burning, see sparking, feel warm walls or warm switch plates, have a breaker that trips daily, or have lost power to part of the house without a clear cause. Resetting a tripped breaker once is fine. Resetting it three times in a row is a fire risk. We'd rather you call us and have us tell you it's a small fix than not call and have a real problem grow.", "answer_schema": "Call an electrician if you smell burning, see sparking, feel warm walls or warm switch plates, have a breaker that trips daily, or have lost power to part of the house without a clear cause. Resetting a tripped breaker once is fine. Resetting it three times in a row is a fire risk." },
+    { "question": "What's the most common electrical problem in {city_name} homes?", "question_schema": "What is the most common electrical problem in {city_name} homes?", "answer_html": "{city_most_common_problem_paragraph}", "answer_schema": "{city_most_common_problem_paragraph}" },
+    { "question": "Do you handle EV charger problems?", "answer_html": "Yes. EV charging puts continuous high-amp draw on circuits that {city_ev_homes_phrase}. If your charger throttles, trips a breaker, or warms the outlet, the cause is almost always upstream — a feeder, a breaker, or a connection that can't sustain the load. We diagnose the cause and either repair it or quote you for the right circuit. See our <a href=\"/ev-charger-{city_slug}/\">EV charger installation page</a> for full installs.", "answer_schema": "Yes. EV charging puts continuous high-amp draw on circuits that {city_ev_homes_phrase}. If your charger throttles, trips a breaker, or warms the outlet, the cause is almost always upstream — a feeder, a breaker, or a connection that cannot sustain the load. We diagnose the cause and either repair it or quote you for the right circuit." },
+    { "question": "Are you licensed and insured?", "answer_html": "Yes. {owner_first_name} holds a Master Electrician license issued by the {license_state_full} — the state's highest electrician credential. {client_name} is fully insured. We're happy to provide proof of license and insurance on request before any work begins.", "answer_schema": "Yes. {owner_first_name} holds a Master Electrician license issued by the {license_state_full} — the state's highest electrician credential. {client_name} is fully insured. We are happy to provide proof of license and insurance on request before any work begins." },
+    { "question": "Do you offer 24/7 emergency service?", "answer_html": "We offer after-hours service when needed, but we don't market ourselves as a 24/7 emergency company. Most residential troubleshooting is handled fastest by booking the earliest weekday or weekend appointment. If you have a genuine emergency — sparks, burning smell, fire risk — call us at {phone_display} and we'll triage immediately.", "answer_schema": "We offer after-hours service when needed, but we don't market ourselves as a 24/7 emergency company. Most residential troubleshooting is handled fastest by booking the earliest weekday or weekend appointment. If you have a genuine emergency — sparks, burning smell, fire risk — call {phone_display} and we will triage immediately." }
+  ],
+
+  "final_cta_heading": "Ready to get your problem diagnosed?",
+  "final_cta_paragraph_template": "Same-day or next-day electrical troubleshooting in {city_name_with_state}.<br>{response_promise}",
+
+  "schema_service_description_template": "Residential electrical troubleshooting and diagnostics in {city_name_with_state}. Master electrician runs full diagnostic on circuits, panels, outlets, switches, and EV-charger circuits. Same-day or next-day appointments in most cases. Written on-site estimate before any repair begins.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "We come to the house, look at the actual work, and give a written estimate before any job is scheduled. The estimate is firm. Diagnostic visits include most minor on-the-spot repairs; major repairs (panel upgrades, sub-panel installs, full circuit re-runs) get a separate written estimate before work begins."
+}
