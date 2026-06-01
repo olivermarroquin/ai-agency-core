@@ -167,17 +167,28 @@ Reading the markdown diff:
 
 ## Operator review tips
 
-- **Axis D often over-proposes.** The first run on a page with many
-  mentions of one service (e.g. "EV charger" appearing 5+ times in a
-  panel-upgrade page) will propose wrapping every instance. Best
-  practice: accept the first 1-2 wraps, reject the rest. Multiple
-  identical-anchor links to the same destination on one page reads
-  templated and may dilute the link's editorial value.
-- **Axis B may over-propose when the service JSON is ahead of the
-  page.** If `related_cards` includes services whose pages don't exist
-  yet (e.g., "Whole-House Rewiring" before page 11 ships), the inserter
-  will still propose the card. Reject and re-run after the destination
-  page exists, or hand-edit the service JSON to defer that card.
+- **Axis D per-destination cap is 2.** If a page mentions "EV charger"
+  5 times, the inserter proposes 2 wraps to `/ev-charger-vienna-va/`
+  and skips the rest. Multiple identical-anchor links to the same
+  destination on one page read templated to Google (only the first
+  link's anchor counts under "first link priority" anyway) and dilute
+  editorial-quality signals. Two is the natural max before the page
+  reads spammy.
+- **Future-page candidates are surfaced, not silently dropped.** When
+  Axis A or Axis B points at a destination that doesn't yet have a
+  page folder in the corpus, the proposal routes into a separate
+  "🟡 Future-page candidates" section in the diff and is skipped on
+  `--apply` (so you can't accidentally ship a 404). The list itself
+  is the build-next prioritization signal — keep the references in
+  `data/services/<slug>.json` `related_cards`; build the pages when
+  the build-order says, and the inserter will start linking them
+  automatically.
+- **Batch mode writes a corpus-wide future-page report.** When you run
+  with `--corpus-root`, the script writes
+  `_future-page-candidates-YYYY-MM-DD.md` at the corpus root listing
+  every distinct future-page destination, sorted by reference count
+  descending. Destinations referenced by many pages should be built
+  sooner.
 - **Axis A picks cities in build-order priority.** If the next 5 cities
   in build order aren't geographically adjacent to the page's city,
   the proposals will reflect priority over adjacency. Hand-pick a

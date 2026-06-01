@@ -128,6 +128,10 @@ class Proposal:
     location_hint: str = ""  # "after evp-related-grid" / "para containing X"
     before: str = ""
     after: str = ""
+    # "actionable" = destination page exists, safe to apply.
+    # "future-page" = destination doesn't exist yet; surface as build-next signal,
+    #                  do not apply (would ship a 404).
+    status: str = "actionable"
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -229,6 +233,25 @@ def load_related_cards(service_slug: str) -> list[dict]:
         return []
 
 
+def discover_corpus_destinations(corpus_root: Path) -> set[str]:
+    """Return the set of page slugs that exist as folders in the corpus root.
+
+    A page is "live" enough to link to if it has a `NN-<page-slug>` folder.
+    Build-order presence isn't required (a page can be in build-order but
+    not yet scaffolded — those return 404 from the live site).
+    """
+    if not corpus_root or not corpus_root.is_dir():
+        return set()
+    slugs: set[str] = set()
+    for entry in corpus_root.iterdir():
+        if not entry.is_dir():
+            continue
+        m = re.match(r"^\d{2}-(.+)$", entry.name)
+        if m:
+            slugs.add(m.group(1))
+    return slugs
+
+
 # ----------------------------------------------------------------------------
 # Page identity parsing
 # ----------------------------------------------------------------------------
@@ -287,9 +310,15 @@ def detect_page_context(folder: Path) -> Optional[PageContext]:
 # ----------------------------------------------------------------------------
 
 
-def check_axis_b(ctx: PageContext) -> list[Proposal]:
+def check_axis_b(ctx: PageContext, corpus_destinations: set[str]) -> list[Proposal]:
     """Verify the page's HTML contains the Axis-B related_cards block per the
-    service JSON. Propose insertions for any missing cards."""
+    service JSON. Propose insertions for any missing cards.
+
+    Destinations that don't exist in the corpus are still surfaced — they
+    become "future-page" proposals (build-next signal) instead of being
+    silently dropped, so the synthesis's recommended related_cards stay
+    visible even when the destination page hasn't been built yet.
+    """
 
     related = load_related_cards(ctx.service_slug)
     if not related:
@@ -306,16 +335,26 @@ def check_axis_b(ctx: PageContext) -> list[Proposal]:
         # Check if already present
         if href in ctx.html_content:
             continue
+        # Destination exists in corpus? If not, mark as future-page candidate
+        status = "actionable" if slug in corpus_destinations else "future-page"
+        rationale = (
+            f"Axis B (same city, other service): {label} not yet linked from {ctx.page_slug}"
+            if status == "actionable"
+            else f"Axis B FUTURE-PAGE: {label} in {ctx.city_slug} referenced by "
+                 f"data/services/{ctx.service_slug}.json related_cards, but page not built yet "
+                 f"— signals build-next candidate"
+        )
         proposals.append(
             Proposal(
                 axis="B",
                 type="insert-block",
                 page_slug=ctx.page_slug,
-                rationale=f"Axis B (same city, other service): {label} not yet linked from {ctx.page_slug}",
+                rationale=rationale,
                 anchor_text=label,
                 destination_href=href,
                 location_hint="inside evp-related-grid (related-services block)",
                 after=f'<div class="evp-related-card"><a href="{href}">{label}</a></div>',
+                status=status,
             )
         )
     return proposals
@@ -326,7 +365,11 @@ def check_axis_b(ctx: PageContext) -> list[Proposal]:
 # ----------------------------------------------------------------------------
 
 
-def check_axis_a(ctx: PageContext, all_pairs: list[tuple[str, str]]) -> list[Proposal]:
+def check_axis_a(
+    ctx: PageContext,
+    all_pairs: list[tuple[str, str]],
+    corpus_destinations: set[str],
+) -> list[Proposal]:
     """For each other city that has this service in the build-order, propose
     a link if it's not already present.
 
@@ -335,11 +378,16 @@ def check_axis_a(ctx: PageContext, all_pairs: list[tuple[str, str]]) -> list[Pro
     walks the build-order in declared order and picks the first 5 non-self
     matches. That's not perfect geographic adjacency, but the build-order is
     roughly ordered by priority + adjacency.
+
+    Destinations missing from the corpus are routed to "future-page" status
+    so they don't ship a 404 if --apply is run blindly. They still surface
+    in the diff as build-next signal.
     """
     sibling_pairs = [
         (s, c) for (s, c) in all_pairs
         if s == ctx.service_slug and c != ctx.city_slug
     ]
+    service_label = SERVICE_LABEL.get(ctx.service_slug, ctx.service_slug.replace("-", " ").title())
     proposals: list[Proposal] = []
     count = 0
     for sibling_service, sibling_city in sibling_pairs:
@@ -353,16 +401,25 @@ def check_axis_a(ctx: PageContext, all_pairs: list[tuple[str, str]]) -> list[Pro
             continue
         # Friendly city label (replace -va/-md/-dc suffix)
         city_label = sibling_city.replace("-va", "").replace("-md", "").replace("-", " ").title()
+        # Destination exists in corpus? If not, mark as future-page candidate
+        status = "actionable" if sibling_page_slug in corpus_destinations else "future-page"
+        rationale = (
+            f"Axis A (same service, nearby city): {SERVICE_LABEL.get(sibling_service, sibling_service)} in {city_label} not linked from {ctx.page_slug}"
+            if status == "actionable"
+            else f"Axis A FUTURE-PAGE: {SERVICE_LABEL.get(sibling_service, sibling_service)} in {city_label} "
+                 f"referenced by build-order but page not built yet — signals build-next candidate"
+        )
         proposals.append(
             Proposal(
                 axis="A",
                 type="insert-block",
                 page_slug=ctx.page_slug,
-                rationale=f"Axis A (same service, nearby city): {SERVICE_LABEL.get(sibling_service, sibling_service)} in {city_label} not linked from {ctx.page_slug}",
+                rationale=rationale,
                 anchor_text=city_label,
                 destination_href=href,
-                location_hint="proposed new block: 'Panel upgrades in nearby cities' (or equivalent for this service)",
+                location_hint=f"proposed new block: '{service_label} in nearby cities'",
                 after=f'<a href="{href}">{city_label}</a>',
+                status=status,
             )
         )
         count += 1
@@ -427,15 +484,33 @@ SEMANTIC_KEYWORDS = [
 ]
 
 
-def check_axis_d(ctx: PageContext, max_proposals: int = 5) -> list[Proposal]:
+def check_axis_d(
+    ctx: PageContext,
+    corpus_destinations: set[str],
+    max_proposals: int = 5,
+    max_per_destination: int = 2,
+) -> list[Proposal]:
     """Scan body paragraphs for keyword mentions of related services. For each
     match outside an existing anchor, propose a wrap-anchor link to the
     corresponding service-in-current-city page.
 
-    Caps at max_proposals per page. Skips matches inside an existing <a>.
+    Caps:
+      - max_proposals per page (default 5) — total Axis D budget
+      - max_per_destination per page (default 2) — prevents 5 identical-anchor
+        links to the same URL. Per the synthesis §3 rule 5: multiple
+        same-anchor links to one destination on a single page read templated
+        to Google (only the first link's anchor counts under "first link
+        priority" anyway) and dilute editorial quality. Two is the natural
+        max before the page reads spammy.
+
+    Skips matches inside an existing <a> (no nested links).
     Skips matches that would point to the current page.
+    Skips destinations missing from the corpus (Axis D wraps only fire on
+    pages we know exist — unlike Axis A/B, an Axis D 404 link is
+    embarrassing because it's embedded in body prose).
     """
     proposals: list[Proposal] = []
+    per_destination_count: dict[str, int] = {}
     # Find <p>...</p> blocks
     para_pattern = re.compile(r"<p[^>]*>(.*?)</p>", re.DOTALL)
     paragraphs = list(para_pattern.finditer(ctx.html_content))
@@ -456,7 +531,14 @@ def check_axis_d(ctx: PageContext, max_proposals: int = 5) -> list[Proposal]:
             target_page_slug = render_page_slug(target_service, ctx.city_slug)
             if target_page_slug == ctx.page_slug:
                 continue
+            # Skip if destination page doesn't exist in the corpus
+            if target_page_slug not in corpus_destinations:
+                continue
             href = f"/{target_page_slug}/"
+            # Per-destination cap — no more than max_per_destination wraps
+            # to the same URL on one page.
+            if per_destination_count.get(href, 0) >= max_per_destination:
+                continue
             matched_phrase = m.group(0)
             wrapped = f'<a href="{href}">{matched_phrase}</a>'
             # Build a short snippet for the operator's diff
@@ -476,6 +558,7 @@ def check_axis_d(ctx: PageContext, max_proposals: int = 5) -> list[Proposal]:
                     after=wrapped,
                 )
             )
+            per_destination_count[href] = per_destination_count.get(href, 0) + 1
             if len(proposals) >= max_proposals:
                 break
     return proposals
@@ -492,6 +575,9 @@ def write_diff(ctx: PageContext, proposals: list[Proposal]) -> tuple[Path, Path]
     json_path = ctx.folder / f"_internal-link-proposals-{today}.json"
     md_path = ctx.folder / f"_internal-link-proposals-{today}.md"
 
+    actionable = [p for p in proposals if p.status == "actionable"]
+    future_page = [p for p in proposals if p.status == "future-page"]
+
     json_data = {
         "page_slug": ctx.page_slug,
         "service_slug": ctx.service_slug,
@@ -499,6 +585,8 @@ def write_diff(ctx: PageContext, proposals: list[Proposal]) -> tuple[Path, Path]
         "html_source": ctx.html_path.name,
         "generated": today,
         "proposal_count": len(proposals),
+        "actionable_count": len(actionable),
+        "future_page_count": len(future_page),
         "proposals": [p.to_dict() for p in proposals],
     }
     json_path.write_text(json.dumps(json_data, indent=2), encoding="utf-8")
@@ -510,9 +598,12 @@ def write_diff(ctx: PageContext, proposals: list[Proposal]) -> tuple[Path, Path]
         f"**Generated:** {today}",
         f"**HTML source:** `{ctx.html_path.name}`",
         f"**Service:** {ctx.service_slug} | **City:** {ctx.city_slug}",
-        f"**Total proposals:** {len(proposals)}",
+        f"**Actionable proposals:** {len(actionable)}",
+        f"**Future-page candidates:** {len(future_page)}",
         "",
-        "Operator review: accept or reject each proposal. To apply approved",
+        "Operator review: accept or reject each actionable proposal. Future-page",
+        "candidates are surfaced as build-next signal — they're skipped on",
+        "`--apply` to prevent shipping 404 links. To apply approved",
         "proposals, edit this file (delete rejected entries) and re-run with",
         f"`--apply --diff-file {json_path.name}`.",
         "",
@@ -520,7 +611,7 @@ def write_diff(ctx: PageContext, proposals: list[Proposal]) -> tuple[Path, Path]
         "",
     ]
     by_axis: dict[str, list[Proposal]] = {"A": [], "B": [], "C": [], "D": []}
-    for p in proposals:
+    for p in actionable:
         by_axis[p.axis].append(p)
     axis_titles = {
         "A": "Axis A — same service, nearby cities",
@@ -546,6 +637,24 @@ def write_diff(ctx: PageContext, proposals: list[Proposal]) -> tuple[Path, Path]
                 md.append(f"**Before:** `{p.before}`")
             md.append(f"**After:** `{p.after}`")
             md.append("")
+
+    # Future-page candidates — separate section, not applied even with --apply.
+    if future_page:
+        md.append("---")
+        md.append("")
+        md.append("## 🟡 Future-page candidates (destinations referenced but not yet built)")
+        md.append("")
+        md.append("These came up as Axis A or Axis B proposals but the destination page doesn't")
+        md.append("exist in the corpus. Each row is also a signal to build the page — if many")
+        md.append("Core 30 pages reference the same destination, prioritize it in the build order.")
+        md.append("")
+        md.append("| Axis | Destination | Anchor | Source |")
+        md.append("|---|---|---|---|")
+        for p in future_page:
+            source = "service JSON related_cards" if p.axis == "B" else "build-order"
+            md.append(f"| {p.axis} | `{p.destination_href}` | {p.anchor_text} | {source} |")
+        md.append("")
+
     md_path.write_text("\n".join(md), encoding="utf-8")
 
     return json_path, md_path
@@ -557,7 +666,13 @@ def write_diff(ctx: PageContext, proposals: list[Proposal]) -> tuple[Path, Path]
 
 
 def apply_proposals(ctx: PageContext, proposals: list[Proposal]) -> Path:
-    """Apply the proposals to a fresh draft (bumps version)."""
+    """Apply the proposals to a fresh draft (bumps version).
+
+    Future-page proposals are silently skipped — applying them would ship
+    404 links. They live in the diff as build-next signal only.
+    """
+    # Filter out future-page candidates — never apply destinations that don't exist
+    proposals = [p for p in proposals if p.status == "actionable"]
     html = ctx.html_content
 
     # Axis B — append related_cards into the existing evp-related-grid container.
@@ -704,7 +819,17 @@ def main() -> int:
             if p.is_dir() and re.match(r"^\d{2}-", p.name)
         )
 
-    overall = {"pages": 0, "proposals_total": 0}
+    # Discover corpus destinations once — used by all axes to suppress
+    # links to pages that don't exist (would-be 404s) and to route them to
+    # the future-page-candidates section instead.
+    corpus_root = args.corpus_root or (args.page_folder.parent if args.page_folder else None)
+    corpus_destinations = discover_corpus_destinations(corpus_root) if corpus_root else set()
+
+    overall = {"pages": 0, "actionable_total": 0, "future_page_total": 0}
+    # Aggregated future-page references across all pages — surfaces "build-next"
+    # signal in batch mode. Key is destination href; value is list of source page slugs.
+    future_page_refs: dict[str, list[str]] = {}
+
     for folder in targets:
         ctx = detect_page_context(folder)
         if not ctx:
@@ -714,14 +839,21 @@ def main() -> int:
 
         proposals: list[Proposal] = []
         if args.mode in ("data-driven", "both"):
-            proposals.extend(check_axis_b(ctx))
+            proposals.extend(check_axis_b(ctx, corpus_destinations))
             if build_order_pairs:
-                proposals.extend(check_axis_a(ctx, build_order_pairs))
+                proposals.extend(check_axis_a(ctx, build_order_pairs, corpus_destinations))
             proposals.extend(check_axis_c(ctx, category_hubs_live))
         if args.mode in ("semantic", "both"):
-            proposals.extend(check_axis_d(ctx))
+            proposals.extend(check_axis_d(ctx, corpus_destinations))
 
-        overall["proposals_total"] += len(proposals)
+        actionable = [p for p in proposals if p.status == "actionable"]
+        future_page = [p for p in proposals if p.status == "future-page"]
+        overall["actionable_total"] += len(actionable)
+        overall["future_page_total"] += len(future_page)
+
+        # Aggregate future-page refs for batch report
+        for p in future_page:
+            future_page_refs.setdefault(p.destination_href, []).append(ctx.page_slug)
 
         if args.apply:
             # Re-load from diff-file if provided (operator-curated subset)
@@ -729,21 +861,51 @@ def main() -> int:
                 curated = json.loads(args.diff_file.read_text(encoding="utf-8"))
                 proposals = [Proposal(**p) for p in curated.get("proposals", [])]
             new_draft = apply_proposals(ctx, proposals)
-            print(f"[apply] {ctx.page_slug}: wrote {new_draft.name} with {len(proposals)} applied")
+            applied_count = sum(1 for p in proposals if p.status == "actionable")
+            print(f"[apply] {ctx.page_slug}: wrote {new_draft.name} with {applied_count} applied")
         else:
             json_path, md_path = write_diff(ctx, proposals)
+            future_note = f" + {len(future_page)} future-page" if future_page else ""
             print(
-                f"[propose] {ctx.page_slug}: {len(proposals)} proposals "
-                f"(A={sum(1 for p in proposals if p.axis=='A')}, "
-                f"B={sum(1 for p in proposals if p.axis=='B')}, "
-                f"C={sum(1 for p in proposals if p.axis=='C')}, "
-                f"D={sum(1 for p in proposals if p.axis=='D')})  "
-                f"→ {md_path.name}"
+                f"[propose] {ctx.page_slug}: {len(actionable)} actionable "
+                f"(A={sum(1 for p in actionable if p.axis=='A')}, "
+                f"B={sum(1 for p in actionable if p.axis=='B')}, "
+                f"C={sum(1 for p in actionable if p.axis=='C')}, "
+                f"D={sum(1 for p in actionable if p.axis=='D')})"
+                f"{future_note}  → {md_path.name}"
             )
+
+    # Batch-mode future-page candidates report
+    if args.corpus_root and future_page_refs:
+        today = date.today().isoformat()
+        report_path = args.corpus_root / f"_future-page-candidates-{today}.md"
+        lines = [
+            "# Future-page candidates — corpus-wide aggregation",
+            "",
+            f"**Generated:** {today}",
+            f"**Pages scanned:** {overall['pages']}",
+            f"**Distinct future-page destinations referenced:** {len(future_page_refs)}",
+            "",
+            "These destinations are referenced by Axis A (build-order siblings) or",
+            "Axis B (`related_cards` in service JSONs) but don't have a page folder",
+            "yet. The reference-count column is a build-next prioritization signal —",
+            "destinations referenced by more pages should be built sooner.",
+            "",
+            "| Destination | Reference count | Referenced by |",
+            "|---|---|---|",
+        ]
+        # Sort by reference count descending — most-wanted first
+        for href in sorted(future_page_refs, key=lambda h: -len(future_page_refs[h])):
+            refs = future_page_refs[href]
+            lines.append(f"| `{href}` | {len(refs)} | {', '.join(refs)} |")
+        lines.append("")
+        report_path.write_text("\n".join(lines), encoding="utf-8")
+        print(f"\n[future-pages] corpus-wide report: {report_path.name}")
 
     print(
         f"\nDone. Pages processed: {overall['pages']}. "
-        f"Total proposals: {overall['proposals_total']}."
+        f"Actionable proposals: {overall['actionable_total']}. "
+        f"Future-page candidates: {overall['future_page_total']}."
     )
     return 0
 
