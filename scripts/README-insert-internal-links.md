@@ -165,6 +165,61 @@ Reading the markdown diff:
 - **Axis D (5 proposals):** Five "EV charger" mentions in the page body
   that could be wrapped to link to `/ev-charger-vienna-va/`.
 
+## Anchor-text rotation (default ON)
+
+When proposing an Axis A or Axis B link, the inserter picks from a pool
+of anchor-text variants per destination and chooses the one that's been
+used the LEAST across the corpus. Why: if 30 pages all link to
+`/panel-upgrade-vienna-va/` with the exact same 2-word anchor "panel
+upgrade", Google reads that as templated/spammy. Varied anchors read
+editorial.
+
+Example: same destination `/panel-upgrade-tysons-va/` gets different
+anchors from different pages:
+
+- From Vienna page: "Tysons panel upgrades"
+- From Fairfax page: "panel upgrade in Tysons"
+- From McLean page: "Tysons"
+
+Variants live in `ANCHOR_VARIANTS_AXIS_A` and `ANCHOR_VARIANTS_AXIS_B`
+at the top of the script — extend when you add new services.
+
+**Cold-start behavior:** before any pages have shipped, the corpus has
+zero anchor history. The picker breaks ties using a stable hash of
+(source page slug, destination) so the FIRST batch run still
+distributes variants across pages instead of picking variant #1
+everywhere. As real anchors accumulate, picks become genuine
+least-used-first.
+
+**Disable with `--no-anchor-rotation`** when you want UX-consistent
+labels across the corpus and don't care about the templated-link SEO
+signal (e.g., visually-uniform card grids matter more than rotation).
+
+## Geographic adjacency (default ON)
+
+Axis A picks "nearby cities" for the same service. Without coordinates
+the picker walks the build-order top-to-bottom — works by luck if your
+build-order is geographically clustered, breaks if a client's
+build-order is ordered by revenue priority instead.
+
+Adding `data/cities-coordinates.json` (lat/lon per city slug) makes
+"nearby" actually mean nearby. The picker sorts sibling cities by
+great-circle distance from the source page's city and proposes the
+closest 5. Every Axis A rationale annotates the distance:
+
+```
+Rationale: Axis A FUTURE-PAGE: Electrical Troubleshooting in Burke
+(~4.1 mi from fairfax-va) referenced by build-order but page not
+built yet — signals build-next candidate
+```
+
+**For new clients:** add your service-area cities + coordinates to
+`data/cities-coordinates.json` during onboarding. The picker falls
+back to build-order order for any city missing from the map, so
+partial coverage is fine — just add cities as you learn them.
+
+**Disable with `--no-geo-adjacency`** to force build-order behavior.
+
 ## Operator review tips
 
 - **Axis D per-destination cap is 2.** If a page mentions "EV charger"

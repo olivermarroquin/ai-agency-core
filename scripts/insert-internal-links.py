@@ -99,6 +99,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from dataclasses import asdict, dataclass, field
@@ -108,6 +109,7 @@ from typing import Optional
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 DATA_DIR = SCRIPTS_DIR / "data"
+CITIES_COORDS_PATH = DATA_DIR / "cities-coordinates.json"
 
 
 # ----------------------------------------------------------------------------
@@ -186,6 +188,130 @@ SERVICE_LABEL = {
     "whole-house-rewire": "Whole-House Rewiring",
     "smart-home-installation": "Smart Home Installation",
 }
+
+# Anchor-text variants for rotation across the corpus. When proposing an Axis A
+# (same-service-different-city) or Axis B (same-city-different-service) link,
+# the inserter picks the variant that's been used the LEAST times pointing at
+# that destination across the whole corpus. Goal: avoid having 30 pages all
+# link to /panel-upgrade-vienna-va/ with the exact same 2-word anchor — that
+# reads templated to Google and triggers spam heuristics. Synthesis §3 rule 5.
+#
+# Format for AXIS_A: {service_slug: [pattern1, pattern2, pattern3]} where each
+# pattern can use {city_label} placeholder. Caller substitutes.
+# Format for AXIS_B: {service_slug: [label1, label2, label3]} — flat list of
+# label variants for the related-cards grid.
+ANCHOR_VARIANTS_AXIS_A = {
+    "troubleshooting":            ["{city_label}", "{city_label} troubleshooting", "electrical troubleshooting in {city_label}"],
+    "panel-upgrade":              ["{city_label}", "{city_label} panel upgrades", "panel upgrade in {city_label}"],
+    "ev-charger":                 ["{city_label}", "EV charger installation in {city_label}", "{city_label} EV charging"],
+    "light-fixture-installation": ["{city_label}", "{city_label} light fixtures", "lighting work in {city_label}"],
+    "smoke-alarm":                ["{city_label}", "{city_label} smoke alarms", "smoke alarm work in {city_label}"],
+    "outlet-installation":        ["{city_label}", "{city_label} outlets", "outlet work in {city_label}"],
+    "generator-installation":     ["{city_label}", "{city_label} generators", "generator installation in {city_label}"],
+    "whole-house-rewire":         ["{city_label}", "{city_label} rewiring", "whole-house rewire in {city_label}"],
+    "smart-home-installation":    ["{city_label}", "{city_label} smart home work", "smart home installation in {city_label}"],
+}
+
+ANCHOR_VARIANTS_AXIS_B = {
+    "troubleshooting":            ["Electrical Troubleshooting", "Diagnostic & Troubleshooting", "Electrical Diagnostics"],
+    "panel-upgrade":              ["Electrical Panel Upgrades", "Panel Replacement", "Service Panel Upgrades"],
+    "ev-charger":                 ["EV Charger Installation", "EV Charging Setup", "Level 2 Charger Install"],
+    "light-fixture-installation": ["Light Fixtures & Chandeliers", "Lighting Installation", "Fixture & Chandelier Install"],
+    "smoke-alarm":                ["Smoke Alarm Installation", "Smoke & CO Alarms", "Smoke Detector Install"],
+    "outlet-installation":        ["Outlet & Switch Installation", "Outlet, Switch & GFCI Work", "Receptacles & Switches"],
+    "generator-installation":     ["Standby Generator Installation", "Whole-Home Generators", "Generator Setup"],
+    "whole-house-rewire":         ["Whole-House Rewiring", "Complete Home Rewire", "Full-Home Rewire Service"],
+    "smart-home-installation":    ["Smart Home Installation", "Smart Home Wiring", "Smart Devices & Wiring"],
+}
+
+
+def load_city_coordinates() -> dict[str, tuple[float, float]]:
+    """Load the city -> (lat, lon) map. Returns empty dict if file missing."""
+    if not CITIES_COORDS_PATH.is_file():
+        return {}
+    try:
+        raw = json.loads(CITIES_COORDS_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    out: dict[str, tuple[float, float]] = {}
+    for k, v in raw.items():
+        if k.startswith("_"):
+            continue
+        if isinstance(v, list) and len(v) == 2:
+            out[k] = (float(v[0]), float(v[1]))
+    return out
+
+
+def haversine_miles(a: tuple[float, float], b: tuple[float, float]) -> float:
+    """Great-circle distance in miles between two (lat, lon) points."""
+    lat1, lon1 = a
+    lat2, lon2 = b
+    r_miles = 3958.756  # earth radius in miles
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+    h = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
+    return 2 * r_miles * math.asin(math.sqrt(h))
+
+
+HREF_PATTERN = re.compile(r'<a\s+[^>]*href\s*=\s*"([^"]+)"[^>]*>(.*?)</a>', re.IGNORECASE | re.DOTALL)
+
+
+def scan_corpus_anchor_usage(corpus_root: Path) -> dict[tuple[str, str], int]:
+    """Walk every page's latest draft, count (anchor_text, destination_href) pairs.
+
+    Used by check_axis_a + check_axis_b to pick the LEAST-used variant when
+    proposing a new link, so anchor text varies across the corpus.
+    """
+    counter: dict[tuple[str, str], int] = {}
+    if not corpus_root or not corpus_root.is_dir():
+        return counter
+    for entry in corpus_root.iterdir():
+        if not entry.is_dir() or not re.match(r"^\d{2}-", entry.name):
+            continue
+        def _ver(p: Path) -> int:
+            m = re.match(r"draft-v(\d+)-WP-WRAPPED\.html$", p.name)
+            return int(m.group(1)) if m else -1
+        drafts = sorted(entry.glob("draft-v*-WP-WRAPPED.html"), key=_ver)
+        if not drafts:
+            continue
+        html = drafts[-1].read_text(encoding="utf-8")
+        for m in HREF_PATTERN.finditer(html):
+            href = m.group(1).split("#")[0].split("?")[0].strip()
+            if not href.startswith("/") or not href.endswith("/"):
+                continue
+            # Strip HTML tags from anchor text to get plain text
+            anchor = re.sub(r"<[^>]+>", "", m.group(2)).strip()
+            if not anchor:
+                continue
+            counter[(anchor, href)] = counter.get((anchor, href), 0) + 1
+    return counter
+
+
+def pick_least_used_variant(
+    variants: list[str],
+    destination_href: str,
+    anchor_usage: dict[tuple[str, str], int],
+    substitutions: dict[str, str] | None = None,
+    source_page_slug: str = "",
+) -> str:
+    """Return the variant pointing at this destination that's been used the
+    fewest times across the corpus. Ties broken by a stable hash of
+    (source_page_slug, destination_href) — guarantees variance even on a
+    cold start (when no anchors have been used yet) so the first batch run
+    doesn't propose the same variant on every page."""
+    if not variants:
+        return ""
+    subs = substitutions or {}
+    expanded = [v.format(**subs) for v in variants]
+    # Per-page deterministic offset so cold-start ties spread across variants
+    offset = hash((source_page_slug, destination_href)) % len(expanded) if expanded else 0
+    counted = [
+        (anchor_usage.get((v, destination_href), 0), (i - offset) % len(expanded), v)
+        for i, v in enumerate(expanded)
+    ]
+    counted.sort()  # least-used first, then by (offset-adjusted) list-order
+    return counted[0][2]
 
 
 def render_page_slug(service_slug: str, city_slug: str) -> str:
@@ -310,7 +436,12 @@ def detect_page_context(folder: Path) -> Optional[PageContext]:
 # ----------------------------------------------------------------------------
 
 
-def check_axis_b(ctx: PageContext, corpus_destinations: set[str]) -> list[Proposal]:
+def check_axis_b(
+    ctx: PageContext,
+    corpus_destinations: set[str],
+    anchor_usage: dict[tuple[str, str], int] | None = None,
+    rotate_anchors: bool = True,
+) -> list[Proposal]:
     """Verify the page's HTML contains the Axis-B related_cards block per the
     service JSON. Propose insertions for any missing cards.
 
@@ -318,29 +449,49 @@ def check_axis_b(ctx: PageContext, corpus_destinations: set[str]) -> list[Propos
     become "future-page" proposals (build-next signal) instead of being
     silently dropped, so the synthesis's recommended related_cards stay
     visible even when the destination page hasn't been built yet.
+
+    Anchor rotation: when rotate_anchors=True and the destination's service
+    has variants defined in ANCHOR_VARIANTS_AXIS_B, picks the variant least-
+    used across the corpus. Goal: 30 pages each linking to a destination
+    don't all use the exact same 2-word anchor.
     """
 
     related = load_related_cards(ctx.service_slug)
     if not related:
         return []
 
+    anchor_usage = anchor_usage or {}
     proposals: list[Proposal] = []
     for card in related:
         slug = card["href_slug"].replace("{city_slug}", ctx.city_slug)
         href = f"/{slug}/"
-        label = card.get("label", slug)
+        default_label = card.get("label", slug)
         # Skip self-link
         if slug == ctx.page_slug:
             continue
         # Check if already present
         if href in ctx.html_content:
             continue
+
+        # Pick anchor text — rotation aware.
+        # Look up which service the related-card destination is; derive from
+        # the href_slug template (everything before -{city_slug}).
+        target_service_slug = card["href_slug"].replace("-{city_slug}", "")
+        label = default_label
+        if rotate_anchors and target_service_slug in ANCHOR_VARIANTS_AXIS_B:
+            label = pick_least_used_variant(
+                ANCHOR_VARIANTS_AXIS_B[target_service_slug],
+                href,
+                anchor_usage,
+                source_page_slug=ctx.page_slug,
+            )
+
         # Destination exists in corpus? If not, mark as future-page candidate
         status = "actionable" if slug in corpus_destinations else "future-page"
         rationale = (
-            f"Axis B (same city, other service): {label} not yet linked from {ctx.page_slug}"
+            f"Axis B (same city, other service): {default_label} not yet linked from {ctx.page_slug}"
             if status == "actionable"
-            else f"Axis B FUTURE-PAGE: {label} in {ctx.city_slug} referenced by "
+            else f"Axis B FUTURE-PAGE: {default_label} in {ctx.city_slug} referenced by "
                  f"data/services/{ctx.service_slug}.json related_cards, but page not built yet "
                  f"— signals build-next candidate"
         )
@@ -369,24 +520,48 @@ def check_axis_a(
     ctx: PageContext,
     all_pairs: list[tuple[str, str]],
     corpus_destinations: set[str],
+    anchor_usage: dict[tuple[str, str], int] | None = None,
+    rotate_anchors: bool = True,
+    city_coords: dict[str, tuple[float, float]] | None = None,
 ) -> list[Proposal]:
     """For each other city that has this service in the build-order, propose
     a link if it's not already present.
 
-    Caps at 5 nearby cities (the synthesis's Axis-A target). Prefers cities
-    geographically adjacent — but in this stdlib implementation, the script
-    walks the build-order in declared order and picks the first 5 non-self
-    matches. That's not perfect geographic adjacency, but the build-order is
-    roughly ordered by priority + adjacency.
+    Caps at 5 nearby cities (the synthesis's Axis-A target).
+
+    Geographic adjacency: if both the source city and a sibling city have
+    coordinates in data/cities-coordinates.json, sibling_pairs is sorted by
+    real great-circle distance from the source city. Falls back to
+    build-order ordering for cities missing coordinates. This makes "nearby
+    cities" actually mean nearby, not just "earlier in the build-order."
+
+    Anchor rotation: when rotate_anchors=True and the service has variants in
+    ANCHOR_VARIANTS_AXIS_A, picks the variant pointing at this destination
+    least-used across the corpus.
 
     Destinations missing from the corpus are routed to "future-page" status
     so they don't ship a 404 if --apply is run blindly. They still surface
     in the diff as build-next signal.
     """
+    anchor_usage = anchor_usage or {}
+    city_coords = city_coords or {}
+
     sibling_pairs = [
         (s, c) for (s, c) in all_pairs
         if s == ctx.service_slug and c != ctx.city_slug
     ]
+
+    # Geographic-distance sort if source city has coordinates. Siblings without
+    # coordinates fall back to a large sentinel distance, preserving build-order
+    # tail behind the geographically-ordered head.
+    source_coord = city_coords.get(ctx.city_slug)
+    if source_coord:
+        def _dist(pair: tuple[str, str]) -> float:
+            sibling_city = pair[1]
+            target = city_coords.get(sibling_city)
+            return haversine_miles(source_coord, target) if target else 1e9
+        sibling_pairs = sorted(sibling_pairs, key=_dist)
+
     service_label = SERVICE_LABEL.get(ctx.service_slug, ctx.service_slug.replace("-", " ").title())
     proposals: list[Proposal] = []
     count = 0
@@ -401,12 +576,32 @@ def check_axis_a(
             continue
         # Friendly city label (replace -va/-md/-dc suffix)
         city_label = sibling_city.replace("-va", "").replace("-md", "").replace("-", " ").title()
+
+        # Pick anchor text — rotation aware. Default is bare city label.
+        anchor_text = city_label
+        if rotate_anchors and sibling_service in ANCHOR_VARIANTS_AXIS_A:
+            anchor_text = pick_least_used_variant(
+                ANCHOR_VARIANTS_AXIS_A[sibling_service],
+                href,
+                anchor_usage,
+                substitutions={"city_label": city_label},
+                source_page_slug=ctx.page_slug,
+            )
+
         # Destination exists in corpus? If not, mark as future-page candidate
         status = "actionable" if sibling_page_slug in corpus_destinations else "future-page"
+
+        # Distance note for the rationale (helps the operator sanity-check geography)
+        target_coord = city_coords.get(sibling_city)
+        distance_note = ""
+        if source_coord and target_coord:
+            miles = haversine_miles(source_coord, target_coord)
+            distance_note = f" (~{miles:.1f} mi from {ctx.city_slug})"
+
         rationale = (
-            f"Axis A (same service, nearby city): {SERVICE_LABEL.get(sibling_service, sibling_service)} in {city_label} not linked from {ctx.page_slug}"
+            f"Axis A (same service, nearby city): {SERVICE_LABEL.get(sibling_service, sibling_service)} in {city_label}{distance_note} not linked from {ctx.page_slug}"
             if status == "actionable"
-            else f"Axis A FUTURE-PAGE: {SERVICE_LABEL.get(sibling_service, sibling_service)} in {city_label} "
+            else f"Axis A FUTURE-PAGE: {SERVICE_LABEL.get(sibling_service, sibling_service)} in {city_label}{distance_note} "
                  f"referenced by build-order but page not built yet — signals build-next candidate"
         )
         proposals.append(
@@ -415,10 +610,10 @@ def check_axis_a(
                 type="insert-block",
                 page_slug=ctx.page_slug,
                 rationale=rationale,
-                anchor_text=city_label,
+                anchor_text=anchor_text,
                 destination_href=href,
                 location_hint=f"proposed new block: '{service_label} in nearby cities'",
-                after=f'<a href="{href}">{city_label}</a>',
+                after=f'<a href="{href}">{anchor_text}</a>',
                 status=status,
             )
         )
@@ -792,6 +987,19 @@ def main() -> int:
         type=Path,
         help="In --apply mode, path to a curated JSON diff (operator-reviewed).",
     )
+    parser.add_argument(
+        "--no-anchor-rotation",
+        action="store_true",
+        help="Disable anchor-text rotation (default: rotation ON). Use when you "
+             "want UX-consistent labels across the corpus and don't care about "
+             "the templated-link SEO signal.",
+    )
+    parser.add_argument(
+        "--no-geo-adjacency",
+        action="store_true",
+        help="Disable geographic-adjacency sorting on Axis A (default: ON when "
+             "data/cities-coordinates.json exists). Falls back to build-order order.",
+    )
     args = parser.parse_args()
 
     if not args.page_folder and not args.corpus_root:
@@ -825,6 +1033,17 @@ def main() -> int:
     corpus_root = args.corpus_root or (args.page_folder.parent if args.page_folder else None)
     corpus_destinations = discover_corpus_destinations(corpus_root) if corpus_root else set()
 
+    # Anchor-usage pre-scan — drives anchor-text rotation across the corpus.
+    rotate_anchors = not args.no_anchor_rotation
+    anchor_usage: dict[tuple[str, str], int] = {}
+    if rotate_anchors and corpus_root:
+        anchor_usage = scan_corpus_anchor_usage(corpus_root)
+
+    # Geographic-adjacency map for Axis A.
+    city_coords: dict[str, tuple[float, float]] = {}
+    if not args.no_geo_adjacency:
+        city_coords = load_city_coordinates()
+
     overall = {"pages": 0, "actionable_total": 0, "future_page_total": 0}
     # Aggregated future-page references across all pages — surfaces "build-next"
     # signal in batch mode. Key is destination href; value is list of source page slugs.
@@ -839,9 +1058,16 @@ def main() -> int:
 
         proposals: list[Proposal] = []
         if args.mode in ("data-driven", "both"):
-            proposals.extend(check_axis_b(ctx, corpus_destinations))
+            proposals.extend(check_axis_b(
+                ctx, corpus_destinations,
+                anchor_usage=anchor_usage, rotate_anchors=rotate_anchors,
+            ))
             if build_order_pairs:
-                proposals.extend(check_axis_a(ctx, build_order_pairs, corpus_destinations))
+                proposals.extend(check_axis_a(
+                    ctx, build_order_pairs, corpus_destinations,
+                    anchor_usage=anchor_usage, rotate_anchors=rotate_anchors,
+                    city_coords=city_coords,
+                ))
             proposals.extend(check_axis_c(ctx, category_hubs_live))
         if args.mode in ("semantic", "both"):
             proposals.extend(check_axis_d(ctx, corpus_destinations))
