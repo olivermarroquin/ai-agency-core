@@ -259,8 +259,14 @@ def detect_page_context(folder: Path) -> Optional[PageContext]:
     if not service_slug or not city_slug:
         return None
 
-    # Find highest-numbered WP-WRAPPED draft
-    drafts = sorted(folder.glob("draft-v*-WP-WRAPPED.html"))
+    # Find highest-numbered WP-WRAPPED draft. Sort NUMERICALLY by version,
+    # not lexicographically — otherwise draft-v9 sorts after draft-v14 because
+    # '9' > '1' as a character.
+    def _draft_version(p: Path) -> int:
+        m = re.match(r"draft-v(\d+)-WP-WRAPPED\.html$", p.name)
+        return int(m.group(1)) if m else -1
+
+    drafts = sorted(folder.glob("draft-v*-WP-WRAPPED.html"), key=_draft_version)
     if not drafts:
         return None
     html_path = drafts[-1]
