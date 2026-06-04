@@ -334,6 +334,47 @@ _JSON_LD_BLOCK_PATTERN = re.compile(
 
 _REQUIRED_SCHEMA_TYPES = {"LocalBusiness", "Service", "FAQPage"}
 
+# Patterns for the placeholder hard-block (Guard 1, Issues #15/#24/#26).
+# Before any publish/update, the draft is scanned for residual placeholder
+# content that would render as visible garbage on the live page. Any match
+# hard-blocks the publish with a file + line report. This replaces the old
+# FILL/TBD-only check with a comprehensive scan covering every placeholder
+# class that shipped (or nearly shipped) to live EV pages in the 06-12 run.
+_PLACEHOLDER_PATTERNS: list[tuple[re.Pattern[str], str]] = [
+    (re.compile(r"\[.*?placeholder.*?\]", re.IGNORECASE),
+     "bracketed placeholder text"),
+    (re.compile(r"<!--\s*MISSING"),
+     "<!-- MISSING comment (scaffolder silent-degrade output)"),
+    (re.compile(r"\{[a-z_]+\}"),
+     "unrendered {template_token}"),
+    (re.compile(r"\bFILL[:\s]", re.IGNORECASE),
+     "FILL: placeholder"),
+    (re.compile(r"\bTBD\b"),
+     "TBD placeholder"),
+]
+
+
+def check_placeholder_gate(html: str) -> tuple[bool, list[str]]:
+    """Scan the HTML draft for residual placeholder content.
+
+    Returns (clean, findings) where findings is a list of
+    human-readable strings like "line 42: bracketed placeholder text: [Hero image placeholder...]".
+
+    Guard 1 from the publish-pipeline hardening handoff (T2-7).
+    Prevents Issues #15 (dangling hero placeholder), #24 (<!-- MISSING
+    scaffolder output), #26 (visible maps placeholder text), and #14
+    (unrendered {city_name} token) from reaching live pages.
+    """
+    findings: list[str] = []
+    for line_num, line in enumerate(html.splitlines(), start=1):
+        for pattern, description in _PLACEHOLDER_PATTERNS:
+            for match in pattern.finditer(line):
+                snippet = match.group(0)[:80]
+                findings.append(
+                    f"line {line_num}: {description}: {snippet}"
+                )
+    return (len(findings) == 0), findings
+
 
 def validate_jsonld(html: str) -> tuple[bool, list[str]]:
     """Pull every JSON-LD block from the HTML, parse each, confirm the required
@@ -1058,6 +1099,30 @@ def publish(
             error_message=f"output-quality-loop pre-publish gate refused: {gate_reason}",
         )
 
+    # Guard 1 — Placeholder hard-block (T2-7, Issues #15/#24/#26).
+    # Scans for ANY residual placeholder content: bracketed [placeholder]
+    # text, <!-- MISSING comments, unrendered {tokens}, FILL/TBD.
+    placeholder_clean, placeholder_findings = check_placeholder_gate(html)
+    if not placeholder_clean:
+        print(f"→ Placeholder gate: ✗ BLOCKED — {len(placeholder_findings)} residual placeholder(s) found:")
+        for f in placeholder_findings:
+            print(f"   ! {html_path.name}: {f}")
+        duration = (datetime.now() - started).total_seconds()
+        return PublishResult(
+            success=False,
+            page_id=None,
+            live_url=None,
+            schema_valid=False,
+            schema_errors=[],
+            duration_seconds=duration,
+            error_message=(
+                f"Placeholder hard-block: {len(placeholder_findings)} residual placeholder(s) "
+                f"in {html_path.name}. Fix the draft before publishing. "
+                f"First finding: {placeholder_findings[0]}"
+            ),
+        )
+    print("→ Placeholder gate: ✓ clean (0 residual placeholders)")
+
     schema_valid, schema_errors = validate_jsonld(html)
     print(f"→ Schema valid:  {schema_valid}")
     if schema_errors:
@@ -1101,6 +1166,31 @@ def publish(
         username=config["wp_username"],
         app_password=app_password,
     )
+
+    # Guard 3 — Disk↔WP sync enforcement (T2-7, Issue #28).
+    # Re-read the on-disk draft at publish time and verify it matches the
+    # HTML we validated above. If someone edited the WP page directly (or
+    # a parallel process changed the draft), the content we're about to push
+    # might not match disk. Disk is the source of truth — refuse if they
+    # diverge. This prevents the WP-only edits that caused Issue #28.
+    disk_html_at_push = html_path.read_text(encoding="utf-8")
+    if disk_html_at_push != html:
+        duration = (datetime.now() - started).total_seconds()
+        print("→ Disk sync:     ✗ REFUSED — on-disk draft changed since validation")
+        return PublishResult(
+            success=False,
+            page_id=None,
+            live_url=None,
+            schema_valid=schema_valid,
+            schema_errors=schema_errors,
+            duration_seconds=duration,
+            error_message=(
+                f"Disk↔WP sync enforcement: the on-disk file {html_path.name} "
+                f"changed between validation and publish. Re-run the script to "
+                f"validate the current version. Disk is the source of truth."
+            ),
+        )
+    print("→ Disk sync:     ✓ on-disk draft matches validated content")
 
     payload = build_wp_payload(metadata, html, config)
 
