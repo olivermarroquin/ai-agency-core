@@ -84,6 +84,11 @@ DEFAULT_BRIEFS_ROOT = Path.home() / "workspace/second-brain/05_shared-intelligen
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 DATA_DIR = SCRIPTS_DIR / "data"
+SECOND_BRAIN = Path.home() / "workspace/second-brain"
+
+# Reference-photo home per _meta/conventions.md § "Client imagery reference assets"
+def reference_photo_home(client_slug: str) -> Path:
+    return SECOND_BRAIN / "04_projects/clients/_active" / client_slug / "marketing-assets/reference-photos"
 
 
 # ----------------------------------------------------------------------------
@@ -547,6 +552,34 @@ SERVICE_FALLBACK_ACTIONS: dict[str, dict[str, str]] = {
 }
 
 
+# Embroidered-no-patch wardrobe clause (Issue #20). Any prompt that may show
+# the uniform (AHMAD-CENTRIC always; HANDS-ONLY when chest/shoulder may render)
+# must carry this clause. The generator must NEVER instruct uploading the uniform
+# mockup — its white callout boxes cause white name-patches.
+EMBROIDERED_NO_PATCH_CLAUSE = (
+    "if any chest, shoulder, or sleeve branding shows, the EV Electric mark is "
+    "embroidered directly onto the shirt fabric — a small yellow-gold lightbulb "
+    "icon + navy 'EV ELECTRIC' wordmark, NO patch, no white background, no "
+    "rectangular badge"
+)
+
+# Prompt type classification for self-documenting headers (Issue #17).
+# Each prompt carries: Type, Reference photos, Aspect, Produces.
+PROMPT_TYPE_LEGEND = {
+    "PURE SCENE": {
+        "description": "The service / installed result — no person in frame",
+        "reference_photos": "NONE",
+    },
+    "HANDS-ONLY": {
+        "description": "A faceless worker's hands at the task, uniform cuff visible — no face",
+        "reference_photos": "NONE (optional: brand logo art only). NEVER upload the uniform mockup.",
+    },
+    "AHMAD-CENTRIC": {
+        "description": "Owner performing the task / portrait — face is in the shot",
+        "reference_photos": "Owner headshot (face/likeness) + brand logo art (chest embroidery). Do NOT upload the uniform mockup.",
+    },
+}
+
 # Always-avoid terms for residential electrical imagery. Carried into every
 # prompt's avoid list, regardless of slot or city.
 DEFAULT_AVOID_TERMS = [
@@ -618,7 +651,7 @@ def _compose_wardrobe_block(
     return (
         f"He is wearing his {client_short} work shirt: a clean short-sleeve button-up work "
         f"shirt in the brand's primary color, with the {client_short} brand mark embroidered "
-        f"directly onto the chest fabric (no patch, no white background) and the name "
+        f"directly onto the chest fabric ({EMBROIDERED_NO_PATCH_CLAUSE}) and the name "
         f"'{owner_first.upper()}' embroidered on the opposite chest. Light pants."
     )
 
@@ -734,6 +767,70 @@ def compose_hero_prompt(
     return " ".join(p.strip() for p in parts if p.strip())
 
 
+def compose_hero_service_scene(
+    client_cfg: dict,
+    service_slug: str,
+    city_name: str,
+    setting_hints: dict,
+    prior: dict,
+) -> str:
+    """Compose a PURE SCENE hero — the installed result / work scene, no person."""
+    region = f"{city_name}-area" if city_name else "Northern Virginia"
+    normalized = _normalize_service_slug(service_slug)
+    fallback = SERVICE_FALLBACK_ACTIONS.get(normalized, {})
+    pretty_service = service_slug.replace("-", " ")
+    subject = fallback.get(
+        "scene_subject",
+        f"the visible output of a residential {pretty_service} service — clean, professional, completed",
+    )
+
+    parts = [
+        f"{subject[0].upper()}{subject[1:]}, newly completed in a modern {region} home.",
+        (f"Setting: interior of a modern residential home — neutral drywall, warm wood floor, "
+         f"soft natural light from a window or doorway, premium-but-approachable residential feel."),
+        ("Composition: the finished result as the clear focal point at rule-of-thirds, "
+         "surrounding environment softly out of focus. 4:3 landscape aspect ratio."),
+        ("Photo-realistic editorial photography, 35mm lens look, shallow depth of field, "
+         "sharp on the result, warm but neutral color grade."),
+        ("Avoid: " + ", ".join(DEFAULT_AVOID_TERMS + [
+            "people's faces", "ladders or visible install mess", "before/after composite layouts",
+        ]) + "."),
+    ]
+    return " ".join(p.strip() for p in parts if p.strip())
+
+
+def compose_hero_hands_only(
+    client_cfg: dict,
+    service_slug: str,
+    city_name: str,
+    setting_hints: dict,
+    prior: dict,
+) -> str:
+    """Compose a HANDS-ONLY hero — faceless worker's hands at the task."""
+    region = f"{city_name}-area" if city_name else "Northern Virginia"
+    normalized = _normalize_service_slug(service_slug)
+    fallback = SERVICE_FALLBACK_ACTIONS.get(normalized, {})
+    pretty_service = service_slug.replace("-", " ")
+    action = fallback.get("hero_action", f"mid-action on a residential {pretty_service} job")
+
+    learned_terms = _learned_avoid_terms_from_lessons(prior.get("lessons", []))
+    avoid_terms = _collect_avoid_terms("hero", learned_terms)
+    avoid_terms.extend(["faces", "full portraits"])
+
+    parts = [
+        (f"Close, mid-action shot of a residential electrician's hands (wearing the cuff of a "
+         f"light medium-blue postman-blue short-sleeve work shirt; {EMBROIDERED_NO_PATCH_CLAUSE}) "
+         f"{action} inside a modern {region} home."),
+        ("Focus on the hands and the work; no face in frame (chest-down / hands-and-work composition)."),
+        (f"Soft warm natural light from a doorway, warm wood floor at the edge of frame."),
+        ("4:3 landscape, hands and work as focal point, shallow depth of field."),
+        ("Photo-realistic editorial photography, 50mm lens look, sharp on the work, "
+         "slight background bokeh, warm neutral grade."),
+        "Avoid: " + ", ".join(avoid_terms) + ".",
+    ]
+    return " ".join(p.strip() for p in parts if p.strip())
+
+
 def compose_about_prompt(
     client_cfg: dict,
     city_name: str,
@@ -824,6 +921,7 @@ def render_log(
     page_slug: str,
     position: str,
     hero_prompt: str,
+    hero_style: str,
     about_prompt: str,
     scene_prompt: str | None,
     about_cache_hit: str | None,
@@ -927,14 +1025,48 @@ def render_log(
     ]
     setup_block = "## Setup context\n\n" + "\n".join(setup_lines) + "\n\n"
 
+    # Compute self-documenting header fields for the hero prompt
+    pretty_service = service_slug.replace("-", " ")
+    if hero_style == "service-scene":
+        hero_type = "PURE SCENE"
+        hero_refs = "NONE"
+        hero_produces = f"the installed result of {pretty_service} — no person in frame"
+    elif hero_style == "hands-only":
+        hero_type = "HANDS-ONLY"
+        hero_refs = "NONE (optional: brand logo art only). NEVER upload the uniform mockup."
+        hero_produces = f"faceless worker's hands performing {pretty_service}"
+    else:  # ahmad-centric
+        hero_type = "AHMAD-CENTRIC"
+        hero_refs = (
+            f"{client_cfg.get('owner_name', 'owner')} headshot (face/likeness) + "
+            f"brand logo art (chest embroidery). Do NOT upload the uniform mockup."
+        )
+        hero_produces = f"{client_cfg.get('owner_name', 'owner')} performing {pretty_service}"
+
+    # Types legend
+    types_legend = (
+        "## Prompt types legend (read once)\n\n"
+        "| Type | What it produces | Reference photos to upload |\n"
+        "|---|---|---|\n"
+    )
+    for ptype, info_dict in PROMPT_TYPE_LEGEND.items():
+        types_legend += f"| **{ptype}** | {info_dict['description']} | {info_dict['reference_photos']} |\n"
+    types_legend += (
+        "\n**Reference-photo home:** `" + str(reference_photo_home(client_cfg.get("client_slug", ""))) + "`\n\n"
+        "**Save/name/organize flow:** download all 4 variants from Higgsfield → pick the best → "
+        "run `organize-image-downloads.py` (renames + files keeper at `<page>/images/`, "
+        "alternates at `<page>/images/_drafts-and-alternates/`) → then `wire-page-images.py` "
+        "(optimize → upload → wire HTML → republish).\n\n"
+    )
+
     # Generations
     gens: list[str] = ["## Generations\n"]
 
     # --- Hero ---
     gens.append("### Hero v1 — pending\n")
-    gens.append("**Image type:** Hero (page top, mid-action scene)\n")
-    gens.append("**Reference photos:** (1) Ahmad face ref, (2) brand logo art (logo for chest-mark fidelity)\n")
-    gens.append("**Aspect ratio:** **4:3 landscape** — verify the Higgsfield aspect chip is locked to 4:3 before generating; "
+    gens.append(f"**Type:** {hero_type} · **Reference photos:** {hero_refs} · "
+                f"**Aspect:** 4:3 landscape · **Produces:** {hero_produces}\n")
+    gens.append("**Aspect ratio note:** verify the Higgsfield aspect chip is locked to 4:3 before generating; "
                 "it can flip to 3:4 between batches and changes the page-template wiring "
                 "(landscape uses Pattern A, portrait uses Pattern B).\n")
     gens.append("**Prompt to paste into Higgsfield:**\n")
@@ -948,9 +1080,11 @@ def render_log(
 
     # --- About ---
     gens.append("### About portrait v1 — pending\n")
-    gens.append("**Image type:** About-section portrait (chest-up, warm, looking at camera)\n")
-    gens.append("**Reference photos:** (1) Ahmad face ref, (2) brand logo art\n")
-    gens.append("**Aspect ratio:** **3:4 portrait** — the About slot is grid-column-narrow with "
+    about_owner = client_cfg.get("owner_name", "owner")
+    gens.append(f"**Type:** AHMAD-CENTRIC · **Reference photos:** {about_owner} headshot + brand logo art. "
+                f"Do NOT upload the uniform mockup. · **Aspect:** 3:4 portrait · "
+                f"**Produces:** {about_owner} chest-up portrait, warm and trustworthy\n")
+    gens.append("**Aspect ratio note:** the About slot is grid-column-narrow with "
                 "align-items: stretch and renders taller than wide; 1:1 from Higgsfield "
                 "tends to render as 4:3 landscape and crops awkwardly.\n")
     if about_cache_hit:
@@ -970,9 +1104,9 @@ def render_log(
     # --- Scene (optional) ---
     if scene_prompt:
         gens.append("### Scene v1 — pending (OPTIONAL — skip if page is already image-heavy)\n")
-        gens.append("**Image type:** Contextual scene (the 'after' shot of the service output)\n")
-        gens.append("**Reference photos:** logo art only (no person needed)\n")
-        gens.append("**Aspect ratio:** 16:9 wide or 4:3 standard — depends on layout slot.\n")
+        gens.append(f"**Type:** PURE SCENE · **Reference photos:** NONE (logo art optional) · "
+                    f"**Aspect:** 16:9 wide or 4:3 standard · "
+                    f"**Produces:** the 'after' shot of {pretty_service} — clean, professional result\n")
         gens.append("**Prompt to paste into Higgsfield:**\n")
         gens.append("> " + scene_prompt.replace("\n", "\n> ") + "\n")
         gens.append("**Selected variant:** _<fill after generation>_\n")
@@ -1013,7 +1147,7 @@ def render_log(
 
     return (
         fm + title + intro + brief_status_block + bias_block + setup_block +
-        generations_block + followups + related
+        types_legend + generations_block + followups + related
     )
 
 
@@ -1031,6 +1165,11 @@ def main() -> int:
                     help="Path to the page folder (contains draft-v1.md).")
     ap.add_argument("--client", default=DEFAULT_CLIENT,
                     help=f"Client slug (default: {DEFAULT_CLIENT})")
+    ap.add_argument("--hero-style", choices=["ahmad-centric", "service-scene", "hands-only"],
+                    default="ahmad-centric",
+                    help="Hero prompt style: 'ahmad-centric' (owner performing task, default), "
+                         "'service-scene' (installed result / work scene, no face), "
+                         "'hands-only' (faceless worker's hands at the task).")
     ap.add_argument("--no-scene", action="store_true",
                     help="Skip the optional Scene prompt (default: include it).")
     ap.add_argument("--overwrite", action="store_true",
@@ -1117,19 +1256,48 @@ def main() -> int:
         else:
             city_name = city_slug.replace("-", " ").title()
 
-    # 7. Compose the three prompts
-    hero_prompt = compose_hero_prompt(
-        client_cfg=client_cfg,
-        client_meta=client_brief,
-        service_slug=service_slug,
-        city_name=city_name,
-        city_state=city_state,
-        service_direction=directions.get("hero", ""),
-        geographic_anchor=geographic_anchor,
-        setting_hints=setting_hints,
-        intersection=intersection_signals,
-        prior=prior,
-    )
+    # 6.5. Check reference-photo home exists (warn if missing)
+    ref_home = reference_photo_home(args.client)
+    if ref_home.is_dir():
+        ref_files = [f.name for f in ref_home.iterdir() if f.is_file() and not f.name.startswith(".")]
+        info(f"reference-photo home: {ref_home} ({len(ref_files)} files)")
+    else:
+        warn(f"reference-photo home MISSING: {ref_home} — prompts will reference it but operator "
+             f"must create the folder + add reference photos before Higgsfield session")
+
+    # 7. Compose the three prompts (hero style determines which compose function)
+    hero_style = args.hero_style
+    info(f"hero style: {hero_style}")
+
+    if hero_style == "service-scene":
+        hero_prompt = compose_hero_service_scene(
+            client_cfg=client_cfg,
+            service_slug=service_slug,
+            city_name=city_name,
+            setting_hints=setting_hints,
+            prior=prior,
+        )
+    elif hero_style == "hands-only":
+        hero_prompt = compose_hero_hands_only(
+            client_cfg=client_cfg,
+            service_slug=service_slug,
+            city_name=city_name,
+            setting_hints=setting_hints,
+            prior=prior,
+        )
+    else:  # ahmad-centric (default)
+        hero_prompt = compose_hero_prompt(
+            client_cfg=client_cfg,
+            client_meta=client_brief,
+            service_slug=service_slug,
+            city_name=city_name,
+            city_state=city_state,
+            service_direction=directions.get("hero", ""),
+            geographic_anchor=geographic_anchor,
+            setting_hints=setting_hints,
+            intersection=intersection_signals,
+            prior=prior,
+        )
     about_prompt = compose_about_prompt(
         client_cfg=client_cfg,
         city_name=city_name,
@@ -1157,6 +1325,7 @@ def main() -> int:
         page_slug=page_slug,
         position=position,
         hero_prompt=hero_prompt,
+        hero_style=hero_style,
         about_prompt=about_prompt,
         scene_prompt=scene_prompt,
         about_cache_hit=about_cache_hit,

@@ -232,6 +232,72 @@ def organize(
     return 0
 
 
+def copy_variant_to_page(
+    source_page: Path,
+    dest_page: Path,
+    image_type: str,
+    selected_variant: int,
+    filename_stem: Optional[str],
+    starting_version: int,
+    dry_run: bool,
+) -> int:
+    """Copy a specific variant from a source page's organized images into a
+    destination page folder. Used when one Higgsfield batch feeds two same-service
+    pages (Issue #19).
+
+    Searches the source page's images/ and images/_drafts-and-alternates/ for a
+    file matching the image_type and variant number, then copies it to the
+    destination page's images/ as the keeper.
+    """
+    if not dest_page.is_dir():
+        sys.stderr.write(f"ERROR: --copy-to destination not found: {dest_page}\n")
+        return 2
+
+    # Search source page for the variant
+    source_images = source_page / "images"
+    source_drafts = source_images / "_drafts-and-alternates"
+    candidates: list[Path] = []
+    for search_dir in [source_images, source_drafts]:
+        if not search_dir.is_dir():
+            continue
+        for p in search_dir.iterdir():
+            if (p.is_file()
+                and p.suffix.lower() == ".png"
+                and image_type in p.stem.lower()
+                and f"variant-{selected_variant}" in p.stem):
+                candidates.append(p)
+
+    if not candidates:
+        sys.stderr.write(
+            f"ERROR: no {image_type} variant-{selected_variant} found in "
+            f"{source_images} or {source_drafts}\n"
+        )
+        return 2
+
+    source_file = candidates[0]  # Take the first match
+    dest_stem = filename_stem or default_filename_stem_from_folder(dest_page)
+    dest_name = f"{dest_stem}-{image_type}-v{starting_version}-variant-{selected_variant}.png"
+    dest_images = dest_page / "images"
+    dest_path = dest_images / dest_name
+
+    if dest_path.exists():
+        sys.stderr.write(f"ERROR: destination already exists: {dest_path}\n")
+        return 3
+
+    sys.stderr.write(f"→ Copy mode: {source_file.name} → {dest_path.relative_to(dest_page)}\n")
+
+    if dry_run:
+        sys.stderr.write("→ DRY RUN — no files copied.\n")
+        print(dest_path)
+        return 0
+
+    dest_images.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(str(source_file), str(dest_path))
+    sys.stderr.write(f"→ Done. Keeper copy at: {dest_path}\n")
+    print(dest_path)
+    return 0
+
+
 def main() -> int:
     p = argparse.ArgumentParser(
         description="Sort Higgsfield download variants into a Core 30 page folder.",
@@ -283,6 +349,18 @@ def main() -> int:
         help="Don't clear the staging folder after move.",
     )
     p.add_argument(
+        "--copy-to",
+        type=Path,
+        default=None,
+        help="Copy (not move) the selected variant to a SECOND page folder. "
+             "Use when one Higgsfield batch feeds two same-service pages: "
+             "organize into the first page normally, then run again with "
+             "--copy-to <second-page-folder> --selected-variant <different-N> "
+             "to copy that alternate into the second page without consuming "
+             "the staging files. Requires --keep-staging on the first run "
+             "OR running --copy-to from the first page's _drafts-and-alternates/.",
+    )
+    p.add_argument(
         "--dry-run",
         action="store_true",
         help="Show planned moves without performing them.",
@@ -293,6 +371,19 @@ def main() -> int:
     if not args.page_folder.is_dir():
         sys.stderr.write(f"ERROR: page-folder not found: {args.page_folder}\n")
         return 2
+
+    # --copy-to mode: copy a specific variant from the first page's organized
+    # images into a second page folder (for same-service multi-page batches).
+    if args.copy_to is not None:
+        return copy_variant_to_page(
+            source_page=args.page_folder,
+            dest_page=args.copy_to,
+            image_type=args.image_type,
+            selected_variant=args.selected_variant,
+            filename_stem=args.filename_stem,
+            starting_version=args.starting_version,
+            dry_run=args.dry_run,
+        )
 
     filename_stem = args.filename_stem or default_filename_stem_from_folder(args.page_folder)
 
