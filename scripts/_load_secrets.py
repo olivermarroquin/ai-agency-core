@@ -130,17 +130,31 @@ def load_wp_app_password(config: dict[str, Any]) -> str:
     """Resolve the WordPress application password.
 
     Reads `config["wp_app_password_env"]` (default `WP_APP_PASSWORD`) from the
-    env first, falls back to tier-3 entry `config["wp_app_password_tier3_identifier"]`
-    (default `core-30-publish-script`) in the markdown file at
-    `config["wp_app_password_tier3_file"]` (default tier-3 business-keelworks.md).
+    env first, then falls back to the tier-3 markdown file.
+
+    Tier-3 file resolution precedence:
+      1. explicit `config["wp_app_password_tier3_file"]`
+      2. derived per-client path from `config["client_slug"]` — the standard
+         home `~/workspace/second-brain-tier3/clients/<slug>/credentials.md`
+      3. legacy hardcoded default (`personal/business-keelworks.md`)
+    The identifier defaults to `config["wp_app_password_tier3_identifier"]`
+    (default `core-30-publish-script`). This means every client "just works"
+    with its own `clients/<slug>/credentials.md` + the default identifier — no
+    per-client config edit required.
 
     Never logs or prints the value. Raises RuntimeError if neither lookup yields.
     """
+    tier3_file = config.get("wp_app_password_tier3_file")
+    if not tier3_file:
+        slug = config.get("client_slug")
+        tier3_file = (
+            f"~/workspace/second-brain-tier3/clients/{slug}/credentials.md"
+            if slug
+            else DEFAULT_TIER3_FILE
+        )
     return _load_from_env_or_tier3(
         env_key=config.get("wp_app_password_env", "WP_APP_PASSWORD"),
-        tier3_path=Path(
-            config.get("wp_app_password_tier3_file", DEFAULT_TIER3_FILE)
-        ).expanduser(),
+        tier3_path=Path(tier3_file).expanduser(),
         identifier=config.get(
             "wp_app_password_tier3_identifier", DEFAULT_WP_IDENTIFIER
         ),
