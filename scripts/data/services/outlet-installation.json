@@ -1,0 +1,201 @@
+{
+  "_comment": "Per-service data for Outlet & Switch Installation. Used by scaffold-core-30-page.py for every Core 30 page of this service across cities. {city} and {client} placeholders substituted at render time.",
+  "_dataforseo_verified": {
+    "date": "2026-06-03",
+    "chat_id": "ev-pages-06-12-dataforseo-202606032350",
+    "national_volume": {
+      "outlet installation": 2400,
+      "electrical outlet installation": 2400,
+      "gfci outlet installation": 27100,
+      "outlet installation near me": 260,
+      "electrical outlet installation near me": 90,
+      "switch installation": 320
+    },
+    "local_volume_note": "All city-specific keywords returned 0 (below Google Ads threshold). 'gfci outlet installation' is 27,100/mo nationally — the highest-volume keyword in the entire 06-12 set — but has low CPC ($4.27) indicating heavy DIY intent. Target as FAQ/guide content (how-to, when-to-call-a-pro, code requirements) rather than as the primary commercial keyword.",
+    "local_pack_composition": "Vienna: AJ Long LP #1 (1100 reviews), Voltex Energy LP #2 (40 reviews), Autumn Electric LP #3 (28 reviews). EV absent from LP and organic. Standard electrician LP — no non-electrician vertical competition for outlet queries (unlike chandelier/smoke alarm).",
+    "competitor_notes": "AJ Long organic #10 + LP #1 for 'outlet installation vienna va'. michaelandson.com organic #3 (large regional, Michael & Son). infiniteelectric.biz organic #4. Standard competitive landscape — no specialty competitors."
+  },
+  "_scaffolded": {
+    "from_brief": false,
+    "brief_research_date": null,
+    "brief_researcher": null,
+    "needs_authoring": [
+      "aioseo_meta_description_template",
+      "hero_heading",
+      "hero_subheading_template",
+      "hero_image_url_template",
+      "what_it_means_paragraphs",
+      "quick_ref_intro",
+      "why_city_closing_note_template",
+      "pricing_intro_template",
+      "about_text_paragraphs",
+      "about_portrait_url_template",
+      "related_intro_template",
+      "faq_items[*].answer_html",
+      "faq_items[*].answer_schema",
+      "final_cta_heading",
+      "final_cta_paragraph_template"
+    ],
+    "needs_confirmation": ["No service brief exists — problem_cards, process_steps, and FAQ items are data-file-first drafts based on DataForSEO keyword data + synthesis competitive context. Verify against Ahmad's actual service delivery before publishing."]
+  },
+  "slug": "outlet-installation",
+  "page_slug_template": "outlet-installation-{city_slug}",
+  "name": "Outlet & Switch Installation",
+  "name_with_city": "Outlet & Switch Installation in {city_name_with_state}",
+  "service_type_phrase": "Electrical outlet installation, switch replacement, and GFCI upgrades",
+  "quoted_phrase": "outlet installation",
+  "lowercase_phrase": "outlet installation",
+  "tag_short": "outlet-installation",
+
+  "aioseo_page_title_template": "Outlet & Switch Installation in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "Licensed Master Electrician serving {city_name_with_state}. Outlet replacements, GFCI upgrades, dedicated circuits, 220V outlets, switches. Same-day service, written estimates.",
+  "aioseo_focus_keyword_template": "outlet installation {city_slug}",
+  "aioseo_additional_keywords_template": [
+    "electrical outlet installation {city_slug}",
+    "gfci outlet installation {city_slug}",
+    "outlet installation near me",
+    "switch installation {city_slug}",
+    "outlet replacement {city_slug}",
+    "usb outlet installation {city_slug}",
+    "outdoor outlet installation {city_slug}",
+    "dedicated circuit installation {city_slug}",
+    "220v outlet installation {city_slug}",
+    "dimmer switch installation {city_slug}",
+    "three-way switch installation {city_slug}",
+    "how much to install an electrical outlet",
+    "gfci outlet replacement cost"
+  ],
+  "wordpress_page_title_template": "Outlet & Switch Installation in {city_name_with_state}",
+
+  "hero_eyebrow_template": "Outlet & Switch Installation in {city_name_with_state}",
+  "hero_heading": "Outlets and switches done right, same day.",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician who handles outlet replacements, GFCI upgrades, dedicated circuits, 220V outlets, and switch installations across {city_name}. Simple swaps quoted over the phone. New circuits get a written estimate after a free on-site assessment.",
+  "hero_image_alt_template": "{owner_name}, master electrician, installing a GFCI outlet in a residential home in {city_name_with_state}",
+  "hero_image_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-outlet-installation-hero-PLACEHOLDER.png",
+
+  "what_it_means_heading": "What outlet and switch installation involves",
+  "what_it_means_paragraphs": [
+    "Outlet and switch installation covers everything from swapping an old outlet for a new one in the same spot to running a brand-new dedicated circuit from your panel to a room that needs its own power. The range includes GFCI upgrades, USB outlet installs, 220V/240V outlets for dryers and ranges, dimmer switches, smart switches, and outdoor outlets with weatherproof covers. A simple 1-for-1 swap is a 15-minute job. Anything that touches new wiring, your panel, or code-required protection needs a licensed electrician — not a handyman.",
+    "The National Electrical Code requires GFCI protection in kitchens, bathrooms, garages, laundry rooms, basements, crawl spaces, and outdoors. The 2023 NEC expanded kitchen requirements to ALL receptacles — not just the ones serving the countertop. If your kitchen has standard outlets near the sink or dishwasher, they need upgrading. Dedicated circuits matter too: a home office pulling 12 amps on a shared bedroom circuit will trip the breaker when the space heater kicks on. A 220V outlet for a dryer or range requires heavier wire and a double-pole breaker.",
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician credential the state issues. He handles outlet and switch work across {city_name} and the surrounding Fairfax County area, from simple GFCI swaps to full dedicated-circuit runs. His team carries common parts on the truck — outlets, GFCIs, switches, breakers, and standard wire sizes — so most jobs finish the same day you call."
+  ],
+
+  "quick_ref_heading_template": "Common outlet and switch projects in {city_name}",
+  "quick_ref_intro": "These are the outlet and switch projects we see most often in {city_name}. Click any item for details on what's involved.",
+  "quick_ref_footer_html_template": "Have a specific project in mind?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll tell you what's involved.",
+
+  "why_city_heading_template": "Why {city_name} homeowners call us for outlet installation",
+  "why_city_closing_note_template": "The typical {city_name} home was built around 1971 — before GFCI requirements existed, before modern circuit loads, and with 1-2 outlets per room instead of the 4-6 modern life demands. Whether you're in a 1960s Vienna Woods ranch that needs more outlets and GFCI upgrades, or a Hunter Mill colonial where the home office keeps tripping the bedroom circuit, the underlying issue is the same: the original wiring wasn't designed for how you use the house today. That's the work we do every week.",
+
+  "problems_heading_template": "Outlet and switch situations we handle every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    {
+      "title": "Not enough outlets in a room",
+      "body": "Older homes were built with 1-2 outlets per room. Modern life needs 4-6. We add outlets by running new wire from the nearest circuit or pulling a new dedicated circuit from the panel. No more extension cords daisy-chaining across the room."
+    },
+    {
+      "title": "GFCI outlets needed in kitchen, bathroom, or garage",
+      "body": "The National Electrical Code requires GFCI protection anywhere water is nearby — kitchens, bathrooms, laundry rooms, garages, basements, and outdoor outlets. If your outlets in these areas don't have the 'Test/Reset' buttons, they're not GFCI-protected and may not pass an inspection. We replace them with GFCI outlets and test the trip function."
+    },
+    {
+      "title": "Dead outlets or outlets that spark",
+      "body": "A dead outlet is usually a loose wire, a tripped GFCI upstream, or a backstabbed connection that worked loose. An outlet that sparks when you plug something in is a connection problem and a fire risk. We diagnose the cause and repair or replace the outlet. See our <a href=\"/electrical-troubleshooting-{city_slug}/\">troubleshooting page</a> for the full diagnostic."
+    },
+    {
+      "title": "Dedicated circuit for a home office or workshop",
+      "body": "A home office with a computer, monitors, printer, and desk lamp can overload a shared bedroom circuit. A workshop with a table saw or compressor needs its own 20-amp or 30-amp circuit. We run a dedicated circuit from the panel to the room so your equipment runs without tripping breakers or dimming lights."
+    },
+    {
+      "title": "220V/240V outlet for a dryer, range, or welder",
+      "body": "A 220V outlet (NEMA 14-30 for a dryer, NEMA 14-50 for a range or welder) requires a dedicated circuit from the panel with heavier wire. If you're replacing a gas appliance with electric, or adding a 240V tool to the garage, we install the outlet and the circuit."
+    },
+    {
+      "title": "USB outlets throughout the house",
+      "body": "USB-A and USB-C outlets replace a standard outlet and add built-in charging ports without a wall wart. We install them in kitchens, bedrooms, living rooms — anywhere you charge phones and tablets. It's a quick swap on existing outlets, no new wiring needed."
+    },
+    {
+      "title": "Dimmer switch or smart switch installation",
+      "body": "Replacing a standard toggle switch with a dimmer, a smart switch (Lutron Caseta, TP-Link Kasa), or a three-way switch requires matching the switch to the wiring topology. We handle single-pole, three-way, and four-way switch wiring and make sure the dimmer is compatible with your light fixtures (LED dimming requires specific dimmer types)."
+    },
+    {
+      "title": "Outdoor outlet installation",
+      "body": "Outdoor outlets need weatherproof in-use covers, GFCI protection, and outdoor-rated boxes. We install them for holiday lights, landscape lighting, pool pumps, hot tubs, and general outdoor use. Properly installed outdoor outlets don't trip every time it rains."
+    }
+  ],
+
+  "process_heading_template": "Our installation process — what happens when you call",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    {
+      "title": "Tell us what you need",
+      "body": "We ask where you want the outlet or switch, what it's for (appliance, general use, outdoor), and whether there's existing wiring nearby. For simple replacements and GFCI upgrades, we can quote over the phone. For new locations and dedicated circuits, we visit."
+    },
+    {
+      "title": "On-site assessment for new circuits",
+      "body": "If you need a new outlet location or a dedicated circuit, we visit the house, check the panel for available slots, measure the run, and give a written estimate. No charge for the assessment in our primary service area."
+    },
+    {
+      "title": "Installation — 30 minutes to half a day",
+      "body": "A simple outlet or switch swap takes 15-30 minutes. A GFCI upgrade takes 30 minutes per outlet. A new outlet location (running wire from an existing circuit) takes 1-2 hours. A dedicated circuit from the panel takes 2-4 hours depending on the run."
+    },
+    {
+      "title": "Testing and cleanup",
+      "body": "Every outlet is tested with a circuit tester before we leave. GFCI outlets are trip-tested. We label new circuits at the panel. The work area is cleaned up."
+    }
+  ],
+
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "Outlet and switch work varies too much to publish a single price. A 1-for-1 outlet swap is a different job than running a dedicated 220V circuit from the panel to the garage. Here's how we handle estimates:",
+  "pricing_items": [
+    "Outlet and switch replacements (1-for-1 swap, same location) — per-unit pricing, quoted over the phone.",
+    "GFCI upgrades — per-outlet pricing. We typically recommend upgrading all water-adjacent outlets in one visit.",
+    "New outlet locations — depends on the run distance and whether attic/crawl access is available. Written estimate after on-site assessment.",
+    "Dedicated circuits — depends on panel distance and wire gauge needed. Written estimate after on-site assessment.",
+    "220V/240V outlet installation — dedicated circuit required; written estimate after panel inspection."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}.",
+  "pricing_closing_note": "",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "{owner_name} is a Master Electrician licensed in {license_state}. The Master tier is the highest electrician license the state issues — it requires several years of journeyman work, a passed state exam, and a clean record. {owner_name} waited roughly four years for his Master license before opening {client_name}. He's fully insured and runs a maintenance team, so when you call us you're not waiting on one person's calendar.",
+    "Outlet and switch work is bread-and-butter residential electrical. {owner_name} does it every day — GFCI upgrades, dedicated circuits, 220V outlets, smart switches, outdoor outlets. He knows which Leviton GFCI fits a tight box, which Lutron dimmer works with LED cans, and how to fish wire through a finished wall without cutting more drywall than necessary. The common stuff done right, every time.",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-outlet-installation-about-PLACEHOLDER.png",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "Outlet work often connects to a bigger electrical picture. If your project leads to a panel question, a troubleshooting need, or another service, these are the pages to check:",
+  "related_cards": [
+    { "href_slug": "electrical-troubleshooting-{city_slug}", "label": "Electrical Troubleshooting" },
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
+    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures &amp; Chandeliers" },
+    { "href_slug": "ev-charger-{city_slug}", "label": "EV Charger Installation" },
+    { "href_slug": "smoke-alarm-{city_slug}", "label": "Smoke Alarm Installation" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    { "question": "How much does it cost to install an electrical outlet in {city_name_with_state}?", "answer_html": "It depends on the job type. A 1-for-1 outlet or switch replacement in the same location is a straightforward per-unit job — we quote it over the phone. A GFCI upgrade is similar and priced per outlet; we recommend bundling all the water-adjacent outlets in one visit. A new outlet in a location where none exists requires running wire from the nearest circuit or the panel — the cost depends on run distance and whether attic or crawl space access is available. Dedicated circuits and 220V/240V outlets get a written estimate after an on-site assessment. Call {phone_display} and we'll tell you which category your project falls into.", "answer_schema": "It depends on the job type. A 1-for-1 outlet or switch replacement in the same location is a straightforward per-unit job quoted over the phone. A GFCI upgrade is similar and priced per outlet. A new outlet in a location where none exists requires running wire from the nearest circuit or the panel — cost depends on run distance and access. Dedicated circuits and 220V/240V outlets get a written estimate after an on-site assessment. Call for details." },
+    { "question": "What is a GFCI outlet and do I need one?", "answer_html": "A GFCI (Ground Fault Circuit Interrupter) is the outlet with the Test and Reset buttons. It monitors the current flowing through the circuit and cuts power in milliseconds if it detects current leaking to ground — which is what happens when electricity flows through water or through you. The National Electrical Code requires GFCI protection in kitchens, bathrooms, garages, laundry rooms, basements, crawl spaces, and all outdoor outlets. The 2023 NEC expanded kitchen requirements to ALL receptacles, not just countertop outlets. If your kitchen has standard outlets near the sink or dishwasher, they need upgrading to GFCI.", "answer_schema": "A GFCI (Ground Fault Circuit Interrupter) is the outlet with the Test and Reset buttons. It monitors the current flowing through the circuit and cuts power in milliseconds if it detects current leaking to ground — which is what happens when electricity flows through water or through you. The National Electrical Code requires GFCI protection in kitchens, bathrooms, garages, laundry rooms, basements, crawl spaces, and all outdoor outlets. The 2023 NEC expanded kitchen requirements to ALL receptacles, not just countertop outlets." },
+    { "question": "Can I add an outlet where there isn't one?", "answer_html": "Yes. Adding an outlet to a new location requires running wire from the nearest existing circuit or from the panel. The main variable is access — if we can reach the wall cavity through the attic, crawl space, or an adjacent unfinished area, the wire run is straightforward and typically takes 1-2 hours. Finished walls with no access above or below require more drywall work. We visit the house, check the route options, and give a written estimate before starting. In most {city_name} homes, attic or crawl space access makes this a same-day job.", "answer_schema": "Yes. Adding an outlet to a new location requires running wire from the nearest existing circuit or from the panel. The main variable is access — if we can reach the wall cavity through the attic, crawl space, or an adjacent unfinished area, the wire run is straightforward and typically takes 1-2 hours. Finished walls with no access require more drywall work. We visit the house, check the route options, and give a written estimate before starting." },
+    { "question": "How long does outlet installation take?", "answer_html": "A simple outlet or switch replacement (same location, same type) takes 15-30 minutes. A GFCI upgrade takes about 30 minutes per outlet. A new outlet in a location where none exists takes 1-2 hours, depending on the wire run and access. A dedicated circuit from the panel to a room takes 2-4 hours depending on distance. A 220V/240V outlet with a new dedicated circuit takes 2-4 hours. Most homeowners bundle several outlets or switches in one visit — we'll give you a time estimate for your specific list when you call.", "answer_schema": "A simple outlet or switch replacement takes 15-30 minutes. A GFCI upgrade takes about 30 minutes per outlet. A new outlet in a location where none exists takes 1-2 hours. A dedicated circuit from the panel takes 2-4 hours. A 220V/240V outlet with a new dedicated circuit takes 2-4 hours. Most homeowners bundle several items in one visit." },
+    { "question": "Do I need a permit for outlet installation?", "answer_html": "For simple replacements — swapping an existing outlet or switch for a new one in the same location — no permit is required in most jurisdictions. For new outlet locations, new circuits, and 220V/240V installations, Fairfax County requires an electrical permit and inspection. Vienna projects specifically require both Fairfax County approval through the PLUS system and a separate Town of Vienna approval — one of only two Fairfax County towns with this dual-approval requirement. We handle the permit paperwork as part of the job so you don't have to navigate the process yourself.", "answer_schema": "For simple replacements — swapping an existing outlet or switch for a new one in the same location — no permit is required in most jurisdictions. For new outlet locations, new circuits, and 220V/240V installations, Fairfax County requires an electrical permit and inspection. Vienna projects specifically require both Fairfax County approval and a separate Town of Vienna approval. We handle the permit paperwork as part of the job." },
+    { "question": "What's the difference between a 15-amp and 20-amp outlet?", "question_schema": "What is the difference between a 15-amp and 20-amp outlet?", "answer_html": "A 20-amp outlet has a T-shaped slot on the left side (the neutral slot) that accepts both 15-amp and 20-amp plugs. A 15-amp outlet has two straight slots and only accepts 15-amp plugs. The difference matters because the National Electrical Code requires 20-amp circuits for kitchen countertop receptacles, laundry rooms, and bathrooms — these areas draw higher loads from appliances like toasters, microwaves, hair dryers, and irons. A 20-amp outlet on a 20-amp circuit handles these loads safely. If your kitchen counter outlets are 15-amp on a 15-amp circuit, they're undersized for modern appliances and worth upgrading.", "answer_schema": "A 20-amp outlet has a T-shaped slot on the left side (the neutral slot) that accepts both 15-amp and 20-amp plugs. A 15-amp outlet has two straight slots and only accepts 15-amp plugs. The National Electrical Code requires 20-amp circuits for kitchen countertop receptacles, laundry rooms, and bathrooms — these areas draw higher loads from appliances like toasters, microwaves, hair dryers, and irons. If your kitchen counter outlets are 15-amp, they may be undersized for modern appliances." },
+    { "question": "Can you install a 220V outlet for my dryer or range?", "answer_html": "Yes. A 220V/240V outlet requires a dedicated circuit from the panel with heavier gauge wire (typically 10-gauge for a 30-amp dryer circuit or 6-gauge for a 50-amp range circuit) and a double-pole breaker. The outlet type depends on the appliance: NEMA 14-30 for most modern dryers, NEMA 14-50 for ranges and welders. If you're switching from gas to electric, or adding a 240V tool to the garage, we inspect the panel for available space, run the circuit, and install the correct outlet. The job typically takes 2-4 hours depending on the distance from the panel.", "answer_schema": "Yes. A 220V/240V outlet requires a dedicated circuit from the panel with heavier gauge wire and a double-pole breaker. The outlet type depends on the appliance: NEMA 14-30 for most modern dryers, NEMA 14-50 for ranges and welders. We inspect the panel for available space, run the circuit, and install the correct outlet. The job typically takes 2-4 hours depending on the distance from the panel." },
+    { "question": "How do I know if my outlets are safe?", "answer_html": "Several warning signs mean you should call an electrician. Outlets that feel warm to the touch have a resistance problem behind the wall — this is how electrical fires start. Discolored or melted faceplates indicate past overheating. Plugs that fall out or fit loosely mean the outlet's internal contacts are worn and arcing. Outlets that spark when you plug something in have a connection problem. Two-prong outlets (no ground hole) are ungrounded and offer no shock protection. And any kitchen, bathroom, garage, or outdoor outlet without GFCI Test/Reset buttons is missing code-required protection. If you see any of these, call {phone_display}.", "answer_schema": "Several warning signs mean you should call an electrician. Outlets that feel warm to the touch have a resistance problem behind the wall. Discolored or melted faceplates indicate past overheating. Plugs that fall out or fit loosely mean the outlet's internal contacts are worn. Outlets that spark have a connection problem. Two-prong outlets are ungrounded and offer no shock protection. Any kitchen, bathroom, garage, or outdoor outlet without GFCI Test/Reset buttons is missing code-required protection." }
+  ],
+
+  "final_cta_heading": "Ready to get your outlets and switches sorted?",
+  "final_cta_paragraph_template": "Call for same-day outlet and switch installation in {city_name_with_state}. Simple swaps quoted over the phone. New circuits and dedicated outlets get a free on-site assessment and written estimate. {response_promise}",
+
+  "schema_service_description_template": "Electrical outlet and switch installation in {city_name_with_state}. Master electrician handles outlet replacements, GFCI upgrades, new outlet locations, dedicated circuits, 220V outlets, USB outlets, dimmer switches, and outdoor outlet installation. Written on-site estimate.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "On-site assessment and written estimate for new outlet locations and dedicated circuits. Simple replacements and GFCI upgrades can be quoted over the phone. Most installations completed same-day."
+}

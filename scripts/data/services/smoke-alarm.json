@@ -1,0 +1,189 @@
+{
+  "_comment": "Per-service data for Smoke Alarm & Detector Installation. Used by scaffold-core-30-page.py for every Core 30 page of this service across cities. {city} and {client} placeholders substituted at render time.",
+  "_dataforseo_verified": {
+    "date": "2026-06-03",
+    "chat_id": "ev-pages-06-12-dataforseo-202606032350",
+    "national_volume": {
+      "smoke alarm installation": 12100,
+      "smoke detector installation": 12100,
+      "smoke alarm replacement": 22200
+    },
+    "local_volume_note": "All city-specific keywords returned 0 (below Google Ads threshold). National volumes are HIGH (12,100 primary; 22,200 for 'replacement' — but replacement is DIY-intent with low CPC $5.07). This service has higher search volume than light fixture (2,400) or electrical troubleshooting (1,300).",
+    "local_pack_composition": "Smoke alarm queries in Vienna surface fire-safety specialists, NOT electricians: ASAP Firewatch LLC (LP #1, 44 reviews), Smoke Alarm Services LLC (LP #2, 2 reviews), AJ Long (LP #3, 1100 reviews). EV absent from LP and organic. The 'near me' query also shows fire-safety niche players. Electricians must compete with dedicated fire-safety companies in both LP and organic.",
+    "competitor_notes": "AJ Long is the only electrician in the smoke alarm LP (position 3). Fire-safety specialists dominate positions 1-2. proelectricva.com appears in organic. No smoke alarm service brief existed prior to this data file — this is the first service-level data capture for smoke alarm.",
+    "strategic_note": "High national volume (12,100) was invisible without DataForSEO — no prior brief estimated it. The 'replacement' variant (22,200) is DIY-intent (low CPC $5.07) — target as FAQ/guide content, not as the primary commercial keyword. Page content should address the code-compliance angle (Virginia fire code, 10-year replacement mandate, interconnected vs standalone) to differentiate from fire-safety-specialist competitors who focus on commercial/multi-family."
+  },
+  "_scaffolded": {
+    "from_brief": false,
+    "brief_research_date": null,
+    "brief_researcher": null,
+    "needs_authoring": [
+      "aioseo_meta_description_template",
+      "hero_heading",
+      "hero_subheading_template",
+      "hero_image_url_template",
+      "what_it_means_paragraphs",
+      "quick_ref_intro",
+      "why_city_closing_note_template",
+      "pricing_intro_template",
+      "about_text_paragraphs",
+      "about_portrait_url_template",
+      "related_intro_template",
+      "faq_items[*].answer_html",
+      "faq_items[*].answer_schema",
+      "final_cta_heading",
+      "final_cta_paragraph_template"
+    ],
+    "needs_confirmation": ["No service brief exists — problem_cards, process_steps, and FAQ items are data-file-first drafts based on DataForSEO keyword data + synthesis competitive context. Verify against Ahmad's actual service delivery before publishing."]
+  },
+  "slug": "smoke-alarm",
+  "page_slug_template": "smoke-alarm-{city_slug}",
+  "name": "Smoke Alarm Installation & Replacement",
+  "name_with_city": "Smoke Alarm Installation in {city_name_with_state}",
+  "service_type_phrase": "Smoke alarm and smoke detector installation, replacement, and code compliance",
+  "quoted_phrase": "smoke alarm installation",
+  "lowercase_phrase": "smoke alarm installation",
+  "tag_short": "smoke-alarm",
+
+  "aioseo_page_title_template": "Smoke Alarm Installation & Replacement in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "FILL: Meta description (≤155 chars).",
+  "aioseo_focus_keyword_template": "smoke alarm installation {city_slug}",
+  "aioseo_additional_keywords_template": [
+    "smoke detector installation {city_slug}",
+    "smoke alarm replacement {city_slug}",
+    "hardwired smoke detector installation {city_slug}",
+    "interconnected smoke alarm installation {city_slug}",
+    "smoke alarm installation near me",
+    "smoke detector replacement {city_slug}",
+    "carbon monoxide detector installation {city_slug}",
+    "smoke alarm code compliance {city_slug}",
+    "electrician smoke alarm {city_slug}",
+    "how much to install smoke detectors",
+    "smoke alarm installation cost",
+    "10 year smoke alarm replacement"
+  ],
+  "wordpress_page_title_template": "Smoke Alarm Installation & Replacement in {city_name_with_state}",
+
+  "hero_eyebrow_template": "Smoke Alarm Installation in {city_name_with_state}",
+  "hero_heading": "FILL: Hero heading — value-prop sentence (≤8 words).",
+  "hero_subheading_template": "FILL: Hero subheading — 2-3 sentences. Mention {owner_name}, {license_state}, code compliance, {city_name}.",
+  "hero_image_alt_template": "{owner_name}, master electrician, installing a hardwired smoke alarm in a residential home in {city_name_with_state}",
+  "hero_image_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-smoke-alarm-hero-PLACEHOLDER.png",
+
+  "what_it_means_heading": "What smoke alarm installation involves",
+  "what_it_means_paragraphs": [
+    "FILL: Paragraph 1 — 80-100 words. Answer-first: hardwired vs battery-only, interconnected systems, why a licensed electrician matters (junction box wiring, circuit integration, code compliance).",
+    "FILL: Paragraph 2 — 80-100 words. Code context: Virginia fire code requires smoke alarms in every bedroom, outside each sleeping area, and on every level. 10-year replacement mandate. Homes sold or renovated may trigger upgrade requirements. Interconnected alarms (when one triggers, all sound) are code-required in new construction.",
+    "FILL: Paragraph 3 — 80-100 words. Owner-grounded. {owner_name}, {license_state}-licensed Master Electrician, {city_name} service area. Ahmad's priority service."
+  ],
+
+  "quick_ref_heading_template": "Common smoke alarm projects in {city_name}",
+  "quick_ref_intro": "FILL: Quick-ref intro.",
+  "quick_ref_footer_html_template": "Not sure what you need?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll assess your home.",
+
+  "why_city_heading_template": "Why {city_name} homeowners call us for smoke alarm installation",
+  "why_city_closing_note_template": "FILL: Why-city closing note — tie city housing stock age to code-compliance needs.",
+
+  "problems_heading_template": "Smoke alarm situations we handle every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    {
+      "title": "Battery-only smoke alarms chirping or expired",
+      "body": "Battery-only alarms expire after 10 years (sealed-battery models) or need battery replacement annually. If yours are chirping, yellowed, or you can't remember when they were installed, they're due. We can replace them with hardwired interconnected units so all alarms sound together — the code-required standard for new construction and renovations."
+    },
+    {
+      "title": "Upgrading to hardwired interconnected alarms",
+      "body": "Older homes often have standalone battery-only alarms that don't communicate with each other. If a downstairs alarm triggers, the upstairs bedrooms hear nothing. Hardwired interconnected alarms wire together on a single circuit — when one triggers, all sound throughout the house. We run the wiring, install the alarms, and test every unit."
+    },
+    {
+      "title": "Smoke alarm code compliance for a home sale",
+      "body": "When you sell a home in Virginia, the buyer's inspector will flag non-compliant smoke alarms — missing from bedrooms, expired units, or non-interconnected systems. Getting compliant before listing avoids last-minute inspection delays. We assess the house, install what's needed, and give you documentation for the listing agent."
+    },
+    {
+      "title": "Adding carbon monoxide detectors",
+      "body": "Virginia code requires CO detectors on every level of a dwelling with a fuel-burning appliance or an attached garage. Many homes have smoke alarms but no CO detectors, or have standalone CO detectors that aren't interconnected with the smoke alarms. We install combination smoke/CO units that cover both requirements in one device."
+    },
+    {
+      "title": "Post-renovation smoke alarm placement",
+      "body": "A finished basement, a new bedroom, or a major remodel triggers code requirements for smoke alarms in the new space. We add hardwired alarms in the new areas and integrate them with the existing system so the whole house is connected."
+    },
+    {
+      "title": "False alarms from old or poorly placed detectors",
+      "body": "Smoke alarms that trigger every time you cook, run the shower, or open the oven are usually either too close to the kitchen/bathroom or past their 10-year life. We relocate and replace with modern units that have better nuisance-alarm resistance while still meeting code placement requirements."
+    }
+  ],
+
+  "process_heading_template": "Our installation process — what happens when you call",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    {
+      "title": "We assess your current setup",
+      "body": "We ask about your home — how many levels, how many bedrooms, whether you have hardwired or battery-only alarms, and whether you have gas appliances or an attached garage (triggers CO detector requirements). For phone quotes on straightforward replacements, this is enough. For upgrades to hardwired interconnected, we visit."
+    },
+    {
+      "title": "On-site assessment for hardwired upgrades",
+      "body": "We walk the house, count alarm locations, check attic/crawl access for running wire, and assess the circuit. You get a written estimate covering the alarm units, the wiring, and the labor. No surprise pricing."
+    },
+    {
+      "title": "Installation — typically 2-4 hours for a full house",
+      "body": "For a standard 3-4 bedroom home, hardwired interconnected smoke/CO installation takes 2-4 hours. We run the wiring, mount each alarm, connect them, and test every unit — individually and as a system (triggering one to verify all sound). We label each alarm's manufacture date for the 10-year replacement cycle."
+    },
+    {
+      "title": "Testing and documentation",
+      "body": "We test every alarm, verify interconnection, and provide a written record of what was installed, where, and when. This documentation is useful for home insurance, for the next buyer's inspection, and for the 10-year replacement schedule."
+    }
+  ],
+
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "FILL: Pricing intro.",
+  "pricing_items": [
+    "<strong>Battery-only replacement (no wiring change).</strong> Per-alarm pricing, quoted over the phone. We carry Kidde, First Alert, and BRK units on the truck — most replacements finish in one visit.",
+    "<strong>Hardwired interconnected upgrade (full house).</strong> Depends on the number of alarms, wiring access, and home layout. A standard 3-4 bedroom home takes 2-4 hours. Written estimate after on-site assessment.",
+    "<strong>Single-room additions (post-renovation).</strong> Per-alarm pricing plus the wiring run to tie into the existing circuit. Quoted on-site after we see the access path.",
+    "<strong>Code-compliance assessment.</strong> We walk the house, identify what's needed for Virginia fire code compliance, and provide a written quote. No charge for the assessment in our primary service area."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}.",
+  "pricing_closing_note": "",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "FILL: About paragraph 1 — license, team, insurance.",
+    "FILL: About paragraph 2 — code-compliance expertise, residential focus.",
+    "FILL: About paragraph 3 — AggregateRating + review pitch."
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-smoke-alarm-about-PLACEHOLDER.png",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "FILL: Related intro.",
+  "related_cards": [
+    { "href_slug": "electrical-troubleshooting-{city_slug}", "label": "Electrical Troubleshooting" },
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
+    { "href_slug": "outlet-installation-{city_slug}", "label": "Outlet &amp; Switch Installation" },
+    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures &amp; Chandeliers" },
+    { "href_slug": "ev-charger-{city_slug}", "label": "EV Charger Installation" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    { "question": "How much does smoke alarm installation cost in {city_name_with_state}?", "answer_html": "FILL: FAQ answer (80-120 words).", "answer_schema": "FILL" },
+    { "question": "How often should smoke alarms be replaced?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: every 10 years per manufacturer + NFPA. Check manufacture date on the back of the unit.", "answer_schema": "FILL" },
+    { "question": "What's the difference between hardwired and battery-only smoke alarms?", "question_schema": "What is the difference between hardwired and battery-only smoke alarms?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: hardwired connect to household circuit + have battery backup. Interconnected = when one triggers, all sound.", "answer_schema": "FILL" },
+    { "question": "Does Virginia require interconnected smoke alarms?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: yes for new construction and major renovations. Existing homes may be grandfathered but should upgrade for safety.", "answer_schema": "FILL" },
+    { "question": "Do I need carbon monoxide detectors too?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: Virginia requires CO detectors on every level if fuel-burning appliance or attached garage. Combo smoke/CO units cover both.", "answer_schema": "FILL" },
+    { "question": "My smoke alarm keeps going off when I cook — what should I do?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: likely too close to kitchen or past 10-year life. Relocate + replace with modern unit with better nuisance resistance.", "answer_schema": "FILL" },
+    { "question": "Do I need a permit for smoke alarm installation?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: for hardwired interconnected systems that involve new circuit work, usually yes.", "answer_schema": "FILL" },
+    { "question": "Can you install smoke alarms for a home sale inspection?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: yes — compliance assessment + install, documentation for listing agent.", "answer_schema": "FILL" }
+  ],
+
+  "final_cta_heading": "FILL: Final CTA heading.",
+  "final_cta_paragraph_template": "FILL: Final CTA paragraph.",
+
+  "schema_service_description_template": "Smoke alarm and smoke detector installation and replacement in {city_name_with_state}. Master electrician handles hardwired interconnected systems, code compliance assessment, carbon monoxide detectors, and post-renovation alarm placement. Written on-site estimate.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "On-site assessment and written estimate for hardwired upgrades. Battery-only replacements can be quoted over the phone. Most full-house installations completed in one visit (2-4 hours)."
+}
