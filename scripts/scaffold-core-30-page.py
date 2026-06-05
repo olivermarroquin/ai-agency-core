@@ -107,7 +107,13 @@ def load_client(slug: str) -> dict:
     return load_json(DATA_DIR / f"client-{slug}.json")
 
 
-def load_service(slug: str) -> dict:
+def load_service(slug: str, client_slug: str | None = None) -> dict:
+    # Check for a client-specific override first (e.g. data/services/s-and-h-contracting/panel-upgrade.json).
+    # Falls back to the shared file (e.g. data/services/panel-upgrade.json).
+    if client_slug:
+        client_path = DATA_DIR / "services" / client_slug / f"{slug}.json"
+        if client_path.is_file():
+            return load_json(client_path)
     return load_json(DATA_DIR / "services" / f"{slug}.json")
 
 
@@ -794,7 +800,7 @@ def main() -> int:
     args = p.parse_args()
 
     client = load_client(args.client)
-    service = load_service(args.service)
+    service = load_service(args.service, client_slug=args.client)
     city = load_city(args.city)
 
     ctx = build_context(client, service, city, args.position)

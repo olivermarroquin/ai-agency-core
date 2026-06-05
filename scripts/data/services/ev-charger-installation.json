@@ -1,0 +1,195 @@
+{
+  "_comment": "Per-service data for EV Charger Installation — S&H Contracting slug variant. S&H's build-order uses 'ev-charger-installation-{city_slug}' (vs EV Electric's 'ev-charger-{city_slug}'). This file carries the S&H-correct page_slug_template so bulk-scaffold-pages.py resolves correctly. Content is structurally identical to ev-charger.json; FILL hints reference {owner_name} placeholders (not a specific owner name) so the scaffolder substitutes from the client JSON.",
+  "_dataforseo_verified": {
+    "date": "2026-06-03",
+    "chat_id": "ev-pages-06-12-dataforseo-202606032350",
+    "national_volume": {
+      "ev charger installation": 18100,
+      "tesla charger installation": 4400,
+      "home ev charger installation": 2900,
+      "level 2 charger installation": 1600,
+      "tesla wall connector installation": 12100,
+      "electric car charger installation": 18100,
+      "ev charger installation near me": 4400
+    },
+    "local_volume_note": "All city-specific keywords returned 0 (below Google Ads reporting threshold ~10-50/mo). Local volume must be inferred from national + geo-distribution or measured via GSC post-publish.",
+    "local_pack_composition": "EV charger queries surface charging stations (EVgo, Tesla Supercharger, Electrify America) in the 3-pack, NOT electrician contractors. Organic is the primary acquisition channel for EV charger installation services.",
+    "competitor_notes": "AJ Long organic #6 for 'ev charger installation fairfax va'. No electrician in LP top 3 (all charging stations). Root Electric has EV charger pages per sitemap but content quality unverified."
+  },
+  "_scaffolded": {
+    "from_brief": true,
+    "brief_research_date": "2026-06-02",
+    "brief_researcher": "service-seo-research-skill-v1",
+    "needs_authoring": [
+      "what_it_means_paragraphs",
+      "quick_ref_intro",
+      "why_city_closing_note_template",
+      "about_text_paragraphs",
+      "about_portrait_url_template",
+      "related_intro_template",
+      "faq_items[*].answer_html",
+      "faq_items[*].answer_schema",
+      "final_cta_heading",
+      "final_cta_paragraph_template"
+    ],
+    "needs_confirmation": []
+  },
+  "slug": "ev-charger-installation",
+  "page_slug_template": "ev-charger-installation-{city_slug}",
+  "name": "EV Charger Installation",
+  "name_with_city": "EV Charger Installation in {city_name_with_state}",
+  "service_type_phrase": "Home EV charger installation and Level 2 charging circuits",
+  "quoted_phrase": "ev charger installation",
+  "lowercase_phrase": "ev charger installation",
+  "tag_short": "ev-charger-installation",
+
+  "aioseo_page_title_template": "EV Charger Installation in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "Licensed EV charger installation in {city_name_with_state}. 240V Level 2 circuits, Tesla Wall Connector, panel assessment. Call {phone_display}.",
+  "aioseo_focus_keyword_template": "ev charger installation {city_slug}",
+  "aioseo_additional_keywords_template": [
+    "tesla charger installation {city_slug}",
+    "tesla wall connector installation {city_slug}",
+    "home ev charger installation {city_slug}",
+    "level 2 charger installation {city_slug}",
+    "electric car charger installation {city_slug}",
+    "ev charger installation cost {city_slug}",
+    "240v ev charger installation {city_slug}",
+    "ev charger installation near me",
+    "nema 14-50 outlet installation for ev {city_slug}",
+    "ev charger permit {city_slug}",
+    "best electrician for ev charger {city_slug}",
+    "ev charger installation with panel upgrade {city_slug}",
+    "ev charger installation in garage",
+    "outdoor ev charger installation {city_slug}"
+  ],
+  "wordpress_page_title_template": "EV Charger Installation in {city_name_with_state}",
+
+  "hero_eyebrow_template": "EV Charger Installation in {city_name_with_state}",
+  "hero_heading": "Level 2 EV Charging, Installed Right",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician who installs Level 2 EV chargers across {city_name} and surrounding areas. We assess your panel, run the dedicated 240V circuit, mount your charger, and handle the permit — so you wake up to a full charge instead of waiting all weekend on a trickle outlet.",
+  "hero_image_alt_template": "{owner_name}, master electrician, installing an EV charger in a residential garage in {city_name_with_state}",
+  "hero_image_url_template": "FILL: Hero image URL for S&H EV charger pages. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-ev-charger-installation-hero.png",
+
+  "what_it_means_heading": "What \"EV charger installation\" actually means",
+  "what_it_means_paragraphs": [
+    "EV charger installation means adding a dedicated 240V circuit to your home so your car charges at 25-30 miles of range per hour instead of the 4-5 miles you get from a standard 120V outlet. That standard outlet is Level 1 — fine for a plug-in hybrid you drive ten miles a day, but not practical for a battery-electric vehicle. Level 2 is the dedicated circuit. The charger manufacturer builds the hardware; the licensed electrician installs the circuit, mounts the unit, and makes sure your panel can carry the load safely.",
+    "A Level 2 circuit runs on 240 volts at 40-50 amps continuous draw. Some chargers plug into a NEMA 14-50 outlet — the same receptacle a clothes dryer uses — while others, like the Tesla Wall Connector, are hardwired directly to the circuit with no plug at all. Hardwired units deliver higher amperage (up to 48A on the Tesla Wall Connector) and require a dedicated 60-amp breaker. Before any installation, we run a load calculation on your panel to confirm it can support the new circuit without tripping or overloading existing breakers. Most jurisdictions require a permit for the new 240V line.",
+    "When you call S&H Contracting for an EV charger install, {owner_name} — a {license_state}-licensed Master Electrician with 16+ years in the trade — handles the panel assessment personally. He reads the panel, identifies open breaker slots, calculates the load, and tells you straight whether you need an upgrade or whether your existing panel has room. That diagnostic-first approach is how every EV charger job starts in {city_name} and across the service area. The charger goes on the wall only after the electrical side checks out."
+  ],
+
+  "quick_ref_heading_template": "Common reasons {city_name} homeowners install an EV charger",
+  "quick_ref_intro": "Most calls start with one of these situations. If yours matches, we already know the scope — call and we'll confirm.",
+  "quick_ref_footer_html_template": "Not sure what you need?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll assess your setup.",
+
+  "why_city_heading_template": "Why {city_name} homeowners call us for EV charger installation",
+  "why_city_closing_note_template": "EV registrations in {city_name} have been climbing year over year, and the electrical infrastructure in most homes here wasn't built for a 40-50 amp continuous draw. That gap between the car in the driveway and the panel in the basement is why homeowners call.",
+
+  "problems_heading_template": "EV charging situations we handle every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    {
+      "title": "New EV, no Level 2 charger yet",
+      "body": "You bought a Tesla, Rivian, BMW, Hyundai, or any other EV and realized the trickle charger on a standard 120V outlet adds 4-5 miles of range per hour. A dedicated 240V Level 2 circuit delivers 25-30 miles per hour — overnight charging instead of all-weekend charging. We install the circuit, mount the charger, and handle the permit."
+    },
+    {
+      "title": "Panel doesn't have room for a 50-amp breaker",
+      "body": "An EV charger draws 40-50 amps continuously. If your panel is 100-amp with a full breaker box, there's no space to add the circuit without an upgrade. We assess whether you need a full panel upgrade to 200-amp or whether a sub-panel or load-management device is the right call."
+    },
+    {
+      "title": "Charger in a detached garage or outdoor parking spot",
+      "body": "Running a 240V circuit from the main panel to a detached garage or carport requires an outdoor-rated conduit run, a sub-panel or disconnect, and weatherproof hardware. We size the feeder, trench or surface-mount the conduit, and install the charger with proper grounding."
+    },
+    {
+      "title": "Tesla Wall Connector installation",
+      "body": "The Tesla Wall Connector is the most common charger we install. It's hardwired (no plug), delivers up to 48 amps, and requires a dedicated 60-amp circuit. We mount it at the right height, run the circuit, and configure the Wi-Fi so you can monitor charging from the Tesla app."
+    },
+    {
+      "title": "Charger trips the breaker or throttles",
+      "body": "If your existing charger throttles itself down or trips the breaker every few hours, the cause is usually upstream — an undersized circuit, a loose connection, or a panel that can't sustain the continuous load. We diagnose the electrical cause, not the charger."
+    },
+    {
+      "title": "Multi-EV household — two chargers, one panel",
+      "body": "Two EVs charging simultaneously can draw 80-100 amps. Most homes need a panel upgrade or a load-sharing device to handle this. We calculate the load, recommend the right solution, and install both circuits so neither car has to wait."
+    },
+    {
+      "title": "NEMA 14-50 outlet for a portable charger",
+      "body": "Some homeowners prefer a NEMA 14-50 outlet (the same plug as a dryer) so they can use a portable Level 2 charger. It's simpler and cheaper than a hardwired unit. We install the dedicated 50-amp circuit and the outlet, and you plug in your own charger."
+    }
+  ],
+
+  "process_heading_template": "Our EV charger installation process — what happens when you call",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    {
+      "title": "A real conversation about your setup",
+      "body": "We ask about your vehicle (make, model, onboard charger amperage), your current panel (age, amperage, available slots), where you park (garage, driveway, street), and what charger you want. If you already bought the charger, we work with it. If not, we recommend one based on your car and your electrical capacity."
+    },
+    {
+      "title": "On-site assessment and written estimate",
+      "body": "We come to the house, look at the panel, measure the distance to the charging location, and run a load calculation. You get a written estimate with the circuit, the conduit run, the charger mount, the permit fee, and the labor laid out clearly. No surprise pricing."
+    },
+    {
+      "title": "Permit and scheduling",
+      "body": "Most jurisdictions require a permit for a new 240V circuit. We pull the permit, schedule the install, and coordinate with you on timing. Most installs are a half-day to full-day job depending on the run distance."
+    },
+    {
+      "title": "Installation — typically half a day",
+      "body": "We install the breaker, run the circuit, mount the charger or outlet, and test the full system. For hardwired chargers, we configure the charger's amperage setting and verify the app connection. You drive away charging that night."
+    },
+    {
+      "title": "Inspection and sign-off",
+      "body": "The county inspector visits. We meet them, walk through the work, and they sign off. You get the permit and inspection record — important for your home insurance and for EV tax credit documentation."
+    }
+  ],
+
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "Every EV charger installation starts with an on-site assessment — not a phone quote. We look at your panel, measure the run distance, and factor in the charger type before giving you a written estimate. You see the full number, broken out by line item, before any work begins.",
+  "pricing_items": [
+    "An on-site assessment comes first. We look at the panel, the run distance, and what you're adding. You get a written estimate before any work starts.",
+    "The estimate covers the breaker, the circuit run, the charger mount (if hardwired), the permit fee, and the labor. No add-ons on the work day.",
+    "Panel upgrades — if your panel can't support the new circuit — get a separate line item. You see what each piece costs.",
+    "Tax credits: the federal EV charger tax credit (Section 30C) may cover up to 30% of installation costs. We don't file it for you, but we give you the documentation your tax preparer needs."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}. We don't charge to drive to your house for the estimate.",
+  "pricing_closing_note": "We don't post fixed prices because every installation is different — panel capacity, run distance, conduit type, permit fees. The estimate after a real on-site assessment is the only honest number.",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "{owner_name} holds a Master Electrician license in Virginia — the highest tier the state issues, requiring years of journeyman work and a passed state exam. He's spent 16+ years doing residential and commercial electrical across Northern Virginia, DC, Maryland, and Pennsylvania, including a steady volume of EV charger installations — Tesla Wall Connectors, ChargePoint Home Flex units, Wallbox Pulsar Plus, and JuiceBox 40. S&H Contracting is fully insured and runs a maintenance team, so scheduling doesn't hinge on one person's calendar.",
+    "{owner_name} is the one who shows up for the panel assessment on most residential EV charger jobs. He reads the panel, runs the load calculation, and explains in plain English whether your existing service can handle a new 40-50 amp circuit or whether an upgrade is the right move. That diagnostic happens before any quote — because quoting a charger install without seeing the panel first is guessing, and guessing costs the homeowner money downstream.",
+    "S&H Contracting Unlimited holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "FILL: About portrait URL for S&H EV charger pages. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-ev-charger-installation-about.png",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "EV charger installations often uncover related electrical needs — a panel that's at capacity, outdated wiring, or garage lighting that hasn't been touched in decades. Here's what else we handle in {city_name}.",
+  "related_cards": [
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
+    { "href_slug": "emergency-electrician-{city_slug}", "label": "24/7 Emergency Electrician" },
+    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures &amp; Chandeliers" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    { "question": "How much does an EV charger installation cost in {city_name_with_state}?", "answer_html": "The cost depends on three things: your panel's available capacity, the distance from the panel to the charger location, and whether you need a panel upgrade. A straightforward garage installation where the panel has room for a new 50-amp breaker and the run is short is our most common job. Longer conduit runs, detached garages, or panels that need a heavy-up add to the scope. We don't post fixed prices because no two homes are wired the same. Call <a href=\"tel:{phone_tel}\">{phone_display}</a> and we'll schedule an on-site assessment — you get a written, itemized estimate before any work starts.", "answer_schema": "The cost depends on three things: your panel's available capacity, the distance from the panel to the charger location, and whether you need a panel upgrade. A straightforward garage installation where the panel has room for a new 50-amp breaker and the run is short is our most common job. Longer conduit runs, detached garages, or panels that need a heavy-up add to the scope. We don't post fixed prices because no two homes are wired the same. Call and we'll schedule an on-site assessment — you get a written, itemized estimate before any work starts." },
+    { "question": "Do I need a panel upgrade to install an EV charger?", "answer_html": "It depends on your current panel amperage and how many breaker slots are open. If you have 200-amp service with available slots, you can usually add a 50-amp EV charger circuit without upgrading anything. If you have 100-amp service — common in homes built before the 1990s — the panel likely can't sustain the additional continuous draw, and a heavy-up to 200 amps is the right move. We check this during the on-site assessment. A load calculation per NEC requirements tells us exactly how much capacity your panel has left. No guessing — real numbers from a real panel read.", "answer_schema": "It depends on your current panel amperage and how many breaker slots are open. If you have 200-amp service with available slots, you can usually add a 50-amp EV charger circuit without upgrading anything. If you have 100-amp service — common in homes built before the 1990s — the panel likely can't sustain the additional continuous draw, and a heavy-up to 200 amps is the right move. We check this during the on-site assessment. A load calculation per NEC requirements tells us exactly how much capacity your panel has left. No guessing — real numbers from a real panel read." },
+    { "question": "What's the difference between Level 1 and Level 2 charging?", "question_schema": "What is the difference between Level 1 and Level 2 charging?", "answer_html": "Level 1 is the cord that comes with your car — it plugs into a standard 120V household outlet and adds about 4-5 miles of range per hour. For a battery that needs 250+ miles of charge, that's 50-60 hours of wall time. Level 2 runs on a dedicated 240V circuit at 40-50 amps and delivers 25-30 miles of range per hour — a full overnight charge for most EVs. Level 2 is the setup most daily drivers need. There's also Level 3 (DC fast charging), but that's commercial infrastructure, not residential — it requires industrial-grade power that homes don't carry.", "answer_schema": "Level 1 is the cord that comes with your car — it plugs into a standard 120V household outlet and adds about 4-5 miles of range per hour. For a battery that needs 250+ miles of charge, that's 50-60 hours of wall time. Level 2 runs on a dedicated 240V circuit at 40-50 amps and delivers 25-30 miles of range per hour — a full overnight charge for most EVs. Level 2 is the setup most daily drivers need. There is also Level 3 (DC fast charging), but that is commercial infrastructure, not residential — it requires industrial-grade power that homes do not carry." },
+    { "question": "Can you install a Tesla Wall Connector?", "answer_html": "Yes — the Tesla Wall Connector is the most common charger we install. It's a hardwired unit (no plug) that delivers up to 48 amps on a dedicated 60-amp circuit. We mount it at the manufacturer-recommended height, run the 6-gauge wiring from your panel, install the double-pole breaker, and configure the Wi-Fi connection so you can monitor charging through the Tesla app. The Wall Connector also charges non-Tesla vehicles that use the NACS connector — Ford, GM, and Rivian have adopted the standard. We also install ChargePoint Home Flex, Wallbox Pulsar Plus, and JuiceBox 40 if you prefer a universal J1772 unit.", "answer_schema": "Yes — the Tesla Wall Connector is the most common charger we install. It is a hardwired unit (no plug) that delivers up to 48 amps on a dedicated 60-amp circuit. We mount it at the manufacturer-recommended height, run the 6-gauge wiring from your panel, install the double-pole breaker, and configure the Wi-Fi connection so you can monitor charging through the Tesla app. The Wall Connector also charges non-Tesla vehicles that use the NACS connector — Ford, GM, and Rivian have adopted the standard. We also install ChargePoint Home Flex, Wallbox Pulsar Plus, and JuiceBox 40 if you prefer a universal J1772 unit." },
+    { "question": "Do I need a permit for an EV charger installation in {city_name_with_state}?", "answer_html": "Yes. A new 240V circuit requires an electrical permit in every Northern Virginia jurisdiction we work in — Prince William County DDS, Fairfax County LDS, the City of Manassas permit desk, and others depending on your location. The permit ensures the work is inspected and meets NEC Article 625 requirements for EV charging equipment. We pull the permit, schedule the inspection, and meet the inspector on-site. You don't have to call anyone or stand in line. The permit and inspection record also matters for your homeowner's insurance and for documenting the installation if you apply for the federal EV charger tax credit.", "answer_schema": "Yes. A new 240V circuit requires an electrical permit in every Northern Virginia jurisdiction — Prince William County DDS, Fairfax County LDS, the City of Manassas permit desk, and others depending on your location. The permit ensures the work is inspected and meets NEC Article 625 requirements for EV charging equipment. We pull the permit, schedule the inspection, and meet the inspector on-site. You do not have to call anyone or stand in line. The permit and inspection record also matters for your homeowner's insurance and for documenting the installation if you apply for the federal EV charger tax credit." },
+    { "question": "How long does an EV charger installation take?", "answer_html": "Installation day itself is typically 2-6 hours for a straightforward job — that covers installing the breaker, running the circuit, mounting the charger, and testing the full system. A short run from a panel with open slots and no obstacles is the faster end. A longer conduit run through finished walls, a detached garage trench, or a panel that needs a sub-panel addition pushes toward the full-day end. Add 1-3 weeks of lead time for permit processing in some jurisdictions before the install date. We schedule most installations within 5-10 business days of estimate acceptance.", "answer_schema": "Installation day itself is typically 2-6 hours for a straightforward job — that covers installing the breaker, running the circuit, mounting the charger, and testing the full system. A short run from a panel with open slots and no obstacles is the faster end. A longer conduit run through finished walls, a detached garage trench, or a panel that needs a sub-panel addition pushes toward the full-day end. Add 1-3 weeks of lead time for permit processing in some jurisdictions before the install date. We schedule most installations within 5-10 business days of estimate acceptance." },
+    { "question": "Can I install an EV charger outdoors or in a detached garage?", "answer_html": "Yes — both are common installations we handle. Outdoor mounts use a weatherproof NEMA-rated enclosure and GFCI protection per code. The charger itself is rated for rain, snow, and direct sun (most Level 2 units carry a NEMA 3R or 4 rating). For detached garages, we run a feeder from your main panel to a sub-panel or disconnect in the garage — either trenched underground in PVC conduit or surface-mounted depending on your property layout. The main cost variable is distance: a 50-foot run costs less than a 150-foot run. We measure the exact route during the on-site assessment.", "answer_schema": "Yes — both are common installations. Outdoor mounts use a weatherproof NEMA-rated enclosure and GFCI protection per code. The charger itself is rated for rain, snow, and direct sun (most Level 2 units carry a NEMA 3R or 4 rating). For detached garages, we run a feeder from your main panel to a sub-panel or disconnect in the garage — either trenched underground in PVC conduit or surface-mounted depending on your property layout. The main cost variable is distance: a 50-foot run costs less than a 150-foot run. We measure the exact route during the on-site assessment." },
+    { "question": "Is there a tax credit for EV charger installation?", "answer_html": "The federal Alternative Fuel Vehicle Refueling Equipment Credit (IRS Section 30C) covers 30% of the cost of purchasing and installing an EV charger at your primary residence, up to $1,000 for residential installations. The property must be in an eligible census tract — most of Northern Virginia qualifies. On top of that, Dominion Energy offers a $125 rebate for smart charger installation and an additional $40 per year if you enroll in their managed charging program. We don't file the credit for you, but we provide the itemized invoice and permit documentation your tax preparer needs to claim it.", "answer_schema": "The federal Alternative Fuel Vehicle Refueling Equipment Credit (IRS Section 30C) covers 30% of the cost of purchasing and installing an EV charger at your primary residence, up to $1,000 for residential installations. The property must be in an eligible census tract — most of Northern Virginia qualifies. On top of that, Dominion Energy offers a $125 rebate for smart charger installation and an additional $40 per year if you enroll in their managed charging program. We do not file the credit for you, but we provide the itemized invoice and permit documentation your tax preparer needs to claim it." }
+  ],
+
+  "final_cta_heading": "Ready to stop waiting on a trickle charge?",
+  "final_cta_paragraph_template": "Call <a href=\"tel:{phone_tel}\">{phone_display}</a> to schedule a panel assessment and get a written estimate for Level 2 EV charger installation in {city_name_with_state}.<br>We respond within one business day.",
+
+  "schema_service_description_template": "Residential EV charger installation in {city_name_with_state}. Master electrician handles Level 2 circuit installation, Tesla Wall Connector mounting, panel assessment, permit, and inspection. Half-day to full-day install with written on-site estimate.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "On-site assessment and written estimate before any EV charger installation begins. Most residential installs scheduled within 5-10 business days of estimate acceptance; permit pull handled by us."
+}

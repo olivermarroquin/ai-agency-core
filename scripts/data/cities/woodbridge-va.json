@@ -1,0 +1,231 @@
+{
+  "_comment": "Per-city data for Woodbridge, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "woodbridge-va",
+  "name": "Woodbridge",
+  "name_with_state": "Woodbridge, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Prince William County",
+  "county_full": "Prince William County, Virginia",
+  "distance_from_hq_phrase": "We're based right here in Woodbridge — this is our home city",
+  "geographic_anchor_paragraph": "Woodbridge, VA sits along the I-95 corridor in eastern Prince William County, roughly 22 miles south of Washington, D.C. The community runs between the Occoquan River to the north, the Potomac River to the east, and the Quantico area to the south, with I-95 and Route 1 as its central spines. Woodbridge is 10-15 minutes from Lorton and Dumfries, and 35-50 minutes from downtown DC depending on traffic.",
+  "audience_descriptor": "Residential homeowners and property managers in Woodbridge, VA and surrounding Prince William County communities including Marumsco Village, Eagles Pointe, Rippon Landing, and the Stonebridge area.",
+  "no_trip_charge_cities": [
+    "Woodbridge",
+    "Lake Ridge",
+    "Dale City",
+    "Dumfries",
+    "Occoquan",
+    "Lorton"
+  ],
+  "neighborhoods": [
+    {
+      "name": "Marumsco Village",
+      "blurb": "the original 1950s-1960s planned community along Route 1"
+    },
+    {
+      "name": "Eagles Pointe",
+      "blurb": "amenity-filled community near I-95 and Stonebridge"
+    },
+    {
+      "name": "Rippon Landing",
+      "blurb": "townhomes near Rippon Lodge and Neabsco Regional Park"
+    },
+    {
+      "name": "Stonebridge",
+      "blurb": "newer townhomes and condos around the Stonebridge shopping center"
+    },
+    {
+      "name": "Marumsco Woods",
+      "blurb": "1960s-era homes near the Marumsco Hills community"
+    },
+    {
+      "name": "Potomac Mills area",
+      "blurb": "the commercial hub along I-95 with surrounding residential"
+    },
+    {
+      "name": "Four Seasons at Virginia Crossing",
+      "blurb": "55+ gated community with resort-style amenities"
+    },
+    {
+      "name": "Old Bridge area",
+      "blurb": "established 1980s residential along Old Bridge Road"
+    },
+    {
+      "name": "Gordon Road / Route 123 corridor",
+      "blurb": "residential pockets along Gordon Boulevard south of I-95"
+    }
+  ],
+  "other_areas_paragraph": "Outside Woodbridge, we serve <a href=\"/electrical-troubleshooting-lake-ridge-va/\">Lake Ridge</a>, <a href=\"/electrical-troubleshooting-dale-city-va/\">Dale City</a>, Dumfries, Occoquan, Lorton, and the rest of Prince William County. We also cover <a href=\"/electrical-troubleshooting-manassas-va/\">Manassas</a>, <a href=\"/electrical-troubleshooting-springfield-va/\">Springfield</a>, <a href=\"/electrical-troubleshooting-burke-va/\">Burke</a>, and <a href=\"/electrical-troubleshooting-stafford-va/\">Stafford</a>.",
+  "housing_patterns": [
+    {
+      "title": "1950s-1960s postwar ranches &amp; split-levels",
+      "neighborhood_examples": "Marumsco Village, Marumsco Woods, Marumsco Hills, older Route 1 corridor homes",
+      "context_paragraph": "The earliest wave of suburban development in Woodbridge, anchored by C.D. Hylton's Marumsco Village project starting in 1956. Built with 60-100 amp panels and circuits sized for the appliances of the era — refrigerator, TV, a window AC unit if you were lucky. Wiring is cloth-insulated copper. Plumbing is original galvanized steel supply lines running to copper at fixtures. Insulation is minimal (R-13 walls at best, often less). These homes are now 60-70 years old and running modern loads — central AC, multiple refrigerators, induction ranges, EV chargers — that the original electrical system was never designed for.",
+      "symptoms": "60-100A panels with circuits sized for 1960s loads; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands; fuse boxes instead of breakers in some units; overhead service drops from utility poles; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal."
+    },
+    {
+      "title": "1970s-1980s colonials &amp; production-built subdivisions",
+      "neighborhood_examples": "Old Bridge area, Gordon Road corridor, older Lake Ridge-adjacent subdivisions, Dale Boulevard-area homes",
+      "context_paragraph": "The mid-boom era when Woodbridge transitioned from rural to suburban. 100-200 amp panels are standard. Some mid-1970s homes contain aluminum branch wiring (NEC — National Electrical Code — banned aluminum branch circuits in 1972, but installation continued for several years after). GFCI (ground-fault circuit interrupter) coverage is spotty — the 1971 NEC required GFCIs only at outdoor and pool circuits; kitchen counter receptacle GFCIs didn't become mandatory until NEC 1996. Plumbing is mostly copper with galvanized supply lines in older units. Central AC is standard in this era. These homes are the workhorses of Woodbridge's residential stock — the most common housing type a service contractor will encounter.",
+      "symptoms": "100-200A panels original at construction; some aluminum branch wiring in mid-1970s homes; GFCI coverage spotty in pre-1996 builds; EV charger or whole-house renovation triggers the 200A upgrade; overhead service in older areas, underground in later subdivisions."
+    },
+    {
+      "title": "1990s-2000s townhomes &amp; newer single-family",
+      "neighborhood_examples": "Eagles Pointe, Rippon Landing, Stonebridge, Four Seasons at Virginia Crossing",
+      "context_paragraph": "200-amp panels standard. Copper wiring with PVC insulation throughout. AFCI (arc-fault circuit interrupter — the breaker that detects dangerous electrical arcs) breakers required per NEC 2008 in bedroom circuits; NEC 2014 expanded to most living-area circuits. PEX plumbing dominant. Central AC and high-efficiency heat pumps common. These are the newest homes in Woodbridge, but they're not exempt from issues — AFCI breakers are sensitive by design and trip on noisy loads; smart-home wiring done by previous owners' contractors sometimes leaves neutral wires bonded incorrectly; and townhomes share walls, which means electrical work sometimes requires HOA coordination.",
+      "symptoms": "200A panels standard; upgrades here are usually about adding capacity for EV chargers, hot tubs, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; HOA coordination may be needed for visible exterior panel work in planned communities like Eagles Pointe and Rippon Landing."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How much does a panel upgrade cost in Woodbridge, VA?",
+        "body": "Every panel upgrade is different, so we don't publish a flat rate. The variables that move the number: your current amperage (60A, 100A, or 150A), whether Dominion Energy needs to pull and reseat the meter, the condition of your service-entrance conductors, and whether your home has overhead or underground service. Call 703-972-5571 and we'll walk through what drives the estimate for your specific Woodbridge home before anyone picks up a tool."
+      },
+      {
+        "summary": "Do I need a permit for a panel upgrade in Prince William County?",
+        "body": "Yes — Prince William County requires an electrical permit for panel upgrades. You file through the county's Building Development Division via the ePortal system. Prince William is a single-AHJ jurisdiction, so there's one permit office and one inspection, which keeps the process straightforward. We pull the permit, schedule the inspection, and handle the Dominion Energy coordination so you're not chasing paperwork."
+      },
+      {
+        "summary": "What are the signs I need a panel upgrade?",
+        "body": "Breakers tripping when you run the microwave and AC at the same time. A panel that's warm to the touch. Scorch marks or a burning smell near the breaker box. Flickering lights under load. If your Woodbridge home was built in the 1950s-1980s — Marumsco Village, Old Bridge area, Gordon Road corridor — and you're still on the original 60A or 100A panel, those symptoms mean the panel is working harder than it was designed for."
+      },
+      {
+        "summary": "Is my Federal Pacific or Zinsco panel dangerous?",
+        "body": "Federal Pacific Stab-Lok and Zinsco panels have documented failure rates — the breakers don't always trip during an overload, which is the one thing a breaker exists to do. Woodbridge's Marumsco Village and Marumsco Woods neighborhoods were built in the 1950s-60s when these panels were standard. If yours is still in service, most insurance carriers writing policies in Northern Virginia will flag it at renewal. We replace Federal Pacific and Zinsco panels with Square D or Eaton — call 703-972-5571 for an on-site assessment."
+      },
+      {
+        "summary": "Should I upgrade to 200 amps?",
+        "body": "For most Woodbridge homes, yes. 200A is the current standard for residential service, and the median Woodbridge home was built around 1986 with a 100A panel. A 100A panel can run the basics, but add an EV charger, a heat pump, or a kitchen remodel with an induction range and you're out of headroom. The 100A-to-200A upgrade is the most common panel job we do in Prince William County."
+      },
+      {
+        "summary": "How long does a panel upgrade take and will I lose power?",
+        "body": "Most panel upgrades are a one-day job. Dominion Energy coordinates the service disconnect — they pull the meter in the morning, we swap the panel, and they reseat the meter once we pass inspection. Expect 4-6 hours without power during the swap itself. We schedule the Dominion coordination ahead of time so the outage window is predictable, not a surprise."
+      },
+      {
+        "summary": "Does my overhead or underground service affect the upgrade?",
+        "body": "It does. Older Woodbridge neighborhoods — Marumsco Village, Marumsco Woods, the Route 1 corridor — typically have overhead service drops from utility poles, which makes the panel swap simpler because the service-entrance conductors are accessible. Newer communities like Eagles Pointe, Rippon Landing, and Stonebridge have underground service, which can add scope if the underground lateral or meter base needs work. We assess the service type during the walkthrough so the estimate reflects the actual path."
+      },
+      {
+        "summary": "Can my Woodbridge panel handle an EV charger?",
+        "body": "A Level 2 EV charger draws 40-50 amps on a dedicated 240V circuit. If your Woodbridge home has a 200A panel with open breaker slots, you're probably fine. If you're on a 100A panel — common in homes built before the late 1980s along Old Bridge Road, Gordon Road, and the Dale Boulevard area — you'll likely need a panel upgrade before the charger goes in. We run a load calculation during the walkthrough to give you a straight answer."
+      }
+    ],
+    "emergency-electrician": [
+      {
+        "summary": "What is considered an electrical emergency?",
+        "body": "If you see flames, smell burning plastic, or hear arcing sounds inside a wall — call 911 first, then call us. Beyond that, an electrical emergency is anything that creates an immediate safety risk: a panel that's hot to the touch, a sparking outlet, a melted service disconnect, or a complete power loss isolated to your home. In Woodbridge's Marumsco-era homes with cloth-insulated wiring and Federal Pacific panels, breaker failure under load is a real emergency — the breaker didn't trip when it should have."
+      },
+      {
+        "summary": "How quickly can you get to my Woodbridge home?",
+        "body": "We're based right here in Woodbridge — 22193, off Bountiful Lane. Most emergency calls in Woodbridge, Lake Ridge, Dale City, and Dumfries, we're at your door in under an hour. The I-95 corridor means we can reach most of eastern Prince William County without fighting cross-county traffic. Call 703-972-5571 — we answer 24/7 and give you a real ETA on the first call, not a window."
+      },
+      {
+        "summary": "What should I do before the electrician arrives?",
+        "body": "Don't touch the panel or any exposed wiring. Turn off the main breaker if you can reach it safely. Keep everyone away from the affected area. Unplug appliances on the problem circuit. If you smell smoke or see scorch marks, get the household out and call 911. If flooding near your panel from Neabsco Creek or Potomac-area storms has put standing water anywhere near electrical equipment, do not enter that water — call us from a dry location."
+      },
+      {
+        "summary": "Is my power out because of Dominion Energy or my house?",
+        "body": "Check Dominion Energy's outage map at dominionenergy.com/outages. If your neighbors have power and you don't, the problem is almost certainly inside your home — a tripped main breaker, a failed service-entrance connection, or a panel issue. If the outage map shows your block affected, that's Dominion's side and they'll restore it. When it's your house, call 703-972-5571 and we'll diagnose it on-site."
+      },
+      {
+        "summary": "How much does emergency electrical service cost in Woodbridge?",
+        "body": "Emergency calls are priced by the job, not a flat rate, because the scope varies too much — a tripped main breaker is a different job than a melted service disconnect. The variables: time of day (after-hours and weekend calls carry a surcharge), diagnostic complexity, and parts needed. We give you the cost picture after the on-site diagnostic, before any repair work starts, so there's no surprise on the invoice."
+      },
+      {
+        "summary": "When should I call 911 instead of an electrician?",
+        "body": "Call 911 if you see active flames, if an electrical panel or outlet is on fire, if someone has been shocked and is unresponsive, or if you smell burning and can't identify the source. An electrician fixes the system after the danger is controlled — the fire department controls the danger. When in doubt, call 911 first, then call us at 703-972-5571."
+      },
+      {
+        "summary": "Do you serve my neighborhood / ZIP code in Woodbridge?",
+        "body": "We cover all of Woodbridge — 22191, 22192, and 22193 — including Marumsco Village, Eagles Pointe, Rippon Landing, Stonebridge, Port Potomac, the Old Bridge area, and the Potomac Mills area. We also serve Lake Ridge, Dale City, Dumfries, Occoquan, and Lorton with no trip charge. Outside that core zone, we cover Manassas, Springfield, Burke, Stafford, and the rest of Northern Virginia."
+      },
+      {
+        "summary": "Are your electricians licensed and insured in Virginia?",
+        "body": "Mohammad Adam is a Master Electrician licensed through the Virginia Department of Professional and Occupational Regulation (DPOR) — the state agency that licenses all electrical contractors in Virginia. Master is the highest electrician tier DPOR issues. S&H Contracting Unlimited is fully insured for residential and commercial work. You can verify any Virginia contractor's license status through the DPOR lookup at dpor.virginia.gov."
+      }
+    ],
+    "ev-charger-installation": [
+      {
+        "summary": "How much does EV charger installation cost in Woodbridge, VA?",
+        "body": "We don't publish a flat rate because the cost depends on your specific setup. The main variables: distance from your panel to the charger location, whether your panel has enough capacity or needs an upgrade, the charger brand and amperage, and whether the install is indoor (garage) or outdoor. Call 703-972-5571 and we'll walk through the details for your Woodbridge home — the estimate is based on a real assessment, not a guess from a website."
+      },
+      {
+        "summary": "Do I need a permit for an EV charger in Woodbridge?",
+        "body": "Yes — Prince William County requires an electrical permit for EV charger installation. You file through the Building Development Division via the ePortal system. The Walk-Thru Plan Review process has no filing fee, which keeps the permit cost low. We handle the permit application, the inspection scheduling, and the Dominion Energy coordination as part of the install."
+      },
+      {
+        "summary": "Do I need a panel upgrade to install an EV charger?",
+        "body": "If your panel is 200A with open breaker slots, you can usually add an EV charger circuit without a panel upgrade. If you're on a 100A panel — common in Woodbridge homes built before the late 1980s — you'll almost certainly need to go to 200A first. We run a load calculation during the walkthrough to confirm. See our <a href=\"/panel-upgrade-woodbridge-va/\">Woodbridge panel upgrade page</a> for more on the capacity question."
+      },
+      {
+        "summary": "Can I install an EV charger in my Woodbridge townhouse?",
+        "body": "Yes, but townhomes have a few extra steps. In communities like Eagles Pointe, Rippon Landing, and Stonebridge, you'll need HOA approval before any exterior-mounted equipment goes up. The charger location depends on your parking setup — garage-mount is cleanest, but exterior-mount on a dedicated post works for driveway spots. Outdoor installations require GFCI protection per code. We handle the HOA coordination paperwork and can recommend charger placements that satisfy both the HOA and the electrical code."
+      },
+      {
+        "summary": "Should I get a Tesla Wall Connector or a universal charger?",
+        "body": "The gap is shrinking. Tesla's NACS connector is becoming the industry standard, and most new EVs from other manufacturers are adopting it. That said: if you only drive Teslas, the Tesla Wall Connector is the cleanest option — it integrates with the Tesla app and supports up to 48A. If your household has or may have non-Tesla EVs, a universal charger like ChargePoint Home Flex or JuiceBox 40 gives you flexibility. We install both and can advise based on your vehicles."
+      },
+      {
+        "summary": "Are there rebates or tax credits for EV charger installation in Virginia?",
+        "body": "The federal 30C tax credit covers 30% of the cost of EV charger equipment and installation, up to $1,000 for residential — but it expires June 30, 2026, so the window is closing. On the utility side, Dominion Energy offers a managed charging program: $125 enrollment credit plus $40/year if you allow the utility to manage charging during peak grid hours. We can walk you through both when we scope the job."
+      },
+      {
+        "summary": "How long does EV charger installation take?",
+        "body": "The installation itself takes 2-6 hours depending on the run distance from your panel and whether you need any panel work. The permit is the longer lead time — Prince William County ePortal processing runs 2-4 weeks for the electrical permit and inspection scheduling. We submit the permit application as soon as you approve the scope, so the clock starts early."
+      },
+      {
+        "summary": "Should I hardwire my EV charger or use a NEMA 14-50 outlet?",
+        "body": "For most Woodbridge homeowners, a plug-in charger on a NEMA 14-50 outlet is the practical choice — it's portable if you move or change vehicles, and it's easier to swap out if the charger needs service. Hardwired makes more sense for outdoor installations where weather exposure and code requirements favor a permanent connection, or for high-amperage setups above 40A. We'll recommend based on your charger location and amperage needs."
+      }
+    ],
+    "light-fixture-installation": [
+      {
+        "summary": "How much does it cost to install a light fixture in Woodbridge, VA?",
+        "body": "Cost depends on the fixture type and what's behind the junction box. A simple one-for-one swap on a modern junction box is a straightforward job. Adding new wiring, mounting a heavy chandelier with a reinforced box, or dealing with older Woodbridge homes where the existing wiring needs attention — those are different scopes. Call 703-972-5571 and we'll give you an estimate based on what you're installing and where."
+      },
+      {
+        "summary": "Do I need an electrician to replace a light fixture, or can I do it myself?",
+        "body": "Honest answer: a simple one-for-one swap on a modern junction box with clearly labeled wiring is a reasonable DIY project if you're comfortable turning off the breaker and testing with a voltage tester. Where you need a pro: new wiring runs, heavy fixtures that need a reinforced box, any home in Marumsco Village or the older Route 1 corridor where you might find cloth-insulated wiring or aluminum branch circuits behind the box. Older wiring changes the risk profile."
+      },
+      {
+        "summary": "Can you install a light fixture I already bought at Home Depot or Lowe's?",
+        "body": "Absolutely — this is one of the most common calls we get. There's a Home Depot and a Lowe's right here in Woodbridge, and homeowners buy fixtures they like, then realize they'd rather not wire them in. Bring the fixture, the mounting hardware, and any included instructions. We install what you bought — no markup on the fixture, no pressure to buy through us."
+      },
+      {
+        "summary": "What types of light fixtures do you install?",
+        "body": "We install the full range: flush mount, semi-flush, pendant lights, chandeliers, recessed (can) lights, wall sconces, outdoor fixtures (porch, landscape, security), under-cabinet lighting, and ceiling fans. Each type has its own mounting and wiring requirements — a recessed light needs a different ceiling prep than a pendant, and a ceiling fan needs a fan-rated junction box. We match the installation to the fixture spec."
+      },
+      {
+        "summary": "My 1980s Woodbridge home has old light fixtures — what should I know about replacing them?",
+        "body": "In 1980s Woodbridge colonials — Old Bridge area, Gordon Road corridor, Dale Boulevard subdivisions — the junction boxes behind existing fixtures may be undersized or corroded after 40+ years. The wiring insulation can be brittle. Some mid-1970s homes in these neighborhoods have aluminum branch wiring, which needs special connectors (COPALUM or AlumiConn) when joining to a new copper-wired fixture. We check the box, test the wiring, and flag anything that needs attention before the new fixture goes up."
+      },
+      {
+        "summary": "Do I need a permit to replace a light fixture in Prince William County?",
+        "body": "A one-for-one fixture swap on existing wiring typically does not require a permit in Prince William County. If the job involves running new wiring, adding a new circuit, or cutting into a ceiling for recessed lights, you'll need an electrical permit filed through the county's ePortal system. We'll tell you at the walkthrough whether a permit applies — and if it does, we handle the filing."
+      },
+      {
+        "summary": "How long does it take to install a light fixture?",
+        "body": "A simple one-for-one fixture swap takes 30-60 minutes per fixture. If we're running new wiring — say, adding a recessed light where there wasn't one, or pulling a new circuit for under-cabinet lighting — that's 2-4 hours depending on the run length and ceiling access. Multiple fixtures in the same visit save time because the setup and breaker work happens once."
+      },
+      {
+        "summary": "Can you install a ceiling fan in a townhouse without bothering the neighbors?",
+        "body": "Yes — and the shared-wall factor matters. In Woodbridge townhomes like Eagles Pointe, Rippon Landing, and Stonebridge, a ceiling fan needs a fan-rated junction box (a standard light box can't handle the weight and vibration) and proper vibration isolation hardware to prevent noise transfer through shared joists. We install fan-rated boxes and balance the fan on-site so it runs quiet. Your neighbors shouldn't hear it."
+      }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "panel-upgrade": "In Woodbridge, panel-upgrade calls split into two patterns. First: 1950s-1960s Marumsco-era ranches and splits with original 60-100A panels — Federal Pacific Stab-Lok or Zinsco panels still in service 60+ years later, now flagged by insurance carriers at policy renewal. Second: 1970s-1980s colonials along the Old Bridge Road corridor and Gordon Road area with 100A panels that can't carry today's loads — central AC plus EV charger plus modern kitchen appliances overruns what the original builder planned. Both patterns drive the standard 100A-to-200A upgrade.",
+    "emergency-electrician": "In Woodbridge, two patterns drive most emergency electrician calls. First: summer thunderstorms and ice storms knock power lines into overhead service drops in the older neighborhoods along Route 1 and in Marumsco Village — the service mast takes the hit and the homeowner loses power while neighbors keep theirs. Second: 1950s-1960s homes running 2026 loads on 60-100 amp panels with cloth-insulated wiring trip breakers under load or — worse — the breaker fails to trip because it's a Federal Pacific Stab-Lok or Zinsco unit. Both scenarios need a licensed electrician, not a DIY reset.",
+    "ev-charger-installation": "In Woodbridge, the most common EV charger installation call comes from commuters who just bought an EV and realized Level 1 charging from a regular outlet only adds 3-5 miles of range per hour — not enough for a 60-80 mile daily I-95 commute. They need a Level 2 charger on a dedicated 240V circuit. The second-most common call comes from townhome owners in Eagles Pointe, Rippon Landing, or Stonebridge who need help navigating the HOA approval process and finding the right exterior-mount or garage-mount option for their parking situation.",
+    "light-fixture-installation": "In Woodbridge, two patterns drive most light fixture calls. First: 1970s-80s colonials and production-built homes in the Old Bridge area, Gordon Road corridor, and Dale Boulevard neighborhoods with original builder-grade fixtures that are now 40-50 years old — outdated, yellowed, and often connected to junction boxes that haven't been inspected in decades. Second: homeowners who bought a new fixture at the Home Depot or Lowe's in Woodbridge and want it installed safely — especially in homes with 8-foot ceilings where fixture selection and clearance matter."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "Woodbridge homes span every construction era — from 1950s Marumsco Village ranches with 60-amp Federal Pacific panels to 2010s Rippon Landing townhomes with 200-amp service and AFCI breakers. The panel-upgrade path depends on which era your home was built in, and what you're asking it to power today.",
+    "emergency-electrician": "Woodbridge sits along the Potomac River corridor, where summer thunderstorms and winter ice storms hit harder than inland communities. The older homes in Marumsco Village and along Route 1 still run on overhead service and original wiring — making them the most likely to need emergency electrical response after a storm.",
+    "ev-charger-installation": "Prince William County is expanding from 14 to 35 public EV charging stations, and Woodbridge's I-95 commuter corridor is one of the highest-density EV adoption zones in the county. Many Woodbridge homeowners are installing home chargers to avoid relying on public infrastructure — and the younger median age (33.8) means early EV adopters are a growing segment.",
+    "light-fixture-installation": "Woodbridge homes span every construction era — from 1950s Marumsco Village ranches with cloth-insulated wiring at the junction box to 2010s Rippon Landing townhomes with 9-foot ceilings and recessed lighting. The fixture that works in one doesn't always work in the other, and an experienced electrician knows the difference."
+  },
+  "ev_charger_homes_phrase": "Woodbridge homes built in the 1950s through 1990s weren't designed for"
+}

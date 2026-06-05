@@ -1,0 +1,230 @@
+{
+  "_comment": "Per-city data for Lake Ridge, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "lake-ridge-va",
+  "name": "Lake Ridge",
+  "name_with_state": "Lake Ridge, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Prince William County",
+  "county_full": "Prince William County, Virginia",
+  "distance_from_hq_phrase": "Lake Ridge is 5 min from our home base in Woodbridge",
+  "geographic_anchor_paragraph": "Lake Ridge sits along the southern bank of the Occoquan Reservoir in eastern Prince William County, about 25 miles south of Washington, DC. The community runs roughly between the reservoir to the north, Gordon Boulevard (VA-123) to the east, Woodbridge to the south, and Dale City to the west. Lake Ridge residents reach I-95 via VA-123 at Exit 160, making it a commuter corridor for DC, the Pentagon, and Quantico.",
+  "audience_descriptor": "Residential homeowners in Lake Ridge, VA and surrounding eastern Prince William County communities including Woodbridge, Dale City, and the Occoquan area.",
+  "no_trip_charge_cities": [
+    "Lake Ridge",
+    "Woodbridge",
+    "Dale City",
+    "Occoquan",
+    "Dumfries"
+  ],
+  "neighborhoods": [
+    {
+      "name": "Thousand Oaks",
+      "blurb": "one of Lake Ridge's original 1969 subdivisions"
+    },
+    {
+      "name": "The Point / Plantation Harbor",
+      "blurb": "early lakefront subdivisions along the Occoquan Reservoir"
+    },
+    {
+      "name": "Westridge",
+      "blurb": "master-planned community with thirteen sub-subdivisions"
+    },
+    {
+      "name": "Old Bridge Estates",
+      "blurb": "single-family homes along the Old Bridge Road corridor"
+    },
+    {
+      "name": "Cardinal Glen",
+      "blurb": "townhome community in the heart of Lake Ridge"
+    },
+    {
+      "name": "Ridgeleigh",
+      "blurb": "one of Lake Ridge's last subdivisions, completing the community"
+    },
+    {
+      "name": "The Hamlet / Village of Lake Ridge",
+      "blurb": "original community core from 1969 development"
+    },
+    {
+      "name": "Agnewville",
+      "blurb": "suburban pocket near Lake Ridge with midcentury homes"
+    }
+  ],
+  "other_areas_paragraph": "Outside Lake Ridge, we serve <a href=\"/electrical-troubleshooting-woodbridge-va/\">Woodbridge</a>, <a href=\"/electrical-troubleshooting-dale-city-va/\">Dale City</a>, Occoquan, Dumfries, Lorton, Manassas, and the rest of Prince William County. We also cover Fairfax County, Stafford County, and the broader Northern Virginia region.",
+  "housing_patterns": [
+    {
+      "title": "1970s split-levels &amp; ranches",
+      "neighborhood_examples": "Thousand Oaks, The Point, Plantation Harbor, The Hamlet, Village of Lake Ridge",
+      "context_paragraph": "Lake Ridge's original developments were built with 100-150 amp panels and circuits sized for 1970s appliance loads — a central AC unit, a couple of window units if needed, a fridge, a range, and a color TV. Plumbing is typically copper supply lines with some galvanized steel runs to older fixtures. Gas service (Columbia Gas) was standard in many homes for heating and water heaters. Insulation is thin by modern standards (R-13 walls at best). Fast-forward to 2026: these homes now run multiple flat-screen TVs, home offices with computer equipment, modern kitchen appliances, and potentially an EV charger — loads the original panels and branch circuits weren't designed for.",
+      "symptoms": "100-150A panels with circuits sized for 1970s loads; possible Federal Pacific Stab-Lok or Zinsco panels in original subdivisions — documented fire-risk brands; fuse boxes instead of breakers in some early units; underground service from pad-mount transformers; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal; GFCI protection limited to outdoor circuits only (pre-1996 NEC)."
+    },
+    {
+      "title": "1980s-1990s colonials &amp; townhomes",
+      "neighborhood_examples": "Westridge, Old Bridge Estates, Cardinal Glen, most of Lake Ridge's 70+ subdivisions",
+      "context_paragraph": "The bulk of Lake Ridge's housing — the massive 1980s-1990s build-out wave. These homes typically have 200-amp service but were wired before the 2008 AFCI requirement and before the 1996 NEC expansion of GFCI requirements to all kitchen counter receptacles. Townhomes in this era often have shared electrical infrastructure considerations — panel access may be in a shared mechanical room or constrained by party walls. Plumbing is mostly copper with early PEX (cross-linked polyethylene piping) appearing in the 1990s builds. Central AC is standard. Many of these homes are now 30-40 years old and hitting the window where original HVAC systems, water heaters, and electrical panels reach end-of-life simultaneously.",
+      "symptoms": "200A panels original at construction; wired before 2008 AFCI requirement and before 1996 GFCI kitchen-counter expansion; EV charger or whole-house renovation triggers capacity assessment; townhome panel access may be constrained by shared walls or mechanical rooms; HOA coordination needed for any visible exterior panel work; underground service standard — Dominion trenching coordination if service entrance needs replacement."
+    },
+    {
+      "title": "Late 1990s newer builds",
+      "neighborhood_examples": "Ridgeleigh, later Westridge sections",
+      "context_paragraph": "The final build-out phase of Lake Ridge. These homes are the newest in the community — still 25+ years old now. 200-amp panels are standard, PEX plumbing is more common, and insulation meets the higher R-19 wall standard. However, even these newer homes predate AFCI requirements (NEC 2008), tamper-resistant outlet requirements (NEC 2008), and the current generation of high-efficiency heat pumps. Smart-home wiring done by previous owners after initial construction can create issues with neutral bonding and load balancing.",
+      "symptoms": "200A panels standard; upgrades here are usually about adding capacity for EV chargers, hot tubs, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads possible; smart-home wiring done by previous owners can create neutral bonding issues; HOA architectural review for visible exterior work in Ridgeleigh and later Westridge sections."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How much does a panel upgrade cost in Lake Ridge, VA?",
+        "body": "Every panel upgrade in Lake Ridge is different, so we don't quote a number sight-unseen. The spread depends on your current amperage, whether Dominion Energy needs to coordinate an underground service upgrade, the panel brand going in (Square D QO, Eaton CH, Siemens), and whether your 1970s or 1980s wiring needs additional branch-circuit work. We walk the panel, run the numbers, and give you a written estimate before any work starts — no surprises."
+      },
+      {
+        "summary": "Do I need a permit for a panel upgrade in Prince William County?",
+        "body": "Yes — Prince William County requires an electrical permit for panel upgrades. You file through the county's ePortal system, and the permit goes through the Building Development Division (BDD). The good news: Prince William is a single-authority jurisdiction, so there's one permit office and one inspection — no dual-approval layers. We pull the permit, schedule the inspection, and handle the paperwork so you don't have to chase it."
+      },
+      {
+        "summary": "What are the signs I need a panel upgrade?",
+        "body": "Breakers tripping when you run the microwave and the hair dryer at the same time. A panel that's warm to the touch. Lights flickering when the HVAC kicks on. Burn marks or a melted-plastic smell near the breaker box. If your Lake Ridge home was built in the 1970s — Thousand Oaks, The Point, The Hamlet — and you're still on the original 100-amp panel, these symptoms mean the panel is working beyond what it was designed for."
+      },
+      {
+        "summary": "Is my Federal Pacific or Zinsco panel dangerous?",
+        "body": "Federal Pacific Stab-Lok and Zinsco panels have a documented history of breakers failing to trip during overcurrent — which is the one job a breaker exists to do. Lake Ridge's 1970s subdivisions like Thousand Oaks and The Point were built during the window when these panels were common. If your homeowners insurance carrier flags your panel at renewal, that's not an upsell — it's the carrier telling you they've seen the failure data. We replace Federal Pacific and Zinsco panels with Square D, Eaton, or Siemens."
+      },
+      {
+        "summary": "Should I upgrade to 200 amps?",
+        "body": "200 amps is the modern residential standard, and for good reason — it handles an EV charger, a home office, modern kitchen appliances, and central HVAC without breaking a sweat. Lake Ridge's median build year is around 1986, and many homes from that era came with 100- or 150-amp panels. The 100A-to-200A upgrade is the most common panel job we do in Lake Ridge. If you're in a later Westridge or Ridgeleigh section with an existing 200-amp panel, you may just need a load-capacity assessment rather than a full upgrade."
+      },
+      {
+        "summary": "How long does a panel upgrade take and will I lose power?",
+        "body": "Most panel upgrades in Lake Ridge are a one-day job. Dominion Energy coordinates the service disconnect and reconnect — they pull the meter, we swap the panel and re-land the circuits, they re-set the meter. The actual power outage is typically 4 to 6 hours. We schedule the Dominion coordination in advance so you know the exact window. You'll want to plan around it — charge your devices, know where the flashlights are, and keep the fridge closed."
+      },
+      {
+        "summary": "Does underground service affect my panel upgrade?",
+        "body": "Lake Ridge was built as a planned community with underground electrical service from pad-mount transformers — no overhead lines in most neighborhoods. That's great for aesthetics and storm resilience, but it means a service-entrance upgrade requires Dominion Energy trenching coordination rather than a simple overhead drop swap. Underground work adds time and cost to the project. We handle the Dominion coordination, but you should budget an extra week or two for scheduling the underground portion."
+      },
+      {
+        "summary": "Can my Lake Ridge panel handle an EV charger?",
+        "body": "Lake Ridge is a commuter community — I-95 to the Pentagon, DC, and Quantico is a daily reality for most households here. EV adoption is climbing fast, and a Level 2 charger on a dedicated 240V, 50-amp circuit is the standard install. If your home is in Thousand Oaks or The Point with an original 100-amp panel, you'll almost certainly need a panel upgrade before the charger goes in. Homes in Westridge or Old Bridge Estates with 200-amp service usually have enough capacity — we run a load calculation to confirm."
+      }
+    ],
+    "emergency-electrician": [
+      {
+        "summary": "What is considered an electrical emergency?",
+        "body": "If you see flames, smell smoke from your panel, or see a downed power line — call 911 first, then call us. Beyond that, the red flags: a breaker that won't stay reset, a burning smell from an outlet or switch, visible arcing or sparking, a panel that's hot to the touch, or a buzzing sound from inside the wall. In Lake Ridge's 1970s homes — especially those with original Federal Pacific or Zinsco panels and no AFCI or GFCI protection — these symptoms are more common and more serious than in newer construction."
+      },
+      {
+        "summary": "How quickly can you get to my Lake Ridge home?",
+        "body": "We're based in Woodbridge 22193 — about 5 minutes from Lake Ridge down Old Bridge Road or VA-123. Most emergency calls, we're at your door in under an hour. We run a maintenance team, so there's usually a truck in the area already. Lake Ridge sits right in the center of our response radius, which means you're not waiting for someone to drive in from Manassas or Fairfax."
+      },
+      {
+        "summary": "What should I do before the electrician arrives?",
+        "body": "Kill the main breaker if you can reach it safely. Unplug anything connected to a sparking or smoking outlet. Keep everyone away from the panel area. Don't touch any wiring or exposed conductors. If you smell burning from the panel, get your family out and call from outside. In Lake Ridge townhomes — Cardinal Glen, Westridge townhome sections — the panel may be in a shared mechanical closet or a tight utility room against a party wall. Know where your main breaker is before an emergency, not during one."
+      },
+      {
+        "summary": "Is my power out because of Dominion Energy or my house?",
+        "body": "Check Dominion Energy's outage map at dominionenergy.com/outages — it updates in near real-time. If your neighbors have power and you don't, it's your house — call us. If the whole block is dark, it's Dominion's side — call them at 1-866-366-4357, then call us for any damage on your side after they restore service. Lake Ridge's underground service from pad-mount transformers means individual-home outages are less common than in overhead-line neighborhoods, so a you-only outage here usually points to a panel or service-entrance issue."
+      },
+      {
+        "summary": "How much does emergency electrical service cost in Lake Ridge?",
+        "body": "Emergency electrical pricing depends on what's actually wrong — and we don't know that until we diagnose it on-site. The variables are time of day, complexity of the failure, and whether parts are needed that night or can wait until morning. We're transparent about after-hours surcharges: if you call at 2 AM, the rate reflects that. What we won't do is quote a panel replacement over the phone when the real problem might be a single failed breaker. Diagnostic first, scope second, price third."
+      },
+      {
+        "summary": "When should I call 911 instead of an electrician?",
+        "body": "Call 911 — not an electrician — if you see active flames, smell smoke coming from inside a wall, see a downed power line, or if anyone has received an electrical shock. A sparking outlet you can safely unplug is an electrician call. A wall that's hot to the touch with a burning smell is a 911 call. When in doubt, call 911 first. We can handle the repair after the fire department clears the scene."
+      },
+      {
+        "summary": "Do you serve townhomes and condos in Lake Ridge?",
+        "body": "Absolutely. We work in Cardinal Glen, the Westridge townhome sections, and every other attached-unit community in Lake Ridge regularly. Townhome emergency work has a few extra considerations — panel access may be in a tight utility closet against a shared wall, and any exterior panel or meter-base work may need LRPRA architectural coordination after the emergency is resolved. We handle the emergency first, then sort out the HOA paperwork for any permanent exterior changes."
+      },
+      {
+        "summary": "Are your electricians licensed and insured in Virginia?",
+        "body": "Yes. Mohammad Adam holds a Master Electrician license through the Virginia Department of Professional and Occupational Regulation (DPOR) — the state agency that licenses all electrical contractors in Virginia. Master is the highest tier DPOR issues. S&H Contracting Unlimited is fully insured. You can verify any Virginia contractor's license status through DPOR's online lookup at dpor.virginia.gov."
+      }
+    ],
+    "ev-charger-installation": [
+      {
+        "summary": "How much does EV charger installation cost in Lake Ridge, VA?",
+        "body": "EV charger installation cost depends on your specific setup — panel capacity, distance from the panel to the garage or driveway, whether you need a panel upgrade first, and the charger model (Tesla Wall Connector, ChargePoint Home Flex, and others each have different wiring requirements). We don't quote a number over the phone because the spread between a straightforward install and one that needs a panel upgrade and a 60-foot conductor run is significant. We assess your panel, measure the run, and give you a written estimate."
+      },
+      {
+        "summary": "Does my Lake Ridge HOA allow EV charger installation?",
+        "body": "Virginia Code 55.1-1823.1 protects your right to install an EV charger on your own property — your HOA cannot prohibit it. The Lake Ridge Parks and Recreation Association (LRPRA) can set reasonable restrictions on exterior placement and appearance, but they can't say no outright. If you're in a Westridge or Cardinal Glen townhome and planning an exterior-mounted charger, submit your architectural review request to LRPRA before scheduling the install. We can advise on placement options that satisfy both the code and the HOA guidelines."
+      },
+      {
+        "summary": "Do I need a permit for an EV charger in Lake Ridge?",
+        "body": "Yes — Prince William County requires an electrical permit for EV charger installation. You file through the county's ePortal, and it goes through the Building Development Division (BDD). EV charger permits qualify for Walk-Thru Plan Review, which moves faster than a full plan review. Prince William is a single-authority jurisdiction — one permit office, one inspection, no dual-approval layers. We handle the filing and schedule the inspection as part of the job."
+      },
+      {
+        "summary": "Do I need a panel upgrade to install an EV charger?",
+        "body": "It depends on what you have now. A Level 2 EV charger pulls 40-50 amps on a dedicated 240V circuit — that's a serious load on top of everything else your panel feeds. If your Lake Ridge home is in Thousand Oaks or The Point with an original 100- or 150-amp panel from the 1970s, you'll likely need a panel upgrade before the charger goes in. If you're in a 1980s-1990s home in Westridge or Old Bridge Estates with 200-amp service, you probably have enough capacity — but we run a load calculation to confirm before committing."
+      },
+      {
+        "summary": "Can I install an EV charger in my Lake Ridge townhouse?",
+        "body": "Yes — and we do it regularly. Roughly half of Lake Ridge's housing stock is attached units, so townhome EV charger installs are one of our most common calls here. The considerations: shared-wall constraints may limit where the panel and charger can go, LRPRA architectural review is typically required for any exterior-mounted charger, outdoor installations need GFCI protection per NEC, and the conductor run from panel to charger may be longer in a townhome layout. Virginia's Right-to-Charge law (Code 55.1-1823.1) protects your right to install — the HOA can regulate placement but cannot prohibit it."
+      },
+      {
+        "summary": "Are there rebates or tax credits for EV charger installation in Virginia?",
+        "body": "The federal 30C tax credit covers 30% of EV charger and installation costs, up to $1,000 for residential — but it expires June 30, 2026, and eligibility depends on your census tract. Check your address against the IRS eligibility map before counting on it. Dominion Energy also offers a managed-charging program: $125 enrollment incentive plus $40 per year for allowing Dominion to manage your charging schedule during peak grid hours. We can walk you through both programs during your estimate visit."
+      },
+      {
+        "summary": "How long does EV charger installation take?",
+        "body": "Installation day is typically 2 to 6 hours depending on the complexity — a straightforward garage-wall mount with the panel nearby is on the shorter end, while a long conductor run or panel upgrade pushes it longer. The permit through Prince William County's ePortal and BDD needs to be in hand before we start work. Permit processing time varies, but we file as soon as you approve the estimate so there's minimal delay between signing off and installation day."
+      },
+      {
+        "summary": "Should I hardwire my EV charger or use a NEMA 14-50 outlet?",
+        "body": "For most Lake Ridge homeowners, we recommend a NEMA 14-50 outlet with a plug-in charger. The reason is portability — if you sell the house or switch vehicles, the charger unplugs and goes with you. Hardwired installations make more sense for outdoor mounts exposed to weather or for high-amperage chargers that exceed what a 14-50 outlet supports. We'll recommend the right approach based on your charger model, mounting location, and whether the install is interior or exterior."
+      }
+    ],
+    "light-fixture-installation": [
+      {
+        "summary": "How much does it cost to install a light fixture in Lake Ridge, VA?",
+        "body": "Light fixture installation cost depends on what you're doing — a simple swap where the new fixture mounts on the existing box and wiring is a different job than running new wiring for a fixture in a location that's never had one. The variables are fixture weight and mounting requirements, whether the existing junction box is rated for the new fixture, and whether any wiring needs to be added or replaced. We look at the fixture and the box, then give you a price before starting."
+      },
+      {
+        "summary": "Do I need an electrician to replace a light fixture, or can I do it myself?",
+        "body": "Honest answer: a simple one-for-one swap on a modern junction box with standard wiring is within reach for a handy homeowner who knows how to kill the breaker and test for voltage. But in Lake Ridge's older homes — especially 1970s builds in Thousand Oaks or The Hamlet — the junction box may not be rated for a heavier modern fixture, the wiring insulation may be brittle after 50 years, and there's no AFCI protection on the circuit. If any of those apply, or if the fixture weighs more than 50 pounds, call a pro."
+      },
+      {
+        "summary": "Can you install a light fixture I already bought at Home Depot or Lowe's?",
+        "body": "Yes — this is one of our most common calls. The Home Depot on Worth Avenue in Woodbridge is about 3 miles from Lake Ridge, and the Lowe's on Smoketown Road is about 4 miles out. People buy a fixture they love, get it home, and realize the mounting bracket doesn't match their box, or the wiring is more complicated than the YouTube video suggested. Bring your fixture, we'll install it. We just need to confirm the junction box can support the weight and the wiring is compatible."
+      },
+      {
+        "summary": "What types of light fixtures do you install?",
+        "body": "We install the full range: flush mounts, semi-flush mounts, pendants, chandeliers, recessed lighting (can lights), wall sconces, outdoor fixtures (porch, landscape, security), under-cabinet lighting, and ceiling fans. Each type has its own mounting and wiring requirements — a flush mount on an existing box is straightforward, while recessed lighting in a finished ceiling means cutting holes and running new circuits. We match the installation approach to the fixture and the home."
+      },
+      {
+        "summary": "My Lake Ridge home was built in the 1980s — what should I know about replacing the light fixtures?",
+        "body": "A few things to be aware of. Junction boxes from the 1980s may not be rated for heavier modern fixtures like large chandeliers or heavy ceiling fans — the box itself may need to be swapped for a fan-rated or heavy-duty version. Wiring insulation is 35-40 years old and can be brittle, especially in attic runs exposed to heat cycling. Some 1980s Lake Ridge homes have aluminum branch-circuit wiring, which requires special connectors when transitioning to copper fixture leads. And none of these circuits have AFCI protection, which is worth adding when you're already opening up the box."
+      },
+      {
+        "summary": "Do I need a permit to replace a light fixture in Prince William County?",
+        "body": "If you're replacing a fixture in the same location using the existing wiring and junction box — no permit needed. That's a like-for-like swap. If the job involves running new wiring, adding a new circuit, or installing a fixture in a location that's never had one, then yes — Prince William County requires an electrical permit, filed through the county ePortal. We'll tell you which category your job falls into during the estimate."
+      },
+      {
+        "summary": "How long does it take to install a light fixture?",
+        "body": "A simple fixture swap — same location, existing wiring, compatible junction box — takes 30 to 60 minutes per fixture. If we need to run new wiring, add a circuit, or replace an undersized junction box, the job stretches to 2 to 4 hours depending on access. Recessed lighting installations or multi-fixture jobs like a kitchen or bathroom refresh are typically a half-day project."
+      },
+      {
+        "summary": "Can you install a ceiling fan in my Lake Ridge townhome without vibration going through the shared wall?",
+        "body": "This is a common concern in Lake Ridge's townhome communities — Cardinal Glen, Westridge, Ridgeleigh — where roughly half the housing is attached. The answer is yes, with the right installation: a fan-rated junction box, a vibration-isolating mounting bracket, and a properly balanced fan eliminate most transmitted vibration. We test the fan at all speeds before we leave. If the ceiling joist runs parallel to the party wall, the mount location matters — we position it to minimize any contact path to the shared structure."
+      },
+      {
+        "summary": "Does exterior lighting work in Lake Ridge need HOA approval?",
+        "body": "In most cases, yes. The Lake Ridge Parks and Recreation Association (LRPRA) covers virtually every property in Lake Ridge, and visible exterior changes — including porch lights, landscape lighting, and security fixtures — typically require architectural review approval before installation. The process is straightforward: submit your plan to LRPRA, get approval, then schedule the work. We can advise on fixture placement that meets both the electrical code and LRPRA's exterior appearance guidelines."
+      }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "panel-upgrade": "In Lake Ridge, panel-upgrade calls follow a consistent pattern. The community was built between the 1970s and late 1990s — nearly all at once. That means thousands of homes are reaching the 30-50 year mark simultaneously, and their original panels are aging together. The 1970s-era split-levels in Thousand Oaks and The Point typically have 100-amp panels sized for 1970s loads — a central AC unit and a few major appliances. The 1980s-1990s colonials and townhomes in Westridge and Old Bridge Estates usually have 200-amp service but pre-AFCI wiring. Both groups are now asking panels to carry loads they were never designed for — EV chargers, home offices, modern kitchen appliances, and whole-house entertainment systems. The standard fix is a 100A-to-200A upgrade for the older homes and a load-capacity assessment for the newer ones.",
+    "emergency-electrician": "In Lake Ridge, most emergency electrician calls trace to one fact: the entire community was built between 1970 and 1999, and those panels, circuits, and wiring are all reaching end-of-life at the same time. The 1970s split-levels in Thousand Oaks and The Point may still have original 100-amp panels — some possibly Federal Pacific or Zinsco brands, which are known fire risks. The 1980s-1990s homes throughout Westridge and Old Bridge Estates have 200-amp panels but were wired before AFCI requirements (NEC 2008), so arc faults in aging wiring go undetected until something burns or trips. Add 2026 loads — home offices, EV chargers, modern kitchen appliances — to circuits designed for 1986 appliance draws, and overloaded panels are the predictable result.",
+    "ev-charger-installation": "In Lake Ridge, the most common EV charger installation call comes from commuters who just bought an EV and realized Level 1 charging from a regular outlet only adds 3-5 miles of range per hour — not enough for a 50-80 mile daily I-95 commute to DC, the Pentagon, or Quantico. They need a Level 2 charger on a dedicated 240V circuit. The second-most common call comes from townhome owners in Westridge, Cardinal Glen, or other HOA-governed subdivisions who need help navigating the HOA architectural review process and understanding their rights under Virginia's Right-to-Charge law before installation begins.",
+    "light-fixture-installation": "In Lake Ridge, one pattern drives most light fixture calls: the entire community was built between the 1970s and 1990s, which means thousands of homes have original builder-grade fixtures that are now 30-50 years old — outdated, yellowed, and connected to junction boxes that haven't been inspected in decades. Whether you're updating a 1970s split-level in Thousand Oaks, refreshing a 1980s colonial in Westridge, or swapping fixtures in a Cardinal Glen townhome, the work starts with assessing what's behind the box before mounting anything new."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "Lake Ridge homes were built in a concentrated 30-year wave — 1970s through the late 1990s. The original subdivisions like Thousand Oaks and The Point have 50-year-old panels that were sized for a different era. The later builds in Westridge and Ridgeleigh have newer panels but still pre-date AFCI breaker requirements. The panel-upgrade path depends on which wave your home was part of.",
+    "emergency-electrician": "Lake Ridge is a planned community where nearly every home was built in the same 30-year window — and now the entire community's electrical infrastructure is aging together. The 1970s homes in Thousand Oaks and The Point are the most likely to need emergency panel or wiring attention, while the townhomes in Cardinal Glen and Westridge face shared-wall constraints that make emergency panel access more complex.",
+    "ev-charger-installation": "Lake Ridge is a planned community where nearly every home falls under the Lake Ridge Parks and Recreation Association HOA. Visible exterior work — like mounting an EV charger on the outside of your garage or townhome — typically requires HOA architectural review before the work starts. Virginia's Right-to-Charge law protects your right to install a charger on your own property, but knowing the process saves time.",
+    "light-fixture-installation": "Lake Ridge homes are concentrated in a single 30-year construction window — from 1970s split-levels in Thousand Oaks and The Hamlet to 1990s townhomes in Ridgeleigh. The fixture that works in an 8-foot ceiling doesn't always fit in a townhome with shared walls, and a 40-year-old junction box may not hold a modern chandelier safely."
+  },
+  "ev_charger_homes_phrase": "Lake Ridge homes built in the 1970s through 1990s weren't designed for"
+}

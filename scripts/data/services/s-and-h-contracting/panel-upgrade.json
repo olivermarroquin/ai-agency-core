@@ -1,0 +1,219 @@
+{
+  "_comment": "S&H Contracting client-specific override of panel-upgrade. Differs from shared file in: related_cards (S&H service slugs), image URL templates (shcontractingunlimited.com domain), FILL hint references.",
+  "_scaffolded": {
+    "from_brief": true,
+    "brief_research_date": "2026-05-26",
+    "brief_researcher": "service-seo-research-skill-v1",
+    "needs_authoring": [
+      "aioseo_meta_description_template",
+      "hero_heading",
+      "hero_subheading_template",
+      "hero_image_url_template",
+      "what_it_means_paragraphs",
+      "quick_ref_intro",
+      "why_city_closing_note_template",
+      "pricing_intro_template",
+      "about_text_paragraphs",
+      "about_portrait_url_template",
+      "related_intro_template",
+      "faq_items[*].answer_html",
+      "faq_items[*].answer_schema",
+      "final_cta_heading",
+      "final_cta_paragraph_template"
+    ],
+    "needs_confirmation": []
+  },
+  "slug": "panel-upgrade",
+  "page_slug_template": "panel-upgrade-{city_slug}",
+  "name": "Electrical Panel Upgrades",
+  "name_with_city": "Electrical Panel Upgrades in {city_name_with_state}",
+  "service_type_phrase": "Electrical panel upgrades and replacements",
+  "quoted_phrase": "panel upgrade",
+  "lowercase_phrase": "panel upgrade",
+  "tag_short": "panel-upgrade",
+  "aioseo_page_title_template": "Electrical Panel Upgrades in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "Licensed panel upgrades in {city_name_with_state}. Master Electrician, 16+ yrs, permit-to-inspection handled. Call {phone_display}.",
+  "aioseo_focus_keyword_template": "panel upgrade {city_slug}",
+  "aioseo_additional_keywords_template": [
+    "100 amp to 200 amp panel upgrade {city_slug}",
+    "federal pacific panel replacement {city_slug}",
+    "zinsco panel replacement {city_slug}",
+    "fuse box to breaker panel {city_slug}",
+    "panel upgrade cost {city_slug}",
+    "panel upgrade permit {city_slug}",
+    "electric panel installation {city_slug}",
+    "electrical service entrance upgrade {city_slug}",
+    "200 amp service installation {city_slug}",
+    "panel upgrade for ev charger {city_slug}",
+    "panel upgrade for hot tub {city_slug}",
+    "main breaker replacement {city_slug}",
+    "subpanel installation {city_slug}",
+    "outdated electrical panel {city_slug}",
+    "panel upgrade financing {city_slug}",
+    "licensed electrician panel upgrade {city_slug}",
+    "same day panel upgrade {city_slug}",
+    "emergency panel replacement {city_slug}"
+  ],
+  "wordpress_page_title_template": "Electrical Panel Upgrades in {city_name_with_state}",
+  "hero_eyebrow_template": "Electrical Panel Upgrades in {city_name_with_state}",
+  "hero_heading": "Panel Upgrades Done Right the First Time",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician with 16+ years of residential and commercial panel work. We handle the permit, the Dominion Energy coordination, the upgrade, and the inspection — most jobs in {city_name} wrap in a single day. Diagnostic first, written estimate before any work starts.",
+  "hero_image_alt_template": "{owner_name}, master electrician, performing a panel upgrade in {city_name_with_state}",
+  "hero_image_url_template": "FILL: Hero image URL for S&H panel upgrade pages. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-panel-upgrade-hero.png",
+  "what_it_means_heading": "What \"panel upgrade\" actually means",
+  "what_it_means_paragraphs": [
+    "A panel upgrade replaces your home's electrical panel — the metal box where every circuit in the house connects — with a modern panel rated for the load you actually draw today. Most upgrades go from 100-amp service to 200-amp service, which is the current code standard for residential construction. The work includes swapping the panel hardware, re-landing every circuit on new breakers, labeling each one, and coordinating with the utility for a temporary power-down and re-energize. It is licensed electrical work that requires a permit and a county inspection.",
+    "The upgrade matters most when your panel is a known problem brand — Federal Pacific Stab-Lok breakers fail to trip in documented percentages of overload tests, and Zinsco panels overheat at the bus bar connection. If your panel carries either name, replacement is a safety decision, not an elective one. The same applies if you still have a screw-in fuse box, if breakers trip every time the AC kicks on, or if you are adding a load the existing panel cannot carry — an EV charger, a hot tub, a finished basement, or a full kitchen renovation.",
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues — with 16+ years of panel work across {city_name} and the surrounding area. He runs a maintenance team, which means your upgrade gets scheduled in days, not weeks. {owner_name} does the diagnostic visit personally: he opens the panel, checks the service entrance and meter base, runs a load calculation, and writes you an estimate that itemizes hardware, labor, permit fee, and utility coordination before any work starts."
+  ],
+  "quick_ref_heading_template": "Common signs you need a {city_name} panel upgrade",
+  "quick_ref_intro": "Eight symptoms we see every week on panel calls. If any of these match your situation, tap to learn what it usually means and what comes next.",
+  "quick_ref_footer_html_template": "Don't see your issue?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll diagnose it.",
+  "why_city_heading_template": "Why {city_name} homeowners call us for panel upgrade",
+  "why_city_closing_note_template": "Most panel upgrade calls from {city_name} come down to the same thing — a house built decades ago carrying loads it was never wired for. We see it every week, and the fix is straightforward when a licensed electrician handles the permit, the utility, and the inspection from start to finish.",
+  "problems_heading_template": "Specific situations we handle every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    {
+      "title": "Frequent breaker trips",
+      "body": "A breaker that trips once is doing its job. A breaker that trips daily, or that pops the moment you reset it, points to a panel that can't handle the load you're putting on it. We trace the circuit, measure the load, and tell you whether you need a new circuit, a new panel, or a fix upstream."
+    },
+    {
+      "title": "Fuse box instead of breakers",
+      "body": "If your panel still has screw-in fuses instead of breakers, you're on a system that hasn't been the standard since the 1960s. Modern appliances draw loads fuse boxes weren't designed for. We replace the fuse panel with a current-code 200-amp breaker panel that supports today's electrical demand."
+    },
+    {
+      "title": "Federal Pacific or Zinsco panel",
+      "body": "Both brands are documented fire risks — Federal Pacific Stab-Lok breakers fail to trip in measurable percentages of cases, and Zinsco panels overheat at the bus bar. If you have one, replacement is the safety call, not a maintenance call. We can identify the brand on-site in 5 minutes."
+    },
+    {
+      "title": "Lights dim when the AC or fridge kicks on",
+      "body": "A voltage drop when a large appliance starts means your service can't deliver consistent power. The cause is often an undersized panel, a loose neutral, or a feeder that wasn't sized for what's now drawing on it. Diagnostic first; upgrade if the cause traces to panel capacity."
+    },
+    {
+      "title": "Burning smell or warm panel cover",
+      "body": "Stop using the affected circuits and call us today. Heat at the panel is almost always a loose connection on a breaker or bus bar, and loose connections in panels are the leading cause of electrical fires inside homes. We treat this as urgent."
+    },
+    {
+      "title": "Planning an EV charger or hot tub",
+      "body": "Most older panels can't safely take a continuous 40–50 amp load on top of the existing house demand. If you're planning to add an EV charger, hot tub, or kitchen renovation, a panel upgrade often comes first. We size the upgrade to support both today's load and what you're adding."
+    },
+    {
+      "title": "Outdated 60- or 100-amp service",
+      "body": "Homes built before 1965 often have 60-amp service; homes built 1965–2000 typically have 100-amp. Modern homes need 200-amp service to support HVAC, kitchen appliances, EV charging, and the rest of how you actually live. Upgrading is standard work, not exotic."
+    },
+    {
+      "title": "Adding a major addition or finished basement",
+      "body": "A major remodel triggers a code-required load calculation. If the new load pushes past your panel's safe capacity, the upgrade happens as part of the project. We coordinate the upgrade with the general contractor's schedule so the inspector signs off the first time."
+    }
+  ],
+  "process_heading_template": "Our panel upgrade process — what happens when you call",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    {
+      "title": "A real conversation, not a script",
+      "body": "We pick up the phone. You tell us what's driving the upgrade — outdated panel, EV charger plans, home addition, frequent trips. We ask about your home's age, your panel's brand if you know it, and what's on your wish list. If there's any safety concern (burning smell, warm panel, sparking), we treat it as urgent and slot you in same-week."
+    },
+    {
+      "title": "Diagnostic visit and written estimate",
+      "body": "We come to your house, open the panel, check the service entrance and meter, and run a load calculation against what you're using today plus what you're adding. You get a written estimate with the panel brand, amperage, breaker count, permit fee, and labor laid out clearly. No surprise pricing on the work day."
+    },
+    {
+      "title": "Permit and utility coordination",
+      "body": "Most jurisdictions require a permit pulled by a licensed electrician for any panel upgrade. We file the permit, schedule the inspection, and coordinate with your utility for the temporary power-down. You don't talk to the permit office or the utility — that's our job."
+    },
+    {
+      "title": "The upgrade itself — typically one day",
+      "body": "Morning: utility cuts power at the meter. We remove the old panel, install the new panel, re-land every circuit on the new breakers, and label them clearly. Afternoon: utility re-energizes the service, we power up, test every circuit, and walk you through the new panel. Most residential upgrades finish in one day."
+    },
+    {
+      "title": "Inspection and sign-off",
+      "body": "The county inspector visits within a few days. We meet them at your house, walk them through the work, and they sign off. You get a copy of the permit and inspection record. The work is on the books with the county — protects your home insurance and your resale value."
+    }
+  ],
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "Every panel upgrade starts with a diagnostic visit — we look at the existing panel, the service entrance, the meter base, and what is drawing power in the house. You get a written estimate before any work begins, itemized so you can see exactly what each piece costs. No add-ons on the work day, no surprise line items after the fact.",
+  "pricing_items": [
+    "A diagnostic visit comes first. We look at the panel, the service entrance, and what's drawing power. You get a written estimate before any work starts.",
+    "The estimate covers the panel hardware, the labor, the permit fee, and the utility coordination. No add-ons on the work day.",
+    "Major related work — service-entrance changes, meter-base replacements, sub-panels, EV-charger circuits — gets its own line item, not bundled in. You see what each piece costs.",
+    "After-hours and weekend work is available; we mention the premium up-front before booking."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}. We don't charge to drive to your house for the estimate.",
+  "pricing_closing_note": "We don't post fixed prices because every house is different — service entrance condition, meter location, breaker count, code upgrades triggered by the work. The estimate after a real diagnostic visit is the only honest number.",
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "{owner_name} is a Master Electrician licensed in Virginia, with over 16 years in the trade. The Master tier is the highest electrician license the state issues — it requires several years of journeyman work, a passed state exam, and a clean record. {owner_name} runs a fully insured maintenance team covering Northern Virginia, Washington DC, Maryland, and Pennsylvania. When you call for a panel upgrade, you are not waiting on one person's calendar — the team is what makes same-week scheduling possible.",
+    "{owner_name} leads the panel work personally on most residential calls. He is the one who opens the panel, reads the service entrance, runs the load calculation, and explains what is happening in plain English before quoting anything. His preference is diagnostic first, fix second — half the time a breaker that keeps tripping turns out to be a load-balance issue or a worn breaker, not a reason to replace the whole panel. When the panel does need replacing, {owner_name} pulls the permit, coordinates the utility power-down, meets the inspector, and hands you the signed-off paperwork.",
+    "S&H Contracting Unlimited holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "FILL: About portrait URL for S&H panel upgrade pages. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-panel-upgrade-about.png",
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "A panel upgrade often connects to other electrical work in {city_name}. If you are adding an EV charger, dealing with an emergency, or updating fixtures, we handle those too — same electrician, same permit discipline.",
+  "related_cards": [
+    {
+      "href_slug": "emergency-electrician-{city_slug}",
+      "label": "24/7 Emergency Electrician"
+    },
+    {
+      "href_slug": "ev-charger-installation-{city_slug}",
+      "label": "EV Charger Installation"
+    },
+    {
+      "href_slug": "light-fixture-installation-{city_slug}",
+      "label": "Light Fixtures & Chandeliers"
+    }
+  ],
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    {
+      "question": "How much does an electrical panel upgrade cost in {city_name_with_state}?",
+      "answer_html": "The honest answer is that it depends on your house. The cost of a panel upgrade varies with the existing service entrance condition, the amperage you are upgrading to, the breaker count, the meter base condition, and whether the work triggers additional code upgrades. A 100-amp to 200-amp upgrade is the most common job we do, but the specifics change from house to house. We do not post fixed prices because the only accurate number comes from a diagnostic visit. We come out, open the panel, run a load calculation, and hand you a written estimate that itemizes hardware, labor, permit, and utility coordination — before any work starts.",
+      "answer_schema": "The honest answer is that it depends on your house. The cost of a panel upgrade varies with the existing service entrance condition, the amperage you are upgrading to, the breaker count, the meter base condition, and whether the work triggers additional code upgrades. A 100-amp to 200-amp upgrade is the most common job we do, but the specifics change from house to house. We do not post fixed prices because the only accurate number comes from a diagnostic visit. We come out, open the panel, run a load calculation, and hand you a written estimate that itemizes hardware, labor, permit, and utility coordination — before any work starts."
+    },
+    {
+      "question": "How long does a panel upgrade take?",
+      "answer_html": "Most residential panel upgrades finish in one day. The utility cuts power at the meter in the morning. We remove the old panel, mount the new one, re-land every circuit on new breakers, and label each circuit clearly. In the afternoon the utility re-energizes the service, we power up and test every circuit, and walk you through the new panel before we leave. Your power is off for roughly 6 to 8 hours during the swap. If the job involves a service-entrance change or a meter-base replacement on top of the panel, it can stretch into a second day — we tell you that in the estimate, not on the work day.",
+      "answer_schema": "Most residential panel upgrades finish in one day. The utility cuts power at the meter in the morning. We remove the old panel, mount the new one, re-land every circuit on new breakers, and label each circuit clearly. In the afternoon the utility re-energizes the service, we power up and test every circuit, and walk you through the new panel before we leave. Your power is off for roughly 6 to 8 hours during the swap. If the job involves a service-entrance change or a meter-base replacement on top of the panel, it can stretch into a second day — we tell you that in the estimate, not on the work day."
+    },
+    {
+      "question": "Do I need a permit for a panel upgrade in {city_name_with_state}?",
+      "answer_html": "Yes. Every jurisdiction we work in — Virginia, DC, and Maryland — requires a permit for a panel upgrade, and that permit must be pulled by a licensed electrician. The permit ensures the work is inspected by the county and recorded on your property's record, which protects your homeowner's insurance and your resale value. We handle the entire permit process: filing the application, scheduling the inspection, and meeting the inspector at your house when they come. You do not need to visit the permit office or coordinate with the utility — that is part of what we do on every panel job.",
+      "answer_schema": "Yes. Every jurisdiction we work in — Virginia, DC, and Maryland — requires a permit for a panel upgrade, and that permit must be pulled by a licensed electrician. The permit ensures the work is inspected by the county and recorded on your property's record, which protects your homeowner's insurance and your resale value. We handle the entire permit process: filing the application, scheduling the inspection, and meeting the inspector at your house when they come. You do not need to visit the permit office or coordinate with the utility — that is part of what we do on every panel job."
+    },
+    {
+      "question": "What are the signs I need to upgrade my electrical panel?",
+      "answer_html": "The most common signs: breakers that trip repeatedly, lights that dim when the AC or refrigerator kicks on, a burning smell or warm panel cover, a screw-in fuse box instead of breakers, or a panel branded Federal Pacific or Zinsco. Any of those is worth a diagnostic visit. You should also consider an upgrade if you are planning to add a large load — an EV charger, hot tub, major kitchen renovation, or finished basement — and your current service is 100 amps or less. We can tell you in about 15 minutes on-site whether the panel is the issue or whether the symptom traces to something else.",
+      "answer_schema": "The most common signs: breakers that trip repeatedly, lights that dim when the AC or refrigerator kicks on, a burning smell or warm panel cover, a screw-in fuse box instead of breakers, or a panel branded Federal Pacific or Zinsco. Any of those is worth a diagnostic visit. You should also consider an upgrade if you are planning to add a large load — an EV charger, hot tub, major kitchen renovation, or finished basement — and your current service is 100 amps or less. We can tell you in about 15 minutes on-site whether the panel is the issue or whether the symptom traces to something else."
+    },
+    {
+      "question": "What size panel do I need for my home?",
+      "answer_html": "200-amp service is the modern standard for residential construction and has been since roughly 2015. If your home currently has 60-amp or 100-amp service, a 200-amp upgrade covers most households — HVAC, kitchen appliances, EV charging, and typical future additions. Homes with unusually high demand — multiple EV chargers, a large workshop, an in-law suite with its own HVAC — sometimes need 400-amp service, but that is the exception, not the rule. The right answer comes from a load calculation: we add up what you are drawing today, factor in what you plan to add, and size the panel to handle both with headroom.",
+      "answer_schema": "200-amp service is the modern standard for residential construction and has been since roughly 2015. If your home currently has 60-amp or 100-amp service, a 200-amp upgrade covers most households — HVAC, kitchen appliances, EV charging, and typical future additions. Homes with unusually high demand — multiple EV chargers, a large workshop, an in-law suite with its own HVAC — sometimes need 400-amp service, but that is the exception, not the rule. The right answer comes from a load calculation: we add up what you are drawing today, factor in what you plan to add, and size the panel to handle both with headroom."
+    },
+    {
+      "question": "Is my Federal Pacific or Zinsco panel dangerous?",
+      "answer_html": "Both are documented fire risks. Federal Pacific Stab-Lok breakers fail to trip during overload in measurable percentages of tested units — meaning the breaker that is supposed to protect your wiring does not do its job. The CPSC investigated in the 1980s and declined a formal recall, but the failure data did not go away. Zinsco panels overheat at the bus bar connection, which causes arcing inside the panel. Most insurance carriers writing homeowners policies in Northern Virginia today flag unmitigated Stab-Lok panels at renewal. If your panel carries either brand name, replacement is the safety call. We can identify the brand on-site in about 5 minutes.",
+      "answer_schema": "Both are documented fire risks. Federal Pacific Stab-Lok breakers fail to trip during overload in measurable percentages of tested units — meaning the breaker that is supposed to protect your wiring does not do its job. The CPSC investigated in the 1980s and declined a formal recall, but the failure data did not go away. Zinsco panels overheat at the bus bar connection, which causes arcing inside the panel. Most insurance carriers writing homeowners policies in Northern Virginia today flag unmitigated Stab-Lok panels at renewal. If your panel carries either brand name, replacement is the safety call. We can identify the brand on-site in about 5 minutes."
+    },
+    {
+      "question": "Can my panel handle an EV charger / hot tub / addition?",
+      "answer_html": "Often not, if the panel is 100 amps or less. A Level 2 EV charger draws a continuous 40 to 50 amps — that is a large sustained load on top of your existing HVAC, kitchen, and general house demand. A hot tub pulls a similar draw. A major addition or finished basement adds circuits the existing panel may not have room or capacity for. The answer depends on a load calculation: we measure what the panel is carrying today, add the new load, and see whether the total exceeds the panel's safe rating. If it does, the panel upgrade happens first, then the new circuit goes in. We size the upgrade to handle both current and planned loads.",
+      "answer_schema": "Often not, if the panel is 100 amps or less. A Level 2 EV charger draws a continuous 40 to 50 amps — that is a large sustained load on top of your existing HVAC, kitchen, and general house demand. A hot tub pulls a similar draw. A major addition or finished basement adds circuits the existing panel may not have room or capacity for. The answer depends on a load calculation: we measure what the panel is carrying today, add the new load, and see whether the total exceeds the panel's safe rating. If it does, the panel upgrade happens first, then the new circuit goes in. We size the upgrade to handle both current and planned loads."
+    },
+    {
+      "question": "Does upgrading my panel increase my home's value?",
+      "answer_html": "Yes, in two concrete ways. First, a permitted and inspected 200-amp panel is what appraisers and home inspectors expect to see in a modern home — a 60-amp fuse box or a flagged Federal Pacific panel on the inspection report creates a negotiation point that costs the seller more than the upgrade would have. Second, insurance carriers in Northern Virginia increasingly flag outdated or recalled panels at renewal. A current-code panel with a clean inspection record removes that friction. The value is less about a dollar-for-dollar return on the upgrade cost and more about removing obstacles that delay or discount the sale when the time comes.",
+      "answer_schema": "Yes, in two concrete ways. First, a permitted and inspected 200-amp panel is what appraisers and home inspectors expect to see in a modern home — a 60-amp fuse box or a flagged Federal Pacific panel on the inspection report creates a negotiation point that costs the seller more than the upgrade would have. Second, insurance carriers in Northern Virginia increasingly flag outdated or recalled panels at renewal. A current-code panel with a clean inspection record removes that friction. The value is less about a dollar-for-dollar return on the upgrade cost and more about removing obstacles that delay or discount the sale when the time comes."
+    }
+  ],
+  "final_cta_heading": "Ready to upgrade your panel?",
+  "final_cta_paragraph_template": "Licensed panel upgrades in {city_name_with_state} — diagnostic visit, written estimate, permit-to-inspection handled.<br>{response_promise}",
+  "schema_service_description_template": "Residential electrical panel upgrades in {city_name_with_state}. Master electrician handles permit, utility coordination, panel installation, and inspection. Most upgrades complete in one day with morning power-down and afternoon restoration.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "Diagnostic visit and written estimate before any panel work begins. Most residential panel upgrades scheduled within 5–10 business days of estimate acceptance; permit pull and utility coordination handled by us."
+}

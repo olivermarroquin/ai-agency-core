@@ -1,0 +1,234 @@
+{
+  "_comment": "Per-city data for Dale City, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "dale-city-va",
+  "name": "Dale City",
+  "name_with_state": "Dale City, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Prince William County",
+  "county_full": "Prince William County, Virginia",
+  "distance_from_hq_phrase": "Dale City is 10 min from our home base in Woodbridge",
+  "geographic_anchor_paragraph": "Dale City sits along the I-95 corridor in eastern Prince William County, about 25 miles southwest of Washington, DC. The community stretches along Dale Boulevard from Gideon Drive on the east to Hoadly Road on the west, with Lake Ridge to the north and Woodbridge just across I-95. It's 10 minutes from Potomac Mills, 20 minutes from Manassas, and 35-55 minutes from downtown DC depending on traffic.",
+  "audience_descriptor": "Residential homeowners in Dale City, VA and surrounding eastern Prince William County neighborhoods including Woodbridge, Lake Ridge, and the I-95 corridor communities.",
+  "no_trip_charge_cities": [
+    "Dale City",
+    "Woodbridge",
+    "Lake Ridge",
+    "Dumfries",
+    "Triangle"
+  ],
+  "neighborhoods": [
+    {
+      "name": "Ashdale",
+      "blurb": "the first section, near the eastern entrance off Gideon Drive"
+    },
+    {
+      "name": "Birchdale",
+      "blurb": "one of the original six dales, northeast of Dale Boulevard"
+    },
+    {
+      "name": "Cloverdale",
+      "blurb": "original section with mature trees and established lots"
+    },
+    {
+      "name": "Forestdale",
+      "blurb": "the sixth original dale, marking the end of the first phase"
+    },
+    {
+      "name": "Hillendale",
+      "blurb": "1970s expansion along the middle of Dale Boulevard"
+    },
+    {
+      "name": "Kerrydale",
+      "blurb": "1970s-era section with a mix of splits and colonials"
+    },
+    {
+      "name": "Mapledale",
+      "blurb": "1970s-1980s section toward the western end of Dale Boulevard"
+    },
+    {
+      "name": "Princedale",
+      "blurb": "one of the later dales, in the western portion of the community"
+    },
+    {
+      "name": "Ridgedale",
+      "blurb": "1980s section near the western boundary toward Hoadly Road"
+    },
+    {
+      "name": "Silverdale",
+      "blurb": "later-phase section at the western end of Dale City"
+    }
+  ],
+  "other_areas_paragraph": "Outside Dale City, we serve <a href=\"/electrical-troubleshooting-woodbridge-va/\">Woodbridge</a>, <a href=\"/electrical-troubleshooting-lake-ridge-va/\">Lake Ridge</a>, Dumfries, Triangle, Manassas, and the rest of Prince William County. We also cover <a href=\"/electrical-troubleshooting-lorton-va/\">Lorton</a>, <a href=\"/electrical-troubleshooting-springfield-va/\">Springfield</a>, and surrounding Fairfax County and Stafford County communities.",
+  "housing_patterns": [
+    {
+      "title": "1960s-1970s ranches &amp; split-levels",
+      "neighborhood_examples": "Ashdale, Birchdale, Cloverdale, Darbydale, Evansdale, Forestdale, Glendale, Hillendale",
+      "context_paragraph": "The original Dale City homes were built by Cecil Hylton's construction company as affordable suburban housing for families working in DC. These homes typically have 100-amp panels (some upgraded to 150-200 amp over the decades), original cloth-insulated or early PVC copper wiring, and in homes built between 1965-1972, aluminum branch wiring (a wiring method that was common in this era but is now deprecated because aluminum connections loosen over time and create fire risk). Plumbing is original galvanized steel supply lines running to copper at fixtures. Insulation is minimal — R-13 walls at best, often less. These homes are now 50-60 years old and carrying loads (central AC, multiple electronics, EV chargers) that the original builders never anticipated.",
+      "symptoms": "100-amp panels with circuits sized for 1960s loads; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands; fuse boxes instead of breakers in some units; aluminum branch wiring in homes built 1965-1972 (Ashdale through Forestdale); overhead service drops from utility poles; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal."
+    },
+    {
+      "title": "1970s-1980s colonials &amp; townhomes",
+      "neighborhood_examples": "Kerrydale, Kirkdale, Lindendale, Mapledale, Nottingdale, Orangedale, Princedale, Queensdale, Ridgedale, Silverdale",
+      "context_paragraph": "The second and third phases of Dale City development brought colonials and early townhome clusters. Panel sizes are typically 150-200 amps but may still have GFCI gaps — the NEC didn't require GFCIs at kitchen counter receptacles until 1996, and most of these homes predate that. Plumbing transitions from galvanized to copper, with early PEX appearing in the late 1980s builds. Central AC is standard. These homes are now 35-50 years old — past the point where original HVAC systems, water heaters, and panel components reach end-of-life.",
+      "symptoms": "100-200 amp panels original at construction; GFCI coverage spotty in pre-1996 builds; EV charger or whole-house renovation triggers the 200A upgrade; overhead service in earlier areas, underground in later subdivisions; HOA approval may be needed for visible exterior panel work in planned communities."
+    },
+    {
+      "title": "2000s infill &amp; newer construction",
+      "neighborhood_examples": "Scattered infill throughout Dale City; newer townhome developments near Dale Boulevard commercial corridor",
+      "context_paragraph": "About 14.6% of Dale City's housing was built between 2000-2009, mostly townhomes and some detached infill on previously undeveloped parcels. These homes have modern 200-amp panels, AFCI breakers (arc-fault circuit interrupters, required by NEC 2008 for bedroom circuits), copper wiring with PVC insulation, and PEX plumbing. While newer, they're not problem-free — AFCI breakers are sensitive by design and trip on noisy loads, and smart-home additions by previous owners can introduce wiring issues. The original service drops from Dominion Energy may need upgrading if the homeowner adds an EV charger to the load.",
+      "symptoms": "200 amp panels standard; upgrades here are usually about adding capacity for EV chargers, hot tubs, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; HOA coordination needed for visible exterior work; Dominion Energy service drop may need upgrading if adding EV charger to the load."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How much does a panel upgrade cost in Dale City, VA?",
+        "body": "Every panel upgrade is different — a straight 100A-to-200A swap in a 1970s Kerrydale colonial with a clean service drop costs less than a full panel relocation in a 1960s Ashdale ranch with aluminum wiring and an overhead mast that needs replacing. We quote after a walkthrough, not over the phone, because the spread depends on panel rating, conductor run length, service entrance condition, and whether Dominion Energy needs to pull the meter. Call 703-972-5571 and we'll schedule the walkthrough at no charge."
+      },
+      {
+        "summary": "Do I need a permit for a panel upgrade in Prince William County?",
+        "body": "Yes. Prince William County requires an electrical permit for panel upgrades, and Dale City falls under a single permitting authority — the Building Development Division. You file through the county's online ePortal, which is simpler than jurisdictions that split permitting between a town and a county. We pull the permit, schedule the inspection, and handle the Dominion Energy meter coordination so you're not chasing paperwork."
+      },
+      {
+        "summary": "What are the signs I need a panel upgrade in my Dale City home?",
+        "body": "Breakers tripping when you run the microwave and the AC at the same time. Lights dimming when the dryer kicks on. A Federal Pacific or Zinsco label on your panel door. If your home is in Ashdale, Birchdale, or Cloverdale — the original 1960s sections — you likely have a 100-amp panel carrying loads it was never sized for. Homes in the later dales like Kerrydale and Mapledale from the 1970s-1980s may have 150-amp service that still falls short once you add an EV charger or a kitchen renovation."
+      },
+      {
+        "summary": "Is my Federal Pacific or Zinsco panel dangerous?",
+        "body": "Federal Pacific Stab-Lok and Zinsco panels are documented fire risks — the breakers can fail to trip during an overload, letting the wiring overheat instead of shutting off. Dale City's 1960s-1970s neighborhoods were mass-built by Cecil Hylton's construction company, and FPE panels were a common choice in that era. If your insurance carrier is flagging the panel at policy renewal, that's not overcaution — it's the carrier reading the same failure data the industry has known about for decades. Replace it."
+      },
+      {
+        "summary": "Should I upgrade to 200 amps?",
+        "body": "For most Dale City homes, yes. The median construction year here is 1983, which means most panels are 100-150 amps — sized for a decade when central AC was the biggest draw. A 200-amp panel is the modern residential standard and gives you headroom for EV chargers, heat pumps, and kitchen remodels without hitting the ceiling again in five years. The 100A-to-200A upgrade is the most common job we run in the '-dale' neighborhoods."
+      },
+      {
+        "summary": "How long does a panel upgrade take and will I lose power?",
+        "body": "A standard panel upgrade is a one-day job. Dominion Energy coordinates the service disconnect — they pull the meter, we swap the panel and reconnect, they re-energize. The outage window is typically 4-6 hours. We schedule the Dominion coordination before we show up so you're not waiting on two calendars. You'll want to plan around the outage — no AC, no fridge, no Wi-Fi for that window."
+      },
+      {
+        "summary": "Does my 1960s-1970s Dale City home have aluminum wiring?",
+        "body": "If your home is in the original '-dale' sections — Ashdale, Birchdale, Cloverdale, Darbydale, Evansdale, or Forestdale — and was built between 1965 and 1972, there's a real chance it has aluminum branch wiring. Aluminum connections loosen over time and create heat at the termination points, which is why it's been deprecated. We can confirm with a visual inspection at the panel and at outlet boxes. If it's aluminum, the standard remediation is copper pigtailing at every connection point or a full rewire depending on the home's condition."
+      },
+      {
+        "summary": "Can my Dale City panel handle an EV charger?",
+        "body": "Probably not without an upgrade. Most Dale City homes built before the late 1980s have 100-150 amp panels, and a Level 2 EV charger draws 40-50 amps on a dedicated circuit. That's a third of a 150-amp panel's capacity before you count the AC, dryer, and range. Prince William County requires an electrical permit for EV charging stations, and the load calculation we submit with the permit application will tell us whether the existing panel can carry the charger or needs a 200A upgrade first. If the charger mounts on the exterior, your HOA may need to approve the placement."
+      }
+    ],
+    "emergency-electrician": [
+      {
+        "summary": "What is considered an electrical emergency?",
+        "body": "Burning smell from an outlet or panel, sparks, a breaker that won't stay off, a buzzing sound inside the wall, or any sign of smoke — those are 911 first, then call us. In Dale City's older homes, the risk profile is higher than average: FPE and Zinsco panels in the 1960s-70s sections can fail to trip during an overload, aluminum wiring in Ashdale and Birchdale-era builds can overheat at connection points, and cloth-insulated wiring in the oldest homes becomes brittle and cracks. Any of those combined with a burning smell is a genuine emergency."
+      },
+      {
+        "summary": "How quickly can you get to my Dale City home?",
+        "body": "We're based 10 minutes away in Woodbridge 22193. Most Dale City emergency calls, we're at your door in under an hour — faster than any Fairfax-based competitor driving 30-plus minutes down I-95. Dale Boulevard access from either direction means we can reach Ashdale on the east end or Silverdale on the west end without fighting the interstate. Mohammad runs a maintenance team, so there's almost always a truck within range."
+      },
+      {
+        "summary": "What should I do before the electrician arrives?",
+        "body": "Keep everyone away from the panel and any affected outlets. Don't touch anything wet near electrical equipment. If you smell burning, get everyone out and call 911 first. Turn off the main breaker only if you can reach it safely without standing in water. Unplug appliances on the affected circuit. If your home has a Federal Pacific or Zinsco panel, do NOT repeatedly reset a tripped breaker — these brands are known for failing to trip during overloads, and forcing a reset can make the situation worse."
+      },
+      {
+        "summary": "Is my power out because of Dominion Energy or my house?",
+        "body": "Check Dominion Energy's outage map at dominionenergy.com/outages. If your neighbors have power and you don't, it's your house — call us at 703-972-5571. If the whole block is dark, it's Dominion — call them at 1-866-366-4357, then call us for any damage to your service entrance after they restore. In Dale City's older neighborhoods with overhead service drops, storm damage to the mast or weatherhead is the most common reason one house loses power while the rest of the street stays on."
+      },
+      {
+        "summary": "How much does emergency electrical service cost in Dale City?",
+        "body": "We quote after diagnosing, not before — because the cost depends on what's actually wrong, not what it sounds like over the phone. The variables are time of day, complexity of the repair, and whether parts are needed on the spot. After-hours and weekend calls carry a surcharge, and we tell you that upfront before we roll. No surprises, no hidden fees. We'll diagnose the problem, explain what needs to happen, and give you a number before any work starts."
+      },
+      {
+        "summary": "When should I call 911 instead of an electrician?",
+        "body": "Call 911 if you see flames, smell smoke coming from a wall or panel, see sparks jumping from wiring, or if someone has received an electrical shock. A burning smell from an outlet or panel with visible discoloration also warrants 911. Once the fire department clears the scene, call us at 703-972-5571 to assess and repair the electrical damage."
+      },
+      {
+        "summary": "Do you serve my neighborhood / ZIP code in Dale City?",
+        "body": "Yes — we serve every '-dale' neighborhood in Dale City: Ashdale, Birchdale, Cloverdale, Forestdale, Hillendale, Kerrydale, Mapledale, Princedale, Ridgedale, and Silverdale. That covers ZIP codes 22191, 22192, and 22193. We also serve Woodbridge, Lake Ridge, Dumfries, Triangle, and the rest of eastern Prince William County. Our home base is in Woodbridge 22193 — 10 minutes from Dale City."
+      },
+      {
+        "summary": "Does Dale City require a permit for emergency electrical work?",
+        "body": "Dale City permits file through Prince William County's online ePortal — one application, one inspection authority. Emergency repairs that don't alter circuits typically don't require a permit. Panel replacements, new circuits, and EV charger installations do. We handle the permit filing and inspection scheduling so you're not navigating the county system during an emergency."
+      }
+    ],
+    "ev-charger-installation": [
+      {
+        "summary": "How much does EV charger installation cost in Dale City, VA?",
+        "body": "The cost depends on three things: your panel's current capacity, the distance from panel to charger location, and whether the install needs a subpanel or a full panel upgrade. A straightforward install on a 200-amp panel with a short conduit run is the low end; a 100A-to-200A panel upgrade plus a 40-foot conduit run to a detached garage is the high end. We quote after the walkthrough because the spread between those two scenarios is significant. Call 703-972-5571 to schedule a free assessment."
+      },
+      {
+        "summary": "Do I need a permit for an EV charger in Dale City?",
+        "body": "Yes — Prince William County's Building Development Division requires an electrical permit for EV charger installations. You file through the county's ePortal, and residential EV charger permits qualify for Walk-Thru Plan Review with no plan review filing fee. The application requires a Residential Load Calculation Worksheet showing the charger circuit at 125% of nameplate amperage — that's an NEC requirement we handle as part of the permit package."
+      },
+      {
+        "summary": "Can my 1970s Dale City home handle an EV charger?",
+        "body": "Most 1970s Dale City homes have 100-150 amp panels that were sized for the loads of that decade — central AC, an electric range, and a dryer. A Level 2 EV charger adds a 40-50 amp circuit on top of all that. We assess your panel's existing load before quoting, because half the time the answer is 'you need a 200A panel upgrade before the charger goes in.' That's not an upsell — it's the math. The load calculation doesn't lie."
+      },
+      {
+        "summary": "Do I need HOA approval for an EV charger in Dale City?",
+        "body": "Dale City has near-universal HOA coverage — nearly every '-dale' neighborhood has active CC&Rs. Exterior-mounted chargers on a garage wall, driveway post, or carport typically need HOA architectural review before installation. Check with your management company — Cedar Management, PMI Prince William, and Sequoia Management handle most Dale City HOAs — before scheduling the install. We can work around most HOA-required placement constraints, but it's easier to get approval first than to move a charger after."
+      },
+      {
+        "summary": "Should I get a Tesla Wall Connector or a universal charger?",
+        "body": "The gap is shrinking since most manufacturers are adopting the NACS connector (Tesla's plug standard). If you have a Tesla and don't plan to charge other brands at home, the Tesla Wall Connector is the cleanest option — it talks to the car natively. If your household has two EVs from different brands, or you might switch brands next lease cycle, a universal charger like the ChargePoint Home Flex, JuiceBox 40, or Grizzl-E gives you flexibility. We install all of them — the electrical work is the same either way."
+      },
+      {
+        "summary": "Are there rebates or tax credits for EV charger installation?",
+        "body": "Two to know about. The federal Alternative Fuel Vehicle Refueling Property Credit (Section 30C) covers 30% of installed cost up to $1,000 — but it expires June 30, 2026, so act soon if you want it. Dominion Energy offers a $125 enrollment rebate plus $40 per year for participating in their managed-charging program. You must enroll within 120 days of charger purchase, and the home must be a single-family residence on a standard rate structure. We can walk you through both during the assessment."
+      },
+      {
+        "summary": "How long does EV charger installation take?",
+        "body": "Installation day is 2-6 hours depending on conduit run length and whether the panel needs work. The permit through Prince William County's ePortal is typically same-day to 1-2 business days for straightforward residential trade permits. From first call to charged car, the usual timeline is about a week — assessment, permit, install, inspection. If your panel needs a 200A upgrade first, add a few days for the Dominion Energy meter coordination."
+      },
+      {
+        "summary": "Can I install an EV charger in my Dale City townhouse?",
+        "body": "Yes — we install EV chargers in townhomes regularly. Dale City has a significant townhome stock alongside its detached homes. The main differences: shared-wall construction may limit conduit routing options, not every unit has a garage with direct panel access, and exterior-mounted chargers need HOA architectural approval. Outdoor installations require GFCI protection per NEC. We assess the specific layout during the walkthrough — panel location, distance to parking, and whether the HOA has placement requirements — before quoting."
+      }
+    ],
+    "light-fixture-installation": [
+      {
+        "summary": "How much does it cost to install a light fixture in Dale City, VA?",
+        "body": "A simple fixture swap — removing the old one and mounting the new one on an existing junction box with modern wiring — is on the lower end of the scale. The cost goes up when we find cloth-insulated wiring at the junction box, a box that isn't rated for the new fixture's weight, or aluminum connections that need pigtailing. We quote after seeing the fixture and the box, not over the phone."
+      },
+      {
+        "summary": "Do I need an electrician to replace a light fixture, or can I do it myself?",
+        "body": "Honest answer: if your home has modern copper wiring, a properly rated junction box, and you're comfortable turning off the breaker and matching wires, a simple one-for-one swap is a reasonable DIY job. But in many Dale City homes built in the 1960s-1970s, you'll open that junction box and find cloth-insulated wiring, possible aluminum connections, or a box that's not rated for the new fixture's weight. If any of those apply, call a licensed electrician — the risk isn't worth the savings."
+      },
+      {
+        "summary": "Can you install a light fixture I already bought at Home Depot?",
+        "body": "Absolutely. The Home Depot on Dale Boulevard is where half our Dale City customers pick up their fixtures — we install customer-supplied fixtures every week. Buy what you like, and we'll mount it. The only thing we check before installing is that the junction box is rated for the fixture's weight and that the wiring at the box is in safe condition. If it's not, we'll let you know before proceeding."
+      },
+      {
+        "summary": "What types of light fixtures do you install?",
+        "body": "We install flush mounts, semi-flush mounts, pendants, chandeliers, recessed lighting, wall sconces, outdoor fixtures (porch, landscape, security), under-cabinet lighting, and ceiling fans. Each type has its own mounting and wiring requirements — a heavy chandelier needs a fan-rated box, recessed cans need IC-rated housings if they're near insulation, and outdoor fixtures need weatherproof junction boxes. We handle all of it."
+      },
+      {
+        "summary": "My 1960s Dale City home has the original light fixtures — what should I know about replacing them?",
+        "body": "Three things to expect. First: the junction boxes in Ashdale and Birchdale-era homes often have cloth-insulated wiring that's brittle after 60 years — it needs careful handling or replacement at the box. Second: if your home was built between 1965 and 1972, there may be aluminum wiring at the fixture connection, which requires copper pigtailing for a safe termination. Third: the original junction boxes may not be rated for the weight of a modern chandelier or ceiling fan. We check all three before mounting anything."
+      },
+      {
+        "summary": "Do I need a permit to replace a light fixture in Prince William County?",
+        "body": "A simple one-for-one fixture replacement on an existing circuit typically does not require a permit in Prince William County. If the job involves running new wiring, adding a new circuit, or relocating a junction box, then yes — you'll need an electrical permit filed through the county's ePortal. We'll tell you which category your job falls into during the assessment."
+      },
+      {
+        "summary": "How long does it take to install a light fixture?",
+        "body": "A simple fixture swap — old fixture off, new fixture on, same wiring — takes 30-60 minutes per fixture. If the junction box needs replacing, the wiring needs updating, or we're running a new circuit for a fixture that didn't exist before, that's 2-4 hours. Most Dale City fixture calls are the simple swap, and we can usually do multiple fixtures in one visit."
+      },
+      {
+        "summary": "Does my Dale City townhouse HOA allow exterior light fixture changes?",
+        "body": "Most Dale City neighborhoods have active HOAs with CC&Rs that govern exterior modifications — and exterior light fixtures usually fall under architectural review. Check with your HOA management company before scheduling, especially if you're changing the fixture style, size, or mounting location. Interior fixtures are your call. If you're not sure whether your fixture change needs approval, a quick email to your management company before we come out saves everyone a second trip."
+      }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "panel-upgrade": "In Dale City, panel-upgrade calls split into two patterns. First: 1960s-era ranches and split-levels in the original '-dale' neighborhoods — Ashdale, Birchdale, Cloverdale, Forestdale — with original 100-amp Federal Pacific or Zinsco panels still in service 60 years later, now flagged by insurance carriers at policy renewal. Some of these homes also have aluminum branch wiring that typically gets remediated alongside the panel upgrade. Second: 1970s-1980s colonials and townhomes in the later '-dales' — Kerrydale, Mapledale, Princedale — with 100-150 amp panels that can't carry today's loads. Central AC plus EV charger plus modern kitchen appliances overruns what Cecil Hylton's builders planned for in the 1970s. Both patterns drive the standard 100A-to-200A upgrade.",
+    "emergency-electrician": "In Dale City, two patterns drive most emergency electrician calls. First: the original 1960s-1970s homes in Ashdale, Birchdale, Cloverdale, and Forestdale are now 50-60 years old, running 2026 loads on original 100-amp panels — many of them Federal Pacific or Zinsco units whose breakers are known for failing to trip during overloads. When a breaker fails to trip, the wiring overheats instead of shutting off, and that's how electrical fires start. Second: summer thunderstorms and winter ice storms knock power to the overhead service drops in these same older neighborhoods. The service mast takes the hit and the homeowner loses power while neighbors on underground service keep theirs. Both scenarios need a licensed electrician, not a DIY reset.",
+    "ev-charger-installation": "In Dale City, the most common EV charger installation call comes from homeowners in the original '-dale' neighborhoods — Ashdale, Birchdale, Hillendale, Kerrydale — whose 1960s-1980s homes were built with 100-150 amp panels that weren't designed for modern electrical loads. They've just bought an EV and realized Level 1 charging from a standard outlet only adds 3-5 miles of range per hour — not enough for an I-95 commute. They need a Level 2 charger on a dedicated 240V circuit, and the first question is always: can my panel handle it? The second-most common call comes from homeowners whose HOA needs to approve the charger location before installation can begin.",
+    "light-fixture-installation": "In Dale City, most light fixture calls come from two patterns. First: the original '-dale' neighborhoods — Ashdale, Birchdale, Cloverdale, and the rest — built in the 1960s and 1970s with builder-grade fixtures that are now 50-60 years old. The junction boxes in these homes may have cloth-insulated wiring, possible aluminum connections, and weight ratings that weren't designed for today's heavier fixtures. Second: younger families who bought a home in the 1970s-1980s colonials and want to update the dated fixtures as part of a kitchen or bathroom renovation — they pick up a new fixture at the Home Depot on Dale Boulevard and need it installed safely."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "Dale City's homes span three construction waves — from 1960s Ashdale and Birchdale ranches with 100-amp Federal Pacific panels to 1980s Ridgedale and Silverdale colonials with 150-amp service to 2000s infill townhomes with modern 200-amp panels. The panel-upgrade path depends on which wave your home was built in, and what you're asking it to power today.",
+    "emergency-electrician": "Dale City's 1960s-1970s neighborhoods — Ashdale, Birchdale, Cloverdale, Forestdale — were mass-built by Cecil Hylton's construction company with 100-amp panels and, in the 1965-1972 segment, aluminum branch wiring. These homes carry the highest emergency electrical risk in Prince William County because the original infrastructure was designed for a fraction of today's electrical load.",
+    "ev-charger-installation": "Dale City's housing was mostly built in the 1960s through 1980s by developer Cecil Hylton's construction company. That means most homes have original electrical panels — some with FPE or Zinsco breakers that need to be assessed before adding a high-draw EV charger circuit. The community's near-universal HOA coverage adds an approval step for exterior charger installations that homeowners in non-HOA neighborhoods don't face.",
+    "light-fixture-installation": "Dale City's homes span from the 1960s Ashdale ranches to the 2000s infill townhomes off Dale Boulevard. The fixture that works in a 1960s split-level with 8-foot ceilings and original wiring isn't the same as what works in a 1980s Princedale colonial with 9-foot ceilings and updated circuits — and an experienced electrician knows the difference before anything gets mounted."
+  },
+  "ev_charger_homes_phrase": "Dale City homes built in the 1960s through 1980s weren't designed for"
+}

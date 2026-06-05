@@ -173,7 +173,11 @@ def derive_city_slug(meta: dict[str, str]) -> str:
     if city:
         parts = page_slug.split("-")
         if len(parts) >= 2 and len(parts[-1]) == 2 and parts[-1].isalpha():
-            return f"{city}-{parts[-1]}"
+            state_suffix = parts[-1]
+            # If city already ends with the state suffix, don't double it
+            if city.endswith(f"-{state_suffix}"):
+                return city
+            return f"{city}-{state_suffix}"
         return city
 
     # 2. Service-prefix peel
@@ -553,15 +557,24 @@ SERVICE_FALLBACK_ACTIONS: dict[str, dict[str, str]] = {
 
 
 # Embroidered-no-patch wardrobe clause (Issue #20). Any prompt that may show
-# the uniform (AHMAD-CENTRIC always; HANDS-ONLY when chest/shoulder may render)
+# the uniform (OWNER-CENTRIC always; HANDS-ONLY when chest/shoulder may render)
 # must carry this clause. The generator must NEVER instruct uploading the uniform
 # mockup — its white callout boxes cause white name-patches.
-EMBROIDERED_NO_PATCH_CLAUSE = (
-    "if any chest, shoulder, or sleeve branding shows, the EV Electric mark is "
-    "embroidered directly onto the shirt fabric — a small yellow-gold lightbulb "
-    "icon + navy 'EV ELECTRIC' wordmark, NO patch, no white background, no "
-    "rectangular badge"
-)
+def embroidered_no_patch_clause(client_cfg: dict) -> str:
+    """Build the brand-mark clause from the client JSON instead of hardcoding."""
+    mark = client_cfg.get("brand_mark_description")
+    if mark:
+        return (
+            f"if any chest, shoulder, or sleeve branding shows, the {mark}, "
+            "NO patch, no white background, no rectangular badge"
+        )
+    # Fallback: generic brand-mark clause
+    name = client_cfg.get("name", "the company")
+    return (
+        f"if any chest, shoulder, or sleeve branding shows, the {name} mark is "
+        "embroidered directly onto the shirt fabric — NO patch, no white background, "
+        "no rectangular badge"
+    )
 
 # Prompt type classification for self-documenting headers (Issue #17).
 # Each prompt carries: Type, Reference photos, Aspect, Produces.
@@ -574,7 +587,7 @@ PROMPT_TYPE_LEGEND = {
         "description": "A faceless worker's hands at the task, uniform cuff visible — no face",
         "reference_photos": "NONE (optional: brand logo art only). NEVER upload the uniform mockup.",
     },
-    "AHMAD-CENTRIC": {
+    "OWNER-CENTRIC": {
         "description": "Owner performing the task / portrait — face is in the shot",
         "reference_photos": "Owner headshot (face/likeness) + brand logo art (chest embroidery). Do NOT upload the uniform mockup.",
     },
@@ -651,7 +664,7 @@ def _compose_wardrobe_block(
     return (
         f"He is wearing his {client_short} work shirt: a clean short-sleeve button-up work "
         f"shirt in the brand's primary color, with the {client_short} brand mark embroidered "
-        f"directly onto the chest fabric ({EMBROIDERED_NO_PATCH_CLAUSE}) and the name "
+        f"directly onto the chest fabric ({embroidered_no_patch_clause(client_cfg)}) and the name "
         f"'{owner_first.upper()}' embroidered on the opposite chest. Light pants."
     )
 
@@ -819,7 +832,7 @@ def compose_hero_hands_only(
 
     parts = [
         (f"Close, mid-action shot of a residential electrician's hands (wearing the cuff of a "
-         f"light medium-blue postman-blue short-sleeve work shirt; {EMBROIDERED_NO_PATCH_CLAUSE}) "
+         f"light medium-blue postman-blue short-sleeve work shirt; {embroidered_no_patch_clause(client_cfg)}) "
          f"{action} inside a modern {region} home."),
         ("Focus on the hands and the work; no face in frame (chest-down / hands-and-work composition)."),
         (f"Soft warm natural light from a doorway, warm wood floor at the edge of frame."),
@@ -1015,8 +1028,10 @@ def render_log(
     setup_lines = [
         f"- **Tool:** Higgsfield (higgsfield.ai)",
         f"- **Model:** Nano Banana Pro",
-        f"- **Reference photos to upload:** (1) `{client_cfg.get('brand_image_url', '<owner reference photo>')}` "
-        f"for face/likeness; (2) the client's logo art for brand-mark fidelity on embroidered chest mark.",
+        f"- **Reference photos to upload:** (1) owner face/likeness crop from "
+        f"`{reference_photo_home(client_cfg.get('client_slug', ''))}` "
+        f"(e.g. mohammed-front-facing-pic.jpg or front-facing-photo-from-drivers-license.png); "
+        f"(2) the client's logo art for brand-mark fidelity on embroidered chest mark.",
         f"- **Owner:** {client_cfg.get('owner_name', '<owner>')} "
         f"({client_cfg.get('owner_title', '<title>')})",
         f"- **City:** {city_name or city_slug} — {city_state or '?'}",
@@ -1035,8 +1050,8 @@ def render_log(
         hero_type = "HANDS-ONLY"
         hero_refs = "NONE (optional: brand logo art only). NEVER upload the uniform mockup."
         hero_produces = f"faceless worker's hands performing {pretty_service}"
-    else:  # ahmad-centric
-        hero_type = "AHMAD-CENTRIC"
+    else:  # owner-centric
+        hero_type = "OWNER-CENTRIC"
         hero_refs = (
             f"{client_cfg.get('owner_name', 'owner')} headshot (face/likeness) + "
             f"brand logo art (chest embroidery). Do NOT upload the uniform mockup."
@@ -1081,7 +1096,7 @@ def render_log(
     # --- About ---
     gens.append("### About portrait v1 — pending\n")
     about_owner = client_cfg.get("owner_name", "owner")
-    gens.append(f"**Type:** AHMAD-CENTRIC · **Reference photos:** {about_owner} headshot + brand logo art. "
+    gens.append(f"**Type:** OWNER-CENTRIC · **Reference photos:** {about_owner} headshot + brand logo art. "
                 f"Do NOT upload the uniform mockup. · **Aspect:** 3:4 portrait · "
                 f"**Produces:** {about_owner} chest-up portrait, warm and trustworthy\n")
     gens.append("**Aspect ratio note:** the About slot is grid-column-narrow with "
@@ -1165,9 +1180,9 @@ def main() -> int:
                     help="Path to the page folder (contains draft-v1.md).")
     ap.add_argument("--client", default=DEFAULT_CLIENT,
                     help=f"Client slug (default: {DEFAULT_CLIENT})")
-    ap.add_argument("--hero-style", choices=["ahmad-centric", "service-scene", "hands-only"],
-                    default="ahmad-centric",
-                    help="Hero prompt style: 'ahmad-centric' (owner performing task, default), "
+    ap.add_argument("--hero-style", choices=["owner-centric", "service-scene", "hands-only"],
+                    default="owner-centric",
+                    help="Hero prompt style: 'owner-centric' (owner performing task, default), "
                          "'service-scene' (installed result / work scene, no face), "
                          "'hands-only' (faceless worker's hands at the task).")
     ap.add_argument("--no-scene", action="store_true",
@@ -1285,7 +1300,7 @@ def main() -> int:
             setting_hints=setting_hints,
             prior=prior,
         )
-    else:  # ahmad-centric (default)
+    else:  # owner-centric (default)
         hero_prompt = compose_hero_prompt(
             client_cfg=client_cfg,
             client_meta=client_brief,

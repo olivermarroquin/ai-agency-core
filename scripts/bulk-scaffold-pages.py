@@ -134,14 +134,18 @@ def page_folder(client: str, position: int, page_slug: str) -> Path:
 # ----------------------------------------------------------------------------
 
 
-# Table row example:
+# Table row example (5-col EV):
 # | 06 | light-fixture-installation-vienna-va | Light fixtures + chandeliers | Vienna | uncontested... |
+# Table row example (6-col S&H):
+# | 01 | panel-upgrade-woodbridge-va | Panel upgrade | Woodbridge | High | **Geographic exclusive** ... |
 ROW_RE = re.compile(
     r"^\|\s*(?P<pos>\d+)\s*\|"             # position
     r"\s*(?P<slug>[A-Za-z0-9_\-]+)\s*\|"   # page slug (skips "(reserved)" rows)
     r"\s*(?P<service>[^|]+?)\s*\|"         # service label
     r"\s*(?P<city>[^|]+?)\s*\|"            # city label
-    r"\s*(?P<status>[^|]*?)\s*\|\s*$"      # status (may be empty / notes)
+    r"\s*(?P<status>[^|]*?)\s*\|"          # status / priority tier
+    r"(?:\s*[^|]*\s*\|)*"                  # consume any extra columns (e.g. positioning notes)
+    r"\s*$"
 )
 
 

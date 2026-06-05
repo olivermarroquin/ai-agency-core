@@ -1,0 +1,226 @@
+{
+  "_comment": "Per-city data for Manassas, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "manassas-va",
+  "name": "Manassas",
+  "name_with_state": "Manassas, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "City of Manassas",
+  "county_full": "City of Manassas, Virginia",
+  "distance_from_hq_phrase": "<TBD: pass --client-slug to resolve from client HQ city>",
+  "geographic_anchor_paragraph": "Manassas, VA is an independent city about 30 miles southwest of Washington, D.C., where I-66 meets the Route 28 and Route 234 corridors. The city sits between the historic Manassas National Battlefield Park to the north and the Prince William County suburbs to the south, with a walkable downtown anchored by the Manassas Train Station and a growing dining and arts scene on Center Street.",
+  "audience_descriptor": "Residential homeowners in Manassas, VA and surrounding areas including Old Town, Sudley, Wellington, and the Route 28 corridor neighborhoods.",
+  "no_trip_charge_cities": [
+    "Manassas",
+    "Manassas Park",
+    "Gainesville",
+    "Bristow",
+    "Centreville"
+  ],
+  "neighborhoods": [
+    {
+      "name": "Old Town Manassas",
+      "blurb": "the historic downtown core around Center Street and the train station"
+    },
+    {
+      "name": "Sudley",
+      "blurb": "established neighborhoods near the Battlefield Park and Sudley Road corridor"
+    },
+    {
+      "name": "Bull Run area",
+      "blurb": "northwest city edge near GMU and the Hylton Performing Arts Center"
+    },
+    {
+      "name": "Wellington",
+      "blurb": "popular family subdivision with parks and community amenities"
+    },
+    {
+      "name": "Signal Hill",
+      "blurb": "established residential subdivision in the central city"
+    },
+    {
+      "name": "Route 28 corridor residential",
+      "blurb": "townhome and apartment communities along the eastern commercial strip"
+    },
+    {
+      "name": "Blooms Crossing area",
+      "blurb": "newer residential area with modern homes and townhomes"
+    },
+    {
+      "name": "Ashton Glen",
+      "blurb": "suburban neighborhood with varied housing and community amenities"
+    }
+  ],
+  "other_areas_paragraph": "Outside Manassas, we serve Manassas Park, Gainesville, Bristow, Centreville, Haymarket, <a href=\"/electrical-troubleshooting-woodbridge-va/\">Woodbridge</a>, <a href=\"/electrical-troubleshooting-dale-city-va/\">Dale City</a>, <a href=\"/electrical-troubleshooting-lake-ridge-va/\">Lake Ridge</a>, and the rest of Prince William County. We also cover western Fairfax County and Fauquier County communities.",
+  "housing_patterns": [
+    {
+      "title": "Pre-1970s historic homes &amp; mid-century ranches",
+      "neighborhood_examples": "Old Town Manassas, Sudley area, older blocks near downtown",
+      "context_paragraph": "Manassas's oldest housing stock includes late-19th-century homes in the Historic Overlay District and mid-century ranches and Cape Cods from the 1950s-1960s. These homes were built with 60-100 amp panels (pre-1960) or 100-amp panels (1960s), cloth-insulated copper wiring, galvanized steel plumbing, and minimal insulation (R-13 walls at best). Many still have original fuse boxes or early breaker panels. Plumbing is typically galvanized steel supply lines running to copper at the fixtures; pipe corrosion and reduced pressure are common in unrenovated homes of this era.",
+      "symptoms": "60-100A panels with circuits sized for 1950s-1960s loads; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands in some units; fuse boxes instead of breakers in unrenovated homes; cloth-insulated copper wiring with brittle insulation; overhead service drops from city utility poles; insurance carriers flagging FPE/Zinsco at renewal."
+    },
+    {
+      "title": "1970s-1990s colonials, split-levels &amp; townhomes",
+      "neighborhood_examples": "Wellington, Signal Hill, Blooms Crossing area, inner subdivisions",
+      "context_paragraph": "The 1980s were Manassas's biggest growth decade — about 35% of the city's housing stock dates from this era. These homes typically have 200-amp service (the new standard by the mid-1980s), copper wiring with PVC insulation, and central AC. However, 1970s-era homes in the mix may have aluminum branch wiring (deprecated by NEC 1972 but installed through the mid-1970s) or undersized panels at 100-150 amps. GFCI protection is inconsistent — NEC 1975 required GFCIs in bathrooms only; kitchen counter receptacles weren't required until NEC 1987. Plumbing transitioned from galvanized + copper (1970s) to all-copper and early PEX (late 1980s-1990s). Insulation improved to R-19 walls and R-30 attics by the late 1980s.",
+      "symptoms": "100-200A panels original at construction — now 35-50 years old; some aluminum branch wiring in mid-1970s homes; GFCI coverage spotty in pre-1987 builds (NEC 1987 added kitchen counter requirements); EV charger or whole-house renovation triggers the 200A upgrade; overhead service in older areas near Sudley, underground in later subdivisions like Wellington."
+    },
+    {
+      "title": "2000s-2020s townhomes &amp; newer infill",
+      "neighborhood_examples": "Route 28 corridor communities, Ashton Glen, newer subdivisions near city edges",
+      "context_paragraph": "About 17% of Manassas housing was built since 2000. These homes have 200-amp service, AFCI breakers (required by NEC 2008 for bedroom circuits, expanded in NEC 2014 and NEC 2020), tamper-resistant outlets (NEC 2008), and PEX plumbing. Common issues include AFCI nuisance tripping on noisy loads (by design — the breakers are sensitive), smart-home wiring done incorrectly by previous owners, and tankless water heaters or heat pumps pulling continuous high loads that strain branch circuits. Many townhomes in this era have shared walls and smaller service drops — coordination with the city's municipal electric utility for any service-entrance work is required.",
+      "symptoms": "200A panels standard; upgrades here are usually about adding capacity for EV chargers, heat pumps, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; smart-home wiring done incorrectly by previous owners; coordination with the city's municipal electric utility required for any service-entrance work; HOA coordination needed in Route 28 corridor townhome communities."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How much does a panel upgrade cost in Manassas, VA?",
+        "body": "Every panel upgrade is scoped on-site — the price depends on your current amperage, the panel brand going in, whether the meter base needs replacement, and how the City of Manassas Electric Utility coordinates the service disconnect. Most 100A-to-200A upgrades in Northern Virginia fall in the $1,500-$3,500 range, but that number moves if we're replacing a Federal Pacific or running new conductors from the weatherhead. We quote after the walkthrough, not before."
+      },
+      {
+        "summary": "Do I need a permit for a panel upgrade in Manassas?",
+        "body": "Yes — electrical panel upgrades in Manassas require a permit from the City of Manassas Department of Community Development, not Prince William County. Manassas is an independent city with its own building department at 9027 Center St. You can apply through the city's Permit Self Service portal online or call 703-257-8278. We handle the permit filing and schedule the inspection as part of the job."
+      },
+      {
+        "summary": "What are the signs I need a panel upgrade?",
+        "body": "Breakers that trip under normal loads, a burning smell near the panel, or flickering lights when the AC kicks on are the most common signs. In Manassas, the median home was built around 1985 — meaning the original panel is now 40+ years old and approaching end-of-life. Older homes in Old Town and Sudley may still have fuse boxes or 60-100 amp panels that were never upgraded. If your panel has a Federal Pacific or Zinsco label, that alone is reason to call."
+      },
+      {
+        "summary": "Who handles the meter pull for my panel upgrade in Manassas?",
+        "body": "In Manassas, the meter pull is coordinated through the City of Manassas Electric Utility at 703-257-8219 — not Dominion Energy. Manassas is one of about 16 cities in Virginia that runs its own municipal electric utility, so the process is different from the rest of Northern Virginia. We coordinate directly with the city utility to schedule the meter disconnect, complete the panel swap, and get the meter re-set the same day."
+      },
+      {
+        "summary": "Is my Federal Pacific or Zinsco panel dangerous?",
+        "body": "Federal Pacific Stab-Lok and Zinsco panels have documented failure rates — breakers that don't trip under overcurrent, which is the one thing a breaker exists to do. Pre-1970s homes in Old Town and Sudley are the most likely to have them in Manassas. Most insurance carriers writing homeowner policies in Northern Virginia now flag FPE and Zinsco panels at renewal, and some won't renew until the panel is replaced. We replace them with Square D or Eaton panels rated for the home's actual load."
+      },
+      {
+        "summary": "Should I upgrade to 200 amps?",
+        "body": "200 amps is the modern standard for residential service, and it's what we install on nearly every upgrade. Manassas homes built in the 1980s often came with 100-150 amp panels — enough for the loads of that era, but not for a modern kitchen, central AC, an EV charger, and a home office running simultaneously. If your home is in Wellington, Georgetown South, or Signal Hill with the original panel, a 200A upgrade future-proofs the house for the next 30 years."
+      },
+      {
+        "summary": "How long does a panel upgrade take and will I lose power?",
+        "body": "Most panel upgrades are a one-day job. The City of Manassas Electric Utility coordinates the service disconnect on our schedule — they pull the meter in the morning, we swap the panel and run the new conductors, and the city re-sets the meter after inspection. Expect a 4-6 hour outage during the active work. We coordinate the timing with the city utility in advance so you know exactly when power goes down and when it comes back."
+      },
+      {
+        "summary": "Can my Manassas panel handle an EV charger?",
+        "body": "Maybe — it depends on your current panel's capacity and available breaker slots. A Level 2 EV charger needs a dedicated 40-50 amp circuit. Most 1980s-era Manassas homes have 200-amp panels with room for the additional breaker, but older homes in Old Town or Westgate may need a panel upgrade first. The good news: Manassas's municipal electric rate is about 12.61 cents per kWh — roughly 14% below the Virginia average — so your overnight charging costs less here than in Dominion Energy territory across the county line."
+      }
+    ],
+    "emergency-electrician": [
+      {
+        "summary": "What is considered an electrical emergency?",
+        "body": "If you see sparks, smell burning plastic near your panel, or have a wire down — call 911 first, then call us. Beyond that, an electrical emergency is anything that poses an immediate safety risk: a breaker that won't trip during an overcurrent event, a melted outlet, a buzzing panel, or a complete loss of power to part of the house. In Manassas's 1980s housing stock, original panels are now 40+ years old, and many kitchens still lack the GFCI protection that NEC 1987 added — both are common sources of emergency calls."
+      },
+      {
+        "summary": "How quickly can you get to my Manassas home?",
+        "body": "We dispatch from Woodbridge — about 20-25 minutes to most Manassas addresses via Route 234 or I-66, depending on traffic and which part of the city you're in. Old Town and Sudley are the closest; Yorkshire and the Route 28 corridor neighborhoods add a few minutes. For emergencies, our real response time is within 45 minutes because Mohammad runs a maintenance team — there's almost always a truck within range."
+      },
+      {
+        "summary": "Is my power out because of the city utility or my house?",
+        "body": "Manassas has its own municipal electric utility — not Dominion Energy. If the whole block is dark, it's the city utility. Check outages at manassasva.gov or call the city's 24-hour operations center at 703-257-8353. If your neighbors have power and you don't, the problem is inside your house — that's when you call us. This is the single most common misunderstanding we hear from Manassas homeowners, and getting it right saves you hours of waiting on hold with the wrong company."
+      },
+      {
+        "summary": "What should I do before the electrician arrives?",
+        "body": "Stay safe and help us diagnose faster. Don't touch exposed wires or standing water near electrical equipment. If you smell burning near your panel — especially in an older Old Town or Sudley home — kill the main breaker if you can reach it safely and call us immediately. Keep kids and pets away from the affected area. If a specific appliance triggered the problem, unplug it. Leave tripped breakers in the tripped position so we can see which circuits faulted. Have your address ready when you call 703-972-5571."
+      },
+      {
+        "summary": "How much does emergency electrical service cost in Manassas?",
+        "body": "Emergency service costs depend on the time of day, complexity of the problem, and whether parts are needed on the spot. After-hours and weekend calls carry a surcharge — we're transparent about that upfront when you call. We don't quote blind over the phone because a tripped main breaker is a different job than a melted service-entrance conductor. Mohammad diagnoses first, explains what he's seeing, and gives you the number before any work starts."
+      },
+      {
+        "summary": "When should I call 911 instead of an electrician?",
+        "body": "Call 911 if you see active fire, arcing, or a downed power line. Call 911 if someone has received an electrical shock and is unresponsive. Call 911 if you smell smoke and can't identify the source. Everything else — a buzzing panel, a dead circuit, a tripped breaker that won't reset, flickering lights across multiple rooms — call a licensed electrician. The line is simple: if there's immediate danger to life or property, 911 first, then us."
+      },
+      {
+        "summary": "Do you pull permits through the City of Manassas or Prince William County?",
+        "body": "City of Manassas — always. Manassas is an independent city with its own permit office at 9027 Center St, separate from Prince William County. We file electrical permits directly with the City of Manassas Department of Community Development and schedule inspections through their office at 703-257-8278. If your contractor pulls a Prince William County permit for a Manassas address, that's a red flag — it means they don't know where they're working."
+      },
+      {
+        "summary": "Are your electricians licensed and insured in Virginia?",
+        "body": "Yes. Mohammad Adam holds a Master Electrician license through the Virginia Department of Professional and Occupational Regulation (DPOR) — the highest electrician tier the state issues. S&H Contracting Unlimited is fully insured for residential and commercial work. You can verify any Virginia contractor license through the DPOR lookup tool at dpor.virginia.gov. We carry that credential into every jurisdiction we work in, including the City of Manassas."
+      }
+    ],
+    "ev-charger-installation": [
+      {
+        "summary": "How much does EV charger installation cost in Manassas, VA?",
+        "body": "EV charger installation in Manassas typically runs $800-$2,000, but that number depends on the charger model, your panel's available capacity, the length of the conductor run from the panel to the garage or driveway, and whether the install is indoor or exterior-mounted. We scope every job on-site because a 10-foot run from a panel with open slots is a different job than a 40-foot run through a finished basement. Call 703-972-5571 and we'll walk through it."
+      },
+      {
+        "summary": "Do I need a permit for an EV charger in Manassas?",
+        "body": "Yes — EV charger installation in Manassas requires an electrical permit from the City of Manassas Department of Community Development, not Prince William County. Manassas is an independent city with its own building department at 9027 Center St. The city offers a Permit Self Service portal for online applications, or you can call 703-257-8278. We handle the permit filing and inspection scheduling so you're not chasing paperwork."
+      },
+      {
+        "summary": "Do I need a panel upgrade to install an EV charger?",
+        "body": "It depends on your current panel's capacity. Most 1980s-era Manassas homes in Wellington, Signal Hill, and Georgetown South have 200-amp panels with room for the dedicated 40-50 amp breaker an EV charger needs. Older homes near Old Town or Sudley with 100-amp or undersized panels will likely need a panel upgrade first. We assess both during the same site visit — no separate trips. See our <a href='/panel-upgrade-manassas-va/'>Manassas panel upgrade page</a> for the full capacity analysis."
+      },
+      {
+        "summary": "Does the City of Manassas electric utility affect my EV charger installation?",
+        "body": "Yes — and it works in your favor. Manassas runs its own municipal electric utility (Manassas Electric Distribution), not Dominion Energy. If the EV charger install requires panel work or a service upgrade, meter coordination goes through the city utility at 703-257-8219, not Dominion. The upside: Manassas's residential rate is about 12.61 cents per kWh — roughly 14% below the Virginia average — so your overnight EV charging costs less here than across the county line in Dominion territory."
+      },
+      {
+        "summary": "Can I install an EV charger in my Manassas townhouse?",
+        "body": "Yes, but the process depends on your community. Newer townhome neighborhoods like Ashton Glen, Blooms Crossing, and Route 28 corridor communities almost always have HOAs that require architectural approval before exterior-mounted equipment goes up — get that approval before scheduling the install. Older detached-home neighborhoods like Old Town, Sudley, and Signal Hill generally don't have HOA restrictions. For shared-wall townhomes, we route the circuit to avoid penetrating the party wall and can exterior-mount the charger near the parking area if garage access is limited."
+      },
+      {
+        "summary": "Should I get a Tesla Wall Connector or a universal charger?",
+        "body": "If you only drive a Tesla and don't plan to charge other vehicles, the Tesla Wall Connector is the cleanest option — it integrates with the Tesla app and supports up to 48 amps. If your household has or may add a non-Tesla EV, a universal charger like the ChargePoint Home Flex or JuiceBox 40 handles any J1772 vehicle and most Tesla models with the included NACS adapter. The NACS connector standard is converging, so the gap is shrinking — but for now, we install both and can advise based on your setup."
+      },
+      {
+        "summary": "Are there rebates or tax credits for EV charger installation in Manassas?",
+        "body": "The federal Section 30C tax credit covers 30% of installation costs up to $1,000 — that applies regardless of your utility provider. However, Dominion Energy's EV charger rebate ($125 plus $40 per year) does not apply inside Manassas city limits because Manassas is served by its own municipal electric utility, not Dominion. Whether the City of Manassas utility offers its own EV incentive is not currently confirmed — we recommend calling the city utility at 703-257-8219 to ask. Don't let a contractor promise you the Dominion rebate in Manassas; it doesn't apply here."
+      },
+      {
+        "summary": "How long does EV charger installation take?",
+        "body": "Installation day is typically 2-6 hours depending on the conductor run length and whether panel work is involved. A straightforward install — short run from a panel with open slots to a garage-mounted charger — is on the shorter end. Permit processing time through the City of Manassas Building Division is not publicly documented with a guaranteed turnaround, so we recommend contacting them at 703-257-8278 for current timelines. We handle the permit application and schedule the install once it's approved."
+      }
+    ],
+    "light-fixture-installation": [
+      {
+        "summary": "How much does it cost to install a light fixture in Manassas, VA?",
+        "body": "Light fixture installation in Manassas typically runs $387-$577 based on regional averages, but the actual cost depends on the fixture type, the condition of your existing junction box, and whether new wiring is needed. A simple swap — same location, compatible box, no new circuit — is on the lower end. A chandelier install in a two-story foyer or a recessed lighting layout in a 1980s colonial with limited attic access costs more. We scope it on-site and quote before we start."
+      },
+      {
+        "summary": "Do I need an electrician to replace a light fixture, or can I do it myself?",
+        "body": "Honest answer: a simple like-for-like swap on a modern circuit with a properly rated junction box is a reasonable DIY project if you're comfortable turning off the breaker and testing with a voltage tester. But if the fixture is heavier than the existing one, the junction box isn't fan-rated for the load, or you're in an older Manassas home — especially pre-1970s stock in Old Town or Sudley with cloth-insulated wiring — call a licensed electrician. The wiring behind the box is the part you can't see and can't guess at."
+      },
+      {
+        "summary": "Can you install a light fixture I already bought at Lowe's?",
+        "body": "Absolutely — we install customer-supplied fixtures every week. If you bought it at the Lowe's on Broken Branch Lane or ordered it online, we'll install it. We just need to confirm the junction box can support the fixture's weight and mounting style, and that your circuit can handle the load. If the box isn't rated for a heavier fixture like a chandelier or ceiling fan, we'll swap it during the same visit. Bring the fixture specs or have the box handy and we'll confirm before we start."
+      },
+      {
+        "summary": "What types of light fixtures do you install?",
+        "body": "We install flush mounts, semi-flush mounts, pendants, chandeliers, recessed lighting, wall sconces, outdoor fixtures (porch lights, landscape lighting, security floods), under-cabinet lighting, and ceiling fans with light kits. If it connects to a junction box or needs a new circuit, we handle it. The fixture type matters less than the wiring behind it — we confirm the junction box rating, circuit capacity, and switch compatibility before we mount anything."
+      },
+      {
+        "summary": "My 1980s Manassas home has old light fixtures — what should I know about replacing them?",
+        "body": "Three things to know. First: your original builder-grade fixtures are 40+ years old — the sockets are likely heat-degraded and the wiring insulation behind the junction box may be brittle. Second: junction boxes from that era may not be rated for heavier modern fixtures like large chandeliers or ceiling fans — we check the box rating before mounting anything new. Third: GFCI protection in kitchens and bathrooms was limited in 1980s construction, so a fixture swap near water is a good time to add GFCI protection to that circuit."
+      },
+      {
+        "summary": "Do I need a permit to replace a light fixture in Manassas?",
+        "body": "A simple fixture replacement — same location, existing wiring, no new circuit — usually does not require a permit. If the job involves running new wiring, adding a new circuit, or modifying existing circuits, a permit is required through the City of Manassas Department of Community Development at 9027 Center St. Not Prince William County — Manassas is an independent city with its own building department. Call 703-257-8278 if you're unsure, or we'll confirm during the site visit."
+      },
+      {
+        "summary": "How long does it take to install a light fixture?",
+        "body": "A straightforward fixture swap — remove the old one, connect the new one to existing wiring, secure to a compatible junction box — takes 30-60 minutes per fixture. If we're running new wiring, adding a switch, or replacing a junction box to support a heavier fixture, plan for 2-4 hours. Multi-fixture jobs like a full kitchen or dining room lighting upgrade are typically a half-day visit. We give you a time estimate during the walkthrough before we start."
+      },
+      {
+        "summary": "Does Manassas use Dominion Energy for electrical service?",
+        "body": "No. Manassas is one of about 16 cities in Virginia that operates its own municipal electric utility — Manassas Electric Distribution, not Dominion Energy. This matters for any electrical work that touches the meter or service entrance: coordination goes through the City of Manassas at 703-257-8219, not through Dominion. For a simple fixture swap it doesn't change the job, but if you ever need panel work or a service upgrade, your electrician needs to know who to call."
+      }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "panel-upgrade": "In Manassas, panel-upgrade calls follow two main patterns. First: pre-1970s homes in Old Town and the Sudley area with original 60-100A panels — some still carrying Federal Pacific or Zinsco panels that insurance carriers flag at renewal. Second: 1980s colonials and townhomes in Wellington, Signal Hill, and similar subdivisions with original 100-200A panels now 40+ years old — panels that can't carry today's loads when you add central AC, an EV charger, and a modern kitchen. Both patterns drive the standard 100A-to-200A upgrade, coordinated through Manassas's own municipal electric utility — not Dominion Energy.",
+    "emergency-electrician": "In Manassas, two patterns drive most emergency electrician calls. First: the city's 1980s housing boom means roughly a third of homes are running on original electrical panels now 40+ years old — breakers that should trip don't, or they trip constantly because the panel can't keep up with modern loads. Second: the older neighborhoods near Old Town and Sudley still run on overhead service fed by the city's municipal electric utility — summer thunderstorms and ice storms hit those service drops hardest. Both scenarios need a licensed electrician, not a DIY reset.",
+    "ev-charger-installation": "In Manassas, the most common EV charger installation call comes from homeowners in Wellington, Signal Hill, and the Sudley area — homes built in the 1980s with 200-amp panels that usually have room for a charger circuit. They bought an EV and realized Level 1 charging from a regular outlet only adds 3-5 miles of range per hour — not enough for an I-66 commute to Tysons or DC. The second-most common call comes from newer townhome communities along Route 28, Ashton Glen, or Blooms Crossing, where HOA approval and exterior-mount options are the main questions.",
+    "light-fixture-installation": "In Manassas, two patterns drive most light fixture calls. First: 1980s colonials and split-levels in Wellington, Signal Hill, and similar subdivisions with original builder-grade fixtures that are now 40+ years old — outdated, yellowed, and connected to junction boxes that may not be rated for heavier modern fixtures. Second: homeowners in Old Town and the older Sudley-area homes with pre-1970s wiring who want to upgrade fixtures but need the wiring inspected first — cloth insulation, original fuse boxes, and 60-100 amp panels make a simple swap less simple."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "Manassas homes span from pre-1940s Old Town bungalows with cloth-insulated wiring to 2010s Route 28 corridor townhomes with 200-amp AFCI panels. Most of the city was built in the 1980s — old enough for the original panel to be at the end of its service life, but new enough that the most extreme hazards like fuse boxes and aluminum wiring are less common than in older NoVA cities.",
+    "emergency-electrician": "Manassas runs its own electric utility — one of only about 16 municipal utilities in Virginia. When the power goes out, you report it to the city at 703-257-8353, not to Dominion Energy. That means outage response is local, but it also means your electrician needs to know how to coordinate with the city utility for meter pulls and service-entrance work — not every contractor does.",
+    "ev-charger-installation": "Manassas runs its own electric utility with residential rates 14% below the Virginia average — meaning your overnight EV charging costs less here than in most of Northern Virginia. And because the city issues its own permits through the Building Division, contractors who know Manassas work directly with one city office for both utility coordination and permits.",
+    "light-fixture-installation": "Manassas homes span from pre-1940s Old Town historic houses with cloth-insulated wiring to 2010s Route 28 corridor townhomes with recessed LED lighting. The fixture that works in one doesn't always work in the other — and knowing what's inside the junction box before you hang a new chandelier is the difference between a clean install and a surprise."
+  },
+  "ev_charger_homes_phrase": "Most Manassas homes were built in the 1980s — old enough that the original wiring may need assessment for a high-draw EV charger circuit, but new enough that the panel is usually 200 amps with room for the dedicated breaker your charger needs."
+}

@@ -84,14 +84,14 @@ PRECONDITIONS
 - Python 3.8+
 - `requests` library installed (pip install requests)
 - WP user has Editor or Administrator role
-- AIOSEO is installed on the target site (for the meta-title / meta-description
-  POST fields). If not, the script skips the AIOSEO meta block and the editor
-  fills it manually.
-- Keelworks AIOSEO Bridge plugin installed and activated on the target site
-  (source: repos/ai-agency-core/wordpress-plugins/keelworks-aioseo-bridge). The
-  bridge exposes POST /wp-json/keelworks/v1/aioseo-meta/<id> with Basic Auth,
-  which the script uses to populate AIOSEO meta automatically. If the bridge
-  isn't installed, the script falls back to printing a paste-friendly block.
+- SEO plugin: AIOSEO or Yoast SEO (or both). The script detects which bridge
+  plugin is installed and writes to whichever responds:
+  - AIOSEO: Keelworks AIOSEO Bridge plugin (repos/ai-agency-core/wordpress-plugins/keelworks-aioseo-bridge).
+    Exposes POST /wp-json/keelworks/v1/aioseo-meta/<id>.
+  - Yoast: Keelworks Yoast Bridge plugin (repos/ai-agency-core/wordpress-plugins/keelworks-yoast-bridge).
+    Exposes POST /wp-json/keelworks/v1/yoast-meta/<id>.
+  If neither bridge is installed, the script falls back to printing a paste-friendly block.
+  If both are installed, both get populated.
 
 REFERENCES
 ----------
@@ -345,12 +345,16 @@ _PLACEHOLDER_PATTERNS: list[tuple[re.Pattern[str], str]] = [
      "bracketed placeholder text"),
     (re.compile(r"<!--\s*MISSING"),
      "<!-- MISSING comment (scaffolder silent-degrade output)"),
+    (re.compile(r"<!--\s*TBD"),
+     "<!-- TBD comment (city-JSON Q&A body not yet authored)"),
     (re.compile(r"\{[a-z_]+\}"),
      "unrendered {template_token}"),
     (re.compile(r"\bFILL[:\s]", re.IGNORECASE),
      "FILL: placeholder"),
     (re.compile(r"\bTBD\b"),
      "TBD placeholder"),
+    (re.compile(r"<TBD[:\s>]", re.IGNORECASE),
+     "<TBD placeholder (angle-bracket variant)"),
 ]
 
 
@@ -543,6 +547,106 @@ class WordPressClient:
 
         action = data.get("action", "wrote")
         return True, f"AIOSEO meta {action} via REST bridge (post_id={page_id})"
+
+    def update_yoast_meta(
+        self,
+        page_id: int,
+        title: str,
+        description: str,
+        focus_keyphrase: str,
+    ) -> tuple[bool, str]:
+        """POST Yoast SEO meta to the Keelworks Yoast Bridge plugin.
+
+        The bridge plugin (repos/ai-agency-core/wordpress-plugins/keelworks-yoast-bridge)
+        must be installed and activated on the target WordPress site for this
+        call to succeed. Mirrors the AIOSEO bridge pattern for sites running
+        Yoast instead of AIOSEO.
+
+        Writes to wp_postmeta:
+          _yoast_wpseo_title    <- title
+          _yoast_wpseo_metadesc <- description
+          _yoast_wpseo_focuskw  <- focus_keyphrase
+
+        Returns (success, message).
+        """
+        url = f"{self.base_url}/wp-json/keelworks/v1/yoast-meta/{page_id}"
+        body = {
+            "title": title,
+            "description": description,
+            "focus_keyphrase": focus_keyphrase,
+        }
+        try:
+            resp = requests.post(
+                url, headers=self.headers, json=body, timeout=self.timeout
+            )
+        except requests.RequestException as e:
+            return False, f"network error talking to Yoast bridge: {e}"
+
+        if resp.status_code == 404:
+            return False, (
+                "Yoast bridge plugin not installed on this site "
+                "(install Keelworks Yoast Bridge from repos/ai-agency-core/wordpress-plugins/)"
+            )
+        if resp.status_code == 503:
+            return False, (
+                "Yoast SEO is not active on this site "
+                f"(bridge returned 503: {resp.text[:200]})"
+            )
+        if resp.status_code in (401, 403):
+            return False, (
+                f"Yoast bridge rejected the request ({resp.status_code}). "
+                f"Check the WP user has Editor/Admin role: {resp.text}"
+            )
+        if resp.status_code >= 400:
+            return False, f"Yoast bridge error {resp.status_code}: {resp.text}"
+
+        try:
+            data = resp.json()
+        except ValueError:
+            return False, f"Yoast bridge returned non-JSON response: {resp.text[:200]}"
+
+        if not data.get("ok"):
+            return False, f"Yoast bridge returned unexpected payload: {data}"
+
+        return True, f"Yoast meta wrote via REST bridge (post_id={page_id})"
+
+    def update_page_options(
+        self,
+        page_id: int,
+        options: dict[str, str],
+    ) -> tuple[bool, str]:
+        """POST theme page-display options via the Keelworks bridge plugin.
+
+        Writes arbitrary post-meta key-value pairs for theme display settings
+        (e.g. Plumbit's page header/padding/breadcrumb/title toggles).
+
+        Returns (success, message).
+        """
+        url = f"{self.base_url}/wp-json/keelworks/v1/page-options/{page_id}"
+        try:
+            resp = requests.post(
+                url, headers=self.headers, json=options, timeout=self.timeout
+            )
+        except requests.RequestException as e:
+            return False, f"network error talking to page-options bridge: {e}"
+
+        if resp.status_code == 404:
+            return False, "page-options endpoint not found (update Keelworks bridge plugin)"
+        if resp.status_code in (401, 403):
+            return False, f"page-options bridge rejected ({resp.status_code}): {resp.text}"
+        if resp.status_code >= 400:
+            return False, f"page-options bridge error {resp.status_code}: {resp.text}"
+
+        try:
+            data = resp.json()
+        except ValueError:
+            return False, f"page-options bridge returned non-JSON: {resp.text[:200]}"
+
+        if not data.get("ok"):
+            return False, f"page-options bridge unexpected payload: {data}"
+
+        wrote_count = len(data.get("wrote", {}))
+        return True, f"page options wrote {wrote_count} keys via REST bridge (post_id={page_id})"
 
 
 def build_wp_payload(
@@ -1215,6 +1319,25 @@ def publish(
     print(f"→ Published:     {live_url}")
     print(f"→ WP page ID:    {page_id}")
 
+    # Set theme page-display options via the Keelworks bridge plugin.
+    # These are theme-specific post-meta keys (not registered with show_in_rest)
+    # that control header, padding, breadcrumb, and title visibility.
+    # The config can carry a "page_options" dict; if absent, use sensible
+    # defaults for Core 30 pages (clean layout, no theme chrome).
+    page_options = config.get("page_options", {
+        "plumbit_page_header_en": "off",
+        "plumbit_page_padding_en": "off",
+        "plumbit_page_breadcrumben": "off",
+        "plumbit_page_titleen": "off",
+        "plumbit_sticky_header_en_page": "on",
+    })
+    if page_options:
+        opts_ok, opts_msg = client.update_page_options(page_id, page_options)
+        if opts_ok:
+            print(f"→ Page options:  {opts_msg}")
+        else:
+            print(f"→ Page options:  skipped — {opts_msg}")
+
     # Submit to the GSC Indexing API automatically when gsc_indexing is true
     # in the client config; otherwise fire only when --request-indexing is
     # passed (which falls through to the manual-submission stub message). This
@@ -1277,6 +1400,44 @@ def publish(
             print(f"\nFocus Keyword:\n  {metadata.target_keyword}")
             print(f"\nAdditional Keywords (comma-separated):")
             print(f"  {', '.join(metadata.additional_keywords)}")
+        print("=" * 70)
+
+    # Populate Yoast SEO meta via the Keelworks Yoast Bridge plugin.
+    #
+    # Yoast stores its data in wp_postmeta using standard meta keys
+    # (_yoast_wpseo_title, _yoast_wpseo_metadesc, _yoast_wpseo_focuskw).
+    # However, Yoast does NOT register these keys with show_in_rest, so
+    # the standard WP REST meta field won't reach them. The bridge plugin
+    # at repos/ai-agency-core/wordpress-plugins/keelworks-yoast-bridge/
+    # exposes POST /wp-json/keelworks/v1/yoast-meta/<id> with the same
+    # Basic Auth this script already uses.
+    #
+    # This block runs ALONGSIDE AIOSEO — if a site has both plugins, both
+    # get populated. If only one is installed, only that one succeeds and
+    # the other's bridge returns 404/503 (handled gracefully).
+    yoast_ok = False
+    if metadata.aioseo_title or metadata.aioseo_description:
+        yoast_ok, yoast_msg = client.update_yoast_meta(
+            page_id=page_id,
+            title=metadata.aioseo_title,
+            description=metadata.aioseo_description,
+            focus_keyphrase=metadata.target_keyword,
+        )
+        if yoast_ok:
+            print(f"→ Yoast meta:   {yoast_msg}")
+        else:
+            print(f"→ Yoast meta:   skipped — {yoast_msg}")
+
+    if (metadata.aioseo_title or metadata.aioseo_description) and not aioseo_ok and not yoast_ok:
+        print("\n" + "=" * 70)
+        print("SEO META — PASTE MANUALLY (neither AIOSEO nor Yoast bridge responded)")
+        print("=" * 70)
+        if metadata.aioseo_title:
+            print(f"SEO Title:\n  {metadata.aioseo_title}")
+        if metadata.aioseo_description:
+            print(f"\nMeta Description:\n  {metadata.aioseo_description}")
+        if metadata.target_keyword:
+            print(f"\nFocus Keyword:\n  {metadata.target_keyword}")
         print("=" * 70)
 
     print(f"\nDone. Elapsed: {duration:.2f}s")
