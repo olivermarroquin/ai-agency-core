@@ -1,0 +1,194 @@
+{
+  "_comment": "Per-city data for Lorton, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "lorton-va",
+  "name": "Lorton",
+  "name_with_state": "Lorton, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Fairfax County",
+  "county_full": "Fairfax County, Virginia",
+  "distance_from_hq_phrase": "Lorton is 8-10 min from our home base in Woodbridge",
+  "geographic_anchor_paragraph": "Lorton, VA sits in southern Fairfax County where I-95 meets the Occoquan River, adjacent to Fort Belvoir and the Mason Neck peninsula. The community runs roughly between Springfield to the north, the Prince William County line to the south, Fort Belvoir to the east, and the I-95 corridor to the west. Lorton is 10-15 minutes from Springfield, 20-30 minutes from Alexandria, and 30-45 minutes from downtown DC, depending on traffic.",
+  "audience_descriptor": "Residential homeowners and renters in Lorton, VA and surrounding Southern Fairfax County neighborhoods including Laurel Hill, Lorton Station, Crosspointe, and Newington.",
+  "no_trip_charge_cities": [
+    "Lorton",
+    "Springfield",
+    "Burke",
+    "Woodbridge",
+    "Fairfax Station"
+  ],
+  "neighborhoods": [
+    {
+      "name": "Laurel Hill",
+      "blurb": "the master-planned community on the former prison grounds"
+    },
+    {
+      "name": "Lorton Station",
+      "blurb": "townhomes and mixed-use near the VRE commuter rail stop"
+    },
+    {
+      "name": "Lorton Valley",
+      "blurb": "established single-family homes along Lorton Road"
+    },
+    {
+      "name": "Crosspointe",
+      "blurb": "large planned community with single-family homes and townhomes"
+    },
+    {
+      "name": "Newington Forest",
+      "blurb": "split-levels and colonials off South Run Road"
+    },
+    {
+      "name": "Gunston area",
+      "blurb": "homes near Gunston Road and the Mason Neck approach"
+    },
+    {
+      "name": "Pohick Estates",
+      "blurb": "mid-century homes near the Pohick Creek corridor"
+    },
+    {
+      "name": "Mason Neck",
+      "blurb": "semi-rural homes on the peninsula toward the Potomac"
+    },
+    {
+      "name": "South Run area",
+      "blurb": "newer subdivisions near South Run District Park"
+    }
+  ],
+  "other_areas_paragraph": "Outside Lorton, we serve <a href=\"/electrical-troubleshooting-springfield-va/\">Springfield</a>, <a href=\"/electrical-troubleshooting-woodbridge-va/\">Woodbridge</a>, Burke, Fairfax Station, and the rest of southern Fairfax County. We also cover <a href=\"/electrical-troubleshooting-alexandria-va/\">Alexandria</a>, Dale City, Lake Ridge, and communities throughout Northern Virginia.",
+  "housing_patterns": [
+    {
+      "title": "1960s-1970s ranches &amp; split-levels",
+      "neighborhood_examples": "Pohick Estates, Gunston area, parts of Lorton Valley",
+      "context_paragraph": "Lorton's oldest significant housing cluster. Built with 100-amp panels (sometimes original Federal Pacific or Zinsco brands), cloth-insulated or early thermoplastic copper wiring, galvanized steel supply plumbing running to copper at fixtures, and minimal insulation (R-13 walls at best). Central AC was an afterthought — many had window units only. Fast-forward to 2026: these homes now run modern loads (central AC, multiple refrigerators, home offices, EV chargers) on circuits the original builder never planned for. Panel upgrades and rewiring are common needs in this stock.",
+      "symptoms": "60-100A panels with circuits sized for 1960s-70s loads; possible Federal Pacific or Zinsco panels; fuse boxes in some units; overhead service in non-HOA areas; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal."
+    },
+    {
+      "title": "1980s-1990s colonials &amp; planned communities",
+      "neighborhood_examples": "Crosspointe, Newington Forest, South Run area, parts of Lorton Valley",
+      "context_paragraph": "200-amp service became standard in this era. Wiring is copper with PVC insulation; GFCI (ground-fault circuit interrupter) protection is present at bathrooms but may be absent at kitchen counters in pre-1996 builds (NEC 1996 made kitchen-counter GFCIs mandatory). Plumbing is mostly copper with early PEX (cross-linked polyethylene) appearing in the 1990s builds. Central AC is standard. Many of these neighborhoods have HOAs that add an approval layer for visible exterior work like generator pads or EV charger installations.",
+      "symptoms": "200A panels standard at construction; upgrades here are about adding capacity — EV charger circuits, home office loads, hot tub wiring; AFCI breaker nuisance-tripping on noisy loads; HOA coordination may be needed for visible exterior panel work."
+    },
+    {
+      "title": "2000s-2020s newer construction — Laurel Hill era",
+      "neighborhood_examples": "Laurel Hill, Lorton Station, Liberty Crest, newer South Run subdivisions",
+      "context_paragraph": "The dominant housing stock in Lorton — roughly 46% of all units were built after 2000. These homes meet modern code requirements: 200-amp panels, AFCI (arc-fault circuit interrupter — the breaker that detects dangerous electrical arcs) protection on bedroom circuits (NEC 2008) and most living-area circuits (NEC 2014+), tamper-resistant outlets, and PEX plumbing throughout. But newer doesn't mean issue-free: AFCI breakers are sensitive by design and trip on noisy loads; smart-home wiring from a previous owner's DIY project can cause neutral-bonding issues; and townhome electrical systems often share utility infrastructure that complicates individual upgrades. The Liberty Crest apartments are historic adaptive reuse (former prison buildings) with modern electrical but unique structural constraints.",
+      "symptoms": "200A panels with modern wiring and AFCI/GFCI protection throughout; panel upgrades rare unless major home addition or whole-house electrification; underground service standard."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How much does a panel upgrade cost in Lorton, VA?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: CoreTrade publishes $1,800-$4,200 for panel size upgrade; estimate-only per Keelworks default — reframe to \"how estimates work\" -->"
+      },
+      {
+        "summary": "Do I need a permit for a panel upgrade in Fairfax County?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Fairfax County LDS is the single AHJ for Lorton — same as Springfield and Burke; name the AHJ explicitly -->"
+      },
+      {
+        "summary": "What are the signs I need a panel upgrade?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Voice with Lorton-specific housing-era anchors: South County 1960s-70s originals vs. Lorton Station 1990s-2000s planned community -->"
+      },
+      {
+        "summary": "Is my Federal Pacific or Zinsco panel dangerous?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Relevant for South County / Newington 1960s-70s homes; less relevant for newer Lorton Station/Laurel Hill stock -->"
+      },
+      {
+        "summary": "Should I upgrade to 200 amps?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 200A is modern standard; older South County homes often have 100A; Lorton Station/Laurel Hill already at 200A — frame as \"check your panel age\" -->"
+      },
+      {
+        "summary": "How long does a panel upgrade take and will I lose power?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: One-day install; Dominion Energy coordinates service disconnect; 4-6 hour outage typical -->"
+      },
+      {
+        "summary": "Does my newer Lorton home still need a panel upgrade?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Lorton Station and Laurel Hill homes have 200A panels — upgrades here are about adding capacity (EV, hot tub, home office), not replacing outdated equipment -->"
+      },
+      {
+        "summary": "Can my Lorton panel handle an EV charger?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Older South County homes likely need upgrade; Lorton Station/Laurel Hill homes usually can support charger with available breaker slots -->"
+      }
+    ],
+    "emergency-electrician": [
+      {
+        "summary": "What is considered an electrical emergency?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Lead with safety-first 911 escalation, then red-flag list; voice for Lorton's housing stock (cloth wiring in South County originals, newer panels in Lorton Station) -->"
+      },
+      {
+        "summary": "How quickly can you get to my Lorton home?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: S&H dispatch from Woodbridge: \"We're 8 miles from Lorton — inside our no-trip-charge zone. Most emergency calls, we're at your door within the hour.\" Acknowledge Kolb's Lorton-local presence indirectly by leading with S&H's own response-time record. -->"
+      },
+      {
+        "summary": "What should I do before the electrician arrives?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 6-bullet safety checklist from Tier 1 S4b; add Lorton-specific: \"If flooding near your panel from Occoquan River or Pohick Creek area storms, do NOT enter standing water near electrical equipment\" -->"
+      },
+      {
+        "summary": "Is my power out because of Dominion Energy or my house?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Lorton-specific moat question — no competitor answers this. \"Check Dominion Energy's outage map. If your neighbors have power and you don't, it's likely your house — call us. If the block is dark, call Dominion at 1-866-366-4357, then call us for any damage after they restore.\" -->"
+      },
+      {
+        "summary": "How much does emergency electrical service cost in Lorton?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Estimate-only stance; name the variables (time of day, complexity, parts); be transparent about after-hours surcharge -->"
+      },
+      {
+        "summary": "When should I call 911 instead of an electrician?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Short, decisive; high-leverage for AI citation -->"
+      },
+      {
+        "summary": "Do you serve Mason Neck and rural Lorton?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Name Mason Neck, Occoquan Overlook, Newington, Lorton Station, Laurel Hill; confirm 22079 ZIP coverage; note Mason Neck's well/septic dependency on electrical power -->"
+      },
+      {
+        "summary": "Are your electricians licensed and insured in Virginia?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Table stakes but must be visible; cite DPOR (Virginia Department of Professional and Occupational Regulation) -->"
+      }
+    ],
+    "ev-charger-installation": [
+      {
+        "summary": "How much does EV charger installation cost in Lorton, VA?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: AJ Long publishes $800-$1,400 standard, $1,400-$2,500 premium; SESCOS publishes NEMA 14/50 circuit at $1,250. Estimate-only per standing decision — reframe to \"how estimates work\" -->"
+      },
+      {
+        "summary": "Do I need a permit for an EV charger in Lorton?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Yes — Fairfax County LDS; NEC Article 625 compliance; name the AHJ explicitly -->"
+      },
+      {
+        "summary": "Do I need a panel upgrade to install an EV charger?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: **Lorton-specific advantage:** Many Lorton Station and Laurel Hill homes already have 200A panels with available breaker slots — no upgrade needed. Older South County homes may need assessment. Cross-reference [[panel-upgrade--lorton-va]] -->"
+      },
+      {
+        "summary": "Can I install an EV charger in my Lorton Station or Laurel Hill townhouse?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: HOA architectural approval may be required; shared-wall routing constraints; exterior-mount options for homes without garages; Lorton Station and Laurel Hill both have HOAs -->"
+      },
+      {
+        "summary": "Should I get a Tesla Wall Connector or a universal charger?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: NACS adoption making the gap smaller; Tesla WC for Tesla-only households; ChargePoint Home Flex, JuiceBox for multi-EV households -->"
+      },
+      {
+        "summary": "Are there rebates or tax credits for EV charger installation in Virginia?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Federal 30C: 30% up to $1,000 (expiring June 30, 2026). Dominion Energy: $125 enrollment + $40/yr managed charging. Name all three incentives with specific dollar amounts -->"
+      },
+      {
+        "summary": "How long does EV charger installation take?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 2-4 hours typical; 4-6 hours if subpanel or longer runs needed (common on Mason Neck's larger lots) -->"
+      },
+      {
+        "summary": "Is my Lorton home already EV-ready?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Frame around housing era: Lorton Station (1990s-2000s) and Laurel Hill (2000s-2010s) homes with 200A panels are often EV-ready with available breaker slots. South County originals (1960s-1980s) with 100A panels likely need assessment -->"
+      }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "panel-upgrade": "In Lorton, panel-upgrade calls split into two patterns. First: 1960s-1980s South County and Newington-era homes with original 60-100A panels — sometimes Federal Pacific or Zinsco panels still in service, now flagged by insurance carriers. Second: 1990s-2000s Lorton Station townhomes and 2000s-2010s Laurel Hill single-family homes where the 200A panel is adequate but the homeowner is adding an EV charger, hot tub, or home office that maxes out available breaker slots. Both patterns need a licensed electrician, but the solution differs — safety replacement vs. capacity expansion.",
+    "emergency-electrician": "In Lorton, emergency electrician calls follow the housing-stock split. The 1960s-1980s South County and Newington homes with overhead service drops are most vulnerable to storm damage — summer thunderstorms and ice storms knock lines into the service mast. Mason Neck's rural properties compound the problem: lose power and you also lose your well pump. The newer Lorton Station and Laurel Hill homes with underground service and 200A panels are less storm-vulnerable, but AFCI breaker nuisance trips and water intrusion from heavy rains still generate emergency calls. Both patterns need a licensed electrician who can diagnose the cause and coordinate with Dominion Energy if the service entrance is damaged.",
+    "ev-charger-installation": "In Lorton, the most common EV charger installation call comes from homeowners in Lorton Station and Laurel Hill who just bought an EV and want a Level 2 charger in their garage or driveway. The good news: most of these 1990s-2010s homes already have 200-amp panels with room for a 50-amp EV circuit — no panel upgrade needed. The second-most common call comes from the older South County area homes where the 100-amp panel needs assessment before adding a 40-50 amp charger circuit. In both cases, HOA approval may be needed if the charger is visible from the street — Lorton Station and Laurel Hill both have architectural review requirements."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "Lorton has the widest housing-era spread in the S&H service area — from 1960s South County originals with 60-amp panels to 2010s Laurel Hill homes with 200-amp service and AFCI breakers. The panel-upgrade path depends on which era your home was built in and what you're asking it to power today.",
+    "emergency-electrician": "Lorton's emergency electrical risk concentrates in the older South County neighborhoods with overhead service and in the Mason Neck area where properties run on well/septic — meaning a power loss is also a water loss. The newer Lorton Station and Laurel Hill communities with underground service are more resilient, but no home is immune to panel-level emergencies.",
+    "ev-charger-installation": "Lorton has the newest housing stock in the S&H service area — most homes in Lorton Station and Laurel Hill were built with 200-amp panels that can support EV charging without a panel upgrade. The older South County homes are the exception, and Mason Neck's rural properties may need longer wire runs for outdoor charger installations."
+  },
+  "ev_charger_homes_phrase": "Many Lorton homes built after 1995 are already"
+}

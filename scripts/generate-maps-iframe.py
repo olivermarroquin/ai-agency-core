@@ -36,12 +36,11 @@ List everything in the cache:
 
 CONFIG
 ------
-Defaults match EV Electric Services. Pass --config to override for another
-client:
+Pass --config to set client-specific values:
 
     {
       "api_key_env":  "GOOGLE_MAPS_EMBED_API_KEY",
-      "client_name":  "EV Electric Services",
+      "client_name":  "S&H Contracting Unlimited",
       "default_zoom": 12,
       "cache_path":   "cache/maps-iframes.json"
     }
@@ -78,12 +77,12 @@ from urllib.parse import quote_plus
 
 
 # ----------------------------------------------------------------------------
-# Defaults (match EV Electric Services out of the box)
+# Defaults — client_name MUST be set by caller (no hardcoded brand)
 # ----------------------------------------------------------------------------
 
 _DEFAULTS = {
     "api_key_env": "GOOGLE_MAPS_EMBED_API_KEY",
-    "client_name": "EV Electric Services",
+    "client_name": None,  # MUST be set by caller or config — no hardcoded default
     "default_zoom": 12,
     "cache_path": "cache/maps-iframes.json",
 }
@@ -187,6 +186,14 @@ def generate_for_city(
     zoom = int(config["default_zoom"])
     key = cache_key(city, state, zoom)
 
+    if not config.get("client_name"):
+        sys.stderr.write(
+            "ERROR: client_name is required in maps config but was not set.\n"
+            "Pass --config with a JSON containing client_name, or set it in the\n"
+            "caller (scaffold-core-30-page.py passes it from the client data file).\n"
+        )
+        sys.exit(2)
+
     if not force_refresh and key in cache:
         return key, cache[key]["wrapped_html"], True
 
@@ -265,7 +272,7 @@ def main() -> int:
         "--config",
         type=Path,
         default=None,
-        help="Optional client config JSON. Defaults baked in match EV Electric.",
+        help="Client config JSON with client_name. Required for correct iframe titles.",
     )
     p.add_argument(
         "--force-refresh",

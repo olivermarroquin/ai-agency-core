@@ -345,6 +345,53 @@ def seed_about_from_html(
 
 
 # ----------------------------------------------------------------------------
+# JSON-LD mutation (PF-02)
+# ----------------------------------------------------------------------------
+
+
+def _update_jsonld_image(html: str, hero_url: str) -> tuple[str, bool]:
+    """Replace @graph[0].image in the page's JSON-LD block with *hero_url*.
+
+    Returns (possibly-modified html, True if a change was made).
+    Handles the block as a regex-bounded JSON round-trip so we don't disturb
+    surrounding HTML or whitespace outside the <script> tag.
+    """
+    pattern = re.compile(
+        r'(<script\s+type\s*=\s*["\']application/ld\+json["\'][^>]*>)'
+        r'(.*?)'
+        r'(</script>)',
+        re.DOTALL | re.IGNORECASE,
+    )
+    match = pattern.search(html)
+    if not match:
+        return html, False
+
+    try:
+        ld = json.loads(match.group(2))
+    except json.JSONDecodeError:
+        sys.stderr.write("  WARN: could not parse JSON-LD block; skipping image update.\n")
+        return html, False
+
+    # Walk @graph for the LocalBusiness entity (always first, but be safe).
+    graph = ld.get("@graph", [ld] if "@type" in ld else [])
+    updated = False
+    for entity in graph:
+        if entity.get("@type") in ("LocalBusiness", "ElectricalContractor"):
+            old_img = entity.get("image", "")
+            if old_img != hero_url:
+                entity["image"] = hero_url
+                updated = True
+            break
+
+    if not updated:
+        return html, False
+
+    new_json = json.dumps(ld, ensure_ascii=False, indent=2)
+    new_block = match.group(1) + "\n" + new_json + "\n" + match.group(3)
+    return html[:match.start()] + new_block + html[match.end():], True
+
+
+# ----------------------------------------------------------------------------
 # Per-slot processing
 # ----------------------------------------------------------------------------
 
@@ -460,6 +507,7 @@ def run(
     only_types: Optional[list[str]],
     skip_publish: bool,
     dry_run: bool,
+    bypass_quality_gate: bool = False,
 ) -> int:
     config = json.loads(config_path.read_text(encoding="utf-8"))
 
@@ -544,6 +592,7 @@ def run(
 
     slot_types = only_types or ["hero", "about", "scene"]
     changes: list[str] = []
+    hero_wp_url: Optional[str] = None  # track for JSON-LD update (PF-02)
     for slot in slot_types:
         sys.stderr.write(f"\n--- slot: {slot} ---\n")
         try:
@@ -580,8 +629,20 @@ def run(
         if new_html != html:
             html = new_html
             changes.append(change_summary)
+            if slot == "hero":
+                hero_wp_url = wp_url
         else:
             sys.stderr.write(f"  (HTML already up to date for this slot)\n")
+
+    # PF-02: Update JSON-LD @graph[0].image to match the real hero URL.
+    # The scaffold writes brand_image_url into the LocalBusiness schema; after
+    # wiring the hero image we patch it to the actual hero WebP URL so Google's
+    # Rich Results Test shows the real page image.
+    if hero_wp_url:
+        html, jsonld_changed = _update_jsonld_image(html, hero_wp_url)
+        if jsonld_changed:
+            changes.append(f"JSON-LD image → {hero_wp_url}")
+            sys.stderr.write(f"\n→ JSON-LD:     image updated to {hero_wp_url}\n")
 
     if not changes:
         sys.stderr.write("\n→ No HTML changes needed. Done.\n")
@@ -614,6 +675,7 @@ def run(
         version=f"v{new_version}",
         dry_run=False,
         request_indexing=False,
+        bypass_quality_gate=bypass_quality_gate,
     )
     if not result.success:
         sys.stderr.write(f"ERROR: publish failed: {result.error_message}\n")
@@ -658,6 +720,16 @@ def main() -> int:
         action="store_true",
         help="Show planned actions without writing files or hitting the network.",
     )
+    p.add_argument(
+        "--bypass-quality-gate",
+        action="store_true",
+        help=(
+            "Pass through to publish-core-30-page.py: override the "
+            "output-quality-loop pre-publish gate. Use when the draft "
+            "content has already been operator-approved but lacks a "
+            "PASS verdict in frontmatter (common during image wiring)."
+        ),
+    )
 
     args = p.parse_args()
 
@@ -683,6 +755,7 @@ def main() -> int:
         only_types=only_types,
         skip_publish=args.skip_publish,
         dry_run=args.dry_run,
+        bypass_quality_gate=args.bypass_quality_gate,
     )
 
 

@@ -1,0 +1,162 @@
+{
+  "_comment": "Per-city data for Burke, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "burke-va",
+  "name": "Burke",
+  "name_with_state": "Burke, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Fairfax County",
+  "county_full": "Fairfax County, Virginia",
+  "distance_from_hq_phrase": "Burke is about 12 miles from our Woodbridge base — we reach Burke Centre and the surrounding neighborhoods in about 20 minutes via I-95 and the Fairfax County Parkway",
+  "geographic_anchor_paragraph": "Burke, VA sits in central-southern Fairfax County at the intersection of Burke Lake Road and Ox Road, about 20 miles from downtown Washington, DC. The community runs roughly between Braddock Road to the north, Springfield and the Fairfax County Parkway to the east, Fairfax Station to the south, and the Burke Centre corridor to the west. Burke is 10-12 minutes from Springfield and Fairfax City, 15 minutes from Lorton, and 30-45 minutes from downtown DC depending on traffic.",
+  "audience_descriptor": "Residential homeowners in Burke, VA and surrounding central Fairfax County neighborhoods including Burke Centre, Rolling Valley, Kings Park, and Signal Hill.",
+  "no_trip_charge_cities": [
+    "Burke",
+    "Springfield",
+    "Fairfax Station",
+    "Annandale",
+    "Lorton"
+  ],
+  "neighborhoods": [
+    {
+      "name": "Burke Centre — The Woods",
+      "blurb": "single-family colonials in a mature wooded setting"
+    },
+    {
+      "name": "Burke Centre — The Oaks",
+      "blurb": "colonials and split-levels in Burke Centre's original section"
+    },
+    {
+      "name": "Burke Centre — The Commons",
+      "blurb": "townhomes in the center of Burke Centre"
+    },
+    {
+      "name": "Burke Centre — The Ponds",
+      "blurb": "homes backing to man-made ponds and green space"
+    },
+    {
+      "name": "Burke Centre — The Landings",
+      "blurb": "duplex-style homes that look like single-family"
+    },
+    {
+      "name": "Rolling Valley West",
+      "blurb": "established split-levels and colonials near Rolling Road"
+    },
+    {
+      "name": "Kings Park / Kings Park West",
+      "blurb": "the first large subdivision in the Burke area"
+    },
+    {
+      "name": "Lake Braddock",
+      "blurb": "family neighborhood near the secondary school"
+    },
+    {
+      "name": "Signal Hill",
+      "blurb": "colonials and split-levels off Burke Lake Road"
+    },
+    {
+      "name": "Cherry Run",
+      "blurb": "townhomes and detached homes near Pohick Creek"
+    }
+  ],
+  "other_areas_paragraph": "Outside Burke, we serve <a href=\"/electrical-troubleshooting-springfield-va/\">Springfield</a>, <a href=\"/electrical-troubleshooting-lorton-va/\">Lorton</a>, Fairfax Station, Annandale, and the rest of central Fairfax County. We also cover <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, Fairfax City, Centreville, and communities throughout Northern Virginia.",
+  "housing_patterns": [
+    {
+      "title": "1960s split-levels &amp; ranches",
+      "neighborhood_examples": "Kings Park, Kings Park West, parts of Rolling Valley West",
+      "context_paragraph": "Burke's earliest significant housing cluster, built when the first large subdivision (Kings Park) went up beginning in 1960 after the proposed airport site was abandoned. These homes have 100-amp panels (sometimes original Federal Pacific or Zinsco brands — both discontinued due to fire-risk concerns), cloth-insulated or early thermoplastic copper wiring, galvanized steel supply plumbing running to copper at fixtures, and minimal insulation (R-13 walls at best). Central AC was not standard — many were retrofitted with window units or had AC added later. Fast-forward to 2026: these homes now run modern loads (central AC, multiple refrigerators, home offices, EV chargers) on circuits the original builder never planned for. Panel upgrades and rewiring are common needs in this stock.",
+      "symptoms": "100A panels with circuits sized for 1960s-1970s loads; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal; overhead service drops from utility poles."
+    },
+    {
+      "title": "1970s-1980s colonials, split-levels &amp; planned communities",
+      "neighborhood_examples": "Burke Centre (all five neighborhoods), Rolling Valley West, Signal Hill, Lake Braddock, Lakepointe, Longwood Knolls",
+      "context_paragraph": "The dominant housing stock in Burke — roughly 67% of all units were built between 1970 and 1989. This era spans the Burke Centre planned community (late 1970s onward) and dozens of surrounding subdivisions. Panels are typically 150-200 amp; wiring is copper with PVC insulation. GFCI (ground-fault circuit interrupter) protection is present at bathrooms in 1980s builds but absent in many 1970s homes. Plumbing transitions from galvanized supply lines in early-1970s builds to copper throughout in late-1970s and 1980s builds. Central AC is standard. The 1970s portion of this stock — now 45-55 years old — is entering the era where original panels, water heaters, and HVAC systems have reached or exceeded their design lifespan. The 1980s portion is 35-45 years old and showing wear on original wiring connections and plumbing joints.",
+      "symptoms": "150A panels original to construction; Burke Centre Conservancy ARB may need notification for exterior service-entrance work; EV charger or whole-house renovation triggers the upgrade to modern 200A with AFCI/GFCI breakers; townhome configurations add shared-wall and exterior-access considerations."
+    },
+    {
+      "title": "1990s colonials &amp; townhomes",
+      "neighborhood_examples": "Cherry Run, Walden at Burke Centre, newer sections of Signal Hill, Edgewater",
+      "context_paragraph": "About 21% of Burke's housing stock was built in the 1990s — the final significant wave of construction before Burke was essentially built-out. These homes meet the 200-amp panel standard. Wiring is copper with PVC insulation; GFCI protection is present at bathrooms and kitchen counters (NEC 1996 made kitchen-counter GFCIs mandatory). Plumbing is mostly copper with early PEX (cross-linked polyethylene) appearing in mid-to-late 1990s builds. AFCI (arc-fault circuit interrupter — the breaker that detects dangerous electrical arcs) protection is not present (NEC 2008 requirement). Many of these neighborhoods have HOAs that add an approval layer for visible exterior work like generator pads or EV charger installations. At 25-35 years old, these homes are reaching the point where original HVAC systems and water heaters need replacement, and electrical panels may need service updates for modern loads.",
+      "symptoms": "200A panels standard; upgrades here are usually about adding capacity for EV chargers, hot tubs, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; HOA coordination may be needed for visible exterior panel work."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How much does a panel upgrade cost in Burke, VA?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: NoVA labor premium applies; estimate-only per Keelworks default (2026-05-26 decision) means reframe to \"how estimates work\"; typical 200A upgrade $2,500-$7,500 range in Fairfax County; total project range $4,000-$15,000 depending on scope -->"
+      },
+      {
+        "summary": "Do I need a permit for a panel upgrade in Fairfax County?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Fairfax County LDS is the AHJ; permits required for replacement of electrical equipment; no plans needed under 600A; online PLUS portal; contractor pulls permit; county inspection required -->"
+      },
+      {
+        "summary": "What are the signs I need a panel upgrade?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Voice with Burke-specific housing-era anchors: \"If your Burke Centre townhome still has its original 1980s 150A panel...\" or \"If your Signal Hill colonial has a 1960s 100A panel with FPE breakers...\" -->"
+      },
+      {
+        "summary": "Is my Federal Pacific or Zinsco panel dangerous?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Burke's 1960s-1970s housing has documented FPE/Zinsco prevalence; insurance-flagging angle; Signal Hill, Rollingwood, Burke Lake area most affected -->"
+      },
+      {
+        "summary": "Should I upgrade to 200 amps?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 200A is the modern standard; Burke's 1960s-1970s homes often have 100A; the 100A-to-200A path is the standard upgrade; Burke Centre 1970s-1980s homes may have 150A needing assessment -->"
+      },
+      {
+        "summary": "How long does a panel upgrade take and will I lose power?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Most residential panel upgrades take 4-8 hours same-day ; Dominion Energy coordinates the service disconnect; plan for the fridge and any medical equipment -->"
+      },
+      {
+        "summary": "Does Burke Centre HOA need to approve my panel upgrade?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Interior panel swaps do not trigger ARB review; exterior meter-base or weatherhead work may require ARB notification; Burke Centre Conservancy ARB at 703-978-2928 -->"
+      },
+      {
+        "summary": "Can my Burke panel handle an EV charger?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Most pre-1990 panels need assessment before charger install; cross-link to [[ev-charger-installation--burke-va]] -->"
+      }
+    ],
+    "emergency-electrician": [
+      {
+        "summary": "How fast can you get to Burke for an electrical emergency?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: S&H is ~12 miles from Woodbridge base; ~20 min off-peak via I-95/Fairfax County Parkway; ~30-40 min peak. Credible response-time with route specifics differentiates from generic \"fast\" claims -->"
+      },
+      {
+        "summary": "How much does an emergency electrician cost in Burke?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Emergency service fees vary by time-of-day and scope; after-hours dispatch fees are standard; estimate-only per Keelworks default means reframe to \"how emergency pricing works\" -->"
+      },
+      {
+        "summary": "What counts as an electrical emergency vs. what can wait?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Voice with Burke-specific scenarios: \"sparking outlet in your Burke Centre townhome — call immediately; a single tripped GFCI in the bathroom — reset it and call during business hours\" -->"
+      },
+      {
+        "summary": "My power is out but my neighbors have power — is it Dominion or my house?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Check Dominion Energy's outage map at dominionenergy.com. If your block shows no outage, the problem is house-side — call us. If Dominion shows an outage, they'll restore grid power. -->"
+      },
+      {
+        "summary": "Is a burning smell from my electrical panel an emergency?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Always yes — disconnect main if safe, evacuate, call 911 if flames, then call electrician. Burke's 1960s-1970s FPE/Zinsco panels are the most common source of panel-smell emergencies -->"
+      },
+      {
+        "summary": "What happens when I call at 2 AM — does a real person answer?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Describe the actual S&H dispatch process: live answer, tech dispatched, estimated arrival communicated, truck-roll fee structure -->"
+      },
+      {
+        "summary": "Do I need Burke Centre HOA approval for emergency electrical work?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Safety-critical emergency work proceeds immediately — ARB notification happens after the repair. Interior work never needs ARB. Exterior emergency repairs (weatherhead, meter base) are safety-exempt -->"
+      },
+      {
+        "summary": "After a storm, should I call an electrician or wait for Dominion?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: If a tree limb hit your service drop, call Dominion first — that's their equipment. If the limb hit your weatherhead or mast, that's house-side — call us. If you lost power during the storm and it didn't come back with the neighbors, call us. -->"
+      }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "panel-upgrade": "In Burke, panel-upgrade calls follow two dominant patterns. First: 1960s-1970s colonials and ranches in Signal Hill, Rollingwood, and the Burke Lake area with original 100A Federal Pacific or Zinsco panels — now flagged by insurance carriers at policy renewal and unable to carry today's loads with central AC, EV chargers, and modern kitchen appliances. Second: Burke Centre's 1978-1985 planned-community homes with 150A panels that meet the basic capacity threshold but use breaker technology that predates current NEC requirements for AFCI and GFCI protection. Both patterns drive the standard upgrade to a modern 200A panel with current-code breakers — and in Burke Centre, the panel work sometimes requires coordination with the Conservancy's Architectural Review Board when exterior service-entrance components are modified.",
+    "emergency-electrician": "In Burke, emergency electrical calls split into three patterns. First: 1960s-1970s homes in Signal Hill, Rollingwood, and the Burke Lake area with original Federal Pacific or Zinsco panels — a breaker that fails to trip becomes a burning-smell call at 2 AM. Second: storm-driven emergencies across Burke's tree-heavy neighbourhoods — a summer thunderstorm drops a limb on the overhead service drop, or a lightning strike sends a surge through the house. Third: Burke Centre's 1980s townhomes and colonials with aging GFCI outlets and breaker panels that nuisance-trip during storms or under heavy loads — not dangerous but disruptive, and the homeowner can't tell the difference at midnight. All three patterns need a licensed electrician who can arrive fast, diagnose accurately, and either fix the immediate problem or recommend the right next step — which in Burke often means a panel upgrade."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "Burke homes span three decades of suburban development — from 1960s Signal Hill colonials with 100-amp Federal Pacific panels to 1985 Burke Centre townhomes with 150-amp service. The panel-upgrade path depends on which era your home was built in, what you're asking it to power today, and whether your insurance carrier has flagged your existing panel brand.",
+    "emergency-electrician": "Burke's emergency electrical calls come from three decades of suburban development — 1960s Signal Hill colonials with aluminum wiring and Federal Pacific panels, 1980s Burke Centre planned-community homes with aging GFCI protection, and storm damage across every neighbourhood from Burke's mature tree canopy. The emergency path depends on whether it's a panel failure, a storm hit, or a wiring fault — and whether it's a Dominion grid issue or a house-side problem."
+  },
+  "ev_charger_homes_phrase": "Burke homes built in the 1960s through 1990s weren't designed for"
+}

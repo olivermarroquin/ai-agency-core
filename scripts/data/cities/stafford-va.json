@@ -1,0 +1,135 @@
+{
+  "_comment": "Per-city data for Stafford, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "stafford-va",
+  "name": "Stafford",
+  "name_with_state": "Stafford, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Stafford County",
+  "county_full": "Stafford County, Virginia",
+  "distance_from_hq_phrase": "Stafford is 20-25 min from our home base in Woodbridge",
+  "geographic_anchor_paragraph": "Stafford County, VA sits along the I-95 corridor about 40 miles south of Washington, D.C., bordered by Prince William County and Marine Corps Base Quantico to the north and the City of Fredericksburg to the south. The county runs from the Potomac River on the east to the foothills of the Blue Ridge to the west, with most residential development clustered along the I-95 and US Route 1 corridors. Stafford is 15-20 minutes from downtown Fredericksburg, 20-25 minutes from Woodbridge, and 50-75 minutes from DC depending on traffic.",
+  "audience_descriptor": "Residential homeowners in Stafford County, VA and surrounding communities including Embrey Mill, Colonial Forge, Aquia Harbour, Garrisonville, and Falmouth.",
+  "no_trip_charge_cities": [
+    "Stafford",
+    "Fredericksburg",
+    "Spotsylvania",
+    "Woodbridge",
+    "Quantico"
+  ],
+  "neighborhoods": [
+    {
+      "name": "Embrey Mill",
+      "blurb": "the largest master-planned community in Stafford County"
+    },
+    {
+      "name": "Aquia Harbour",
+      "blurb": "gated waterfront community with marina and golf course"
+    },
+    {
+      "name": "Colonial Forge / Augustine",
+      "blurb": "master-planned community with golf and top-rated schools"
+    },
+    {
+      "name": "Garrisonville area",
+      "blurb": "commercial and residential hub along Route 610"
+    },
+    {
+      "name": "Leeland Station",
+      "blurb": "growing neighborhood with quarter-acre lots near VRE"
+    },
+    {
+      "name": "Falmouth",
+      "blurb": "historic village area along the Rappahannock River"
+    },
+    {
+      "name": "Hampton Oaks",
+      "blurb": "established single-family community in central Stafford"
+    },
+    {
+      "name": "Shelton Woods",
+      "blurb": "luxury single-family homes near I-95 exit 140"
+    },
+    {
+      "name": "Estates at Rocky Pen",
+      "blurb": "estate homes near Lake Mooney in Falmouth area"
+    },
+    {
+      "name": "Southgate",
+      "blurb": "Ryan Homes subdivision along Jefferson Davis Highway"
+    }
+  ],
+  "other_areas_paragraph": "Outside Stafford, we serve Fredericksburg, Spotsylvania, <a href=\"/electrical-troubleshooting-woodbridge-va/\">Woodbridge</a>, <a href=\"/electrical-troubleshooting-dale-city-va/\">Dale City</a>, and communities throughout the I-95 corridor. We also cover <a href=\"/electrical-troubleshooting-manassas-va/\">Manassas</a>, <a href=\"/electrical-troubleshooting-lake-ridge-va/\">Lake Ridge</a>, <a href=\"/electrical-troubleshooting-springfield-va/\">Springfield</a>, and the rest of Northern Virginia.",
+  "housing_patterns": [
+    {
+      "title": "Pre-1970s historic &amp; rural homes",
+      "neighborhood_examples": "Falmouth, Aquia area (non-Harbour), rural western Stafford",
+      "context_paragraph": "Stafford's oldest housing stock, representing roughly 10% of all homes. Includes some pre-Civil-War-era structures in Falmouth and scattered farmhouses throughout rural Stafford. Built with 60-100 amp panels (sometimes original Federal Pacific or Zinsco brands), cloth-insulated or early thermoplastic copper wiring, galvanized steel supply plumbing, and minimal insulation. Many were on well water and septic from the start and remain so. These homes run modern loads — central AC retrofits, home offices, multiple appliances — on systems the original builder never anticipated. Panel upgrades, complete rewiring, and grounding system modernization are common needs.",
+      "symptoms": "100A panels original at construction; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands in some homes; overhead service drops from utility poles in older areas; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal; utility provider may be Dominion Energy or NOVEC depending on exact location."
+    },
+    {
+      "title": "1970s-1980s split-levels, ranches &amp; colonials",
+      "neighborhood_examples": "Aquia Harbour, parts of Garrisonville area, older Falmouth subdivisions",
+      "context_paragraph": "The first wave of Stafford's suburbanization. Built with 100-200 amp panels — 100-amp was still common in the 1970s, with 200-amp becoming standard by the mid-1980s. Wiring is copper with PVC insulation; aluminum branch wiring (1965-1972 era, deprecated by NEC 1972) may be present in some early-1970s homes. GFCI (ground-fault circuit interrupter) protection is present at bathrooms but may be absent at kitchen counters in pre-1996 builds. Aquia Harbour's diverse housing stock (ranches, colonials, raised-ranches) exemplifies this era. Many homes have had partial electrical updates but still have original panels.",
+      "symptoms": "100-200A panels original at construction; panels adequate at build time but stressed by modern loads — EV charger, home office, smart-home systems; some underground service in planned communities; GFCI coverage spotty in pre-1996 builds; utility provider varies by neighborhood — verify Dominion vs NOVEC vs REC before scheduling."
+    },
+    {
+      "title": "1990s-2000s planned communities — suburban boom era",
+      "neighborhood_examples": "Colonial Forge, Hampton Oaks, Leeland Station, Garrisonville subdivisions, Crossroads area",
+      "context_paragraph": "The largest housing cohort in Stafford — roughly 40% of all homes. Built to modern standards: 200-amp panels, copper wiring with PVC insulation, GFCI protection at kitchens and bathrooms, and PEX (cross-linked polyethylene — a flexible plumbing pipe material common in homes built after ~1990) plumbing in later builds. Central AC is standard. Many of these communities have HOAs. While meeting code at time of construction, homes from the late 1990s predate AFCI (arc-fault circuit interrupter — the breaker that detects dangerous electrical arcs) requirements (NEC 2008 for bedrooms) and tamper-resistant outlet requirements (NEC 2008). Twenty-five years of use means original HVAC systems are reaching end-of-life, and electrical needs have grown with EV chargers, home offices, and smart-home systems.",
+      "symptoms": "200A panels standard; upgrades here are usually about adding capacity for EV chargers, hot tubs, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; HOA coordination may be needed for visible exterior panel work in master-planned communities; most likely served by Dominion Energy."
+    },
+    {
+      "title": "2010s-2020s newer construction — Embrey Mill era",
+      "neighborhood_examples": "Embrey Mill, Shelton Woods, Southgate, Estates at Rocky Pen, Liberty Knolls, Westgate",
+      "context_paragraph": "Roughly 20% of Stafford's housing stock. These homes meet modern code: 200-amp panels, AFCI protection on bedroom and most living-area circuits, tamper-resistant outlets, and PEX plumbing throughout. Embrey Mill alone plans 1,827 homes at full buildout. But newer doesn't mean issue-free: AFCI breakers are sensitive by design and trip on noisy loads; builder-grade electrical may not include enough circuits for today's demands (EV chargers, hot tubs, home offices); and townhome electrical systems in mixed-use communities may share utility infrastructure that complicates individual upgrades.",
+      "symptoms": "<TBD by intersection brief>"
+    }
+  ],
+  "quick_ref_localized_items": {
+    "panel-upgrade": [],
+    "emergency-electrician": [
+      {
+        "summary": "What is considered an electrical emergency?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Universal — lead with safety-first 911 escalation, then red-flag list; voice for Stafford's housing stock (1970s-80s Aquia Harbour wiring, 1990s-2000s suburban panels under modern loads) -->"
+      },
+      {
+        "summary": "How quickly can you get to my Stafford home?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: S&H's honest-distance differentiator — \"We're based in Woodbridge, about 25 miles north. For most Stafford locations, dispatch time is 35-50 minutes depending on I-95 conditions. For Aquia Harbour or northern Stafford, closer to 30 minutes. For southern Stafford near Fredericksburg, closer to 50.\" -->"
+      },
+      {
+        "summary": "Is my power out because of Dominion, NOVEC, or REC — or my house?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: THE unique Stafford emergency FAQ. No competitor answers this. \"Stafford has three electric utilities. Step 1: figure out which one serves your address. NOVEC: novec.com/outages. Dominion: dominionenergy.com/outages. REC: myrec.coop/outages. If your neighbors have power and you don't, it's your house — call us.\" -->"
+      },
+      {
+        "summary": "What should I do before the electrician arrives?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 6-bullet safety checklist from Tier 1 §4b; add Stafford-specific: \"If you're in a rural area with a well pump, losing power means losing water — fill containers before the well pump circuit dies\" -->"
+      },
+      {
+        "summary": "How much does emergency electrical service cost in Stafford?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Estimate-only stance per standing decision; name the variables (time of day, complexity, parts, dispatch distance); be transparent about after-hours surcharge -->"
+      },
+      {
+        "summary": "When should I call 911 instead of an electrician?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Short, decisive; high-leverage for AI citation; under-covered by all Stafford competitors -->"
+      },
+      {
+        "summary": "Do you serve my neighborhood in Stafford County?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Name specific neighborhoods: Aquia Harbour, Garrisonville, Courthouse, Chatham Heights, Embrey Mill, Falmouth. Name adjacent areas: Quantico (base housing referrals), Fredericksburg (border), Triangle -->"
+      },
+      {
+        "summary": "Are your electricians licensed and insured in Virginia?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Table stakes but must be visible; cite DPOR lookup if available -->"
+      }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "panel-upgrade": "In Stafford County, panel-upgrade calls follow two dominant patterns. First: 1970s-1980s colonials and ranches in Aquia Harbour, Chatham Heights, and the older Garrisonville corridor with original 100-amp panels — some still Federal Pacific Stab-Lok or Zinsco units installed 40-50 years ago, now flagged by insurance carriers at policy renewal. Second: 1990s-2000s subdivision homes along the Route 1 and Garrisonville corridors with 100-200A panels that can't carry today's loads — central AC plus EV charger plus home office equipment overruns what the original builder planned. A Stafford-specific wrinkle: three different electric utilities serve the county (Dominion Energy, NOVEC, and REC), and the meter-base coordination for your panel upgrade depends on which one serves your address.",
+    "emergency-electrician": "In Stafford County, three patterns drive most emergency electrician calls. First: storms knock power lines and overhead service drops in the 1970s-80s neighborhoods like Aquia Harbour and along Route 1 — during the March 2026 storm, 60% of NOVEC's Stafford customers lost power. Second: the county's three electric utilities (Dominion Energy, NOVEC, and Rappahannock Electric Cooperative) mean homeowners often don't know which company to call during an outage — and they need an electrician to diagnose whether the problem is the utility's or theirs. Third: rural properties lose well-pump water when the power goes out, turning an electrical emergency into a no-water emergency."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "Stafford County homes span three construction eras — from 1970s Aquia Harbour waterfront colonials with 100-amp panels to 2010s Embrey Mill homes with 200-amp service and AFCI breakers. The panel-upgrade path depends on which era your home was built in, which of Stafford's three electric utilities serves your address, and what you're asking your electrical system to power today.",
+    "emergency-electrician": "Stafford County spans 269 square miles with three different electric utilities — Dominion Energy, NOVEC, and Rappahannock Electric Cooperative. The older homes in Aquia Harbour and Garrisonville run on overhead service vulnerable to Potomac corridor storms. The newer developments in Embrey Mill and Courthouse have underground service but bring AFCI breaker sensitivity and high-load modern kitchens. Rural areas south and west add well-pump and propane complexity that suburban neighborhoods don't face."
+  },
+  "ev_charger_homes_phrase": "Stafford County homes built in the 1970s through 2000s weren't designed for"
+}

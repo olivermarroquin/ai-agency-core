@@ -5,8 +5,8 @@ publish-core-30-page.py — Path-2 automation for Core 30 page deployment.
 Reads a WordPress-wrapped HTML draft + a client config JSON, then publishes the
 page to a WordPress site via the REST API at /wp-json/wp/v2/pages.
 
-Designed for the EV Electric Services Core 30 build (and any future client
-using the same SOP). Target time per page: ~30 seconds of script execution
+Designed for the Core 30 build SOP (multi-client — EV Electric, S&H, future
+clients). Target time per page: ~30 seconds of script execution
 versus 30-45 minutes of manual paste through wp-admin.
 
 USAGE
@@ -120,6 +120,8 @@ except ImportError:
         "ERROR: `requests` is not installed. Run: pip install requests\n"
     )
     sys.exit(2)
+
+from gsc_indexing import request_gsc_indexing
 
 
 # ----------------------------------------------------------------------------
@@ -356,6 +358,45 @@ _PLACEHOLDER_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"<TBD[:\s>]", re.IGNORECASE),
      "<TBD placeholder (angle-bracket variant)"),
 ]
+
+
+def check_brand_leak_gate(html: str, config: dict) -> list[str]:
+    """Scan the HTML for OTHER clients' brand names (PR-35 EV-leak class).
+
+    Loads all client-*.json files in data/, collects brand names for every
+    client EXCEPT the current one, and scans the HTML for case-insensitive
+    matches. Returns a list of findings (empty = clean).
+    """
+    current_slug = config.get("client_slug", "")
+    data_dir = Path(__file__).resolve().parent / "data"
+    foreign_brands: list[tuple[str, str]] = []  # (brand_string, source_client)
+
+    for client_file in sorted(data_dir.glob("client-*.json")):
+        try:
+            cdata = json.loads(client_file.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        slug = cdata.get("client_slug", "")
+        if slug == current_slug or not slug:
+            continue
+        # Collect brand strings that should never appear in another client's page
+        for key in ("name", "alternate_name", "owner_name"):
+            val = cdata.get(key, "")
+            if val and len(val) >= 4:  # skip very short strings to avoid false positives
+                foreign_brands.append((val, slug))
+
+    findings: list[str] = []
+    html_lower = html.lower()
+    for brand, source in foreign_brands:
+        if brand.lower() in html_lower:
+            # Find approximate line number
+            idx = html_lower.index(brand.lower())
+            line_no = html[:idx].count("\n") + 1
+            findings.append(
+                f"line ~{line_no}: foreign brand '{brand}' (from client {source}) "
+                f"found in this {current_slug} page"
+            )
+    return findings
 
 
 def check_placeholder_gate(html: str) -> tuple[bool, list[str]]:
@@ -695,153 +736,6 @@ def _slug_to_title(slug: str) -> str:
     return " ".join(w.capitalize() if len(w) > 2 else w.upper() for w in words)
 
 
-# ----------------------------------------------------------------------------
-# Optional: GSC indexing request
-# ----------------------------------------------------------------------------
-
-
-_GSC_INDEXING_ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
-_GSC_INDEXING_SCOPE = "https://www.googleapis.com/auth/indexing"
-
-
-def _load_gsc_access_token() -> tuple[str, Optional[str]]:
-    """Lazy-load google-auth and return (access_token, quota_project_id) for
-    the Indexing API via Application Default Credentials (ADC).
-
-    Reads credentials from gcloud's ADC file, typically at
-    ~/.config/gcloud/application_default_credentials.json. One-time setup:
-
-        gcloud auth application-default login \\
-            --scopes=https://www.googleapis.com/auth/cloud-platform,\\
-                     https://www.googleapis.com/auth/indexing
-        gcloud auth application-default set-quota-project <gcp-project-id>
-
-    The gcloud-authed Google account must be Owner on the target GSC
-    property — GSC, not GCP, authorizes the Indexing API request. The quota
-    project is required for user-credential ADC on the Indexing API (Google
-    bills request quota against that project; the request 403s without it).
-
-    Raises RuntimeError with a helpful message if google-auth is not
-    installed or if ADC is not configured.
-    """
-    try:
-        import google.auth
-        from google.auth.transport.requests import Request as GoogleAuthRequest
-    except ImportError as e:
-        raise RuntimeError(
-            "google-auth is not installed. Run: "
-            "pip install google-auth google-auth-httplib2 google-api-python-client "
-            "--break-system-packages"
-        ) from e
-
-    try:
-        credentials, _project = google.auth.default(scopes=[_GSC_INDEXING_SCOPE])
-    except Exception as e:
-        raise RuntimeError(
-            "Application Default Credentials not configured. Run: "
-            "gcloud auth application-default login "
-            "--scopes=https://www.googleapis.com/auth/cloud-platform,"
-            "https://www.googleapis.com/auth/indexing "
-            f"(underlying error: {e})"
-        ) from e
-
-    credentials.refresh(GoogleAuthRequest())
-    quota_project_id = getattr(credentials, "quota_project_id", None)
-    return credentials.token, quota_project_id
-
-
-def request_gsc_indexing(live_url: str, config: dict[str, Any]) -> str:
-    """Submit a URL to the Google Search Console Indexing API via ADC.
-
-    Reads `config["gsc_indexing"]` (boolean). When true, uses Application
-    Default Credentials — set up via `gcloud auth application-default login`
-    on the operator's Mac — to authenticate. When false or absent, returns
-    the manual-submission stub message; the publish still succeeds.
-
-    Returns a single-line status string suitable for printing. Never raises:
-    indexing is a nice-to-have, not load-bearing, so any failure (missing
-    library, bad credentials, network error, 4xx/5xx response) is returned as
-    a human-readable error string and the publish continues.
-
-    Google's official policy is that the Indexing API is intended for
-    `JobPosting` and `BroadcastEvent` pages. The Core 30 use case is
-    best-effort: Google may process the request anyway, and worst case the
-    request fails cleanly and the operator falls back to the manual "Request
-    Indexing" click in GSC (see sop-gsc-request-indexing.md).
-
-    Setup procedure (one-time per Mac, covers all clients):
-    see second-brain/05_shared-intelligence/workflows/
-        workflow-marketing-seo-engagement/sops/sop-gsc-indexing-api-setup.md
-    """
-    if not config.get("gsc_indexing"):
-        return (
-            "[skipped] gsc_indexing not enabled in config — "
-            "submit manually at search.google.com/search-console → URL Inspection"
-        )
-
-    try:
-        access_token, quota_project_id = _load_gsc_access_token()
-    except RuntimeError as e:
-        return f"[error] {e}"
-    except Exception as e:
-        return f"[error] could not load ADC credentials: {e}"
-
-    if not quota_project_id:
-        return (
-            "[error] ADC has no quota project set — Indexing API will 403. Run: "
-            "gcloud auth application-default set-quota-project <gcp-project-id>"
-        )
-
-    headers = {
-        "Authorization": f"Bearer {access_token}",
-        "Content-Type": "application/json",
-        # Required for user-credential ADC paths — Google bills request quota
-        # against this project, and Indexing API 403s without it.
-        "x-goog-user-project": quota_project_id,
-    }
-    body = {"url": live_url, "type": "URL_UPDATED"}
-
-    try:
-        resp = requests.post(
-            _GSC_INDEXING_ENDPOINT, headers=headers, json=body, timeout=30
-        )
-    except requests.RequestException as e:
-        return f"[error] network error talking to Indexing API: {e}"
-
-    if resp.status_code == 200:
-        # Pull the notify-time out of the response if available so the
-        # operator has a timestamp to cross-reference in GSC.
-        try:
-            data = resp.json()
-        except ValueError:
-            data = {}
-        notify_time = (
-            data.get("urlNotificationMetadata", {})
-            .get("latestUpdate", {})
-            .get("notifyTime")
-        )
-        if notify_time:
-            return f"submitted ({notify_time})"
-        return "submitted (HTTP 200)"
-
-    # Surface the common failure modes with actionable hints so a publish-log
-    # reader knows exactly what to fix.
-    text_preview = (resp.text or "")[:240]
-    if resp.status_code in (401, 403):
-        return (
-            f"[error] Indexing API rejected the request ({resp.status_code}). "
-            f"Confirm the service account email is added as an Owner on the "
-            f"GSC property and the Indexing API is enabled on the GCP project. "
-            f"Response: {text_preview}"
-        )
-    if resp.status_code == 429:
-        return (
-            f"[error] Indexing API quota exceeded (429). Default quota is "
-            f"~200 URL submissions per day; spread across days or request a "
-            f"quota increase. Response: {text_preview}"
-        )
-    return f"[error] Indexing API returned HTTP {resp.status_code}: {text_preview}"
-
 
 # ----------------------------------------------------------------------------
 # Execution log
@@ -878,29 +772,32 @@ def write_execution_log(
     nn = f"{metadata.position:02d}"
     log_path = log_dir / f"execution-log-{today}-core-30-page-{nn}-{metadata.slug}.md"
 
-    body = _render_execution_log(metadata, result, html_path, today)
+    body = _render_execution_log(config, metadata, result, html_path, today)
     log_path.write_text(body, encoding="utf-8")
     return log_path
 
 
 def _render_execution_log(
+    config: dict[str, Any],
     metadata: PageMetadata,
     result: PublishResult,
     html_path: Path,
     today: str,
 ) -> str:
+    client_slug = config.get("client_slug", "unknown-client")
+    client_name = config.get("client_name", client_slug)
     return f"""---
 type: execution-log
 status: draft
 created: {today}
 updated: {today}
-venture: ev-electric-services
-tags: [execution-log, core-30, ev-electric-services, automation]
+venture: {client_slug}
+tags: [execution-log, core-30, {client_slug}, automation]
 ---
 
 ## {today} — Core 30 page #{metadata.position:02d} published via script: {metadata.slug}
 
-**What was built:** Core 30 page #{metadata.position} for EV Electric Services. Slug: `{metadata.slug}`. Published via the Path-2 automation script (publish-core-30-page.py).
+**What was built:** Core 30 page #{metadata.position} for {client_name}. Slug: `{metadata.slug}`. Published via the Path-2 automation script (publish-core-30-page.py).
 **Decision made:** Used the WP REST API path (Path 2) instead of manual paste through wp-admin (Path 1). Time savings: ~30 seconds scripted vs. 30-45 minutes manual.
 **Alternatives considered:** Manual paste through wp-admin Custom HTML block (Path 1). Rejected because the template is now locked at page 1 v9 and the per-page content is the only variable — automation captures that cleanly.
 **Why this approach:** The script reads the highest-vN WP-WRAPPED file, validates the JSON-LD schema before posting, builds the WP REST payload from the markdown frontmatter, and writes an execution-log entry on success. Schema validation = {"PASS" if result.schema_valid else "FAIL"}.
@@ -921,11 +818,11 @@ tags: [execution-log, core-30, ev-electric-services, automation]
 
 ### Post-publish punchlist
 
-- [ ] Confirm AIOSEO title and description are populated (script writes via Keelworks AIOSEO Bridge; if the bridge plugin isn't installed, paste manually using the printed block)
+- [ ] Confirm SEO title and description are populated (Yoast or AIOSEO via Keelworks bridge)
 - [ ] Run Google Rich Results Test on the live URL
 - [ ] GSC → URL Inspection → Request Indexing
 - [ ] Update `core-30/_build-order.md` to mark this page as published
-- [ ] Swap hero image, Ahmad portrait, and Google Maps placeholders for real assets when available
+- [ ] Verify hero + about images are real assets (not placeholders)
 """
 
 
@@ -1226,6 +1123,31 @@ def publish(
             ),
         )
     print("→ Placeholder gate: ✓ clean (0 residual placeholders)")
+
+    # Guard 3 — Brand-leak hard-block (PR-35 EV-leak class).
+    # Scans for OTHER clients' brand names appearing in this client's page.
+    # A deterministic catch for cross-client name leaks (e.g., "EV Electric"
+    # in an S&H page) that the placeholder gate can't see.
+    brand_leak_findings = check_brand_leak_gate(html, config)
+    if brand_leak_findings:
+        print(f"→ Brand-leak gate: ✗ BLOCKED — {len(brand_leak_findings)} foreign brand(s) found:")
+        for f in brand_leak_findings:
+            print(f"   ! {f}")
+        duration = (datetime.now() - started).total_seconds()
+        return PublishResult(
+            success=False,
+            page_id=None,
+            live_url=None,
+            schema_valid=False,
+            schema_errors=[],
+            duration_seconds=duration,
+            error_message=(
+                f"Brand-leak hard-block: {len(brand_leak_findings)} foreign brand name(s) "
+                f"in {html_path.name}. Fix the template/scaffold before publishing. "
+                f"First finding: {brand_leak_findings[0]}"
+            ),
+        )
+    print("→ Brand-leak gate: ✓ clean (0 foreign brand names)")
 
     schema_valid, schema_errors = validate_jsonld(html)
     print(f"→ Schema valid:  {schema_valid}")

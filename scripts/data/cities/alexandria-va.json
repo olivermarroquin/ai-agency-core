@@ -1,0 +1,232 @@
+{
+  "_comment": "Per-city data for Alexandria, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "alexandria-va",
+  "name": "Alexandria",
+  "name_with_state": "Alexandria, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "City of Alexandria",
+  "county_full": "City of Alexandria, Virginia",
+  "distance_from_hq_phrase": "Alexandria is about 20 miles from our Woodbridge base — we reach Old Town and Del Ray in 20-30 minutes via I-95 or Route 1",
+  "geographic_anchor_paragraph": "Alexandria, VA is an independent city on the west bank of the Potomac River, just south of Arlington and across the river from Washington, D.C. The city runs from the historic Old Town waterfront east of Route 1 through the established neighborhoods of Del Ray, Rosemont, and Seminary Hill, out to the West End along Duke Street and I-395. Alexandria is 15-20 minutes from downtown DC, 15 minutes from Springfield, and immediately adjacent to Reagan National Airport.",
+  "audience_descriptor": "Residential homeowners and property owners in Alexandria, VA and surrounding neighborhoods including Old Town, Del Ray, Rosemont, Seminary Hill, and the West End.",
+  "no_trip_charge_cities": [
+    "Alexandria",
+    "Arlington",
+    "Springfield",
+    "Annandale",
+    "Fort Hunt"
+  ],
+  "neighborhoods": [
+    {
+      "name": "Old Town",
+      "blurb": "the historic waterfront district with cobblestone streets and King Street shops"
+    },
+    {
+      "name": "Del Ray",
+      "blurb": "the artsy, walkable neighborhood along Mount Vernon Avenue"
+    },
+    {
+      "name": "Rosemont",
+      "blurb": "a 1900s-1920s streetcar suburb west of Old Town"
+    },
+    {
+      "name": "North Ridge",
+      "blurb": "established 1930s-1960s single-family homes north of King Street"
+    },
+    {
+      "name": "Seminary Hill",
+      "blurb": "residential area near the Virginia Theological Seminary"
+    },
+    {
+      "name": "Beverly Hills / Braddock Heights",
+      "blurb": "rolling hills and 1930s-1940s homes in a walkable community"
+    },
+    {
+      "name": "Arlandria / Chirilagua",
+      "blurb": "diverse commercial and residential corridor straddling the Arlington line"
+    },
+    {
+      "name": "Parker-Gray",
+      "blurb": "the city's largest historically Black neighborhood north of Old Town"
+    },
+    {
+      "name": "Eisenhower / Carlyle",
+      "blurb": "modern mixed-use district near the Eisenhower Avenue Metro"
+    },
+    {
+      "name": "Potomac Yard",
+      "blurb": "former rail yards transformed into new Metro-connected development"
+    },
+    {
+      "name": "Cameron Station",
+      "blurb": "a planned community on the former Cameron Station military base"
+    },
+    {
+      "name": "West End / Landmark",
+      "blurb": "the western corridor along Duke Street and Van Dorn"
+    }
+  ],
+  "other_areas_paragraph": "Outside Alexandria, we serve Arlington, <a href=\"/electrical-troubleshooting-springfield-va/\">Springfield</a>, Annandale, and the rest of Northern Virginia. We also cover <a href=\"/electrical-troubleshooting-lorton-va/\">Lorton</a>, <a href=\"/electrical-troubleshooting-woodbridge-va/\">Woodbridge</a>, Burke, Fairfax, and communities throughout the DC metro area.",
+  "housing_patterns": [
+    {
+      "title": "Pre-1940 historic homes — colonial, Federal, and Victorian",
+      "neighborhood_examples": "Old Town, Rosemont, Parker-Gray",
+      "context_paragraph": "Alexandria's oldest housing includes 18th-century townhouses in Old Town and early 20th-century Craftsman homes in Rosemont. These homes were built with 30-60 amp fuse panels (the original standard — many still have fuse boxes), knob-and-tube or cloth-insulated copper wiring, galvanized steel and lead plumbing, and essentially no insulation. In Old Town, the Historic District overlay adds an approval layer — exterior modifications visible from the street require Board of Architectural Review (BAR) approval on top of building permits. Electrical upgrades in these homes are complex: the original service entrance was sized for a few lights and a radio, not central AC, heat pumps, EV chargers, and modern kitchen loads. Full rewiring and panel upgrades are common needs.",
+      "symptoms": "Knob-and-tube wiring throughout; 30-60 amp fuse panels; no grounding; lead plumbing coexisting with electrical runs; BAR Historic District overlay in Old Town requiring approval for visible exterior panel work; full electrical modernization needed, not just a panel swap; overhead service drops from utility poles on narrow historic streets."
+    },
+    {
+      "title": "1940s-1960s colonials, Cape Cods &amp; garden apartments",
+      "neighborhood_examples": "Beverly Hills / Braddock Heights, North Ridge, Seminary Hill, Del Ray (later builds), Arlandria",
+      "context_paragraph": "The largest single housing era in Alexandria — about 35% of all units. Built with 60-100 amp panels (pre-1960) or 100-amp panels (1960s), cloth-insulated or early thermoplastic copper wiring, galvanized steel supply plumbing running to copper at fixtures, and minimal insulation (R-13 walls at best). Central AC was rare in the earliest builds — many had window units retrofitted later. This era also produced Alexandria's large garden-apartment complexes, many of which have been renovated but still run on mid-century electrical infrastructure. These homes now carry modern loads (central AC, multiple electronics, home offices) on circuits the original builders never anticipated. Panel upgrades from 100-amp to 200-amp service are the most common electrical project in this stock.",
+      "symptoms": "60-100 amp panels; cloth-insulated wiring degrading behind walls; Federal Pacific Stab-Lok and Zinsco panels in 1960s-1970s builds; GFCI (GFCI — ground-fault circuit interrupter, the outlet that cuts power when it detects current leakage) absent in kitchens and bathrooms; insurance carriers flagging FPE/Zinsco at policy renewal; 100A-to-200A upgrade is the standard path."
+    },
+    {
+      "title": "1970s-1990s condos, townhomes &amp; suburban colonials",
+      "neighborhood_examples": "West End / Landmark, Cameron Station area (pre-redevelopment), parts of Seminary Hill",
+      "context_paragraph": "About 35% of Alexandria's housing stock. 200-amp service became standard by the mid-1980s. Wiring is copper with PVC insulation; GFCI (ground-fault circuit interrupter — the outlet that cuts power when it detects current leakage) protection is present at bathrooms but may be absent at kitchen counters in pre-1996 builds (NEC 1996 made kitchen-counter GFCIs mandatory). Plumbing transitioned from galvanized + copper (1970s) to all-copper and early PEX (cross-linked polyethylene) in the 1990s. Central AC is standard. Many of Alexandria's condo and townhome buildings from this era have shared electrical infrastructure — individual unit upgrades may require coordination with the condo association and building management.",
+      "symptoms": "200 amp standard by mid-1980s; GFCI spotty in pre-1996 builds; many condos and townhomes with shared electrical infrastructure requiring HOA coordination; subpanel additions for basement finishes and home offices."
+    },
+    {
+      "title": "2000s-2020s modern condos, townhomes &amp; mixed-use",
+      "neighborhood_examples": "Potomac Yard, Eisenhower / Carlyle, Cameron Station, newer Old Town North infill",
+      "context_paragraph": "About 21% of housing — a significant and growing share driven by Potomac Yard, Carlyle, and infill redevelopment across the city. These homes meet modern code requirements: 200-amp panels, AFCI (arc-fault circuit interrupter — the breaker that detects dangerous electrical arcs) protection on bedroom circuits (NEC 2008) and most living-area circuits (NEC 2014+), tamper-resistant outlets (NEC 2008), and PEX plumbing throughout. Common issues include AFCI breakers that trip on noisy loads (by design — the breakers are sensitive), smart-home wiring from a previous owner's DIY project, and high-rise condo electrical systems where individual unit upgrades require building management coordination and sometimes Virginia American Water shutoff coordination for plumbing work.",
+      "symptoms": "Modern code, AFCI (AFCI — arc-fault circuit interrupter, the breaker that detects dangerous electrical arcs), 200 amp standard; upgrades here are about adding capacity for EV chargers, home offices, or whole-unit renovations; high-rise condo coordination needed with building management for power shutdowns affecting common areas."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How much does a panel upgrade cost in Alexandria, VA?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: AJ Long publishes most granular ranges; Michael & Son's $3,500 avg is a useful anchor; estimate-only per Keelworks default (2026-05-26 decision) means reframe to \"how estimates work\" -->"
+      },
+      {
+        "summary": "Do I need a permit for a panel upgrade in Alexandria?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Alexandria is an independent city — file through APEX portal at apex.alexandriava.gov, NOT Fairfax County; ~10 business day turnaround via VRC; name the Department of Code Administration -->"
+      },
+      {
+        "summary": "What are the signs I need a panel upgrade?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Tier 1 §10a symptom list; voice with Alexandria housing-era anchors: knob-and-tube in pre-1940 Old Town, FPE/Zinsco in 1960s Seminary Hill, cloth-insulated wiring in 1940s-1960s Del Ray -->"
+      },
+      {
+        "summary": "Is my Federal Pacific or Zinsco panel dangerous?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Alexandria's 1940s-1960s housing era (Beverly Hills/Braddock Heights, Seminary Hill, Del Ray — 35% of stock) has documented FPE/Zinsco prevalence; insurance-flagging angle is strong with Alexandria's educated homeowner demographic -->"
+      },
+      {
+        "summary": "Do I need BAR approval for panel work in Old Town?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Old Town Historic District has a BAR (Board of Architectural Review) overlay — exterior panel installations visible from the street require BAR review; this adds scheduling time and potentially design constraints; ONLY Alexandria has this in the S&H service area -->"
+      },
+      {
+        "summary": "Should I upgrade to 200 amps?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 200A is the modern standard; Alexandria's median ~1974 construction means many homes have 100A or lower; the 100A-to-200A path is the standard upgrade; older pre-1940 homes may have 30-60A fuse boxes requiring a complete panel + service upgrade -->"
+      },
+      {
+        "summary": "How long does a panel upgrade take and will I lose power?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: One-day install; Dominion Energy coordinates the service disconnect; 4-6 hour outage typical; voice the fridge/medical-device planning angle -->"
+      },
+      {
+        "summary": "I live in a condo/apartment — can I upgrade my panel?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 60.9% of Alexandria housing is apartments or condos; panel upgrades in multi-unit buildings require HOA/condo board approval, coordination with shared electrical infrastructure, and building-wide load calculations; high-rises in Eisenhower/Carlyle and Potomac Yard need building management coordination -->"
+      },
+      {
+        "summary": "My house is in an Alexandria flood zone — does panel placement matter?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 20% of Alexandria is in FEMA floodplain; NEC (NEC — National Electrical Code, revised every 3 years) and Virginia code require panels above the base flood elevation; basement panel relocations may be required; this affects cost and scope -->"
+      }
+    ],
+    "emergency-electrician": [
+      {
+        "summary": "What is considered an electrical emergency?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Universal — lead with safety-first 911 escalation, then red-flag list; voice for Alexandria's housing stock (knob-and-tube in Old Town pre-1940 homes, FPE/Zinsco panels in Seminary Hill and West End 1960s-70s homes) -->"
+      },
+      {
+        "summary": "How quickly can you get to my Alexandria home?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: S&H must own the response-time narrative honestly: \"We're based in Woodbridge — ~18 miles from Alexandria. Emergency calls, we're typically at your door in 20-30 minutes via I-95 and the Beltway. For Old Town and Del Ray, we come up Route 1 or the GW Parkway.\" No bluffing proximity. -->"
+      },
+      {
+        "summary": "What should I do before the electrician arrives?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 6-bullet safety checklist from Tier 1 §4b; add Alexandria-specific: \"If you're in Old Town or another flood-prone area and water is near your electrical panel, do NOT enter standing water near electrical equipment — call 911 first, then call us.\" -->"
+      },
+      {
+        "summary": "Is my power out because of Dominion Energy or my house?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Alexandria-specific moat question — no competitor answers this. \"Check Dominion Energy's outage map at dominionenergy.com/outages. If your neighbors have power and you don't, it's likely your house — call us. If the whole block is dark, it's Dominion — call them at 1-866-366-4357, then call us for any damage to your service entrance after they restore.\" -->"
+      },
+      {
+        "summary": "How much does emergency electrical service cost in Alexandria?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Estimate-only stance per standing decision; name the variables (time of day, complexity, parts); be transparent about after-hours surcharge -->"
+      },
+      {
+        "summary": "When should I call 911 instead of an electrician?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Short, decisive; high-leverage for AI citation; under-covered by all Alexandria competitors -->"
+      },
+      {
+        "summary": "Do you serve my neighborhood / ZIP code in Alexandria?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Name specific neighborhoods (Old Town, Del Ray, Rosemont, Seminary Hill, Eisenhower East, Potomac Yard, Carlyle, Cameron Station, North Ridge, West End, Arlandria, Beverley Hills, Parkfairfax) + ZIPs (22301-22315) -->"
+      },
+      {
+        "summary": "Are your electricians licensed and insured in Virginia?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Table stakes but must be visible; cite DPOR (Virginia Department of Professional and Occupational Regulation) lookup if available -->"
+      },
+      {
+        "summary": "Can you do emergency electrical work in my Alexandria condo?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Moat question — explain condo association coordination: panel-room access, adjacent-unit shut-off, association contractor rules. No competitor addresses this. -->"
+      },
+      {
+        "summary": "Do I need a permit for emergency electrical work in Alexandria?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Name the AHJ (authority having jurisdiction): City of Alexandria Department of Code Administration, APEX online portal. Emergency work can start before permit issuance per Virginia code, but permit must be pulled within the next business day. Historic District exterior work requires BAR (Board of Architectural Review) approval. -->"
+      }
+    ],
+    "ev-charger-installation": [
+      {
+        "summary": "How much does EV charger installation cost in Alexandria, VA?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: AJ Long Electric tiers: $800-$1,400 standard, $1,400-$2,500 premium, $2,500-$4,500 complex — plus charger unit. Estimate-only per standing decision — reframe to \"how estimates work\" -->"
+      },
+      {
+        "summary": "Do I need a permit for an EV charger in Alexandria?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Yes — City of Alexandria Department of Code Administration; APEX online portal for submission; electrical permit required for new dedicated circuits or hardwired Level 2 EVSE (Electric Vehicle Supply Equipment — the technical term for the charger unit) -->"
+      },
+      {
+        "summary": "Can I install an EV charger in my Alexandria condo or apartment?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 60.9% of Alexandria housing is apartments/condos. Honest answer: requires condo association board approval, may need dedicated meter, shared parking garage installation adds complexity (fire code, ventilation, load management), Dominion EV Charger Rewards NOT eligible for apartments/condos. Plug In Alexandria awarded $10k-$15k grants to 12 multi-family communities — funding fully awarded Sept 2025, waitlist only -->"
+      },
+      {
+        "summary": "Do I need a panel upgrade to install an EV charger?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Cross-reference: \"See [[panel-upgrade--alexandria-va]] for the panel-capacity prerequisite analysis.\" Quick answer: 200A with open slots usually fine; Old Town homes (pre-1940) often have 30-60A panels requiring full upgrade; Del Ray (1920s-40s) and Seminary Hill (1940s-60s) range from 60-100A — professional assessment needed -->"
+      },
+      {
+        "summary": "Are there rebates or tax credits for EV charger installation in Alexandria?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Federal 30C: 30% up to $1,000 (expiring June 30, 2026). Dominion EV Charger Rewards: $125 enrollment + $40/yr managed charging (single-family/townhome ONLY). Dominion Residential Charger Program: ~$40/mo for 5 years (Dominion installs/maintains). Plug In Alexandria: $10k-$15k multi-family grants (funding awarded, waitlist). This is the richest incentive landscape in the S&H service area — naming all four programs with eligibility details is the highest-leverage content gap -->"
+      },
+      {
+        "summary": "Should I get a Tesla Wall Connector or a universal charger?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: NACS adoption making the gap smaller; Tesla WC for Tesla-only; universal (ChargePoint Home Flex, JuiceBox 48, Grizzl-E Classic, Wallbox Pulsar Plus) for multi-EV households. AJ Long Electric names these brands — match and exceed with NACS context -->"
+      },
+      {
+        "summary": "Do I need BAR approval for an EV charger in Old Town Alexandria?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Yes, if the charger or conduit is visible from the street in the Old Town Historic District. Board of Architectural Review approval required for exterior-visible modifications. This adds 2-4 weeks to the timeline. Charger placement on an interior garage wall or rear-facing wall not visible from the public right-of-way may avoid BAR review — but confirm with the Department of Code Administration first -->"
+      },
+      {
+        "summary": "How long does EV charger installation take?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 2-6 hours installation day; permit processing through APEX varies; Historic District BAR adds 2-4 weeks if triggered -->"
+      },
+      {
+        "summary": "Should I hardwire my EV charger or use a NEMA 14-50 outlet?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: NEMA 14-50 (a specific 240V outlet type commonly used for plug-in EV chargers) recommended for most homeowners due to portability; hardwired recommended for outdoor installations and high-amperage setups; condo/apartment installations often require hardwired per building code -->"
+      },
+      {
+        "summary": "What is the Curbside EV Charging Program in Alexandria?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Approved Feb 21, 2026 — up to 60 curbside chargers over 2 years, targeting residents without driveways or garages. This is relevant context for residents weighing home installation versus curbside alternatives — especially apartment dwellers who cannot install a private charger -->"
+      }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "panel-upgrade": "In Alexandria, panel-upgrade calls split into three patterns. First: pre-1940 Old Town, Rosemont, and Parker-Gray homes with original knob-and-tube wiring and 30-60 amp fuse panels — these aren't upgrades, they're full electrical modernizations that may require BAR approval if the panel is visible from the street. Second: 1940s-1960s Del Ray, Beverly Hills/Braddock Heights, and Seminary Hill homes with 60-100 amp panels — FPE Stab-Lok or Zinsco panels still in service 60+ years later, now flagged by insurance carriers at policy renewal. Third: condo and apartment owners across Eisenhower/Carlyle, Potomac Yard, and West End/Landmark needing panel upgrades for EV chargers or kitchen renovations, but requiring HOA/condo board coordination before work can begin. All three patterns require filing through Alexandria's APEX permit portal — not Fairfax County.",
+    "emergency-electrician": "In Alexandria, three patterns drive most emergency electrician calls. First: tidal flooding in Old Town and the waterfront — the Potomac backs up through storm drains more than 100 times a year, and when water reaches basement electrical panels or outlets, it creates an immediate shock and fire hazard. Second: summer thunderstorms and hurricanes knock overhead service drops in the older neighborhoods — Old Town, Del Ray, Rosemont, Seminary Hill — and the homeowner loses power while neighbors on underground service keep theirs. Third: pre-1940 homes in Old Town running on knob-and-tube wiring and original fuse boxes, and 1960s-70s homes in Seminary Hill and West End with Federal Pacific Stab-Lok or Zinsco panels where the breaker fails to trip during overloads. All three scenarios need a licensed electrician, not a DIY reset.",
+    "ev-charger-installation": "In Alexandria, the most common EV charger installation inquiry comes from condo and apartment owners — 60.9% of Alexandria housing — who discover that installing a private charger in a multi-family building requires condo association approval, may need a dedicated electrical meter, and faces shared parking garage logistics that a single-family home installation doesn't. The second-most common call comes from Old Town row house owners with pre-1940 homes running 30-60 amp panels that need a full panel upgrade before they can support a Level 2 charger circuit. The third pattern is townhome owners in communities like Cameron Station navigating HOA approval for exterior-mounted chargers."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "Alexandria homes span every construction era — from 1790s Old Town rowhouses with knob-and-tube wiring and 30-amp fuse boxes to 2020s Potomac Yard high-rises with 200-amp service and AFCI breakers. The panel-upgrade path depends on which era your home was built in, whether you're in the Historic District, and whether your building is a single-family home, a rowhouse, or a condo — because 60% of Alexandria's housing is multi-unit.",
+    "emergency-electrician": "Alexandria sits on the Potomac waterfront, where 20% of the city is FEMA-designated floodplain. Old Town floods from tidal backflow more than 100 times a year. The pre-1940 homes in Old Town still run on knob-and-tube wiring and fuse boxes; the 1960s-70s homes in Seminary Hill and West End carry FPE/Zinsco panels. Overhead service drops in these older neighborhoods make them the most likely to need emergency electrical response after a storm.",
+    "ev-charger-installation": "Alexandria is one of the most EV-ready cities in Northern Virginia by demographics — median income $119,681, 65.8% bachelor's degree or higher, 28.4-minute average commute with 48.3% driving alone. The city's Eco-City sustainability framework supports EV adoption, and the newly approved Curbside EV Charging Program (up to 60 chargers over 2 years) shows the city is actively building public infrastructure. But the 60.9% apartment/condo housing stock means most Alexandria residents face a harder path to home charging than suburban neighbors — making expert guidance on multi-family installation the key differentiator."
+  },
+  "ev_charger_homes_phrase": "Alexandria homes and buildings span three centuries — pre-1940 Old Town row houses with 30-60 amp panels, 1920s-40s Del Ray bungalows, 1940s-60s Seminary Hill colonials with 60-100 amp panels, 1960s-90s West End apartment complexes, and 2000s+ Potomac Yard construction with 200 amp panels standard. Each era presents different"
+}

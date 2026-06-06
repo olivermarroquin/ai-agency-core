@@ -1,0 +1,191 @@
+{
+  "_comment": "Per-city data for Springfield, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "springfield-va",
+  "name": "Springfield",
+  "name_with_state": "Springfield, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Fairfax County",
+  "county_full": "Fairfax County, Virginia",
+  "distance_from_hq_phrase": "Springfield is about 15 miles from our Woodbridge base — we reach most Springfield neighborhoods in 15-20 minutes via I-95",
+  "geographic_anchor_paragraph": "Springfield, VA sits at the intersection of three interstates — I-95, I-395, and I-495 — in southern Fairfax County. The community is anchored by the Springfield Town Center, the Franconia-Springfield Metro station, and some of the region's most connected highway infrastructure. Springfield is 15 miles from downtown DC and within 15 minutes of Burke, Lorton, Annandale, and Alexandria.",
+  "audience_descriptor": "Residential homeowners in Springfield, VA and surrounding southern Fairfax County neighborhoods including North Springfield, West Springfield, Kings Park, Franconia, and Newington.",
+  "no_trip_charge_cities": [
+    "Springfield",
+    "Burke",
+    "Lorton",
+    "Annandale",
+    "Franconia",
+    "Alexandria"
+  ],
+  "neighborhoods": [
+    {
+      "name": "North Springfield",
+      "blurb": "the 1950s subdivision north of Old Keene Mill Road"
+    },
+    {
+      "name": "West Springfield",
+      "blurb": "the residential sector west of Rolling Road"
+    },
+    {
+      "name": "Kings Park",
+      "blurb": "the 1960s-1970s neighborhood near Kings Park Elementary"
+    },
+    {
+      "name": "Saratoga",
+      "blurb": "garden-style townhomes and condos near Fairfax County Parkway"
+    },
+    {
+      "name": "Franconia",
+      "blurb": "condos and townhomes near the Blue Line Metro"
+    },
+    {
+      "name": "Newington",
+      "blurb": "the southern Springfield area near Fort Belvoir"
+    },
+    {
+      "name": "Springfield Forest",
+      "blurb": "the established neighborhood along Backlick Road"
+    },
+    {
+      "name": "Ravensworth",
+      "blurb": "the postwar neighborhood north of Braddock Road"
+    }
+  ],
+  "other_areas_paragraph": "Outside Springfield, we serve <a href=\"/electrical-troubleshooting-burke-va/\">Burke</a>, <a href=\"/electrical-troubleshooting-lorton-va/\">Lorton</a>, <a href=\"/electrical-troubleshooting-alexandria-va/\">Alexandria</a>, Annandale, Franconia, and the rest of Fairfax County. We also cover <a href=\"/electrical-troubleshooting-woodbridge-va/\">Woodbridge</a>, <a href=\"/electrical-troubleshooting-manassas-va/\">Manassas</a>, and the broader Northern Virginia region.",
+  "housing_patterns": [
+    {
+      "title": "1950s-1960s ramblers, split-levels &amp; Cape Cods",
+      "neighborhood_examples": "North Springfield, Ravensworth, Kings Park, Springfield Forest",
+      "context_paragraph": "Springfield's first wave of suburban homes arrived in the 1950s when developer Edward Carr began building ramblers along the newly opened Shirley Highway (now I-95/I-395). These homes were built with 60-100 amp panels and circuits sized for a 1950s appliance load — refrigerator, toaster, a window AC unit if you were lucky. Plumbing is original galvanized steel running to copper at the fixtures. Insulation is thin (R-13 walls at best, often less). By the 1960s, the typical Springfield home had grown to 3-4 bedrooms and 1,200-2,200 square feet, but the electrical infrastructure stayed modest. Fast-forward to 2026: induction range, central AC, two refrigerators, a tankless water heater, and an EV charger in the garage. Modern load overwhelms circuits the original builder never planned for.",
+      "symptoms": "60-100A panels with circuits sized for 1950s-1960s loads; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands; fuse boxes instead of breakers in some units; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal; overhead service drops from utility poles."
+    },
+    {
+      "title": "1970s-1980s colonials, split-levels &amp; townhomes",
+      "neighborhood_examples": "West Springfield, Saratoga, Newington, Orange Hunt, Rolling Valley",
+      "context_paragraph": "Springfield's second major building wave brought colonials, larger split-levels, and early townhome communities. These homes typically have 100-200 amp panels — better than the 1950s stock, but a subset from the mid-1970s may have aluminum branch wiring (NEC banned aluminum branch circuits in 1972 but installation continued for several years after). GFCI coverage is spotty — the 1996 NEC made GFCIs mandatory at every kitchen counter receptacle, but pre-1996 homes usually have one or two if any. Central AC is standard, plumbing is mostly copper with early PEX appearing in the late 1980s. Insulation improves to R-19 walls.",
+      "symptoms": "100-200A panels original at construction; EV charger or whole-house renovation triggers the upgrade to modern 200A with AFCI/GFCI breakers; some aluminum branch wiring in mid-1970s homes; GFCI coverage spotty in pre-1996 builds."
+    },
+    {
+      "title": "2000s-2020s townhomes, condos &amp; infill",
+      "neighborhood_examples": "Franconia-area near Metro, Springfield Town Center-adjacent, Kingstowne-edge",
+      "context_paragraph": "Newer construction in Springfield clusters around transit and the Town Center redevelopment. These homes have 200-amp service, AFCI breakers (arc-fault circuit interrupters required by NEC 2008 and tightened in subsequent code cycles), and PEX plumbing. But newer homes aren't exempt from issues. AFCI breakers are sensitive by design and trip on noisy loads. Smart-home wiring done by previous owners can leave neutral wires bonded incorrectly. High-efficiency heat pumps and tankless water heaters pull continuous high loads the original branch circuits sometimes can't sustain. Townhome HOAs add an approval layer for visible-from-street work like EV charger installations.",
+      "symptoms": "200A panels standard; upgrades here are usually about adding capacity for EV chargers, hot tubs, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; HOA coordination may be needed for visible exterior panel work in planned communities."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How much does a panel upgrade cost in Springfield, VA?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: NoVA labor premium applies; estimate-only per Keelworks default (2026-05-26 decision) means reframe to \"how estimates work\"; typical 200A upgrade $1,800-$4,500 range in Fairfax County -->"
+      },
+      {
+        "summary": "Do I need a permit for a panel upgrade in Fairfax County?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Fairfax County LDS is the AHJ; name the online permit portal; Springfield is unincorporated — no municipal layer -->"
+      },
+      {
+        "summary": "What are the signs I need a panel upgrade?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Voice with Springfield-specific housing-era anchors: \"If your Kings Park colonial still has its original 1960s 100A panel...\" -->"
+      },
+      {
+        "summary": "Is my Federal Pacific or Zinsco panel dangerous?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Springfield's 1950s-1970s housing has documented FPE/Zinsco prevalence; insurance-flagging angle; Ravensworth and North Springfield most affected -->"
+      },
+      {
+        "summary": "Should I upgrade to 200 amps?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 200A is the modern standard; Springfield's 1960s-1970s Kings Park and Saratoga homes often have 100A; the 100A-to-200A path is the standard upgrade -->"
+      },
+      {
+        "summary": "How long does a panel upgrade take and will I lose power?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: One-day install; Dominion Energy coordinates the service disconnect; 4-6 hour outage typical -->"
+      },
+      {
+        "summary": "Does my overhead or underground service affect the upgrade?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Older Springfield neighborhoods (North Springfield, Ravensworth) are overhead; newer areas may be underground; overhead is simpler/cheaper -->"
+      },
+      {
+        "summary": "Can my Springfield panel handle an EV charger?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Most pre-1990 panels need assessment before charger install; cross-link to [[ev-charger-installation--springfield-va]] -->"
+      }
+    ],
+    "emergency-electrician": [
+      {
+        "summary": "What is considered an electrical emergency?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Universal — lead with safety-first 911 escalation, then red-flag list; voice for Springfield's housing stock (cloth wiring in 1950s North Springfield ranches, Federal Pacific panels in 1960s Kings Park colonials) -->"
+      },
+      {
+        "summary": "How quickly can you get to my Springfield home?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Adjacent-market positioning: \"We dispatch from Woodbridge — most Springfield calls, we're at your door in 20-30 minutes via I-95 and Franconia-Springfield Parkway.\" Honest, specific, differentiating. -->"
+      },
+      {
+        "summary": "What should I do before the electrician arrives?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 6-bullet safety checklist from Tier 1 §4b; add Springfield-specific: \"If you smell burning from your panel, do NOT open the panel door — turn off the main breaker if safely accessible and call us\" -->"
+      },
+      {
+        "summary": "Is my power out because of Dominion Energy or my house?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Springfield-specific moat question — no competitor answers this. \"Check Dominion Energy's outage map at dominionenergy.com/outages. If your neighbors have power and you don't, it's likely your house — call us. If the whole block is dark, it's Dominion — call them at 1-866-366-4357, then call us for any damage to your service entrance after they restore.\" -->"
+      },
+      {
+        "summary": "How much does emergency electrical service cost in Springfield?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Estimate-only stance per standing decision; name the variables (time of day, complexity, parts); be transparent about after-hours surcharge -->"
+      },
+      {
+        "summary": "When should I call 911 instead of an electrician?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Short, decisive; high-leverage for AI citation; under-covered by all Springfield competitors -->"
+      },
+      {
+        "summary": "Do you serve my neighborhood / ZIP code in Springfield?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Name specific neighborhoods + ZIPs (22150, 22151, 22152, 22153) + adjacent communities (Burke, Annandale, Franconia, Kingstowne, Fort Belvoir area) -->"
+      },
+      {
+        "summary": "Are your electricians licensed and insured in Virginia?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Table stakes but must be visible; cite DPOR (Virginia Department of Professional and Occupational Regulation — the state agency that licenses contractors) lookup if available -->"
+      }
+    ],
+    "ev-charger-installation": [
+      {
+        "summary": "How much does EV charger installation cost in Springfield, VA?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Typical range $800-$2,000 for standard install; $2,000-$4,000+ if panel upgrade needed; estimate-only per standing decision — reframe to \"how estimates work\" -->"
+      },
+      {
+        "summary": "Do I need a permit for an EV charger in Springfield?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Yes — Fairfax County Land Development Services (LDS) is the AHJ; name the online permit portal; Springfield is unincorporated — no municipal layer, permits go through the county -->"
+      },
+      {
+        "summary": "Do I need a panel upgrade to install an EV charger?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Cross-reference: \"See [[panel-upgrade--springfield-va]] for the panel-capacity prerequisite analysis.\" Quick answer: 200A with open slots usually fine; 1950s-1980s homes with 60-150A panels need professional assessment — most will need an upgrade -->"
+      },
+      {
+        "summary": "Can I install an EV charger in my Springfield townhouse?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Springfield has significant townhome inventory near Town Center and in Franconia-area developments. Address shared-wall constraints, HOA approval requirements, exterior-mount options, GFCI (ground-fault circuit interrupter — the outlet that cuts power when it detects current leakage) requirements for outdoor installations -->"
+      },
+      {
+        "summary": "Are there rebates or tax credits for EV charger installation in Virginia?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: Federal Section 30C: 30% up to $1,000 (expiring June 30, 2026). Dominion Energy: $125 enrollment rebate + $40/yr managed-charging incentive. Zero competitors mention ANY of these -->"
+      },
+      {
+        "summary": "Should I get a Tesla Wall Connector or a universal charger?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: NACS adoption making the gap smaller; Tesla WC for Tesla-only households; universal (ChargePoint, JuiceBox, Wallbox) for multi-EV households -->"
+      },
+      {
+        "summary": "How long does EV charger installation take?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: 2-6 hours installation day; permit processing time varies by Fairfax County workload -->"
+      },
+      {
+        "summary": "Should I hardwire my EV charger or use a NEMA 14-50 outlet?",
+        "body": "<!-- TBD: author body for this Q&A. Voicing: NEMA 14-50 (a specific 240V outlet type commonly used for plug-in EV chargers) recommended for most homeowners due to portability; hardwired for outdoor or high-amperage installations -->"
+      }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "panel-upgrade": "In Springfield, panel-upgrade calls split into three patterns. First: 1950s-1960s North Springfield and Ravensworth ranches and Cape Cods with original 60-100A panels — Federal Pacific Stab-Lok or Zinsco panels still in service 60+ years later, now flagged by insurance carriers at policy renewal. Second: 1960s-1970s Kings Park and Saratoga colonials with 100A panels that can't carry today's loads — central AC plus EV charger plus modern kitchen appliances overruns what the original builder planned. Third: 1970s-1980s West Springfield splits and colonials with 150-200A panels but outdated breaker technology that doesn't meet current NEC requirements for AFCI and GFCI protection. All three patterns drive the standard upgrade to a modern 200A panel with current-code breakers.",
+    "emergency-electrician": "In Springfield, two patterns drive most emergency electrician calls. First: 1950s-1960s North Springfield and Ravensworth ranches running modern loads on original 60-100 amp panels with cloth-insulated wiring — breakers trip under load or, worse, fail to trip because they're Federal Pacific Stab-Lok or Zinsco units. Second: summer thunderstorms and occasional ice storms knock down overhead service drops in the older neighborhoods — the homeowner loses power while neighbors keep theirs. Both scenarios need a licensed electrician, not a DIY reset.",
+    "ev-charger-installation": "In Springfield, the most common EV charger installation call comes from commuters who just bought an EV and realized Level 1 charging from a regular outlet only adds 3-5 miles of range per hour — not enough for their daily commute into DC, the Pentagon, or Fort Belvoir. They need a Level 2 charger on a dedicated 240V circuit. The catch: most Springfield homes built before 1990 — that's everything in North Springfield, Kings Park, Saratoga, and West Springfield — have panels that need assessment before a 40-50 amp charger circuit can be safely added. The panel-upgrade conversation is often the first conversation."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "Springfield homes span every postwar construction era — from 1950s North Springfield ranches with 60-amp Federal Pacific panels to 1980s West Springfield colonials with 200-amp service. The panel-upgrade path depends on which era your home was built in, what you're asking it to power today, and whether your insurance carrier has flagged your existing panel brand.",
+    "emergency-electrician": "Springfield's older neighborhoods — North Springfield, Ravensworth, and parts of Kings Park — still run on 1950s-1960s wiring and overhead service. These are the most likely to need emergency electrical response after a storm or when an aging panel finally gives out.",
+    "ev-charger-installation": "Springfield's NoVA commuter profile — DC, Pentagon, Fort Belvoir, Quantico — makes it a natural EV adoption zone. But the 1950s-1980s housing stock in North Springfield, Kings Park, and West Springfield means most homeowners need a panel capacity assessment before a Level 2 charger can be safely installed."
+  },
+  "ev_charger_homes_phrase": "Springfield homes built in the 1950s through 1980s weren't designed for the electrical loads of a Level 2 EV charger — most need a panel assessment and many need an upgrade before installation can begin."
+}

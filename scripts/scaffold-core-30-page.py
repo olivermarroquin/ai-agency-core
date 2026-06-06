@@ -501,6 +501,9 @@ def get_map_iframe_html(ctx: dict) -> str:
     spec.loader.exec_module(mod)
 
     cfg = mod.load_config(None)
+    # Inject client_name from the caller's context so the maps iframe title
+    # uses the correct client brand — not a hardcoded default (PR-35 EV-leak fix).
+    cfg["client_name"] = ctx["client_name"]
     cache_path = mod.resolve_cache_path(cfg["cache_path"])
     cache = mod.load_cache(cache_path)
 
