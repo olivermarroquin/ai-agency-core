@@ -7,6 +7,15 @@
   "state_full": "Virginia",
   "county": "Fairfax County",
   "county_full": "Fairfax County, Virginia",
+  "electric_utilities": ["Dominion Energy"],
+  "dispatch_time_phrase": "20–30 minute",
+  "dispatch_time_short": "20–30 min",
+  "area_served_schema": [
+    {"@type": "AdministrativeArea", "name": "Fairfax County, VA"},
+    {"@type": "City", "name": "Springfield", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
+    {"@type": "City", "name": "Burke", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
+    {"@type": "City", "name": "Lorton", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}}
+  ],
   "distance_from_hq_phrase": "Springfield is about 15 miles from our Woodbridge base — we reach most Springfield neighborhoods in 15-20 minutes via I-95",
   "geographic_anchor_paragraph": "Springfield, VA sits at the intersection of three interstates — I-95, I-395, and I-495 — in southern Fairfax County. The community is anchored by the Springfield Town Center, the Franconia-Springfield Metro station, and some of the region's most connected highway infrastructure. Springfield is 15 miles from downtown DC and within 15 minutes of Burke, Lorton, Annandale, and Alexandria.",
   "audience_descriptor": "Residential homeowners in Springfield, VA and surrounding southern Fairfax County neighborhoods including North Springfield, West Springfield, Kings Park, Franconia, and Newington.",

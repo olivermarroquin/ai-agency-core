@@ -31,7 +31,7 @@
   "tag_short": "emergency-electrician",
 
   "aioseo_page_title_template": "24/7 Emergency Electrician in {city_name_with_state} | {client_name}",
-  "aioseo_meta_description_template": "24/7 emergency electrician in {city_name_with_state}. Master Electrician, 45-min response, on-site diagnosis before any work starts. Call {phone_display}.",
+  "aioseo_meta_description_template": "24/7 emergency electrician in {city_name_with_state}. Master Electrician, {dispatch_time_short} response, on-site diagnosis before any work starts. Call {phone_display}.",
   "aioseo_focus_keyword_template": "emergency electrician {city_slug}",
   "aioseo_additional_keywords_template": [
     "24 hour electrician {city_slug}",
@@ -54,7 +54,7 @@
 
   "hero_eyebrow_template": "24/7 Emergency Electrician in {city_name_with_state}",
   "hero_heading": "Master Electrician. 24/7 Emergency Dispatch.",
-  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician with 16+ years in the trade. We dispatch 24/7 — overnight, Sundays, holidays — with a typical 45-minute response inside the {city_name} service area. Call comes in, technician rolls, diagnosis before any work starts.",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician with 16+ years in the trade. We dispatch 24/7 — overnight, Sundays, holidays — with a typical {dispatch_time_phrase} response inside the {city_name} service area. Call comes in, technician rolls, diagnosis before any work starts.",
   "hero_image_alt_template": "{owner_name}, master electrician, providing emergency electrical service in {city_name_with_state}",
   "hero_image_url_template": "FILL: Hero image URL. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-emergency-electrician-hero.png",
 
@@ -62,7 +62,7 @@
   "what_it_means_paragraphs": [
     "An electrical emergency is any situation that poses an immediate risk of fire, shock, or loss of essential power in your home. Sparks from an outlet, a burning smell behind a wall, a breaker panel that's hot to the touch, exposed wiring, water pooling near electrical equipment, or a partial power outage when your neighbors still have power — these are all active safety risks. If you see fire, smoke, or active sparking, call 911 first. Then call us. We handle the electrical side once the scene is safe.",
     "Not every electrical issue is an emergency. A single dead outlet, lights that dim briefly when the AC kicks on, or an intermittent flicker in one room — those are worth a service call, but they can usually wait for a scheduled appointment. An emergency is when there's an active safety risk to people in the house or when you've lost power entirely and the utility confirms the outage isn't on their end. If you're not sure which side your situation falls on, call {phone_display} and describe what you see — we'll tell you straight whether it needs a truck now or a Tuesday appointment.",
-    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues — with 16+ years diagnosing residential electrical failures across Northern Virginia, DC, and Maryland. {owner_name} runs a maintenance team, which is what makes the 24/7 dispatch and 45-minute response time inside the {city_name} service area a real operational number, not a marketing claim. Call comes in. Technician rolls. Temporary safe state first, then targeted diagnosis, then the permanent fix — scheduled or completed the same visit."
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues — with 16+ years diagnosing residential electrical failures across Northern Virginia, DC, and Maryland. {owner_name} runs a maintenance team, which is what makes the 24/7 dispatch and {dispatch_time_phrase} response time inside the {city_name} service area a real operational number, not a marketing claim. Call comes in. Technician rolls. Temporary safe state first, then targeted diagnosis, then the permanent fix — scheduled or completed the same visit."
   ],
 
   "quick_ref_heading_template": "Common electrical emergencies in {city_name}",
@@ -121,8 +121,8 @@
       "body": "We pick up. You describe the symptoms — what you see, smell, hear. We ask about your panel location, whether you've been able to kill the breaker, and whether anyone was shocked or injured. If there's an active fire or someone is injured, we tell you to call 911 first — we're electricians, not first responders."
     },
     {
-      "title": "Dispatch — typically within 45 minutes",
-      "body": "{owner_first_name} runs a maintenance team, so there's almost always a truck within the response radius. We give you a real ETA on the phone, not a window. If the team is already dispatched and we can't hit 45 minutes, we say so and give you the honest timeline."
+      "title": "Dispatch — typically within {dispatch_time_phrase}",
+      "body": "{owner_first_name} runs a maintenance team, so there's almost always a truck within the response radius. We give you a real ETA on the phone, not a window. If the team is already dispatched and we can't hit that window, we say so and give you the honest timeline."
     },
     {
       "title": "On-site safety check",
@@ -159,7 +159,7 @@
 
   "about_heading_template": "About {owner_name}, {owner_title}",
   "about_text_paragraphs": [
-    "{owner_name} is a Master Electrician licensed in Virginia — the highest electrician tier the state issues, requiring several years of journeyman work, a passed state exam, and a clean record. Over 16+ years in the trade, {owner_name} has built a licensed and insured residential and commercial electrical practice serving Northern Virginia, Washington DC, Maryland, and Pennsylvania. He runs a maintenance team, which is what makes the 24/7 emergency dispatch and 45-minute response time an operational reality, not a phone-room promise.",
+    "{owner_name} is a Master Electrician licensed in Virginia — the highest electrician tier the state issues, requiring several years of journeyman work, a passed state exam, and a clean record. Over 16+ years in the trade, {owner_name} has built a licensed and insured residential and commercial electrical practice serving Northern Virginia, Washington DC, Maryland, and Pennsylvania. He runs a maintenance team, which is what makes the 24/7 emergency dispatch and {dispatch_time_phrase} response time an operational reality, not a phone-room promise.",
     "{owner_name} leads the diagnostic on most residential emergency calls personally. The approach is diagnostic-first, fix-second — he reads the panel, runs the tests, and explains what's happening in plain English before any work starts. Half the time a homeowner calls expecting a full panel replacement, the actual cause is a single worn breaker, a load-balance issue, or a downstream short. The walk-through costs nothing. The misdiagnosis costs everything.",
     "S&H Contracting Unlimited holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
   ],
@@ -186,8 +186,8 @@
     },
     {
       "question": "How quickly can you arrive for an emergency in {city_name_with_state}?",
-      "answer_html": "Typically within 45 minutes inside the {city_name} service area. That number is real because {owner_name} runs a maintenance team — there's almost always a truck within the response radius, day or night. We dispatch 24/7, including overnight, Sundays, and holidays. If the team is already out on another emergency and we can't hit 45 minutes, we tell you on the phone and give you an honest ETA — not a vague arrival window. Call {phone_display} and we'll confirm the timeline before we roll.",
-      "answer_schema": "Typically within 45 minutes inside the service area. The response time is real because the owner runs a maintenance team with trucks within the response radius day and night. Dispatch is 24/7 including overnight, Sundays, and holidays. If the team is already out on another emergency and cannot hit 45 minutes, the company provides an honest ETA on the phone, not a vague arrival window."
+      "answer_html": "Typically within {dispatch_time_phrase} inside the {city_name} service area. That number is real because {owner_name} runs a maintenance team — there's almost always a truck within the response radius, day or night. We dispatch 24/7, including overnight, Sundays, and holidays. If the team is already out on another emergency and we can't hit that window, we tell you on the phone and give you an honest ETA — not a vague arrival window. Call {phone_display} and we'll confirm the timeline before we roll.",
+      "answer_schema": "Typically within {dispatch_time_phrase} inside the service area. The response time is real because the owner runs a maintenance team with trucks within the response radius day and night. Dispatch is 24/7 including overnight, Sundays, and holidays. If the team is already out on another emergency and cannot hit that window, the company provides an honest ETA on the phone, not a vague arrival window."
     },
     {
       "question": "What should I do before the electrician arrives?",
@@ -206,8 +206,8 @@
     },
     {
       "question": "Are you really available 24/7 — including Sundays and holidays?",
-      "answer_html": "Yes. 24/7 means 24/7 — overnight, Sundays, Thanksgiving, New Year's, no exceptions. This isn't a marketing line. {owner_name} runs a maintenance team with trucks in the Northern Virginia service area, so there's almost always someone within the response radius regardless of the day or hour. The typical response inside the {city_name} area is 45 minutes. If you call at 2 AM on Christmas morning with a melted HVAC pull-out disconnect, we answer the phone, triage the symptoms, and dispatch. The maintenance team is what makes the 24/7 claim credible — it's not one person on call, it's a team.",
-      "answer_schema": "Yes, 24/7 means 24/7 including overnight, Sundays, Thanksgiving, New Year's, and all holidays with no exceptions. The owner runs a maintenance team with trucks in the Northern Virginia service area, so there is almost always a technician within the response radius regardless of the day or hour. Typical response time is 45 minutes. The maintenance team is what makes the 24/7 claim credible."
+      "answer_html": "Yes. 24/7 means 24/7 — overnight, Sundays, Thanksgiving, New Year's, no exceptions. This isn't a marketing line. {owner_name} runs a maintenance team with trucks in the Northern Virginia service area, so there's almost always someone within the response radius regardless of the day or hour. The typical response inside the {city_name} area is {dispatch_time_phrase}. If you call at 2 AM on Christmas morning with a melted HVAC pull-out disconnect, we answer the phone, triage the symptoms, and dispatch. The maintenance team is what makes the 24/7 claim credible — it's not one person on call, it's a team.",
+      "answer_schema": "Yes, 24/7 means 24/7 including overnight, Sundays, Thanksgiving, New Year's, and all holidays with no exceptions. The owner runs a maintenance team with trucks in the Northern Virginia service area, so there is almost always a technician within the response radius regardless of the day or hour. Typical response time is {dispatch_time_phrase}. The maintenance team is what makes the 24/7 claim credible."
     },
     {
       "question": "What happens during an emergency electrician visit?",
@@ -222,9 +222,9 @@
   ],
 
   "final_cta_heading": "Electrical emergency? Call now.",
-  "final_cta_paragraph_template": "24/7 emergency electrician in {city_name_with_state}. {owner_name} and team dispatch within 45 minutes — overnight, Sundays, holidays, no exceptions. Diagnosis before any work starts, written estimate before we pick up a tool.<br>Call {phone_display} now.",
+  "final_cta_paragraph_template": "24/7 emergency electrician in {city_name_with_state}. {owner_name} and team dispatch within {dispatch_time_phrase} — overnight, Sundays, holidays, no exceptions. Diagnosis before any work starts, written estimate before we pick up a tool.<br>Call {phone_display} now.",
 
-  "schema_service_description_template": "24/7 emergency electrical service in {city_name_with_state}. Master electrician dispatches within 45 minutes for residential electrical emergencies — sparking outlets, burning smells, breaker failures, power loss, storm damage. On-site diagnosis and written estimate before repair begins.",
+  "schema_service_description_template": "24/7 emergency electrical service in {city_name_with_state}. Master electrician dispatches within {dispatch_time_phrase} for residential electrical emergencies — sparking outlets, burning smells, breaker failures, power loss, storm damage. On-site diagnosis and written estimate before repair begins.",
   "schema_service_price": "",
   "schema_service_price_description": "",
   "schema_service_terms": "Emergency dispatch available 24/7 including nights, weekends, and holidays. On-site written estimate before any repair work begins. After-hours surcharge named on the phone before dispatch."

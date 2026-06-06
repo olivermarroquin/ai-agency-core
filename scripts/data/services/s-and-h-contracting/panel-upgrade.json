@@ -57,7 +57,7 @@
   "wordpress_page_title_template": "Electrical Panel Upgrades in {city_name_with_state}",
   "hero_eyebrow_template": "Electrical Panel Upgrades in {city_name_with_state}",
   "hero_heading": "Panel Upgrades Done Right the First Time",
-  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician with 16+ years of residential and commercial panel work. We handle the permit, the Dominion Energy coordination, the upgrade, and the inspection — most jobs in {city_name} wrap in a single day. Diagnostic first, written estimate before any work starts.",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician with 16+ years of residential and commercial panel work. We handle the permit, the {utility_coordination_phrase} the upgrade, and the inspection — most jobs in {city_name} wrap in a single day. Diagnostic first, written estimate before any work starts.",
   "hero_image_alt_template": "{owner_name}, master electrician, performing a panel upgrade in {city_name_with_state}",
   "hero_image_url_template": "FILL: Hero image URL for S&H panel upgrade pages. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-panel-upgrade-hero.png",
   "what_it_means_heading": "What \"panel upgrade\" actually means",

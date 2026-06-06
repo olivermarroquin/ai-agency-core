@@ -202,6 +202,17 @@ def build_context(client: dict, service: dict, city: dict, position: int) -> dic
         "city_ev_neighborhood_phrase": city["specific_problems_neighborhood_phrase"].get(service["slug"], ""),
         "city_most_common_problem_paragraph": city["most_common_problem_paragraph"].get(service["slug"], ""),
 
+        # D-11 fix: utility coordination phrase — cities with multiple utilities
+        # (e.g. Stafford: Dominion/NOVEC/REC) get a city-specific phrase; single-
+        # utility cities fall back to "Dominion Energy coordination"
+        "utility_coordination_phrase": city.get("utility_coordination_phrase", "Dominion Energy coordination"),
+
+        # D-12 fix: per-city dispatch time — max-reach cities (Stafford ~25mi)
+        # get longer times; adjacent cities (Springfield ~15mi) get shorter.
+        # Default 45-minute for cities without explicit data.
+        "dispatch_time_phrase": city.get("dispatch_time_phrase", "45-minute"),
+        "dispatch_time_short": city.get("dispatch_time_short", "45-min"),
+
         # Page-level derived
         "page_slug": page_slug,
         "page_url": page_url,
@@ -535,10 +546,17 @@ def build_jsonld(ctx: dict) -> str:
     service = ctx["_service"]
     city = ctx["_city"]
 
-    area_served = [
-        {"@type": "City", "name": name, "containedInPlace": {"@type": "AdministrativeArea", "name": client["brand_area_county"]}}
-        for name in client["brand_areas_served"]
-    ]
+    # D-10 fix: prefer city-level area_served_schema (county + adjacent cities)
+    # over the client-level brand_areas_served (which is hardcoded to the client's
+    # HQ county and doesn't reflect the actual page city). Falls back to client-level
+    # for cities that haven't been upgraded yet.
+    if "area_served_schema" in city:
+        area_served = city["area_served_schema"]
+    else:
+        area_served = [
+            {"@type": "City", "name": name, "containedInPlace": {"@type": "AdministrativeArea", "name": client["brand_area_county"]}}
+            for name in client["brand_areas_served"]
+        ]
 
     hours_spec = []
     for h in client["hours"]:

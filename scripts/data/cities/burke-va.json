@@ -7,6 +7,15 @@
   "state_full": "Virginia",
   "county": "Fairfax County",
   "county_full": "Fairfax County, Virginia",
+  "electric_utilities": ["Dominion Energy"],
+  "dispatch_time_phrase": "20–30 minute",
+  "dispatch_time_short": "20–30 min",
+  "area_served_schema": [
+    {"@type": "AdministrativeArea", "name": "Fairfax County, VA"},
+    {"@type": "City", "name": "Burke", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
+    {"@type": "City", "name": "Springfield", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
+    {"@type": "City", "name": "Fairfax Station", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}}
+  ],
   "distance_from_hq_phrase": "Burke is about 12 miles from our Woodbridge base — we reach Burke Centre and the surrounding neighborhoods in about 20 minutes via I-95 and the Fairfax County Parkway",
   "geographic_anchor_paragraph": "Burke, VA sits in central-southern Fairfax County at the intersection of Burke Lake Road and Ox Road, about 20 miles from downtown Washington, DC. The community runs roughly between Braddock Road to the north, Springfield and the Fairfax County Parkway to the east, Fairfax Station to the south, and the Burke Centre corridor to the west. Burke is 10-12 minutes from Springfield and Fairfax City, 15 minutes from Lorton, and 30-45 minutes from downtown DC depending on traffic.",
   "audience_descriptor": "Residential homeowners in Burke, VA and surrounding central Fairfax County neighborhoods including Burke Centre, Rolling Valley, Kings Park, and Signal Hill.",
