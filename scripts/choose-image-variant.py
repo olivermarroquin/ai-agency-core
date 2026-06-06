@@ -287,6 +287,45 @@ ITERATE_THRESHOLD = 45
 
 
 # ---------------------------------------------------------------------------
+# Display-context weighting (D-06)
+# ---------------------------------------------------------------------------
+
+# When an image is displayed at hero size (1200x900px on a webpage), small text
+# like breaker labels is not readable. Penalizing text_legibility at full weight
+# (20/100) over-punishes hero images for garbled 8pt text nobody can read at
+# display size. The modifier tells the vision model to down-weight legibility.
+DISPLAY_CONTEXT_MODIFIERS = {
+    "hero": (
+        "\n\n## DISPLAY-CONTEXT ADJUSTMENT (hero image)\n"
+        "This image will be displayed as a HERO image at approximately 1200×900px "
+        "on a webpage. At this display size, small text on equipment (breaker labels, "
+        "circuit directory text, panel markings) is NOT readable by the viewer. "
+        "Therefore:\n"
+        "- DOWN-WEIGHT text_legibility: score it out of 8 instead of 20. "
+        "Small-text garbling that would be visible at full resolution is NOT "
+        "visible at hero display size and should not heavily penalize the image.\n"
+        "- Text that IS large enough to read at hero size (e.g., large signage, "
+        "prominent lettering) should still be scored normally for legibility.\n"
+        "- All other criteria remain at full weight.\n"
+        "- In the output JSON, still use the 0-20 scale for text_legibility but "
+        "apply the hero-display leniency (i.e., a score of 12-15 for small "
+        "garbled text that would otherwise score 3-5).\n"
+    ),
+    "thumbnail": (
+        "\n\n## DISPLAY-CONTEXT ADJUSTMENT (thumbnail)\n"
+        "This image will be displayed as a small thumbnail. Text is entirely "
+        "unreadable at this size. Score text_legibility 15/20 (neutral) unless "
+        "there is LARGE garbled text visible even at thumbnail scale.\n"
+    ),
+}
+
+
+def _display_context_modifier(display_context: str) -> str:
+    """Return the rubric modifier for the given display context, or empty string."""
+    return DISPLAY_CONTEXT_MODIFIERS.get(display_context, "")
+
+
+# ---------------------------------------------------------------------------
 # Image helpers
 # ---------------------------------------------------------------------------
 
@@ -362,21 +401,25 @@ def build_scoring_prompt(
     client_config_path: Path,
     page_service: str = "",
     page_city: str = "",
+    display_context: str = "",
 ) -> dict[str, Any]:
     """Build the full scoring context for the in-session backend.
 
     Returns a dict with:
-      rubric       — the filled rubric text
-      variants     — list of {path, name} dicts
-      reference    — {path, name} or None
-      slot_type    — hero/about/scene
-      image_class  — owner/topic
-      client_data  — merged client config + data
+      rubric              — the filled rubric text
+      variants            — list of {path, name} dicts
+      reference           — {path, name} or None
+      slot_type           — hero/about/scene
+      image_class         — owner/topic
+      client_data         — merged client config + data
+      display_context     — hero/thumbnail/full-page or "" (D-06)
+      display_modifier    — rubric modifier text for display context (D-06)
+      variant_system_prompt_fn — callable name for D-04 filename binding
 
     The calling Claude Code session uses this to:
       1. Read each variant image via the Read tool
       2. Read the reference image (if owner-class)
-      3. Apply the rubric visually
+      3. Apply the rubric visually (with display_modifier prepended if non-empty)
       4. Return per-variant JSON scores
       5. Call pick_keeper() with those scores
     """
@@ -395,6 +438,8 @@ def build_scoring_prompt(
             for k, v in client_data.items()
             if not k.startswith("_") and k != "owner_bio_paragraphs"
         },
+        "display_context": display_context,
+        "display_modifier": _display_context_modifier(display_context),
     }
 
 
@@ -522,14 +567,59 @@ def _extract_score_json(text: str, variant_name: str) -> Optional[dict]:
     return None
 
 
+def _check_rationale_binding(result: dict[str, Any], variant_name: str, other_variant_names: list[str]) -> dict[str, Any]:
+    """Post-score sanity-check: rationale must reference THIS variant's content only.
+
+    D-04 fix: the vision model's rationale can cross-contaminate between variants
+    (e.g., citing breaker labels from variant 1 in variant 3's rationale). Detect
+    this by checking if the rationale references another variant's filename.
+    """
+    rationale = result.get("rationale", "")
+    contaminated_refs = [
+        name for name in other_variant_names
+        if name != variant_name and name in rationale
+    ]
+    if contaminated_refs:
+        result["cross_variant_contamination"] = contaminated_refs
+        result["rationale"] = (
+            f"[CONTAMINATION WARNING: rationale references {', '.join(contaminated_refs)}, "
+            f"not just {variant_name}] {rationale}"
+        )
+        sys.stderr.write(
+            f"  WARN: rationale for {variant_name} references other variant(s): "
+            f"{', '.join(contaminated_refs)}\n"
+        )
+    return result
+
+
+def _build_variant_system_prompt(variant_name: str) -> str:
+    """System prompt anchoring the vision model to a specific variant file.
+
+    D-04 fix: every vision call gets the variant filename in the system prompt
+    so the model's rationale is bound to THAT specific image, not a prior one
+    in the conversation.
+    """
+    return (
+        f"You are scoring the image variant named '{variant_name}'. "
+        f"Your rationale MUST describe only what you see in THIS specific image "
+        f"('{variant_name}'). Do NOT reference content from any other image. "
+        f"If you mention specific visual details (labels, text, objects), they "
+        f"must be visible in '{variant_name}'."
+    )
+
+
 def _score_variant_api(
     api_client: Any,  # anthropic.Anthropic
     variant_path: Path,
     reference_path: Optional[Path],
     rubric: str,
     slot_type: str,
+    all_variant_names: Optional[list[str]] = None,
+    display_context: str = "",
 ) -> dict[str, Any]:
     """Score a single variant via the Anthropic Messages API."""
+    variant_name = variant_path.name
+    system_prompt = _build_variant_system_prompt(variant_name)
     messages_content: list[dict[str, Any]] = []
 
     if reference_path is not None:
@@ -546,48 +636,97 @@ def _score_variant_api(
     var_b64, var_mime = load_image_b64(variant_path)
     messages_content.append({
         "type": "text",
-        "text": f"VARIANT TO SCORE (slot: {slot_type}, file: {variant_path.name}):",
+        "text": f"VARIANT TO SCORE (slot: {slot_type}, file: {variant_name}):",
     })
     messages_content.append({
         "type": "image",
         "source": {"type": "base64", "media_type": var_mime, "data": var_b64},
     })
+
+    # D-06: inject display-context rubric modifier before the rubric itself
+    if display_context:
+        messages_content.append({
+            "type": "text",
+            "text": _display_context_modifier(display_context),
+        })
+
     messages_content.append({"type": "text", "text": rubric})
 
+    # --- D-05: 3-tier retry on parse failure (was: 1 retry then punt) ---
+    result = None
+    raw_text = ""
+
+    # Tier 1: standard call
     response = api_client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=512,
+        system=system_prompt,
         messages=[{"role": "user", "content": messages_content}],
     )
+    raw_text = response.content[0].text.strip()
+    result = _extract_score_json(raw_text, variant_name)
 
-    text = response.content[0].text.strip()
-    result = _extract_score_json(text, variant_path.name)
-
-    # On parse failure, retry ONCE (model sometimes wraps in markdown on first try)
+    # Tier 2: same prompt retry (model sometimes wraps in markdown on first try)
     if result is None:
         sys.stderr.write(
-            f"  WARN: parse failed for {variant_path.name}, retrying once…\n"
+            f"  WARN: tier-1 parse failed for {variant_name}, retrying (tier 2)…\n"
         )
-        retry_response = api_client.messages.create(
+        t2_response = api_client.messages.create(
             model="claude-sonnet-4-6",
             max_tokens=512,
+            system=system_prompt,
             messages=[{"role": "user", "content": messages_content}],
         )
-        retry_text = retry_response.content[0].text.strip()
-        result = _extract_score_json(retry_text, variant_path.name)
+        raw_text = t2_response.content[0].text.strip()
+        result = _extract_score_json(raw_text, variant_name)
 
+    # Tier 3: simplified prompt with explicit JSON-only instruction
     if result is None:
         sys.stderr.write(
-            f"  ERROR: score parse failed after retry for {variant_path.name}\n"
+            f"  WARN: tier-2 parse failed for {variant_name}, retrying (tier 3 — simplified)…\n"
+        )
+        simplified_content = messages_content.copy()
+        simplified_content.append({
+            "type": "text",
+            "text": (
+                "\n\nIMPORTANT: Respond with ONLY a raw JSON object. "
+                "No markdown fences, no commentary, no text before or after the JSON. "
+                "Start your response with '{' and end with '}'."
+            ),
+        })
+        t3_response = api_client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=512,
+            system=system_prompt,
+            messages=[{"role": "user", "content": simplified_content}],
+        )
+        raw_text = t3_response.content[0].text.strip()
+        result = _extract_score_json(raw_text, variant_name)
+
+    # All 3 tiers failed — escalate with a recommended pick, don't silently punt
+    if result is None:
+        sys.stderr.write(
+            f"  ERROR: all 3 parse tiers failed for {variant_name}\n"
         )
         result = {
             "score": -1,
-            "rationale": f"Parse error (needs human review): {text[:100]}",
-            "outcome_tag": "parse-error",
+            "rationale": (
+                f"Parse error after 3-tier retry for '{variant_name}'. "
+                f"Raw response sample: {raw_text[:150]}. "
+                f"Escalating to operator — variant excluded from ranking but "
+                f"operator should visually inspect before discarding."
+            ),
+            "outcome_tag": "parse-error-escalated",
+            "parse_tiers_attempted": 3,
         }
 
     result["variant_path"] = str(variant_path)
-    result["variant_name"] = variant_path.name
+    result["variant_name"] = variant_name
+
+    # D-04: post-score cross-variant contamination check
+    if all_variant_names and result.get("score", 0) >= 0:
+        result = _check_rationale_binding(result, variant_name, all_variant_names)
+
     return result
 
 
@@ -599,6 +738,7 @@ def run_anthropic_backend(
     client_config_path: Path,
     page_service: str,
     page_city: str,
+    display_context: str = "",
 ) -> dict[str, Any]:
     """Score all variants via the Anthropic API backend."""
     import anthropic
@@ -607,9 +747,12 @@ def run_anthropic_backend(
     api_client = anthropic.Anthropic(api_key=key)
     client_data = load_client_data(client_config_path)
     rubric = build_rubric(image_class, client_data, page_service, page_city)
+    all_variant_names = [vp.name for vp in variant_paths]
 
     sys.stderr.write(f"→ Scoring {len(variant_paths)} variants for {slot_type} ({image_class}-class)\n")
     sys.stderr.write(f"→ Backend: anthropic API\n")
+    if display_context:
+        sys.stderr.write(f"→ Display context: {display_context}\n")
     if reference_path:
         sys.stderr.write(f"→ Reference: {reference_path.name}\n")
 
@@ -622,6 +765,8 @@ def run_anthropic_backend(
             reference_path=reference_path if image_class == "owner" else None,
             rubric=rubric,
             slot_type=slot_type,
+            all_variant_names=all_variant_names,
+            display_context=display_context,
         )
         # Enforce composition cap for topic-class: subject_prominence ≤ 2 → cap at 70
         if (image_class == "topic"
@@ -720,6 +865,17 @@ def main() -> int:
         help="City display name for the page (used in topic-class rubric).",
     )
     p.add_argument(
+        "--display-context",
+        choices=["hero", "thumbnail", "full-page"],
+        default="",
+        help=(
+            "Display context for the image. 'hero' down-weights small-text "
+            "legibility (breaker labels not readable at hero display size). "
+            "'thumbnail' treats all text as unreadable. 'full-page' uses "
+            "default weights. Omit for default (full weight)."
+        ),
+    )
+    p.add_argument(
         "--backend",
         choices=["anthropic"],
         default="anthropic",
@@ -749,6 +905,7 @@ def main() -> int:
         client_config_path=args.client_config,
         page_service=args.page_service,
         page_city=args.page_city,
+        display_context=args.display_context,
     )
 
     print(json.dumps(result, indent=2, ensure_ascii=False))
