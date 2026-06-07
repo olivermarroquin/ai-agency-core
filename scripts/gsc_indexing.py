@@ -84,6 +84,69 @@ def load_gsc_access_token() -> tuple[str, Optional[str]]:
     return credentials.token, quota_project_id
 
 
+def verify_gsc_credentials() -> tuple[bool, str]:
+    """Pre-flight check: verify GSC ADC credentials are configured and valid.
+
+    Loads Application Default Credentials, refreshes the token, and confirms a
+    quota project is set — everything needed for the Indexing API to succeed.
+    Does NOT submit any URL. Cheap enough to call at run start before any
+    page work begins.
+
+    Returns (ok, message):
+      (True,  "GSC credentials OK ...")  — ready to index
+      (False, "... run `gcloud auth application-default login` ...")  — actionable fix
+
+    Generic: works for any pipeline that uses GSC indexing via ADC, not just
+    Core 30 or any specific client.
+    """
+    try:
+        import google.auth  # noqa: F811
+        from google.auth.transport.requests import Request as GoogleAuthRequest  # noqa: F811
+    except ImportError:
+        return False, (
+            "google-auth is not installed. Run:\n"
+            "  pip install google-auth google-auth-httplib2 "
+            "google-api-python-client --break-system-packages\n"
+            "Then re-run."
+        )
+
+    try:
+        credentials, _project = google.auth.default(scopes=[GSC_INDEXING_SCOPE])
+    except Exception as e:
+        return False, (
+            "GSC Application Default Credentials not configured. Run:\n"
+            "  gcloud auth application-default login \\\n"
+            "    --scopes=https://www.googleapis.com/auth/cloud-platform,"
+            "https://www.googleapis.com/auth/indexing\n"
+            f"(underlying error: {e})"
+        )
+
+    try:
+        credentials.refresh(GoogleAuthRequest())
+    except Exception as e:
+        return False, (
+            "GSC ADC credentials exist but failed to refresh (expired or revoked). "
+            "Re-authenticate:\n"
+            "  gcloud auth application-default login \\\n"
+            "    --scopes=https://www.googleapis.com/auth/cloud-platform,"
+            "https://www.googleapis.com/auth/indexing\n"
+            f"(underlying error: {e})"
+        )
+
+    quota_project_id = getattr(credentials, "quota_project_id", None)
+    if not quota_project_id:
+        return False, (
+            "GSC ADC credentials are valid but no quota project is set — "
+            "Indexing API will 403. Run:\n"
+            "  gcloud auth application-default set-quota-project <gcp-project-id>"
+        )
+
+    return True, (
+        f"GSC credentials OK (quota project: {quota_project_id}, "
+        f"token expires: {getattr(credentials, 'expiry', 'unknown')})"
+    )
+
+
 def request_gsc_indexing(live_url: str, config: dict[str, Any]) -> str:
     """Submit a URL to the Google Search Console Indexing API via ADC.
 

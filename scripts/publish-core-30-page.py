@@ -121,7 +121,7 @@ except ImportError:
     )
     sys.exit(2)
 
-from gsc_indexing import request_gsc_indexing
+from gsc_indexing import request_gsc_indexing, verify_gsc_credentials
 
 
 # ----------------------------------------------------------------------------
@@ -1046,6 +1046,89 @@ def write_bypass_record(md_path: Path, page_slug: str, reason: str) -> Optional[
 
 
 # ----------------------------------------------------------------------------
+# ORCH-2: Auto-stamp build-order on publish
+# ----------------------------------------------------------------------------
+
+
+def _find_build_order(page_folder: Path) -> Optional[Path]:
+    """Walk up from page_folder to find _build-order.md in a parent core-30/ dir.
+
+    Page folders sit at: .../core-30/NN-<slug>/
+    So _build-order.md is at: .../core-30/_build-order.md (one level up).
+    Also handles deeper nesting by walking up to 3 levels.
+    """
+    for ancestor in [page_folder.parent] + list(page_folder.parents)[:3]:
+        candidate = ancestor / "_build-order.md"
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def stamp_build_order(
+    page_slug: str,
+    page_id: int,
+    build_order_path: Optional[Path] = None,
+    page_folder: Optional[Path] = None,
+) -> Optional[str]:
+    """Stamp a page as PUBLISHED in _build-order.md after a successful publish.
+
+    Finds the row whose slug column matches `page_slug` and prepends
+    **PUBLISHED YYYY-MM-DD** (WP post_id=<id>) to the last column (positioning
+    note). Matches the manually-applied stamp format from wave-1/wave-2.
+
+    Returns a status message, or None if build-order was not found / not updated.
+    Generic: works for any client's _build-order.md that uses the standard
+    6-column table format (# | Slug | Service | City | Priority | Note).
+    """
+    # Discover the build-order file
+    bo_path = build_order_path
+    if bo_path is None and page_folder is not None:
+        bo_path = _find_build_order(page_folder)
+    if bo_path is None or not bo_path.is_file():
+        return None
+
+    content = bo_path.read_text(encoding="utf-8")
+    lines = content.splitlines()
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    stamp = f"**PUBLISHED {today}** (WP post_id={page_id})"
+
+    updated = False
+    for i, line in enumerate(lines):
+        # Match table rows: | # | slug | ... |
+        if not line.strip().startswith("|"):
+            continue
+        cells = [c.strip() for c in line.split("|")]
+        # cells[0] is empty (before first |), cells[-1] is empty (after last |)
+        # Standard format: | # | Slug | Service | City | Priority | Note |
+        # So cells = ['', '#', 'Slug', 'Service', 'City', 'Priority', 'Note', '']
+        if len(cells) < 7:
+            continue
+        row_slug = cells[2]  # Slug column
+        if row_slug != page_slug:
+            continue
+
+        # Already stamped? Skip to avoid double-stamping.
+        last_col = cells[-2]  # Note column (before trailing empty)
+        if "**PUBLISHED" in last_col:
+            return f"already stamped in {bo_path.name}"
+
+        # Prepend the stamp to the positioning note
+        cells[-2] = f"{stamp}. {last_col}" if last_col else stamp
+        lines[i] = "| " + " | ".join(cells[1:-1]) + " |"
+        updated = True
+        break
+
+    if not updated:
+        return f"slug '{page_slug}' not found in {bo_path.name}"
+
+    # Write atomically
+    tmp = bo_path.with_suffix(".tmp")
+    tmp.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    tmp.rename(bo_path)
+    return f"stamped in {bo_path.name}"
+
+
+# ----------------------------------------------------------------------------
 # Main publish flow
 # ----------------------------------------------------------------------------
 
@@ -1057,10 +1140,33 @@ def publish(
     dry_run: bool = False,
     request_indexing: bool = False,
     bypass_quality_gate: bool = False,
+    preflight_credentials: bool = False,
 ) -> PublishResult:
     started = datetime.now()
 
     config = json.loads(config_path.read_text(encoding="utf-8"))
+
+    # ORCH-1: credential pre-flight — verify GSC ADC at run start, not after
+    # each page's indexing silently fails. Only fires when the config has
+    # gsc_indexing enabled (otherwise there's nothing to pre-flight).
+    if preflight_credentials and config.get("gsc_indexing"):
+        cred_ok, cred_msg = verify_gsc_credentials()
+        print(f"→ GSC pre-flight: {'✓' if cred_ok else '✗'} {cred_msg}")
+        if not cred_ok:
+            duration = (datetime.now() - started).total_seconds()
+            return PublishResult(
+                success=False,
+                page_id=None,
+                live_url=None,
+                schema_valid=False,
+                schema_errors=[],
+                duration_seconds=duration,
+                error_message=(
+                    f"GSC credential pre-flight failed: {cred_msg}\n"
+                    "Fix credentials before publishing, or re-run without "
+                    "--preflight-credentials to publish without indexing."
+                ),
+            )
 
     html_path = find_canonical_html(page_folder, version=version)
     html = html_path.read_text(encoding="utf-8")
@@ -1283,6 +1389,15 @@ def publish(
     if log_path:
         print(f"→ Execution log: {log_path}")
 
+    # ORCH-2: auto-stamp the build-order after a successful publish
+    bo_status = stamp_build_order(
+        page_slug=metadata.slug,
+        page_id=page_id,
+        page_folder=page_folder,
+    )
+    if bo_status:
+        print(f"→ Build-order:   {bo_status}")
+
     # Populate AIOSEO meta via the Keelworks AIOSEO Bridge plugin.
     #
     # AIOSEO stores its data in a custom DB table (aioseo_posts), not in
@@ -1378,14 +1493,14 @@ def main() -> int:
     p.add_argument(
         "--page-folder",
         type=Path,
-        required=True,
-        help="Path to a Core 30 page folder (contains draft-vN-WP-WRAPPED.html + draft-v1.md)",
+        default=None,
+        help="Path to a Core 30 page folder (contains draft-vN-WP-WRAPPED.html + draft-v1.md). Required unless --check-credentials.",
     )
     p.add_argument(
         "--config",
         type=Path,
-        required=True,
-        help="Path to client config JSON",
+        default=None,
+        help="Path to client config JSON. Required unless --check-credentials.",
     )
     p.add_argument(
         "--version",
@@ -1423,8 +1538,42 @@ def main() -> int:
         ),
     )
 
+    p.add_argument(
+        "--preflight-credentials",
+        action="store_true",
+        help=(
+            "Verify GSC Application Default Credentials at run start before "
+            "any page work begins. If credentials are missing or expired, the "
+            "script exits with an actionable fix message instead of silently "
+            "failing at the indexing step of each page. Recommended for batch "
+            "runs. Only fires when the config has gsc_indexing: true."
+        ),
+    )
+    p.add_argument(
+        "--check-credentials",
+        action="store_true",
+        help=(
+            "Standalone mode: verify GSC credentials and exit. Does not "
+            "require --page-folder or --config. Use at the start of an "
+            "orchestrated run to surface auth issues before any page work."
+        ),
+    )
+
     args = p.parse_args()
 
+    # ORCH-1: standalone credential check mode — no page folder needed
+    if args.check_credentials:
+        ok, msg = verify_gsc_credentials()
+        print(f"GSC credential check: {'✓ PASS' if ok else '✗ FAIL'}")
+        print(f"  {msg}")
+        return 0 if ok else 1
+
+    if args.page_folder is None:
+        sys.stderr.write("ERROR: --page-folder is required (unless using --check-credentials)\n")
+        return 2
+    if args.config is None:
+        sys.stderr.write("ERROR: --config is required (unless using --check-credentials)\n")
+        return 2
     if not args.page_folder.is_dir():
         sys.stderr.write(f"ERROR: page-folder not found: {args.page_folder}\n")
         return 2
@@ -1440,6 +1589,7 @@ def main() -> int:
             dry_run=args.dry_run,
             request_indexing=args.request_indexing,
             bypass_quality_gate=args.bypass_quality_gate,
+            preflight_credentials=args.preflight_credentials,
         )
     except Exception as e:
         sys.stderr.write(f"FATAL: {e}\n")

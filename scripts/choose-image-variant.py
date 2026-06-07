@@ -62,6 +62,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import hashlib
 import json
 import mimetypes
 import sys
@@ -70,6 +71,215 @@ from typing import Any, Optional
 
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
+
+# ---------------------------------------------------------------------------
+# CH-1: Image-reuse-overuse tracker + variant rotation across siblings
+# ---------------------------------------------------------------------------
+# Tracks which images (by content hash) are used on which pages.
+# Registry lives at <workspace>/repos/ai-agency-core/scripts/data/_image-usage-registry.json
+# Shape: { "<content_hash>": { "pages": ["<page-slug>", ...], "path": "<last-known-path>" } }
+# Generic: works for any client / any pipeline that calls choose-image-variant.
+
+DEFAULT_OVERUSE_THRESHOLD = 3  # flag when one image is used on > N pages
+
+
+# ---------------------------------------------------------------------------
+# CH-2: Vision-score cache by image hash
+# ---------------------------------------------------------------------------
+# Caches per-variant vision API scores keyed by (image_content_hash, rubric_hash).
+# On cache hit, the API call is skipped entirely — zero cost re-run.
+# Cache file: <workspace>/repos/ai-agency-core/scripts/data/_vision-score-cache.json
+# Shape: { "<image_hash>:<rubric_hash>": { "score_result": {...}, "cached_at": "ISO" } }
+# Generic: works for any image class / any pipeline.
+
+
+def _score_cache_path() -> Path:
+    """Return the path to the vision-score cache JSON."""
+    return SCRIPTS_DIR / "data" / "_vision-score-cache.json"
+
+
+def _load_score_cache() -> dict[str, Any]:
+    """Load the vision-score cache from disk. Returns empty dict if missing."""
+    cp = _score_cache_path()
+    if cp.is_file():
+        try:
+            return json.loads(cp.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            sys.stderr.write(f"  WARN: could not parse {cp}, starting fresh\n")
+    return {}
+
+
+def _save_score_cache(cache: dict[str, Any]) -> None:
+    """Write the vision-score cache to disk atomically."""
+    cp = _score_cache_path()
+    cp.parent.mkdir(parents=True, exist_ok=True)
+    tmp = cp.with_suffix(".tmp")
+    tmp.write_text(json.dumps(cache, indent=2, ensure_ascii=False), encoding="utf-8")
+    tmp.rename(cp)
+
+
+def _rubric_hash(rubric: str) -> str:
+    """Return a short SHA-256 hash of the rubric text (first 16 hex chars).
+
+    Ensures a rubric change (e.g., weight adjustment, new criterion) invalidates
+    all cached scores produced under the old rubric.
+    """
+    return hashlib.sha256(rubric.encode("utf-8")).hexdigest()[:16]
+
+
+def _cache_key(image_hash: str, rubric_h: str) -> str:
+    """Build the compound cache key."""
+    return f"{image_hash}:{rubric_h}"
+
+
+def lookup_cached_score(image_hash: str, rubric_h: str) -> Optional[dict[str, Any]]:
+    """Return the cached score result for this image+rubric, or None on miss."""
+    cache = _load_score_cache()
+    entry = cache.get(_cache_key(image_hash, rubric_h))
+    if entry:
+        return entry.get("score_result")
+    return None
+
+
+def store_cached_score(
+    image_hash: str,
+    rubric_h: str,
+    score_result: dict[str, Any],
+) -> None:
+    """Write a score result to the cache."""
+    from datetime import datetime, timezone
+    cache = _load_score_cache()
+    cache[_cache_key(image_hash, rubric_h)] = {
+        "score_result": score_result,
+        "cached_at": datetime.now(timezone.utc).isoformat(),
+    }
+    _save_score_cache(cache)
+
+
+def _image_content_hash(path: Path) -> str:
+    """Return the SHA-256 hex digest of an image file's content."""
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _registry_path() -> Path:
+    """Return the path to the image-usage registry JSON."""
+    return SCRIPTS_DIR / "data" / "_image-usage-registry.json"
+
+
+def _load_registry() -> dict[str, Any]:
+    """Load the image-usage registry from disk. Returns empty dict if missing."""
+    rp = _registry_path()
+    if rp.is_file():
+        try:
+            return json.loads(rp.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            sys.stderr.write(f"  WARN: could not parse {rp}, starting fresh\n")
+    return {}
+
+
+def _save_registry(registry: dict[str, Any]) -> None:
+    """Write the image-usage registry to disk atomically."""
+    rp = _registry_path()
+    rp.parent.mkdir(parents=True, exist_ok=True)
+    tmp = rp.with_suffix(".tmp")
+    tmp.write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
+    tmp.rename(rp)
+
+
+def register_image_usage(
+    image_path: Path,
+    page_slug: str,
+    content_hash: Optional[str] = None,
+) -> dict[str, Any]:
+    """Record that `page_slug` uses the image at `image_path`.
+
+    Returns the registry entry for this hash (including the updated pages list).
+    """
+    if content_hash is None:
+        content_hash = _image_content_hash(image_path)
+    registry = _load_registry()
+    entry = registry.setdefault(content_hash, {"pages": [], "path": ""})
+    entry["path"] = str(image_path)
+    if page_slug and page_slug not in entry["pages"]:
+        entry["pages"].append(page_slug)
+    _save_registry(registry)
+    return entry
+
+
+def check_overuse(
+    content_hash: str,
+    threshold: int = DEFAULT_OVERUSE_THRESHOLD,
+) -> Optional[str]:
+    """Return a warning string if this image hash exceeds the threshold, else None."""
+    registry = _load_registry()
+    entry = registry.get(content_hash)
+    if not entry:
+        return None
+    page_count = len(entry.get("pages", []))
+    if page_count > threshold:
+        return (
+            f"IMAGE OVERUSE: hash {content_hash[:12]}… used on {page_count} pages "
+            f"(threshold={threshold}). Pages: {', '.join(entry['pages'])}. "
+            f"Consider rotating to a different variant for SEO diversity."
+        )
+    return None
+
+
+def rotate_for_siblings(
+    scored_variants: list[dict[str, Any]],
+    sibling_page_slugs: list[str],
+    threshold: int = DEFAULT_OVERUSE_THRESHOLD,
+) -> list[dict[str, Any]]:
+    """Re-rank scored variants to prefer those NOT already used by sibling pages.
+
+    Takes a list of scored variant dicts (each must have 'variant_path' and 'score')
+    and a list of sibling page slugs (e.g., same service across different cities).
+
+    Variants already used by a sibling get a ranking penalty. The penalty increases
+    with the number of siblings already using that variant. The original score
+    is preserved in 'original_score'; 'score' is adjusted for rotation.
+
+    Returns the re-ranked list (highest adjusted score first).
+    """
+    if not sibling_page_slugs:
+        return scored_variants
+
+    registry = _load_registry()
+
+    for variant in scored_variants:
+        vpath = Path(variant.get("variant_path", ""))
+        if not vpath.is_file():
+            continue
+        content_hash = _image_content_hash(vpath)
+        variant["content_hash"] = content_hash
+        entry = registry.get(content_hash, {"pages": []})
+        sibling_uses = sum(
+            1 for p in entry.get("pages", []) if p in sibling_page_slugs
+        )
+        variant["sibling_reuse_count"] = sibling_uses
+        variant["original_score"] = variant.get("score", 0)
+        # Penalty: -15 points per sibling already using this image.
+        # At 1 sibling: reused 85 drops to 70, losing to a fresh 75.
+        # At 3 siblings: -45 penalty — a strong variant CAN drop below
+        # a mediocre fresh one. This is intentional: heavy reuse should
+        # strongly favor any fresh alternative. No score floor enforced.
+        penalty = sibling_uses * 15
+        variant["rotation_penalty"] = penalty
+        variant["score"] = max(0, variant["original_score"] - penalty)
+        if penalty > 0:
+            sys.stderr.write(
+                f"  ROTATION: {vpath.name} used by {sibling_uses} sibling(s) — "
+                f"score {variant['original_score']}→{variant['score']} "
+                f"(-{penalty} rotation penalty)\n"
+            )
+
+    # Re-sort by adjusted score
+    scored_variants.sort(key=lambda s: s.get("score", 0), reverse=True)
+    return scored_variants
 
 
 # ---------------------------------------------------------------------------
@@ -457,7 +667,14 @@ def determine_outcome_tag(score: int) -> str:
     return "regression"
 
 
-def pick_keeper(scores: list[dict[str, Any]], image_class: str = "", slot_type: str = "") -> dict[str, Any]:
+def pick_keeper(
+    scores: list[dict[str, Any]],
+    image_class: str = "",
+    slot_type: str = "",
+    page_slug: str = "",
+    sibling_page_slugs: Optional[list[str]] = None,
+    overuse_threshold: int = DEFAULT_OVERUSE_THRESHOLD,
+) -> dict[str, Any]:
     """Select the best variant and determine the outcome.
 
     `scores` is a list of dicts, each with at minimum:
@@ -465,6 +682,11 @@ def pick_keeper(scores: list[dict[str, Any]], image_class: str = "", slot_type: 
       rationale     — str
       variant_path  — str
       variant_name  — str
+
+    CH-1 integration:
+      - If `sibling_page_slugs` is provided, applies rotation penalty before ranking.
+      - After selecting the keeper, registers it in the image-usage registry.
+      - Checks overuse threshold and includes warnings in the result.
     """
     # Separate parse-error variants (score -1) — they must not win the ranking
     valid = [s for s in scores if s.get("score", 0) >= 0]
@@ -474,29 +696,56 @@ def pick_keeper(scores: list[dict[str, Any]], image_class: str = "", slot_type: 
             f"  NOTE: {len(parse_errors)} variant(s) had parse errors — "
             f"excluded from ranking, flagged for human review.\n"
         )
-    ranked = sorted(valid or scores, key=lambda s: s.get("score", 0), reverse=True)
+
+    candidates = valid or scores
+
+    # CH-1: apply sibling rotation penalty before ranking
+    if sibling_page_slugs:
+        candidates = rotate_for_siblings(
+            candidates, sibling_page_slugs, threshold=overuse_threshold
+        )
+
+    ranked = sorted(candidates, key=lambda s: s.get("score", 0), reverse=True)
     best = ranked[0]
-    tag = determine_outcome_tag(best.get("score", 0))
-    return {
+    tag = determine_outcome_tag(best.get("original_score", best.get("score", 0)))
+
+    result = {
         "keeper_index": scores.index(best),
         "keeper_path": best.get("variant_path", ""),
         "keeper_name": best.get("variant_name", ""),
         "outcome_tag": tag,
         "rationale": best.get("rationale", ""),
-        "score": best.get("score", 0),
+        "score": best.get("original_score", best.get("score", 0)),
+        "adjusted_score": best.get("score", 0),
         "image_class": image_class,
         "slot_type": slot_type,
         "all_ranked": [
             {
                 "rank": i + 1,
                 "name": s.get("variant_name", ""),
-                "score": s.get("score", 0),
-                "tag": determine_outcome_tag(s.get("score", 0)),
+                "score": s.get("original_score", s.get("score", 0)),
+                "adjusted_score": s.get("score", 0),
+                "tag": determine_outcome_tag(s.get("original_score", s.get("score", 0))),
                 "rationale": s.get("rationale", ""),
+                "sibling_reuse_count": s.get("sibling_reuse_count", 0),
+                "rotation_penalty": s.get("rotation_penalty", 0),
             }
             for i, s in enumerate(ranked)
         ],
     }
+
+    # CH-1: register keeper in image-usage registry + check overuse
+    keeper_path = Path(best.get("variant_path", ""))
+    if keeper_path.is_file() and page_slug:
+        content_hash = best.get("content_hash") or _image_content_hash(keeper_path)
+        register_image_usage(keeper_path, page_slug, content_hash=content_hash)
+        overuse_warning = check_overuse(content_hash, threshold=overuse_threshold)
+        if overuse_warning:
+            result["overuse_warning"] = overuse_warning
+            sys.stderr.write(f"  ⚠ {overuse_warning}\n")
+        result["keeper_content_hash"] = content_hash
+
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -616,9 +865,24 @@ def _score_variant_api(
     slot_type: str,
     all_variant_names: Optional[list[str]] = None,
     display_context: str = "",
+    use_cache: bool = True,
 ) -> dict[str, Any]:
     """Score a single variant via the Anthropic Messages API."""
     variant_name = variant_path.name
+
+    # CH-2: check cache before calling the API
+    if use_cache:
+        img_hash = _image_content_hash(variant_path)
+        r_hash = _rubric_hash(rubric + (display_context or ""))
+        cached = lookup_cached_score(img_hash, r_hash)
+        if cached is not None:
+            # Restore variant identity fields (cache stores scores, not paths)
+            cached["variant_path"] = str(variant_path)
+            cached["variant_name"] = variant_name
+            cached["cache_hit"] = True
+            sys.stderr.write(f"CACHE HIT (hash {img_hash[:12]}…)\n")
+            return cached
+
     system_prompt = _build_variant_system_prompt(variant_name)
     messages_content: list[dict[str, Any]] = []
 
@@ -727,6 +991,12 @@ def _score_variant_api(
     if all_variant_names and result.get("score", 0) >= 0:
         result = _check_rationale_binding(result, variant_name, all_variant_names)
 
+    # CH-2: store successful score in cache (skip parse-error results)
+    if use_cache and result.get("score", 0) >= 0:
+        img_hash = _image_content_hash(variant_path)
+        r_hash = _rubric_hash(rubric + (display_context or ""))
+        store_cached_score(img_hash, r_hash, result)
+
     return result
 
 
@@ -739,6 +1009,10 @@ def run_anthropic_backend(
     page_service: str,
     page_city: str,
     display_context: str = "",
+    page_slug: str = "",
+    sibling_page_slugs: Optional[list[str]] = None,
+    overuse_threshold: int = DEFAULT_OVERUSE_THRESHOLD,
+    use_cache: bool = True,
 ) -> dict[str, Any]:
     """Score all variants via the Anthropic API backend."""
     import anthropic
@@ -767,6 +1041,7 @@ def run_anthropic_backend(
             slot_type=slot_type,
             all_variant_names=all_variant_names,
             display_context=display_context,
+            use_cache=use_cache,
         )
         # Enforce composition cap for topic-class: subject_prominence ≤ 2 → cap at 70
         if (image_class == "topic"
@@ -783,7 +1058,14 @@ def run_anthropic_backend(
             sys.stderr.write(f"score={result.get('score', '?')}\n")
         scores.append(result)
 
-    outcome = pick_keeper(scores, image_class=image_class, slot_type=slot_type)
+    outcome = pick_keeper(
+        scores,
+        image_class=image_class,
+        slot_type=slot_type,
+        page_slug=page_slug,
+        sibling_page_slugs=sibling_page_slugs,
+        overuse_threshold=overuse_threshold,
+    )
     outcome["scores"] = scores
     outcome["backend"] = "anthropic"
 
@@ -881,6 +1163,47 @@ def main() -> int:
         default="anthropic",
         help="Vision backend. 'anthropic' = standalone API calls. In-session mode is not CLI-invocable.",
     )
+    # CH-2: vision-score cache
+    p.add_argument(
+        "--no-cache",
+        action="store_true",
+        help=(
+            "Disable the vision-score cache. Forces re-scoring of all variants "
+            "even if identical images were scored before with the same rubric."
+        ),
+    )
+    # CH-1: image-reuse-overuse tracker + variant rotation
+    p.add_argument(
+        "--page-slug",
+        type=str,
+        default="",
+        help=(
+            "Slug of the page this image is for (e.g., 'panel-upgrade-woodbridge-va'). "
+            "Used to register the keeper in the image-usage registry and to check "
+            "overuse thresholds. Omit for ad-hoc scoring without tracking."
+        ),
+    )
+    p.add_argument(
+        "--sibling-slugs",
+        type=str,
+        nargs="*",
+        default=None,
+        help=(
+            "Page slugs of sibling pages (same service, different cities — or vice "
+            "versa). Used to apply a rotation penalty so the chooser prefers variants "
+            "NOT already used by siblings. Omit to skip rotation."
+        ),
+    )
+    p.add_argument(
+        "--overuse-threshold",
+        type=int,
+        default=DEFAULT_OVERUSE_THRESHOLD,
+        help=(
+            f"Flag when one image (by content hash) is used on more than N pages "
+            f"(default: {DEFAULT_OVERUSE_THRESHOLD}). Applies to the keeper after "
+            f"selection."
+        ),
+    )
 
     args = p.parse_args()
 
@@ -906,6 +1229,10 @@ def main() -> int:
         page_service=args.page_service,
         page_city=args.page_city,
         display_context=args.display_context,
+        page_slug=args.page_slug,
+        sibling_page_slugs=args.sibling_slugs,
+        overuse_threshold=args.overuse_threshold,
+        use_cache=not args.no_cache,
     )
 
     print(json.dumps(result, indent=2, ensure_ascii=False))
