@@ -1,0 +1,25 @@
+{
+  "profile_id": "template-placeholder-defaults",
+  "description": "Non-SEO proof: generic scanner for any template+data pipeline. Detects common placeholder defaults that indicate a field was not parameterized. Usable by any scaffolder that uses {placeholder} substitution.",
+  "scan_globs": ["*.html", "*.md", "*.txt", "*.json"],
+  "defaults": [
+    {
+      "field": "unrendered_placeholder",
+      "default_values": ["{city_name}", "{client_name}", "{owner_name}", "{service_name}", "{phone_display}"],
+      "severity": "blocking",
+      "rationale": "Unrendered str.format_map placeholder — the template variable was never substituted."
+    },
+    {
+      "field": "fill_marker",
+      "default_values": ["FILL:", "<!-- MISSING", "<!-- TBD", "<TBD>"],
+      "severity": "blocking",
+      "rationale": "Explicit fill/missing marker left in output — indicates intentional gap that was never resolved."
+    },
+    {
+      "field": "example_placeholder",
+      "default_values": ["example.com", "555-0100", "John Doe", "Acme Corp"],
+      "severity": "warning",
+      "rationale": "Common placeholder/example values that may indicate template defaults leaked through."
+    }
+  ]
+}

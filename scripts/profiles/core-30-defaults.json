@@ -1,0 +1,19 @@
+{
+  "profile_id": "core-30-defaults",
+  "description": "Detects scaffolder silent defaults in Core 30 page output. Each entry is a value the scaffolder falls back to when a field is missing from the city/service/client JSON — the exact class of defect that D-10/D-11/D-12 represent.",
+  "scan_globs": ["*.html", "*.md"],
+  "defaults": [
+    {
+      "field": "dispatch_time",
+      "default_values": ["45-minute", "45-min"],
+      "severity": "blocking",
+      "rationale": "D-12: scaffold-core-30-page.py line 213 falls back to '45-minute' / '45-min' when city JSON omits the field. A match here means the value MAY be a silent default — cross-reference with SC-2 to confirm whether the city JSON provides the value explicitly. If explicit, the match is a false positive (the value happens to equal the default). If missing, the match is a real catch."
+    },
+    {
+      "field": "utility_coordination",
+      "default_values": ["Dominion Energy coordination"],
+      "severity": "blocking",
+      "rationale": "D-11: scaffold-core-30-page.py line 208 falls back to 'Dominion Energy coordination' when city JSON omits the field. A match here means the value MAY be a silent default — same cross-reference principle as dispatch_time. Single-Dominion cities that provide the value explicitly are false positives."
+    }
+  ]
+}

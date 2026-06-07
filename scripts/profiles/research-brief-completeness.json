@@ -1,0 +1,46 @@
+{
+  "profile_id": "research-brief-completeness",
+  "description": "Non-SEO proof: pre-authoring completeness gate for research briefs. Verifies the data sources a brief will reference have the required fields. Same engine as core-30-completeness, different artifact class.",
+  "data_files": [
+    {
+      "pattern": "cities/{city_slug}.json",
+      "required_fields": [
+        {
+          "field": "name",
+          "severity": "blocking",
+          "rationale": "City name is the brief's subject identity."
+        },
+        {
+          "field": "county_full",
+          "severity": "blocking",
+          "rationale": "County alignment is a required section in city-base-research briefs."
+        },
+        {
+          "field": "state",
+          "severity": "blocking",
+          "rationale": "State is needed for jurisdiction-specific research (permits, utilities)."
+        }
+      ]
+    },
+    {
+      "pattern": "client-{client_slug}.json",
+      "required_fields": [
+        {
+          "field": "name",
+          "severity": "blocking",
+          "rationale": "Client name is needed for client-fact-research brief subject."
+        },
+        {
+          "field": "owner_name",
+          "severity": "blocking",
+          "rationale": "Owner name is needed for accounts-ownership verification."
+        },
+        {
+          "field": "website_url",
+          "severity": "blocking",
+          "rationale": "Website URL is needed for NAP consistency checks."
+        }
+      ]
+    }
+  ]
+}

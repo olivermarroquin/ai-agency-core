@@ -1,0 +1,231 @@
+{
+  "profile_id": "core-30-completeness",
+  "description": "Pre-scaffold completeness gate for Core 30 pages. Verifies city/service/client data files have every field the templates reference. Missing field = fail loud, never silent-default.",
+  "data_files": [
+    {
+      "pattern": "cities/{city_slug}.json",
+      "required_fields": [
+        {
+          "field": "slug",
+          "severity": "blocking",
+          "rationale": "Core identity field — scaffolder uses this to derive page slug, folder name, and URL."
+        },
+        {
+          "field": "name",
+          "severity": "blocking",
+          "rationale": "City name appears in H1, meta title, meta description, JSON-LD, and body text."
+        },
+        {
+          "field": "name_with_state",
+          "severity": "blocking",
+          "rationale": "Full city name (e.g., 'Vienna, VA') used in schema areaServed and meta description."
+        },
+        {
+          "field": "state",
+          "severity": "blocking",
+          "rationale": "State abbreviation used in address blocks and schema."
+        },
+        {
+          "field": "county",
+          "severity": "blocking",
+          "rationale": "County name used in JSON-LD areaServed. D-10 class: wrong county = wrong service area."
+        },
+        {
+          "field": "county_full",
+          "severity": "blocking",
+          "rationale": "Full county name (e.g., 'Fairfax County') in JSON-LD and body text."
+        },
+        {
+          "field": "dispatch_time_short",
+          "severity": "blocking",
+          "rationale": "D-12: always-required-explicit. Even cities where '45-min' IS correct must state it consciously. The scaffolder's fallback exists for backwards compat only — this gate treats any reliance on that fallback as a missing-field failure."
+        },
+        {
+          "field": "dispatch_time_phrase",
+          "severity": "blocking",
+          "rationale": "D-12: always-required-explicit. Companion to dispatch_time_short. Same principle — conscious value, not silent default."
+        },
+        {
+          "field": "utility_coordination_phrase",
+          "severity": "blocking",
+          "rationale": "D-11: always-required-explicit. Single-utility cities (Springfield = Dominion) and multi-utility cities (Stafford = Dominion/NOVEC/REC) alike must state the value consciously. The scaffolder's fallback to 'Dominion Energy coordination' exists for backwards compat only — this gate treats any reliance on that fallback as a missing-field failure, not a correct default."
+        },
+        {
+          "field": "distance_from_hq_phrase",
+          "severity": "blocking",
+          "rationale": "Used in hero subheading and about section. Drives dispatch time logic."
+        },
+        {
+          "field": "neighborhoods",
+          "severity": "blocking",
+          "rationale": "Neighborhoods section is a required page section. Empty = visible gap."
+        },
+        {
+          "field": "housing_patterns",
+          "severity": "blocking",
+          "rationale": "Pattern cards section. Empty = visible gap in page structure."
+        },
+        {
+          "field": "geographic_anchor_paragraph",
+          "severity": "blocking",
+          "rationale": "Opening paragraph of the 'Why {city}' section."
+        },
+        {
+          "field": "no_trip_charge_cities",
+          "severity": "blocking",
+          "rationale": "List of nearby cities for the no-trip-charge phrase. Empty list = broken sentence."
+        },
+        {
+          "field": "audience_descriptor",
+          "severity": "warning",
+          "rationale": "Used in JSON-LD audience. Defaults gracefully but should be explicit."
+        },
+        {
+          "field": "ev_charger_homes_phrase",
+          "severity": "warning",
+          "rationale": "Service-specific city detail. Not all services reference this."
+        },
+        {
+          "field": "other_areas_paragraph",
+          "severity": "warning",
+          "rationale": "Optional paragraph about surrounding service areas."
+        }
+      ]
+    },
+    {
+      "pattern": "services/{service_slug}.json",
+      "required_fields": [
+        {
+          "field": "slug",
+          "severity": "blocking",
+          "rationale": "Service identity. Used to derive page slug via page_slug_template."
+        },
+        {
+          "field": "name",
+          "severity": "blocking",
+          "rationale": "Service name appears in headings, meta, and schema."
+        },
+        {
+          "field": "page_slug_template",
+          "severity": "blocking",
+          "rationale": "Template for page URL. Missing = no page slug = crash."
+        },
+        {
+          "field": "hero_eyebrow_template",
+          "severity": "blocking",
+          "rationale": "H1 eyebrow text template."
+        },
+        {
+          "field": "hero_heading",
+          "severity": "blocking",
+          "rationale": "H2 hero heading."
+        },
+        {
+          "field": "hero_subheading_template",
+          "severity": "blocking",
+          "rationale": "Hero subheading template."
+        },
+        {
+          "field": "problem_cards",
+          "severity": "blocking",
+          "rationale": "Problem cards section content. Empty = blank page section."
+        },
+        {
+          "field": "process_steps",
+          "severity": "blocking",
+          "rationale": "Process steps section. Empty = blank page section."
+        },
+        {
+          "field": "pricing_items",
+          "severity": "blocking",
+          "rationale": "Pricing items list. Empty = blank pricing section."
+        },
+        {
+          "field": "faq_items",
+          "severity": "blocking",
+          "rationale": "FAQ section + FAQ schema. Empty = missing FAQ schema."
+        },
+        {
+          "field": "related_cards",
+          "severity": "blocking",
+          "rationale": "Related services cards. Empty = dead section. PR-07 class: must point to THIS client's services."
+        },
+        {
+          "field": "aioseo_page_title_template",
+          "severity": "blocking",
+          "rationale": "Meta title template. Missing = no SEO title."
+        },
+        {
+          "field": "aioseo_meta_description_template",
+          "severity": "blocking",
+          "rationale": "Meta description template. Missing = no meta description."
+        },
+        {
+          "field": "aioseo_focus_keyword_template",
+          "severity": "blocking",
+          "rationale": "Focus keyword for AIOSEO. Missing = no keyword targeting."
+        }
+      ]
+    },
+    {
+      "pattern": "client-{client_slug}.json",
+      "required_fields": [
+        {
+          "field": "client_slug",
+          "severity": "blocking",
+          "rationale": "Client identity. Used to load service overrides via load_service()."
+        },
+        {
+          "field": "name",
+          "severity": "blocking",
+          "rationale": "Business name in schema, body, and meta."
+        },
+        {
+          "field": "owner_name",
+          "severity": "blocking",
+          "rationale": "Owner name in about section and Person schema."
+        },
+        {
+          "field": "phone_display",
+          "severity": "blocking",
+          "rationale": "Phone number in CTA buttons and body text."
+        },
+        {
+          "field": "phone_tel",
+          "severity": "blocking",
+          "rationale": "tel: link for phone CTA."
+        },
+        {
+          "field": "email",
+          "severity": "blocking",
+          "rationale": "Email in schema."
+        },
+        {
+          "field": "website_url",
+          "severity": "blocking",
+          "rationale": "Base URL for page_url derivation and schema."
+        },
+        {
+          "field": "brand_image_url",
+          "severity": "blocking",
+          "rationale": "Brand image in schema. PR-25: must not be used as page hero."
+        },
+        {
+          "field": "primary_color",
+          "severity": "blocking",
+          "rationale": "CSS primary color. Missing = broken page styling."
+        },
+        {
+          "field": "review_count",
+          "severity": "warning",
+          "rationale": "Review count in schema AggregateRating. Should be current."
+        },
+        {
+          "field": "review_rating",
+          "severity": "warning",
+          "rationale": "Review rating in schema AggregateRating."
+        }
+      ]
+    }
+  ]
+}
