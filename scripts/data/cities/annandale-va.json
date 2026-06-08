@@ -1,0 +1,108 @@
+{
+  "_comment": "Per-city data for Annandale, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "annandale-va",
+  "name": "Annandale",
+  "name_with_state": "Annandale, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Fairfax County",
+  "county_full": "Fairfax County, Virginia",
+  "electric_utilities": ["Dominion Energy"],
+  "utility_coordination_phrase": "Dominion Energy coordination",
+  "dispatch_time_phrase": "15–20 minute",
+  "dispatch_time_short": "15–20 min",
+  "distance_from_hq_phrase": "Annandale is about 7 miles from our Fairfax Blvd office — roughly 15–20 minutes via Little River Turnpike or I-495",
+  "geographic_anchor_paragraph": "Annandale, VA is a census-designated place in central Fairfax County, anchored by the intersection of Little River Turnpike (Route 236) and Columbia Pike (Route 244). The Capital Beltway (I-495) forms its western boundary. Annandale is bordered by Falls Church and Arlington to the north, Springfield to the south, and Burke to the southwest. It is about 10 miles from downtown DC, 10 minutes from Falls Church and Fairfax City, and 15–20 minutes from our Fairfax Blvd office.",
+  "audience_descriptor": "Residential homeowners in Annandale, VA and surrounding Fairfax County neighborhoods including Ravensworth, Columbia Pines, Heritage Hill, Lincolnia, Pine Ridge, and the Wakefield Chapel community.",
+  "no_trip_charge_cities": [
+    "Annandale",
+    "Fairfax",
+    "Falls Church",
+    "Vienna",
+    "Springfield"
+  ],
+  "area_served_schema": [
+    {"@type": "AdministrativeArea", "name": "Fairfax County, VA"},
+    {"@type": "City", "name": "Annandale", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
+    {"@type": "City", "name": "Fairfax", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
+    {"@type": "City", "name": "Falls Church", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}}
+  ],
+  "neighborhoods": [
+    {
+      "name": "Ravensworth",
+      "blurb": "large 1950s–1960s planned community of ramblers and split-levels near Braddock Road with mature tree canopy"
+    },
+    {
+      "name": "Columbia Pines",
+      "blurb": "established neighborhood of 1960s colonials and split-levels along the Columbia Pike corridor"
+    },
+    {
+      "name": "Heritage Hill",
+      "blurb": "1970s–1980s colonials and split-foyers on generous wooded lots near the Beltway"
+    },
+    {
+      "name": "Lincolnia",
+      "blurb": "post-war community straddling the Annandale-Alexandria border with a mix of 1950s ramblers and newer townhomes"
+    },
+    {
+      "name": "Pine Ridge",
+      "blurb": "quiet 1960s neighborhood of brick ramblers and split-levels near Annandale Community Park"
+    },
+    {
+      "name": "Wakefield Chapel",
+      "blurb": "well-maintained 1960s–1970s homes on wooded lots near Wakefield Park and the Cross County Trail"
+    },
+    {
+      "name": "Mason District",
+      "blurb": "diverse residential area north of Little River Turnpike with housing stock spanning the 1950s through 1980s"
+    },
+    {
+      "name": "Sleepy Hollow",
+      "blurb": "1950s–1960s brick ramblers and Cape Cods in a walkable neighborhood near Sleepy Hollow Road"
+    }
+  ],
+  "other_areas_paragraph": "Outside Annandale, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Falls Church, Springfield, Burke, and the rest of Fairfax County. We also cover Arlington, Montgomery County, MD, and Washington, DC.",
+  "housing_patterns": [
+    {
+      "title": "1950s–1960s ramblers, Cape Cods &amp; early split-levels",
+      "neighborhood_examples": "Ravensworth, Sleepy Hollow, Lincolnia, Pine Ridge (original homes)",
+      "context_paragraph": "Annandale's first wave of suburban development arrived in the 1950s and early 1960s — brick ramblers in Ravensworth, Cape Cods in Sleepy Hollow, and modest colonials near Annandale's commercial center. These homes were built with 100-amp panels (an upgrade from fuse boxes in older areas) and thermoplastic copper wiring sized for the appliance loads of their era. Ravensworth alone has over 1,500 homes built between 1951 and 1958, nearly all with identical electrical systems. Ungrounded outlets, no GFCI protection, and limited circuit counts are the norm. Many owners have added central AC, kitchen remodels, and finished basements without upgrading the original electrical service.",
+      "symptoms": "100-amp panels with every breaker slot filled and no capacity for additional circuits. Two-prong ungrounded outlets in bedrooms and living areas — the original wiring has no equipment ground conductor. No GFCI protection in kitchens, bathrooms, or exterior outlets (pre-1975 construction). Breakers tripping when running the AC and a microwave simultaneously — the original circuits weren't sized for modern loads. Double-tapped breakers where a previous handyman added circuits without adding panel capacity."
+    },
+    {
+      "title": "1960s–1980s split-levels, split-foyers &amp; colonials",
+      "neighborhood_examples": "Columbia Pines, Heritage Hill, Wakefield Chapel, Mason District, Ravensworth (later sections)",
+      "context_paragraph": "Annandale's continued growth through the 1960s–1980s brought split-levels, split-foyers, and larger colonials to neighborhoods like Columbia Pines, Heritage Hill, and Wakefield Chapel. These homes have 100-amp or 150-amp panels with copper wiring — adequate when built but insufficient for modern loads. Some 1970s construction used aluminum branch wiring on 15-amp and 20-amp circuits. Many of these homes have been expanded with sunrooms, finished basements, and updated kitchens, creating a patchwork of wiring vintages. Federal Pacific Stab-Lok panels are common in 1970s construction throughout Annandale.",
+      "symptoms": "Federal Pacific Stab-Lok or Zinsco panels (1970s homes) — known fire hazards with breakers that fail to trip on overloads. Aluminum branch wiring with oxidized connections causing warm outlets and intermittent flickering at switches. 150-amp panels that are full — no room for EV charger circuits, heat pump upgrades, or additional kitchen circuits. Patchwork wiring from multiple renovation eras with incompatible connection methods at junction boxes."
+    },
+    {
+      "title": "2000s–2020s renovations, additions &amp; selective rebuilds",
+      "neighborhood_examples": "Ravensworth (renovated), Sleepy Hollow (expanded), Pine Ridge (updated), Columbia Pines (rebuilt)",
+      "context_paragraph": "While Annandale has seen fewer full teardowns than closer-in communities like Falls Church, major renovations and additions are common — 1950s ramblers gaining second stories, kitchens gutted to the studs, and basements converted to full living space. Some lots have seen full teardown-rebuilds, especially along the Columbia Pike corridor. Renovated homes often have a modern sub-panel serving the addition while the original panel remains in place — creating two electrical systems of different vintages under one roof. New construction meets current code with 200-amp panels and AFCI protection.",
+      "symptoms": "Dual-panel configurations where the original 100-amp panel feeds half the home and a newer sub-panel feeds the addition — the original panel becomes the weak link. Undersized service entrance conductors that were adequate for the original home but bottleneck the expanded structure. AFCI nuisance trips in new addition bedrooms connected to circuits that also serve the original portion of the home. Voltage imbalance between old and new sections during high-demand periods."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "troubleshooting": [
+      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Annandale's 1950s–1960s homes (Ravensworth, Sleepy Hollow, Pine Ridge), 100-amp panels are maxed out with no spare capacity for modern loads." },
+      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes." },
+      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging Dominion Energy service connection. Annandale's mature-tree neighborhoods (Ravensworth, Wakefield Chapel, Heritage Hill) are prone to weather-related service-entrance damage." },
+      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. In Annandale's 1970s homes with aluminum wiring (Heritage Hill, Columbia Pines), warm outlets are especially concerning and require immediate inspection." },
+      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in Annandale's heavily wooded neighborhoods." },
+      { "summary": "Federal Pacific or Zinsco panel in your home", "body": "These 1970s-era panels are known fire hazards — breakers fail to trip on overloads. If your Annandale home has a Federal Pacific Stab-Lok or Zinsco panel (common in Heritage Hill, Columbia Pines, Mason District), replacement is the only safe option." }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "troubleshooting": "Breaker trips on overloaded circuits. Annandale's housing stock is overwhelmingly 1950s–1980s construction — from brick ramblers in Ravensworth with 100-amp panels sized for 1955 loads, to 1970s split-levels in Heritage Hill with Federal Pacific panels that are fire hazards, to expanded colonials in Columbia Pines with patchwork wiring from multiple renovation eras. None of these homes were designed for central AC, dual ovens, home offices, and EV chargers. The second most common call is warm outlets and flickering lights — often pointing to aluminum wiring connections or loose neutrals at the service entrance."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "troubleshooting": "In Annandale's established communities like Ravensworth, Sleepy Hollow, and along Little River Turnpike,"
+  },
+  "ev_neighborhood_phrase": {
+    "troubleshooting": "In Annandale's single-family homes in Ravensworth, Wakefield Chapel, and the Heritage Hill area,"
+  },
+  "distance_phrase": {
+    "troubleshooting": "Annandale is about 7 miles from our Fairfax Blvd office — roughly 15–20 minutes via Little River Turnpike or I-495"
+  },
+  "ev_charger_homes_phrase": "Annandale's mid-century homes were not wired for"
+}

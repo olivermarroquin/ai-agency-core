@@ -1,0 +1,117 @@
+{
+  "_comment": "Per-city data for Washington, DC. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30. Focus on NW DC residential neighborhoods.",
+  "slug": "washington-dc",
+  "name": "Washington",
+  "name_with_state": "Washington, DC",
+  "state": "DC",
+  "state_full": "District of Columbia",
+  "county": "District of Columbia",
+  "county_full": "District of Columbia (independent jurisdiction)",
+  "electric_utilities": ["PEPCO"],
+  "utility_coordination_phrase": "PEPCO coordination",
+  "permit_authority": "DC Department of Buildings (DOB)",
+  "dispatch_time_phrase": "25–40 minute",
+  "dispatch_time_short": "25–40 min",
+  "distance_from_hq_phrase": "Washington, DC (NW neighborhoods) is about 15–20 miles from our Fairfax Blvd office — roughly 25–40 minutes via I-66 or the George Washington Parkway depending on the neighborhood",
+  "geographic_anchor_paragraph": "Washington, DC's Northwest quadrant contains the District's most concentrated residential electrician demand — affluent single-family neighborhoods stretching from Georgetown along the Potomac to Tenleytown, Chevy Chase DC, and the Palisades. Key corridors include Wisconsin Avenue, Massachusetts Avenue, MacArthur Boulevard, and Foxhall Road. These neighborhoods sit between Rock Creek Park to the east and the Potomac River to the west. NW DC is about 15–20 miles from our Fairfax Blvd office, with access via I-66, the Key Bridge, or Chain Bridge depending on the specific neighborhood.",
+  "audience_descriptor": "Residential homeowners in Northwest Washington, DC neighborhoods including Georgetown, Tenleytown, Cleveland Park, Chevy Chase DC, Palisades, Spring Valley, American University Park, Foxhall, Glover Park, and Cathedral Heights.",
+  "no_trip_charge_cities": [
+    "Washington DC (NW)",
+    "Bethesda",
+    "Chevy Chase",
+    "McLean",
+    "Arlington"
+  ],
+  "area_served_schema": [
+    {"@type": "AdministrativeArea", "name": "District of Columbia"},
+    {"@type": "City", "name": "Washington", "containedInPlace": {"@type": "AdministrativeArea", "name": "District of Columbia"}},
+    {"@type": "City", "name": "Bethesda", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
+    {"@type": "City", "name": "McLean", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}}
+  ],
+  "neighborhoods": [
+    {
+      "name": "Georgetown",
+      "blurb": "historic Federal and Georgian row houses from the 1800s along cobblestone streets — DC's oldest residential neighborhood"
+    },
+    {
+      "name": "Tenleytown",
+      "blurb": "1920s–1950s colonials and brick Cape Cods near Wisconsin Avenue with Metro access and walkable amenities"
+    },
+    {
+      "name": "Cleveland Park",
+      "blurb": "grand Victorians, Craftsman homes, and 1920s colonials on tree-lined streets near the National Cathedral"
+    },
+    {
+      "name": "Chevy Chase DC",
+      "blurb": "1920s–1940s colonials and Tudors at DC's northern tip — architecturally continuous with Chevy Chase, MD"
+    },
+    {
+      "name": "Palisades",
+      "blurb": "secluded 1920s–1960s neighborhood along MacArthur Boulevard overlooking the Potomac — a village within the city"
+    },
+    {
+      "name": "Spring Valley",
+      "blurb": "1930s–1940s estate-scale colonials on large wooded lots — one of DC's most affluent neighborhoods"
+    },
+    {
+      "name": "American University Park",
+      "blurb": "1930s–1950s colonials and Cape Cods in a quiet residential enclave adjacent to American University"
+    },
+    {
+      "name": "Foxhall",
+      "blurb": "large estate homes on secluded lots along Foxhall Road — some of DC's most private residential properties"
+    },
+    {
+      "name": "Glover Park",
+      "blurb": "1920s–1940s row houses and detached homes on hillside streets between Georgetown and the National Cathedral"
+    },
+    {
+      "name": "Cathedral Heights",
+      "blurb": "1940s–1960s homes and apartment buildings on elevated terrain near the Washington National Cathedral"
+    }
+  ],
+  "other_areas_paragraph": "Outside Washington, DC, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Bethesda, Chevy Chase, Potomac, Arlington, and all of Northern Virginia and Montgomery County, MD.",
+  "housing_patterns": [
+    {
+      "title": "1800s–1920s historic row houses, Victorians &amp; Federal-style homes",
+      "neighborhood_examples": "Georgetown, Cleveland Park (Victorians), Glover Park (early row houses), Palisades (early homes)",
+      "context_paragraph": "DC's oldest residential neighborhoods contain housing stock predating modern electrical systems entirely. Georgetown's Federal-style row houses date to the late 1700s and early 1800s — electricity was retrofitted decades after construction. Cleveland Park's Queen Anne Victorians and Craftsman homes were built in the 1890s–1910s with early knob-and-tube wiring. These homes present unique challenges: thick plaster-and-lath walls, no accessible wall cavities for new wiring, historic preservation requirements (some in Historic Districts), and layers of electrical work from every decade since the 1920s. DC's own permitting authority (DC Department of Buildings (DOB)) and historic preservation review add complexity beyond suburban jurisdictions.",
+      "symptoms": "Knob-and-tube wiring still active in wall cavities and attics — especially in Georgetown and Cleveland Park homes that have never been fully rewired. Original 60-amp fuse boxes or early panel upgrades mounted in awkward locations (closets, under stairs) where the retrofit electrician could access masonry walls. Two-prong ungrounded outlets throughout — running a ground wire through plaster-and-lath walls without damage requires specialized technique. Overloaded circuits from 100+ years of adding loads to wiring designed for a few light bulbs."
+    },
+    {
+      "title": "1920s–1950s colonials, Tudors &amp; Cape Cods",
+      "neighborhood_examples": "Chevy Chase DC, Tenleytown, Spring Valley, American University Park, Palisades (later homes), Cathedral Heights",
+      "context_paragraph": "DC's NW residential expansion in the 1920s–1950s produced the colonials, Tudors, and Cape Cods that define neighborhoods like Chevy Chase DC, Spring Valley, and Tenleytown. These homes were built with 60-amp or 100-amp panels and cloth-insulated copper wiring — a significant improvement over earlier construction but still undersized for today's loads. Spring Valley's estate homes (3,000–5,000 square feet) have more circuits than typical homes of the era but are still overwhelmed by modern demands. Foxhall's secluded properties often have long service runs from the street. GFCI protection is absent in all pre-1975 construction.",
+      "symptoms": "100-amp panels with no spare breaker slots — common in Tenleytown and American University Park homes where central AC, updated kitchens, and home offices were added over decades. Cloth-insulated wiring with cracking insulation in attics and wall cavities. No GFCI protection in kitchens, bathrooms, or exterior outlets. Long service-entrance runs in Spring Valley and Foxhall causing voltage drop during peak loads. Backstabbed outlet connections from 1970s–1980s renovation work failing after decades."
+    },
+    {
+      "title": "2000s–2020s gut renovations &amp; major additions",
+      "neighborhood_examples": "Georgetown (gut renovations), Spring Valley (additions), Chevy Chase DC (modernized), Palisades (updated), Foxhall (estate renovations)",
+      "context_paragraph": "DC's NW neighborhoods have seen extensive renovation activity — gut renovations in Georgetown that preserve the facade while completely replacing interior systems, large additions in Spring Valley and Foxhall, and systematic modernization in Chevy Chase DC and Tenleytown. These projects install 200-amp panels with AFCI protection and modern wiring, but must interface with PEPCO's existing infrastructure and navigate DC Department of Buildings (DOB) permitting (which differs significantly from Virginia and Maryland county permits). Historic District requirements in Georgetown may limit exterior modifications to service entrances. The combination of modern interior systems with aged utility feeds creates recurring issues.",
+      "symptoms": "Undersized PEPCO service drops — the utility feed was sized for the original home's modest loads, not the renovated structure's modern demands. AFCI nuisance trips in renovated portions where new wiring runs near old (abandoned but not removed) wiring in shared wall cavities. DC Department of Buildings (DOB) inspection requirements that differ from Virginia/Maryland — specific grounding electrode requirements, panel labeling standards, and historic district constraints. Voltage drop to rear additions and carriage houses fed by undersized conductors."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "troubleshooting": [
+      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In DC's 1920s–1950s homes (Chevy Chase DC, Tenleytown, American University Park), the original 100-amp panel is overwhelmed by decades of added loads." },
+      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind plaster walls. We trace the circuit map and find the break in 15–30 minutes." },
+      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging PEPCO service connection. DC's tree-heavy NW neighborhoods (Palisades, Spring Valley, Cleveland Park) are prone to weather-related service-entrance damage from overhead lines." },
+      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections behind plaster-and-lath walls are especially dangerous. We find the heat source with an IR thermal camera and repair it before damage spreads." },
+      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in DC's mature-canopy neighborhoods." },
+      { "summary": "Only two-prong outlets throughout the home", "body": "Pre-1960 DC homes (Georgetown, Cleveland Park, Glover Park, Tenleytown) were wired without equipment grounding conductors. Upgrading to three-prong grounded outlets requires either running new ground wires or installing GFCI protection — we assess the best approach for your home's construction." }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "troubleshooting": "Breaker trips on overloaded circuits. DC's NW residential neighborhoods span nearly two centuries of construction — from Georgetown's 1800s row houses with retrofitted electrical systems, to 1920s–1940s colonials in Chevy Chase DC and Spring Valley with 100-amp panels, to renovated homes where modern kitchens and home offices overload original wiring. The oldest homes have electrical systems that were never designed from scratch — they were retrofitted into masonry structures built before electricity existed. The second most common call is flickering lights — usually a loose neutral at the meter base or voltage drop from an aging PEPCO overhead connection."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "troubleshooting": "In DC's established NW neighborhoods like Georgetown, Cleveland Park, and Spring Valley,"
+  },
+  "ev_neighborhood_phrase": {
+    "troubleshooting": "In DC's single-family homes with garages in Spring Valley, Foxhall, and the Palisades,"
+  },
+  "distance_phrase": {
+    "troubleshooting": "Washington, DC (NW neighborhoods) is about 15–20 miles from our Fairfax Blvd office — roughly 25–40 minutes via I-66 or the George Washington Parkway"
+  },
+  "ev_charger_homes_phrase": "DC's historic homes were not wired for"
+}

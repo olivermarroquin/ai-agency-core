@@ -1,0 +1,17 @@
+{
+  "_comment": "EV Electric client-specific override for Burke, VA. Overlays HQ-relative fields onto the shared burke-va.json base. EV's HQ is Fairfax Blvd (not Woodbridge like S&H). Shared facts (county, neighborhoods, housing_patterns, utilities) stay in the base file.",
+  "dispatch_time_phrase": "15–20 minute",
+  "dispatch_time_short": "15–20 min",
+  "distance_from_hq_phrase": "Burke is about 8 miles from our Fairfax Blvd office — roughly 15–20 minutes via Route 123 south and Burke Lake Road",
+  "no_trip_charge_cities": [
+    "Burke",
+    "Fairfax",
+    "Springfield",
+    "Annandale",
+    "Fairfax Station"
+  ],
+  "other_areas_paragraph": "Outside Burke, we serve <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Springfield, Annandale, Fairfax Station, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
+  "distance_phrase": {
+    "troubleshooting": "Burke is about 8 miles from our Fairfax Blvd office — roughly 15–20 minutes via Route 123 and Burke Lake Road"
+  }
+}

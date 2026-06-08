@@ -1,0 +1,108 @@
+{
+  "_comment": "Per-city data for Tysons, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "tysons-va",
+  "name": "Tysons",
+  "name_with_state": "Tysons, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Fairfax County",
+  "county_full": "Fairfax County, Virginia",
+  "electric_utilities": ["Dominion Energy"],
+  "utility_coordination_phrase": "Dominion Energy coordination",
+  "dispatch_time_phrase": "10–15 minute",
+  "dispatch_time_short": "10–15 min",
+  "distance_from_hq_phrase": "Tysons is about 4 miles from our Fairfax Blvd office — roughly 10–15 minutes via Route 123 or I-495",
+  "geographic_anchor_paragraph": "Tysons, VA (formerly Tysons Corner) is Fairfax County's urban center, located at the intersection of the Capital Beltway (I-495) and Route 123 (Chain Bridge Road). The Dulles Toll Road (Route 267) defines its northern edge. Tysons is bordered by McLean to the east, Vienna to the west, and Falls Church to the south. The Silver Line Metro (Tysons Corner and Spring Hill stations) connects the area to DC. Tysons is about 12 miles from downtown DC, 5 minutes from McLean and Vienna, and just 10–15 minutes from our Fairfax Blvd office.",
+  "audience_descriptor": "Residential homeowners in Tysons, VA and surrounding Fairfax County neighborhoods including Westpark, Scotts Run, Spring Hill, Pimmit Hills, and the Chains Bridge Road corridor.",
+  "no_trip_charge_cities": [
+    "Tysons",
+    "McLean",
+    "Vienna",
+    "Fairfax",
+    "Falls Church"
+  ],
+  "area_served_schema": [
+    {"@type": "AdministrativeArea", "name": "Fairfax County, VA"},
+    {"@type": "City", "name": "Tysons", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
+    {"@type": "City", "name": "McLean", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
+    {"@type": "City", "name": "Vienna", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}}
+  ],
+  "neighborhoods": [
+    {
+      "name": "Westpark",
+      "blurb": "1970s–1980s single-family homes and townhomes on the McLean side of Tysons near Westpark Drive"
+    },
+    {
+      "name": "Scotts Run",
+      "blurb": "upscale 1980s–1990s colonials and new luxury builds near Scotts Run Stream Valley Park"
+    },
+    {
+      "name": "Spring Hill",
+      "blurb": "residential area near the Spring Hill Metro station with a mix of 1970s homes and new construction"
+    },
+    {
+      "name": "Chain Bridge Road Corridor",
+      "blurb": "established homes along Route 123 with lots dating to the 1960s–1970s amid rapid redevelopment"
+    },
+    {
+      "name": "Pimmit Hills Border",
+      "blurb": "1950s ramblers at Tysons' southeastern edge — many renovated or rebuilt as the area urbanizes"
+    },
+    {
+      "name": "International Drive Area",
+      "blurb": "newer luxury townhomes and single-family homes near Tysons' corporate center and the Beltway"
+    },
+    {
+      "name": "Tysons Woods",
+      "blurb": "1970s single-family homes on wooded lots tucked between Route 7 and the Dulles Toll Road"
+    },
+    {
+      "name": "Rotonda",
+      "blurb": "distinctive circular-plan condominium complex of 1970s high-rises near Tysons Corner Center"
+    }
+  ],
+  "other_areas_paragraph": "Outside Tysons, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Falls Church, Arlington, and the rest of Fairfax County. We also cover Montgomery County, MD and Washington, DC.",
+  "housing_patterns": [
+    {
+      "title": "1950s–1960s ramblers &amp; early colonials",
+      "neighborhood_examples": "Pimmit Hills Border, Chain Bridge Road Corridor (original homes), Tysons Woods (early lots)",
+      "context_paragraph": "Before Tysons became an urban center, it was low-density farmland and scattered post-war subdivisions. The 1950s and 1960s homes that remain — mostly along the edges near Pimmit Hills and the Chain Bridge Road corridor — are modest ramblers and colonials with 100-amp panels and thermoplastic copper wiring. Many of these homes sit on lots now worth more than the structures, making them prime teardown candidates. Those still occupied often have decades of DIY modifications as owners squeezed more utility from aging infrastructure.",
+      "symptoms": "100-amp panels with every slot filled and no room for modern additions. Ungrounded two-prong outlets in bedrooms and living areas. Decades of DIY wiring modifications — romex spliced to cloth-insulated wire, circuits extended without proper junction boxes. Undersized service entrance cables that were adequate for a 1,200-square-foot rambler but cannot support central AC and modern kitchen loads."
+    },
+    {
+      "title": "1970s–1990s colonials, split-levels &amp; townhomes",
+      "neighborhood_examples": "Westpark, Tysons Woods, Spring Hill, Rotonda (condos), Chain Bridge Road Corridor (later construction)",
+      "context_paragraph": "Tysons' residential growth peaked in the 1970s–1990s as the commercial center expanded and surrounding neighborhoods filled in. Westpark, Tysons Woods, and Spring Hill are dominated by colonials and split-levels with 150-amp or 200-amp panels and copper wiring adequate for their era. Some 1970s construction used aluminum branch wiring. These homes were built when Tysons was a suburban office park — now they sit in an urbanizing area with Metro access and rising property values, driving major renovation and addition activity that strains original electrical systems.",
+      "symptoms": "Aluminum branch wiring (1970s homes) with oxidized connections at outlets and switches. 150-amp panels that are full — no capacity for EV chargers, heat pump systems, or kitchen remodels. Federal Pacific Stab-Lok panels in some 1970s construction — a known fire hazard. Outdated sub-panels in finished basements that were added without load calculations."
+    },
+    {
+      "title": "2010s–2020s luxury new construction &amp; teardown rebuilds",
+      "neighborhood_examples": "Scotts Run (new builds), International Drive Area, Spring Hill (infill), Pimmit Hills Border (rebuilds)",
+      "context_paragraph": "The Silver Line Metro's arrival in 2014 accelerated Tysons' transformation. Single-family teardown-rebuilds now produce 4,000–7,000-square-foot luxury homes on lots previously occupied by modest ramblers. New townhome communities and infill developments fill gaps between commercial parcels. These homes are built to current code with 200-amp (sometimes 400-amp) panels, whole-house AFCI protection, and pre-wired EV charging circuits. But the rapid development pace means some builders cut corners on load calculations, and Dominion Energy service drops may not reflect the new home's actual demand.",
+      "symptoms": "Nuisance AFCI breaker trips on motor-driven loads — vacuums, treadmills, and garage door openers. Undersized Dominion Energy service drops that were sized for the previous structure on the lot. Smart-home wiring conflicts — incorrectly shared neutrals on multi-wire branch circuits causing phantom loads. Voltage drop to detached garages and outdoor kitchens fed by undersized conductors run at build time."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "troubleshooting": [
+      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Tysons' 1970s–1980s homes (Westpark, Tysons Woods, Spring Hill), 150-amp panels are overwhelmed by modern loads including home offices and EV chargers." },
+      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes." },
+      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging Dominion Energy service connection. Common in Tysons' 1970s–1980s neighborhoods where the original service was sized for lower loads than today's renovated homes demand." },
+      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. In Tysons' 1970s homes with aluminum wiring (Westpark, Tysons Woods), warm outlets require immediate professional inspection." },
+      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Can occur after storms or when aging service entrance connections corrode." },
+      { "summary": "AFCI breaker trips on normal appliances", "body": "AFCI breakers in Tysons' 2010s+ new construction (Scotts Run, International Drive area) are sensitive by design and trip on noisy loads like vacuums and treadmills. We confirm whether the trip is nuisance or a real arc fault, and adjust the circuit accordingly." }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "troubleshooting": "Breaker trips on overloaded circuits. Tysons' residential areas span three distinct eras — 1950s–1960s ramblers near Pimmit Hills with original 100-amp panels, 1970s–1980s colonials in Westpark and Tysons Woods with 150-amp panels and occasional aluminum wiring, and 2010s luxury rebuilds near Scotts Run with modern 200-amp panels. The older homes were never wired for today's loads; even the 1980s homes struggle with EV chargers, home offices, and heat pump conversions. The second most common call is warm outlets in 1970s homes — usually aluminum wiring connections that have oxidized over decades."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "troubleshooting": "In Tysons' residential pockets like Westpark, Tysons Woods, and along Chain Bridge Road,"
+  },
+  "ev_neighborhood_phrase": {
+    "troubleshooting": "In Tysons' single-family homes in Scotts Run, Westpark, and the Spring Hill area,"
+  },
+  "distance_phrase": {
+    "troubleshooting": "Tysons is about 4 miles from our Fairfax Blvd office — roughly 10–15 minutes via Route 123 or I-495"
+  },
+  "ev_charger_homes_phrase": "Tysons' older residential homes were not wired for"
+}

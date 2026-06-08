@@ -1563,7 +1563,11 @@ def main() -> int:
 
     # ORCH-1: standalone credential check mode — no page folder needed
     if args.check_credentials:
-        ok, msg = verify_gsc_credentials()
+        # If --config is supplied, pass it so service-account auth is tried
+        check_config = {}
+        if args.config and args.config.is_file():
+            check_config = json.loads(args.config.read_text(encoding="utf-8"))
+        ok, msg = verify_gsc_credentials(check_config)
         print(f"GSC credential check: {'✓ PASS' if ok else '✗ FAIL'}")
         print(f"  {msg}")
         return 0 if ok else 1

@@ -1,0 +1,112 @@
+{
+  "_comment": "Per-city data for Potomac, MD. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30. NOTE: $75 CPC = extreme value market.",
+  "slug": "potomac-md",
+  "name": "Potomac",
+  "name_with_state": "Potomac, MD",
+  "state": "MD",
+  "state_full": "Maryland",
+  "county": "Montgomery County",
+  "county_full": "Montgomery County, Maryland",
+  "electric_utilities": ["PEPCO"],
+  "utility_coordination_phrase": "PEPCO coordination",
+  "dispatch_time_phrase": "25–35 minute",
+  "dispatch_time_short": "25–35 min",
+  "distance_from_hq_phrase": "Potomac is about 18 miles from our Fairfax Blvd office — roughly 25–35 minutes via the Capital Beltway and River Road",
+  "geographic_anchor_paragraph": "Potomac, MD is an affluent unincorporated community in western Montgomery County, bordered by the Potomac River to the south and west, the Capital Beltway (I-495) to the east, and Darnestown/North Potomac to the north. River Road, Falls Road, and Glen Road are the primary corridors through the community. Potomac is about 14 miles from downtown DC, 10 minutes from Bethesda, 15 minutes from Rockville, and 25–35 minutes from Fairfax, VA via the Beltway and River Road.",
+  "audience_descriptor": "Residential homeowners in Potomac, MD and surrounding Montgomery County neighborhoods including Avenel, Potomac Falls, River Falls, Congressional Country Club area, Potomac Manors, Glen Road estates, and the Potomac Village community.",
+  "no_trip_charge_cities": [
+    "Potomac",
+    "Bethesda",
+    "Chevy Chase",
+    "Rockville",
+    "North Potomac"
+  ],
+  "area_served_schema": [
+    {"@type": "AdministrativeArea", "name": "Montgomery County, MD"},
+    {"@type": "City", "name": "Potomac", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
+    {"@type": "City", "name": "Bethesda", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
+    {"@type": "City", "name": "Rockville", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}}
+  ],
+  "neighborhoods": [
+    {
+      "name": "Potomac Village",
+      "blurb": "the community's commercial center at River Road and Falls Road, surrounded by established 1960s–1980s homes"
+    },
+    {
+      "name": "Avenel",
+      "blurb": "gated luxury community of 1980s–1990s homes on the TPC Avenel golf course — large colonials on manicured lots"
+    },
+    {
+      "name": "Potomac Falls",
+      "blurb": "wooded estate lots along the Potomac River with homes ranging from 1960s originals to custom new builds"
+    },
+    {
+      "name": "River Falls",
+      "blurb": "1970s–1980s luxury colonials on one-to-two-acre lots with heavily wooded settings near River Road"
+    },
+    {
+      "name": "Piney Glen",
+      "blurb": "secluded enclave of custom homes on large wooded parcels off Piney Meetinghouse Road"
+    },
+    {
+      "name": "Congressional Country Club Area",
+      "blurb": "estate homes on multi-acre lots surrounding the Congressional Country Club — among the most valuable residential land in Maryland"
+    },
+    {
+      "name": "Potomac Manors",
+      "blurb": "established 1960s–1970s neighborhood of colonials and contemporaries on generous lots near MacArthur Boulevard"
+    },
+    {
+      "name": "Glen Road Estates",
+      "blurb": "horse country — five-to-ten-acre parcels with estate homes, paddocks, and private drives along Glen Road"
+    },
+    {
+      "name": "Falconhurst",
+      "blurb": "1970s–1980s colonials on wooded one-acre lots near Cabin John Regional Park"
+    }
+  ],
+  "other_areas_paragraph": "Outside Potomac, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Bethesda, Chevy Chase, Rockville, Kensington, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.",
+  "housing_patterns": [
+    {
+      "title": "1960s–1970s estate colonials &amp; contemporaries",
+      "neighborhood_examples": "Potomac Manors, Potomac Falls (original homes), Falconhurst, River Falls (early sections)",
+      "context_paragraph": "Potomac's first wave of residential development came in the 1960s and 1970s as affluent families built large colonials and contemporary-style homes on one-to-five-acre wooded lots. These homes — typically 3,000–5,000 square feet — were generous by the standards of their era and have 200-amp panels with copper wiring. However, 'large for 1970' is not 'large for today.' Many have been expanded with wings, pool houses, and guest quarters over the decades. The electrical systems were sized for the original footprint, not the expanded structure. Long driveway runs from the road to the home mean extended service-entrance conductors with inherent voltage drop.",
+      "symptoms": "200-amp panels that are full after decades of additions — pool equipment, landscape lighting, workshop circuits, and guest house sub-panels consuming all available capacity. Long service-entrance runs (200+ feet from PEPCO transformer to panel) causing voltage drop during peak loads — lights dim when the pool pump and AC run simultaneously. No GFCI protection on older outdoor circuits serving pool equipment, landscape lighting, and detached structures. Aging underground feeder cables to pool houses, barns, and detached garages with deteriorating insulation."
+    },
+    {
+      "title": "1980s–1990s luxury colonials &amp; gated community homes",
+      "neighborhood_examples": "Avenel, River Falls (later sections), Congressional Country Club Area, Piney Glen",
+      "context_paragraph": "Potomac's second building wave produced the gated communities and estate-lot subdivisions of the 1980s and 1990s — Avenel, later sections of River Falls, and custom homes near Congressional Country Club. These are 4,000–8,000-square-foot colonials with 200-amp panels, copper wiring, and early home automation systems (hardwired intercoms, whole-house audio, security systems). The wiring is generally sound but sized for 1990s loads — before home theaters, server closets, heated bathroom floors, and Level 2 EV chargers were standard expectations in homes of this caliber.",
+      "symptoms": "200-amp panels approaching capacity — pool heaters, multiple HVAC zones, home theaters, and wine cellar cooling consuming most available amperage. Outdated low-voltage systems (hardwired intercoms, whole-house audio, security panels) that no longer function and create confusion about which wires are active. Sub-panels in detached structures (pool houses, guest cottages) with undersized feeders for current loads. Landscape lighting circuits with deteriorating direct-burial connections causing ground faults that trip outdoor GFCI breakers."
+    },
+    {
+      "title": "2000s–2020s custom new builds &amp; estate renovations",
+      "neighborhood_examples": "Glen Road Estates (new builds), Potomac Falls (rebuilds), Congressional Country Club Area (new construction), Avenel (renovated)",
+      "context_paragraph": "Potomac's most recent construction includes custom estate homes on Glen Road (many on former horse farm parcels), teardown-rebuilds in Potomac Falls, and gut renovations in Avenel. These homes are 6,000–12,000+ square feet with 400-amp services (sometimes dual 200-amp panels), whole-house generators, pre-wired EV charging, and sophisticated automation systems. The scale creates unique challenges — long wire runs to detached garages, barns, and guest houses; multiple sub-panels requiring coordinated load management; and utility service that must be specially coordinated with PEPCO for 400-amp residential feeds.",
+      "symptoms": "Generator transfer switch coordination issues — whole-house generators that don't properly manage loads during utility outages, causing nuisance shutdowns. Voltage drop to detached structures 300+ feet from the main panel — pool houses, guest cottages, barns, and workshops. Complex automation system failures where lighting control panels, motorized shades, and HVAC integration create cascading electrical issues. PEPCO service coordination for 400-amp residential feeds requiring transformer upgrades."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "troubleshooting": [
+      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Potomac's larger estate homes (River Falls, Avenel, Congressional area), 200-amp panels installed in the 1980s are overwhelmed by pool equipment, multiple HVAC zones, and home entertainment systems." },
+      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box. In Potomac's large homes, the tripped GFCI may be in a garage, basement, or pool house — far from the dead outlet." },
+      { "summary": "Lights flicker or dim when pool pump or AC starts", "body": "Voltage drop from long service runs — common in Potomac's estate-lot homes where the PEPCO transformer may be 200–400 feet from the main panel. Also caused by loose connections at the meter base or weathered overhead service drops." },
+      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads." },
+      { "summary": "Generator runs but doesn't power the whole house", "body": "Transfer switch load management issues — common in Potomac homes where the generator was sized for essential circuits but the homeowner expects whole-house coverage. We audit the transfer switch programming and load priorities." },
+      { "summary": "Landscape lighting or pool equipment trips breakers", "body": "Ground faults in direct-burial landscape lighting connections or deteriorating underground feeders to pool equipment. Potomac's wooded lots with mature root systems are prone to underground cable damage from root intrusion and soil movement." }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "troubleshooting": "Panel capacity issues in estate homes with decades of additions. Potomac's housing stock consists primarily of large homes on generous lots — from 1960s–1970s colonials in Potomac Manors with original 200-amp panels now serving expanded structures, to 1980s luxury homes in Avenel and River Falls where pool equipment, multiple HVAC zones, and home automation consume available capacity, to estate properties along Glen Road with complex multi-panel configurations. The second most common call is voltage drop and flickering lights — caused by long service-entrance runs inherent to estate-lot properties where the PEPCO transformer may be hundreds of feet from the home."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "troubleshooting": "In Potomac's estate neighborhoods like Glen Road, Avenel, and the Congressional Country Club area,"
+  },
+  "ev_neighborhood_phrase": {
+    "troubleshooting": "In Potomac's multi-car-garage estate homes in Avenel, River Falls, and along Glen Road,"
+  },
+  "distance_phrase": {
+    "troubleshooting": "Potomac is about 18 miles from our Fairfax Blvd office — roughly 25–35 minutes via the Capital Beltway and River Road"
+  },
+  "ev_charger_homes_phrase": "Potomac's estate homes were not originally wired for"
+}

@@ -1,0 +1,112 @@
+{
+  "_comment": "Per-city data for Falls Church, VA. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "falls-church-va",
+  "name": "Falls Church",
+  "name_with_state": "Falls Church, VA",
+  "state": "VA",
+  "state_full": "Virginia",
+  "county": "Fairfax County / City of Falls Church",
+  "county_full": "Fairfax County, Virginia and the independent City of Falls Church",
+  "electric_utilities": ["Dominion Energy"],
+  "utility_coordination_phrase": "Dominion Energy coordination",
+  "dispatch_time_phrase": "10–15 minute",
+  "dispatch_time_short": "10–15 min",
+  "distance_from_hq_phrase": "Falls Church is about 5 miles from our Fairfax Blvd office — roughly 10–15 minutes via Route 29 or Route 50",
+  "geographic_anchor_paragraph": "Falls Church, VA sits at the crossroads of Arlington, Fairfax County, and the independent City of Falls Church — a small but distinct jurisdiction surrounded by Fairfax County. Route 7 (Leesburg Pike) and Route 29 (Lee Highway) converge here, with I-66 forming the southern boundary and the W&OD Trail cutting east-west through the community. Falls Church is about 7 miles from downtown DC, 5 minutes from McLean and Arlington, 10 minutes from Tysons, and just 10–15 minutes from our Fairfax Blvd office.",
+  "audience_descriptor": "Residential homeowners in Falls Church, VA and surrounding neighborhoods including West Falls Church, East Falls Church, Broadmont, Jefferson Village, Pimmit Hills, and the Greenway Downs community.",
+  "no_trip_charge_cities": [
+    "Falls Church",
+    "Fairfax",
+    "McLean",
+    "Vienna",
+    "Arlington"
+  ],
+  "area_served_schema": [
+    {"@type": "AdministrativeArea", "name": "Fairfax County, VA"},
+    {"@type": "City", "name": "Falls Church", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
+    {"@type": "City", "name": "McLean", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
+    {"@type": "City", "name": "Vienna", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}}
+  ],
+  "neighborhoods": [
+    {
+      "name": "West Falls Church",
+      "blurb": "established neighborhood near the West Falls Church Metro station with a mix of mid-century ramblers and newer infill"
+    },
+    {
+      "name": "East Falls Church",
+      "blurb": "tree-lined streets with 1940s–1960s homes adjacent to the East Falls Church Metro and W&OD Trail"
+    },
+    {
+      "name": "Broadmont",
+      "blurb": "quiet residential enclave of 1950s–1960s colonials and split-levels south of Broad Street"
+    },
+    {
+      "name": "Jefferson Village",
+      "blurb": "post-war community of Cape Cods and colonials near Jefferson Street with walkable neighborhood character"
+    },
+    {
+      "name": "Westfall",
+      "blurb": "wooded lots with mid-century homes between West Street and the Fairfax County line"
+    },
+    {
+      "name": "Pimmit Hills",
+      "blurb": "1950s Levittown-style ramblers on the Fairfax County side near Route 7 — many now expanded or rebuilt"
+    },
+    {
+      "name": "Greenway Downs",
+      "blurb": "compact 1940s community of brick Cape Cods near Shreve Road with strong neighborhood identity"
+    },
+    {
+      "name": "Cherry Hill",
+      "blurb": "hillside community of mid-century homes with large lots and mature tree canopy near Cherry Street"
+    },
+    {
+      "name": "Madison Manor",
+      "blurb": "1960s split-levels and colonials along Lee Highway corridor with easy I-66 access"
+    }
+  ],
+  "other_areas_paragraph": "Outside Falls Church, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Arlington, Tysons, and the rest of Fairfax County. We also cover Montgomery County, MD and Washington, DC.",
+  "housing_patterns": [
+    {
+      "title": "1940s–1950s Cape Cods, brick ramblers &amp; bungalows",
+      "neighborhood_examples": "Greenway Downs, East Falls Church, Jefferson Village, Cherry Hill (original homes)",
+      "context_paragraph": "Falls Church's earliest residential growth arrived in the 1940s and 1950s — brick Cape Cods in Greenway Downs, modest ramblers in Pimmit Hills, and colonials near the city center. These homes were built with 60-amp fuse boxes and cloth-insulated copper wiring designed for a radio, a few ceiling lights, and a single kitchen appliance circuit. Many Greenway Downs homes still have their original 1946 electrical systems beneath surface upgrades. Ungrounded two-prong outlets are standard throughout, and the original service entrance cables are often undersized for today's loads.",
+      "symptoms": "Original 60-amp fuse boxes or undersized 100-amp panel upgrades from the 1970s with no spare breaker slots. Cloth-insulated wiring with cracking insulation — especially in attics where summer heat accelerates deterioration. Two-prong ungrounded outlets throughout (no equipment ground conductor). Repeated fuse blowing or breaker trips when running a window AC unit and a microwave simultaneously. Knob-and-tube remnants in some pre-1945 homes near East Falls Church."
+    },
+    {
+      "title": "1950s–1970s split-levels, ramblers &amp; expanded colonials",
+      "neighborhood_examples": "Broadmont, Madison Manor, West Falls Church, Pimmit Hills (expanded homes), Westfall",
+      "context_paragraph": "The suburban boom brought split-levels and larger colonials to Falls Church's outer neighborhoods in the 1950s through 1970s. These homes typically have 100-amp panels with thermoplastic copper wiring — adequate for original loads but overwhelmed by today's demands. Pimmit Hills saw extensive additions as owners expanded 900-square-foot ramblers into 2,000-square-foot homes, often without upgrading the electrical service. Some 1970s construction used aluminum branch wiring. GFCI protection is absent in pre-1975 homes and minimal in those built before 1980.",
+      "symptoms": "100-amp panels maxed out with no room for additional circuits — common when homeowners add central AC to homes originally built with window units. Aluminum branch wiring connections (1970s homes) with oxidation causing warm outlets and intermittent flickering. No GFCI protection in kitchens, bathrooms, garages, or exterior outlets. Overloaded circuits from decades of additions — a 1955 rambler with a 1975 family room, a 1990 kitchen remodel, and a 2010 basement finish all sharing original wiring capacity."
+    },
+    {
+      "title": "2000s–2020s infill homes &amp; teardown rebuilds",
+      "neighborhood_examples": "Pimmit Hills (new builds), West Falls Church (infill), East Falls Church (teardowns), Broadmont (selective rebuilds)",
+      "context_paragraph": "Falls Church's proximity to DC and Metro access has driven significant teardown-rebuild activity since the early 2000s — original 1,000-square-foot ramblers replaced by 3,500–5,000-square-foot homes on the same lots. These homes are built to modern code with 200-amp panels, AFCI protection on bedroom and living-area circuits, and tamper-resistant receptacles. However, the Dominion Energy service drop was often sized for the original small home and never upgraded. Smart-home systems and high-draw kitchen appliances in these homes create loads that approach panel capacity during peak summer demand.",
+      "symptoms": "Undersized Dominion Energy service drops — the panel is modern but the utility feed was sized for the 1950s rambler that previously occupied the lot. Nuisance AFCI breaker trips on vacuum cleaners, treadmills, and other motor-driven loads. Smart-home wiring with incorrect neutral bonds causing phantom loads and intermittent switch failures. Voltage drop to detached garages and ADUs fed by undersized sub-panel conductors."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "troubleshooting": [
+      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Falls Church's 1940s–1950s homes (Greenway Downs, Jefferson Village, East Falls Church), the original 60-amp fuse box or early 100-amp panel is overwhelmed by modern loads." },
+      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes." },
+      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging Dominion Energy service connection. Falls Church's tree-heavy neighborhoods (West Falls Church, Cherry Hill, Broadmont) are prone to weather-related service-entrance damage." },
+      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads." },
+      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in Falls Church's mature-canopy neighborhoods." },
+      { "summary": "Panel buzzing or crackling sounds", "body": "Buzzing from the breaker panel indicates a loose bus bar connection or a failing breaker. In Falls Church's 1960s–1970s split-levels (Broadmont, Madison Manor), Federal Pacific and Zinsco panels are still common — both are known fire hazards that should be replaced." }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "troubleshooting": "Breaker trips on overloaded circuits. Falls Church's housing stock is dominated by 1940s–1970s construction — from brick Cape Cods in Greenway Downs with original 60-amp fuse boxes, to 1960s split-levels in Broadmont and Madison Manor with 100-amp panels, to expanded ramblers in Pimmit Hills where additions were wired without upgrading the service. These homes were never designed for central AC, multiple kitchen appliances, home offices, and EV chargers. The second most common call is flickering lights — usually a loose neutral at the meter base or voltage drop from an aging Dominion Energy service connection."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "troubleshooting": "In Falls Church's established neighborhoods like Greenway Downs, East Falls Church, and along Broad Street,"
+  },
+  "ev_neighborhood_phrase": {
+    "troubleshooting": "In Falls Church's single-family homes in West Falls Church, Pimmit Hills, and the Broadmont area,"
+  },
+  "distance_phrase": {
+    "troubleshooting": "Falls Church is about 5 miles from our Fairfax Blvd office — roughly 10–15 minutes via Route 29 or Route 50"
+  },
+  "ev_charger_homes_phrase": "Falls Church's mid-century homes were not wired for"
+}

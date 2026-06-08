@@ -1,0 +1,117 @@
+{
+  "_comment": "Per-city data for Bethesda, MD. Used by scaffold-core-30-page.py for Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD audience.audienceType. One file per city across the Core 30.",
+  "slug": "bethesda-md",
+  "name": "Bethesda",
+  "name_with_state": "Bethesda, MD",
+  "state": "MD",
+  "state_full": "Maryland",
+  "county": "Montgomery County",
+  "county_full": "Montgomery County, Maryland",
+  "zip_codes": ["20814", "20816", "20817"],
+  "electric_utilities": ["PEPCO"],
+  "utility_coordination_phrase": "PEPCO coordination",
+  "dispatch_time_phrase": "35–45 minute",
+  "dispatch_time_short": "35–45 min",
+  "distance_from_hq_phrase": "Bethesda is about 22 miles from our Fairfax Blvd office — roughly 35–45 minutes via the Capital Beltway (I-495)",
+  "geographic_anchor_paragraph": "Bethesda, MD sits in southern Montgomery County, directly northwest of Washington, DC — separated from the District by Western Avenue. The Capital Beltway (I-495) defines Bethesda's northern edge, while the Potomac River borders it to the west. Wisconsin Avenue and Old Georgetown Road are the main commercial corridors running through the community. Bethesda is about 8 miles from downtown DC, 10 minutes from Chevy Chase and Potomac, 15 minutes from Rockville, and 35–45 minutes from Fairfax, VA via the Beltway.",
+  "audience_descriptor": "Residential homeowners in Bethesda, MD and surrounding Montgomery County neighborhoods including Kenwood, Burning Tree, Bradley Hills, Edgemoor, Somerset, Glen Echo Heights, and the Westbard corridor.",
+  "no_trip_charge_cities": [
+    "Bethesda",
+    "Chevy Chase",
+    "Potomac",
+    "Rockville",
+    "Kensington"
+  ],
+  "area_served_schema": [
+    {"@type": "AdministrativeArea", "name": "Montgomery County, MD"},
+    {"@type": "City", "name": "Bethesda", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
+    {"@type": "City", "name": "Chevy Chase", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
+    {"@type": "City", "name": "Potomac", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}}
+  ],
+  "neighborhoods": [
+    {
+      "name": "Kenwood",
+      "blurb": "stately colonials and renowned cherry blossom-lined streets south of River Road"
+    },
+    {
+      "name": "Burning Tree",
+      "blurb": "heavily wooded estate lots averaging half an acre in western Bethesda (20817)"
+    },
+    {
+      "name": "Bradley Hills",
+      "blurb": "rolling lots with mature trees and a top-rated elementary school near Bradley Boulevard"
+    },
+    {
+      "name": "Edgemoor",
+      "blurb": "walkable to downtown Bethesda with a mix of original colonials and teardown rebuilds"
+    },
+    {
+      "name": "Somerset",
+      "blurb": "incorporated town of tree-lined streets between Wisconsin Avenue and Little Falls Parkway"
+    },
+    {
+      "name": "Battery Park",
+      "blurb": "established neighborhood adjacent to Edgemoor with easy access to the Capital Crescent Trail"
+    },
+    {
+      "name": "Glen Echo Heights",
+      "blurb": "exclusive enclave near the Potomac with architecturally diverse homes and limited inventory"
+    },
+    {
+      "name": "Westbard",
+      "blurb": "revitalizing corridor west of downtown with new amenities and proximity to the Capital Crescent Trail"
+    },
+    {
+      "name": "Woodhaven",
+      "blurb": "English-village character with Tudor-style homes near the Capital Beltway"
+    },
+    {
+      "name": "Sumner",
+      "blurb": "colonial homes with large yards and Little Falls Stream Valley Park access near the DC line"
+    }
+  ],
+  "other_areas_paragraph": "Outside Bethesda, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Chevy Chase, Potomac, Rockville, Kensington, Silver Spring, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.",
+  "housing_patterns": [
+    {
+      "title": "1920s–1950s colonials, Cape Cods &amp; bungalows",
+      "neighborhood_examples": "Kenwood, Bradley Hills, Battery Park, Somerset, Sumner (original homes)",
+      "context_paragraph": "Bethesda's earliest residential subdivisions — Bradley Hills, Battery Park, and Kenwood — filled in during the 1920s through 1950s with English cottages, Cape Cods, colonials, and Craftsman bungalows. These homes were built with 60-amp fuse boxes (sometimes upgraded to 100-amp panels decades later) and cloth-insulated copper wiring rated for a refrigerator, a radio, and a few ceiling lights. Knob-and-tube wiring persists in some unfinished attics and basements. Original galvanized steel plumbing and minimal insulation (R-7 walls or less) are typical. These homes have survived 70–100 years, but their electrical systems were never designed for central AC, multiple kitchen appliances, home offices, or EV chargers.",
+      "symptoms": "Original 60-amp fuse boxes or early 100-amp panels with no room for additional circuits. Cloth-insulated wiring with brittle insulation that cracks when disturbed — a fire hazard behind walls. Two-prong ungrounded outlets throughout the home (no equipment ground). Fuses blowing repeatedly because the homeowner replaced a 15-amp fuse with a 20-amp to stop the nuisance — masking an overload rather than fixing it. Knob-and-tube remnants in attics covered by blown-in insulation, creating a heat-trapping fire risk."
+    },
+    {
+      "title": "1950s–1970s split-levels, ramblers &amp; expanded colonials",
+      "neighborhood_examples": "Woodhaven, Westbard, Glen Echo Heights, Burning Tree (original homes), Bradley Hills (expanded homes)",
+      "context_paragraph": "The post-war boom brought split-levels, ramblers, and larger colonials to Bethesda's western and northern neighborhoods. These homes typically have 100-amp or early 200-amp panels with thermoplastic (TW/THW) copper wiring — a major upgrade over cloth-insulated wire but still sized for 1960s loads. Some mid-1970s construction in Bethesda used aluminum branch wiring before the practice was curtailed. GFCI protection is absent or minimal — pre-1975 homes have none; 1975–1980 homes may have a single GFCI in the bathroom. Many of these homes have been expanded over the decades with additions, finished basements, and updated kitchens, creating a patchwork of wiring vintages behind the walls.",
+      "symptoms": "Breakers tripping under modern loads — the original 100-amp panel is overwhelmed by central AC, multiple refrigerators, and home office equipment. Aluminum branch wiring (1970s homes) with oxidized connections causing warm outlets and flickering lights. No GFCI protection in kitchens, bathrooms, or exterior outlets — a shock hazard that fails any home inspection. Patchwork wiring from decades of additions — a 1965 original circuit spliced to a 1985 kitchen remodel spliced to a 2005 basement finish, with different wire gauges and connection methods at each junction."
+    },
+    {
+      "title": "2000s–2020s teardown rebuilds &amp; luxury new construction",
+      "neighborhood_examples": "Edgemoor (new builds), Burning Tree (new builds), Bradley Hills (new builds), Kenwood (selective rebuilds), Woodhaven (new builds)",
+      "context_paragraph": "Bethesda's teardown-rebuild trend began in the 1990s and accelerated through the 2010s — original 1,500-square-foot ramblers replaced by 5,000–8,000-square-foot luxury homes on the same lots. These homes are built to modern code with 200-amp (occasionally 400-amp) panels, AFCI protection on bedroom and living-area circuits (NEC 2008+), and tamper-resistant receptacles throughout. But new construction is not problem-free. The PEPCO service drop was often sized for the original small home and not upgraded when the replacement went up — leaving a modern 200-amp panel fed by an undersized utility connection. Smart-home systems installed by the builder's low-voltage contractor sometimes have incorrect neutral bonds or improperly shared neutrals on multi-wire branch circuits.",
+      "symptoms": "Nuisance AFCI breaker trips on vacuum cleaners, treadmills, and other motor-driven loads — the breaker is working correctly but the homeowner perceives a fault. Undersized PEPCO service drops — the panel is modern but the utility feed was sized for the 1950s rambler that previously stood on the lot, throttling actual capacity during peak loads. Smart-home wiring with incorrect neutral bonds causing phantom loads, intermittent switch failures, and compatibility issues with aftermarket dimmers. Voltage drop to detached garages and accessory dwelling units fed by undersized sub-panel conductors run at the time of construction."
+    }
+  ],
+  "quick_ref_localized_items": {
+    "troubleshooting": [
+      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Bethesda's 1920s–1950s homes (Kenwood, Bradley Hills, Battery Park), the original 60-amp fuse box or early 100-amp panel is overwhelmed by modern loads." },
+      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes." },
+      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging overhead PEPCO service connection. Bethesda's older tree-canopy neighborhoods are especially prone to weather-related service-entrance damage." },
+      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads." },
+      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in Bethesda's tree-heavy neighborhoods." },
+      { "summary": "AFCI breaker trips on normal appliances", "body": "AFCI breakers in Bethesda's 2010s+ teardown rebuilds are sensitive by design and trip on noisy loads like vacuums and treadmills. We confirm whether the trip is nuisance or a real arc fault, and adjust the circuit accordingly." }
+    ]
+  },
+  "most_common_problem_paragraph": {
+    "troubleshooting": "Breaker trips on overloaded circuits. Bethesda's housing stock spans a century — from 1920s colonials in Kenwood and Bradley Hills with original 60-amp fuse boxes, to 1960s split-levels in Woodhaven and Westbard with 100-amp panels, to 2010s teardown rebuilds in Edgemoor and Burning Tree. The oldest homes have electrical systems designed for a radio and a few light bulbs; even the mid-century homes weren't wired for central AC, dual ovens, home offices, and EV chargers. The second most common call is flickering lights — usually a loose neutral at the meter base or voltage drop from an aging PEPCO overhead service connection in Bethesda's heavily wooded neighborhoods."
+  },
+  "specific_problems_neighborhood_phrase": {
+    "troubleshooting": "In Bethesda's estate neighborhoods like Kenwood, Burning Tree, and along Bradley Boulevard,"
+  },
+  "ev_neighborhood_phrase": {
+    "troubleshooting": "In Bethesda's two-car-garage homes in Burning Tree, Kenwood, and the Bradley Hills corridor,"
+  },
+  "distance_phrase": {
+    "troubleshooting": "Bethesda is about 22 miles from our Fairfax Blvd office — roughly 35–45 minutes via the Capital Beltway (I-495)"
+  },
+  "ev_charger_homes_phrase": "Bethesda's larger homes were not wired for"
+}

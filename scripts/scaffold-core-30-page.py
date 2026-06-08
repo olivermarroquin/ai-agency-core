@@ -117,8 +117,19 @@ def load_service(slug: str, client_slug: str | None = None) -> dict:
     return load_json(DATA_DIR / "services" / f"{slug}.json")
 
 
-def load_city(slug: str) -> dict:
-    return load_json(DATA_DIR / "cities" / f"{slug}.json")
+def load_city(slug: str, client_slug: str | None = None) -> dict:
+    # Load the shared city file, then overlay client-specific HQ-relative fields
+    # if a client override exists (e.g. data/cities/ev-electric-services/burke-va.json).
+    # Unlike load_service (full replacement), city overrides MERGE — shared facts
+    # (county, neighborhoods, housing_patterns) stay in the base file; only
+    # client-relative fields (dispatch, distance_from_hq, route) get overridden.
+    base = load_json(DATA_DIR / "cities" / f"{slug}.json")
+    if client_slug:
+        override_path = DATA_DIR / "cities" / client_slug / f"{slug}.json"
+        if override_path.is_file():
+            override = load_json(override_path)
+            base.update(override)
+    return base
 
 
 def load_template(name: str) -> str:
@@ -822,7 +833,7 @@ def main() -> int:
 
     client = load_client(args.client)
     service = load_service(args.service, client_slug=args.client)
-    city = load_city(args.city)
+    city = load_city(args.city, client_slug=args.client)
 
     ctx = build_context(client, service, city, args.position)
 

@@ -1,23 +1,21 @@
 """
-gsc_indexing.py — Google Search Console Indexing API via Application Default
-Credentials (ADC).
+gsc_indexing.py — Google Search Console Indexing API auth + submission.
 
-Extracted from publish-core-30-page.py so that any script can submit URLs to
-the Indexing API without duplicating auth or HTTP logic.
+Supports two auth modes (tried in order):
+  1. **Service account JSON key** (non-expiring, preferred) — loaded from
+     tier-3 via `_load_secrets.load_gsc_service_account(config)`.
+  2. **Application Default Credentials (ADC)** (user-level, expires) — falls
+     back to `google.auth.default()` if no service account is configured.
+
+The service-account path is the permanent fix for the "GSC keeps expiring"
+friction class (D-row 2026-06-08). ADC is preserved as fallback.
 
 Public API
 ----------
-- load_gsc_access_token() -> (access_token, quota_project_id)
+- load_gsc_access_token(config=None) -> (access_token, quota_project_id)
+- verify_gsc_credentials(config=None) -> (bool, str)
 - request_gsc_indexing(live_url, config) -> status string (never raises)
 - GSC_INDEXING_ENDPOINT, GSC_INDEXING_SCOPE constants
-
-Setup (one-time per Mac):
-    gcloud auth application-default login \
-        --scopes=https://www.googleapis.com/auth/cloud-platform,\
-                 https://www.googleapis.com/auth/indexing
-    gcloud auth application-default set-quota-project <gcp-project-id>
-
-See sop-gsc-indexing-api-setup.md for the full procedure.
 """
 
 from __future__ import annotations
@@ -38,25 +36,31 @@ GSC_INDEXING_ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:pub
 GSC_INDEXING_SCOPE = "https://www.googleapis.com/auth/indexing"
 
 
-def load_gsc_access_token() -> tuple[str, Optional[str]]:
-    """Lazy-load google-auth and return (access_token, quota_project_id) for
-    the Indexing API via Application Default Credentials (ADC).
+def _load_sa_credentials(config: dict[str, Any] | None):
+    """Try to load service-account credentials from tier-3. Returns (creds, project) or (None, None)."""
+    if not config:
+        return None, None
+    try:
+        from _load_secrets import load_gsc_service_account
+    except ImportError:
+        return None, None
+    sa_data = load_gsc_service_account(config)
+    if not sa_data:
+        return None, None
+    try:
+        from google.oauth2 import service_account
+        creds = service_account.Credentials.from_service_account_info(
+            sa_data, scopes=[GSC_INDEXING_SCOPE]
+        )
+        return creds, sa_data.get("project_id")
+    except Exception:
+        return None, None
 
-    Reads credentials from gcloud's ADC file, typically at
-    ~/.config/gcloud/application_default_credentials.json. One-time setup:
 
-        gcloud auth application-default login \\
-            --scopes=https://www.googleapis.com/auth/cloud-platform,\\
-                     https://www.googleapis.com/auth/indexing
-        gcloud auth application-default set-quota-project <gcp-project-id>
+def load_gsc_access_token(config: dict[str, Any] | None = None) -> tuple[str, Optional[str]]:
+    """Return (access_token, quota_project_id) for the Indexing API.
 
-    The gcloud-authed Google account must be Owner on the target GSC
-    property — GSC, not GCP, authorizes the Indexing API request. The quota
-    project is required for user-credential ADC on the Indexing API (Google
-    bills request quota against that project; the request 403s without it).
-
-    Raises RuntimeError with a helpful message if google-auth is not
-    installed or if ADC is not configured.
+    Tries service-account JSON first (non-expiring), then falls back to ADC.
     """
     try:
         import google.auth
@@ -68,14 +72,22 @@ def load_gsc_access_token() -> tuple[str, Optional[str]]:
             "--break-system-packages"
         ) from e
 
+    # 1. Service account (preferred — non-expiring)
+    sa_creds, sa_project = _load_sa_credentials(config)
+    if sa_creds:
+        sa_creds.refresh(GoogleAuthRequest())
+        return sa_creds.token, sa_project
+
+    # 2. ADC fallback (user-level, expires)
     try:
         credentials, _project = google.auth.default(scopes=[GSC_INDEXING_SCOPE])
     except Exception as e:
         raise RuntimeError(
-            "Application Default Credentials not configured. Run: "
-            "gcloud auth application-default login "
+            "No GSC credentials found. Options:\n"
+            "  1. Place service account JSON at automation/secrets/gsc-sa-<client>.json\n"
+            "  2. Run: gcloud auth application-default login "
             "--scopes=https://www.googleapis.com/auth/cloud-platform,"
-            "https://www.googleapis.com/auth/indexing "
+            "https://www.googleapis.com/auth/indexing\n"
             f"(underlying error: {e})"
         ) from e
 
@@ -84,20 +96,10 @@ def load_gsc_access_token() -> tuple[str, Optional[str]]:
     return credentials.token, quota_project_id
 
 
-def verify_gsc_credentials() -> tuple[bool, str]:
-    """Pre-flight check: verify GSC ADC credentials are configured and valid.
+def verify_gsc_credentials(config: dict[str, Any] | None = None) -> tuple[bool, str]:
+    """Pre-flight: verify GSC credentials (service account or ADC).
 
-    Loads Application Default Credentials, refreshes the token, and confirms a
-    quota project is set — everything needed for the Indexing API to succeed.
-    Does NOT submit any URL. Cheap enough to call at run start before any
-    page work begins.
-
-    Returns (ok, message):
-      (True,  "GSC credentials OK ...")  — ready to index
-      (False, "... run `gcloud auth application-default login` ...")  — actionable fix
-
-    Generic: works for any pipeline that uses GSC indexing via ADC, not just
-    Core 30 or any specific client.
+    Returns (ok, message). Tries service account first, then ADC.
     """
     try:
         import google.auth  # noqa: F811
@@ -110,12 +112,26 @@ def verify_gsc_credentials() -> tuple[bool, str]:
             "Then re-run."
         )
 
+    # 1. Try service account
+    sa_creds, sa_project = _load_sa_credentials(config)
+    if sa_creds:
+        try:
+            sa_creds.refresh(GoogleAuthRequest())
+            return True, (
+                f"GSC credentials OK (service account, project: {sa_project}, "
+                f"non-expiring)"
+            )
+        except Exception as e:
+            return False, f"Service account JSON found but failed to authenticate: {e}"
+
+    # 2. Fall back to ADC
     try:
         credentials, _project = google.auth.default(scopes=[GSC_INDEXING_SCOPE])
     except Exception as e:
         return False, (
-            "GSC Application Default Credentials not configured. Run:\n"
-            "  gcloud auth application-default login \\\n"
+            "No GSC credentials found. Options:\n"
+            "  1. Place service account JSON at automation/secrets/gsc-sa-<client>.json\n"
+            "  2. Run: gcloud auth application-default login \\\n"
             "    --scopes=https://www.googleapis.com/auth/cloud-platform,"
             "https://www.googleapis.com/auth/indexing\n"
             f"(underlying error: {e})"
@@ -142,8 +158,9 @@ def verify_gsc_credentials() -> tuple[bool, str]:
         )
 
     return True, (
-        f"GSC credentials OK (quota project: {quota_project_id}, "
-        f"token expires: {getattr(credentials, 'expiry', 'unknown')})"
+        f"GSC credentials OK via ADC (quota project: {quota_project_id}, "
+        f"token expires: {getattr(credentials, 'expiry', 'unknown')}). "
+        f"Consider switching to a service account for non-expiring auth."
     )
 
 
@@ -177,11 +194,11 @@ def request_gsc_indexing(live_url: str, config: dict[str, Any]) -> str:
         )
 
     try:
-        access_token, quota_project_id = load_gsc_access_token()
+        access_token, quota_project_id = load_gsc_access_token(config)
     except RuntimeError as e:
         return f"[error] {e}"
     except Exception as e:
-        return f"[error] could not load ADC credentials: {e}"
+        return f"[error] could not load GSC credentials: {e}"
 
     if not quota_project_id:
         return (

@@ -8,6 +8,7 @@
   "county": "Fairfax County",
   "county_full": "Fairfax County, Virginia",
   "electric_utilities": ["Dominion Energy"],
+  "utility_coordination_phrase": "Dominion Energy coordination",
   "dispatch_time_phrase": "20–30 minute",
   "dispatch_time_short": "20–30 min",
   "area_served_schema": [
