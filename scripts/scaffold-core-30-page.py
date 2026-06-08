@@ -390,15 +390,45 @@ def render_neighborhoods_list(ctx: dict) -> str:
     return "\n".join(out) + "\n"
 
 
+def _page_exists_on_disk(slug: str, client_slug: str) -> bool:
+    """Check if a Core 30 page folder exists for this slug (any position number)."""
+    core30_dir = (
+        Path.home() / "workspace" / "second-brain" / "04_projects" / "clients"
+        / "_active" / client_slug / "website-archive" / "new" / "core-30"
+    )
+    if not core30_dir.is_dir():
+        return False
+    for d in core30_dir.iterdir():
+        if d.is_dir() and d.name.split("-", 1)[-1:] == [slug]:
+            return True
+    return False
+
+
 def render_related_cards(ctx: dict) -> str:
+    """Render related-service cards. Only emits links to pages that exist on disk;
+    unbuilt siblings render as plain text (no dead <a href>). Skips services not
+    in the Core 30 set (whole-house-rewire, generator-installation)."""
+    EXCLUDED_SERVICES = {"whole-house-rewire", "generator-installation"}
     cards = ctx["_service"]["related_cards"]
+    client_slug = ctx.get("client_slug", "")
     out: list[str] = []
     for c in cards:
         href_slug = c["href_slug"].format_map(ctx)
-        out.append(
-            f'        <div class="evp-related-card"><a href="/{href_slug}/">'
-            f"{c['label']}</a></div>"
-        )
+        # Skip services not in Core 30
+        service_part = href_slug.rsplit("-", 2)[0] if "-" in href_slug else href_slug
+        if any(excl in href_slug for excl in EXCLUDED_SERVICES):
+            continue
+        # Only link if the target page exists
+        if _page_exists_on_disk(href_slug, client_slug):
+            out.append(
+                f'        <div class="evp-related-card"><a href="/{href_slug}/">'
+                f"{c['label']}</a></div>"
+            )
+        else:
+            out.append(
+                f'        <div class="evp-related-card">'
+                f"{c['label']}</div>"
+            )
     return "\n".join(out) + "\n"
 
 
@@ -699,7 +729,12 @@ def render_html(ctx: dict, hero_image_path: Path | None = None) -> str:
 def render_markdown(ctx: dict) -> str:
     template = load_template("draft-v1.md.tmpl")
     additional_kw_md = ", ".join(f"`{kw}`" for kw in ctx["aioseo_additional_keywords"])
-    related_pages = [card["href_slug"].format_map(ctx) for card in ctx["_service"]["related_cards"]]
+    EXCLUDED_SERVICES = {"whole-house-rewire", "generator-installation"}
+    related_pages = [
+        card["href_slug"].format_map(ctx)
+        for card in ctx["_service"]["related_cards"]
+        if not any(excl in card["href_slug"] for excl in EXCLUDED_SERVICES)
+    ]
     ctx["aioseo_additional_keywords_md"] = additional_kw_md
     ctx["related_pages_csv"] = ", ".join(related_pages)
     ctx["page_title_h1"] = ctx["wordpress_page_title"]
