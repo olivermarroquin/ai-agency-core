@@ -689,6 +689,113 @@ class WordPressClient:
         wrote_count = len(data.get("wrote", {}))
         return True, f"page options wrote {wrote_count} keys via REST bridge (post_id={page_id})"
 
+    def purge_litespeed_urls(
+        self,
+        urls: list[str],
+    ) -> tuple[bool, str]:
+        """Purge specific URLs from LiteSpeed edge cache via the Keelworks
+        LiteSpeed Bridge plugin.
+
+        The bridge must be installed and activated on the target site. If
+        not installed (404), reports gracefully so the caller can skip.
+
+        Returns (success, message).
+        """
+        url = f"{self.base_url}/wp-json/keelworks/v1/litespeed-purge"
+        try:
+            resp = requests.post(
+                url,
+                headers=self.headers,
+                json={"urls": urls},
+                timeout=self.timeout,
+            )
+        except requests.RequestException as e:
+            return False, f"network error talking to LiteSpeed bridge: {e}"
+
+        if resp.status_code == 404:
+            return False, (
+                "LiteSpeed bridge not installed "
+                "(install Keelworks LiteSpeed Bridge from "
+                "repos/ai-agency-core/wordpress-plugins/)"
+            )
+        if resp.status_code in (401, 403):
+            return False, (
+                f"LiteSpeed bridge rejected ({resp.status_code}). "
+                f"Caller needs manage_options capability."
+            )
+        if resp.status_code >= 400:
+            return False, f"LiteSpeed bridge error {resp.status_code}: {resp.text[:200]}"
+
+        try:
+            data = resp.json()
+        except ValueError:
+            return False, f"LiteSpeed bridge returned non-JSON: {resp.text[:200]}"
+
+        count = data.get("count", 0)
+        return data.get("ok", False), f"purged {count} URL(s) from LiteSpeed cache"
+
+
+def verify_sitemap_freshness(
+    client: "WordPressClient",
+    page_slug: str,
+    config: dict[str, Any],
+) -> bool:
+    """Post-publish sitemap freshness check.
+
+    1. Purge sitemap URLs from LiteSpeed cache via the bridge plugin
+       (graceful skip if bridge not installed).
+    2. Fetch the sitemap with a cache-buster query parameter.
+    3. Verify the newly published page slug appears in the sitemap XML.
+
+    Returns True if the slug is found, False otherwise.
+    """
+    import random
+
+    base_url = config["wp_base_url"].rstrip("/")
+
+    # Step 1: Attempt LiteSpeed cache purge for sitemap URLs.
+    sitemap_urls = [
+        f"{base_url}/page-sitemap.xml",
+        f"{base_url}/sitemap.xml",
+        f"{base_url}/sitemap_index.xml",
+        f"{base_url}/post-sitemap.xml",
+    ]
+    purge_ok, purge_msg = client.purge_litespeed_urls(sitemap_urls)
+    print(f"→ Sitemap purge: {'✓' if purge_ok else '⚠ skipped'} — {purge_msg}")
+
+    # Step 2: Cache-busted fetch + slug check.
+    cache_buster = f"?nocache={random.randint(100000, 999999)}"
+    checked_paths = []
+
+    for sitemap_path in ("/page-sitemap.xml", "/sitemap_index.xml"):
+        fetch_url = f"{base_url}{sitemap_path}{cache_buster}"
+        try:
+            resp = requests.get(
+                fetch_url,
+                timeout=15,
+                headers={"User-Agent": "publish-core-30-page.py/1.0"},
+            )
+            if resp.status_code == 200:
+                checked_paths.append(sitemap_path)
+                if page_slug in resp.text:
+                    print(
+                        f"→ Sitemap check: ✓ '{page_slug}' found in "
+                        f"{sitemap_path} (cache-busted)"
+                    )
+                    return True
+        except requests.RequestException:
+            pass
+
+    if checked_paths:
+        print(
+            f"→ Sitemap check: ⚠ '{page_slug}' NOT found in "
+            f"{', '.join(checked_paths)} — may appear after next AIOSEO/Yoast regen cycle"
+        )
+    else:
+        print("→ Sitemap check: ⚠ could not fetch any sitemap XML")
+
+    return False
+
 
 def build_wp_payload(
     metadata: PageMetadata,
@@ -1374,6 +1481,13 @@ def publish(
     if gsc_configured or request_indexing:
         msg = request_gsc_indexing(live_url, config)
         print(f"→ GSC indexing:  {msg}")
+
+    # Post-publish sitemap freshness verification: purge LiteSpeed cache for
+    # sitemap URLs (prevents stale CDN copies after publish), then verify the
+    # newly published slug appears in the live sitemap XML. Graceful fallback
+    # if the LiteSpeed bridge plugin is not installed — prints a warning but
+    # does not block the publish.
+    verify_sitemap_freshness(client, metadata.slug, config)
 
     duration = (datetime.now() - started).total_seconds()
     result = PublishResult(
