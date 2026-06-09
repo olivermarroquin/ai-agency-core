@@ -23,6 +23,9 @@ import re
 import sys
 import time
 
+sys.path.insert(0, os.path.dirname(__file__))
+from _paths import STATE_DIR
+
 # Known boilerplate patterns that indicate a self-claim without real review
 BOILERPLATE_PATTERNS = [
     r'^\[summary of checks run and findings\]$',
@@ -116,13 +119,9 @@ def main():
         print(f'[review-gate] REJECTED: {err}', file=sys.stderr)
         sys.exit(1)
 
-    state_dir = os.path.join(
-        os.environ.get('CLAUDE_PROJECT_DIR', os.getcwd()),
-        '.claude', 'state'
-    )
-    os.makedirs(state_dir, exist_ok=True)
+    os.makedirs(STATE_DIR, exist_ok=True)
 
-    reviewed_path = os.path.join(state_dir, f'{args.session}-reviewed.jsonl')
+    reviewed_path = os.path.join(STATE_DIR, f'{args.session}-reviewed.jsonl')
 
     now = time.time()
     iso = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())

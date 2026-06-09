@@ -17,11 +17,21 @@ import re
 import sys
 import time
 
+sys.path.insert(0, os.path.dirname(__file__))
+from _paths import STATE_DIR
+
 # --- Self-referential exclusion ---
+# Match these substrings anywhere in the Bash command. Covers:
+#   python3 /abs/.../mandatory-review-gate.py ...
+#   python3 /abs/.../log-review-pass.py --session ...
+#   python3 /abs/.../dirty-ledger-track.py
+#   python3 -c "...from _paths import STATE_DIR..." (inline inspection)
 SELF_PATTERNS = [
     'mandatory-review-gate',
     'log-review-pass',
     'dirty-ledger-track',
+    '_paths.py',
+    'from _paths import',
 ]
 
 # --- Read-only Bash classifier ---
@@ -35,6 +45,7 @@ READ_ONLY_CMDS = frozenset({
     # Benign directory/shell builtins (change shell state, not filesystem state)
     'cd', 'pushd', 'popd', ':', 'source', '.', 'export', 'set', 'unset',
     'alias', 'unalias', 'hash', 'ulimit', 'umask', 'shopt', 'trap',
+    # NOTE: curl/wget handled separately in _is_segment_read_only (need flag inspection)
 })
 
 READ_ONLY_GIT_SUBCMDS = frozenset({
@@ -103,6 +114,21 @@ def _is_segment_read_only(segment: str) -> bool:
         if subcmd and subcmd in READ_ONLY_GIT_SUBCMDS:
             return True
         return False
+
+    # curl/wget: read-only if no mutation flags
+    # curl is GET by default; -X POST/PUT/PATCH/DELETE, --data, -d, -F make it state-changing
+    if base in ('curl', 'wget'):
+        curl_write_flags = {'-X', '--request', '-d', '--data', '--data-raw',
+                            '--data-binary', '--data-urlencode', '-F', '--form',
+                            '--upload-file', '-T'}
+        parts = segment.split()
+        for p in parts[1:]:
+            if p in curl_write_flags:
+                return False
+            # -X POST (flag + value)
+            if p.startswith('-X') and len(p) > 2:
+                return False
+        return True
 
     if base in READ_ONLY_CMDS:
         return True
@@ -291,13 +317,9 @@ def main():
 
     tier = classify_tier(file_path, tool_input, tool_name)
 
-    state_dir = os.path.join(
-        os.environ.get('CLAUDE_PROJECT_DIR', os.getcwd()),
-        '.claude', 'state'
-    )
-    os.makedirs(state_dir, exist_ok=True)
+    os.makedirs(STATE_DIR, exist_ok=True)
 
-    ledger_path = os.path.join(state_dir, f'{session_id}-dirty.jsonl')
+    ledger_path = os.path.join(STATE_DIR, f'{session_id}-dirty.jsonl')
 
     entry = {
         'timestamp': time.time(),

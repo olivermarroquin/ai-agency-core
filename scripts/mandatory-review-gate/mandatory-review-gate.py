@@ -16,6 +16,9 @@ import json
 import os
 import sys
 
+sys.path.insert(0, os.path.dirname(__file__))
+from _paths import STATE_DIR
+
 
 def load_jsonl(path: str) -> list:
     if not os.path.exists(path):
@@ -100,13 +103,8 @@ def main():
 
     session_id = data.get('session_id', 'unknown')
 
-    state_dir = os.path.join(
-        os.environ.get('CLAUDE_PROJECT_DIR', os.getcwd()),
-        '.claude', 'state'
-    )
-
-    dirty_path = os.path.join(state_dir, f'{session_id}-dirty.jsonl')
-    reviewed_path = os.path.join(state_dir, f'{session_id}-reviewed.jsonl')
+    dirty_path = os.path.join(STATE_DIR, f'{session_id}-dirty.jsonl')
+    reviewed_path = os.path.join(STATE_DIR, f'{session_id}-reviewed.jsonl')
 
     dirty_entries = load_jsonl(dirty_path)
     reviewed_entries = load_jsonl(reviewed_path)
