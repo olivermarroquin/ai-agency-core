@@ -1,6 +1,5 @@
 {
   "_comment": "Per-city data for Fairfax, VA. Anchor city — EV Electric's office is at 9488 Fairfax Blvd, physically inside the City of Fairfax. The home-market framing differs from satellite cities: not '10-15 min away,' but 'around the corner.' Used by scaffold-core-30-page.py.",
-
   "slug": "fairfax-va",
   "name": "Fairfax",
   "name_with_state": "Fairfax, VA",
@@ -11,22 +10,52 @@
   "distance_from_hq_phrase": "Our shop is at 9488 Fairfax Blvd — physically inside the City of Fairfax",
   "geographic_anchor_paragraph": "Fairfax is our home market. Our shop is at 9488 Fairfax Blvd, right on the Route 50/29 corridor. The City of Fairfax sits between Mantua to the north, Kings Park to the south, Fair Oaks to the west, and the Mosby Woods / Old Town border to the east — a tight mix of postwar ranches, 1960s-1970s colonials, 1990s-2000s townhomes, and pockets of new construction.",
   "audience_descriptor": "Residential homeowners in Fairfax, VA and surrounding City-of-Fairfax neighborhoods including Old Town Fairfax, Mantua, Kings Park, Mosby Woods, Country Club Hills, Fair Oaks, Fair Lakes, Fairfax Corner, Penderbrook, and Greenbriar.",
-  "no_trip_charge_cities": ["Fairfax", "Vienna", "McLean", "Oakton", "Tysons"],
-
-  "neighborhoods": [
-    { "name": "Old Town Fairfax", "blurb": "the original City of Fairfax core around Main Street and Chain Bridge Road" },
-    { "name": "Mantua", "blurb": "the established mid-century neighborhood north of Pickett Road" },
-    { "name": "Kings Park / Kings Park West", "blurb": "1960s-1970s colonials south of Braddock Road" },
-    { "name": "Mosby Woods", "blurb": "split-levels and ranches near the City of Fairfax border" },
-    { "name": "Country Club Hills", "blurb": "mid-century homes near the Country Club of Fairfax" },
-    { "name": "Fair Oaks / Fair Lakes", "blurb": "newer townhomes and detached homes along the Route 50 / 66 corridor" },
-    { "name": "Fairfax Corner", "blurb": "2000s townhomes and condos at the I-66 / West Ox interchange" },
-    { "name": "Penderbrook", "blurb": "1980s-1990s townhomes around the Penderbrook golf course" },
-    { "name": "Greenbriar", "blurb": "1970s-1980s neighborhood east of Route 50, near Fair Oaks Mall" }
+  "no_trip_charge_cities": [
+    "Fairfax",
+    "Vienna",
+    "McLean",
+    "Oakton",
+    "Tysons"
   ],
-
-  "other_areas_paragraph": "Outside Fairfax City, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Oakton, Tysons, Burke, Annandale, Falls Church, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
-
+  "neighborhoods": [
+    {
+      "name": "Old Town Fairfax",
+      "blurb": "the original City of Fairfax core around Main Street and Chain Bridge Road"
+    },
+    {
+      "name": "Mantua",
+      "blurb": "the established mid-century neighborhood north of Pickett Road"
+    },
+    {
+      "name": "Kings Park / Kings Park West",
+      "blurb": "1960s-1970s colonials south of Braddock Road"
+    },
+    {
+      "name": "Mosby Woods",
+      "blurb": "split-levels and ranches near the City of Fairfax border"
+    },
+    {
+      "name": "Country Club Hills",
+      "blurb": "mid-century homes near the Country Club of Fairfax"
+    },
+    {
+      "name": "Fair Oaks / Fair Lakes",
+      "blurb": "newer townhomes and detached homes along the Route 50 / 66 corridor"
+    },
+    {
+      "name": "Fairfax Corner",
+      "blurb": "2000s townhomes and condos at the I-66 / West Ox interchange"
+    },
+    {
+      "name": "Penderbrook",
+      "blurb": "1980s-1990s townhomes around the Penderbrook golf course"
+    },
+    {
+      "name": "Greenbriar",
+      "blurb": "1970s-1980s neighborhood east of Route 50, near Fair Oaks Mall"
+    }
+  ],
+  "other_areas_paragraph": "Outside Fairfax City, we serve Vienna, McLean, Oakton, Tysons, Burke, Annandale, Falls Church, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
   "housing_patterns": [
     {
       "title": "1950s-1970s split-levels &amp; ranches",
@@ -47,25 +76,39 @@
       "symptoms": "failed dimmers, dead three-way switches, outlets that test fine but won't hold a plug."
     }
   ],
-
   "quick_ref_localized_items": {
     "troubleshooting": [
-      { "summary": "Lights flicker when the AC or fridge kicks on", "body": "Voltage drop. Often a loose neutral at the meter base or a damaged feeder. Common in older Mantua and Country Club Hills homes built before 1980 — the service entrance is reaching the end of its life. Worth diagnosing soon: persistent voltage drops shorten the life of every motor in your house." },
-      { "summary": "A breaker keeps tripping (more than once a week)", "body": "The breaker is doing its job — something's wrong upstream. Usually an overloaded circuit (new microwave + toaster on the same line), a short in a wall outlet, or a failed breaker itself. We trace which of the three in 30-60 minutes." },
-      { "summary": "An outlet or switch plate feels warm to the touch", "body": "Stop using the circuit and call us today. Heat at a connection means resistance, and resistance behind drywall is how house fires start. Most common in 1960s-1980s Kings Park and Mantua colonials with original wire-nut splices in junction boxes." },
-      { "summary": "You smell burning plastic or \"hot\" electrical odor", "body": "Treat this as urgent. Shut off the breaker for the affected area if you can identify it. We triage these calls to the earliest slot — typically same-day in Fairfax since our shop is right here. The cause is almost always overheated insulation at a loose connection." },
-      { "summary": "Half your house has power, half doesn't", "body": "An open neutral at the service entrance. Serious condition — it can fluctuate voltage between 50V and 200V and damage electronics. We test each leg of the panel and identify the failure point. Often a utility-side issue but we confirm before calling Dominion Energy." },
-      { "summary": "Your EV charger throttles, trips, or warms the outlet", "body": "EV charging puts continuous 30-50 amp draw on circuits that older Fairfax homes weren't designed for. The cause is usually upstream of the charger — a feeder, a breaker, or a connection that can't sustain the load. Common in Fair Oaks and Penderbrook townhomes where owners added a Level 2 charger to a pre-2010 panel." }
+      {
+        "summary": "Lights flicker when the AC or fridge kicks on",
+        "body": "Voltage drop. Often a loose neutral at the meter base or a damaged feeder. Common in older Mantua and Country Club Hills homes built before 1980 — the service entrance is reaching the end of its life. Worth diagnosing soon: persistent voltage drops shorten the life of every motor in your house."
+      },
+      {
+        "summary": "A breaker keeps tripping (more than once a week)",
+        "body": "The breaker is doing its job — something's wrong upstream. Usually an overloaded circuit (new microwave + toaster on the same line), a short in a wall outlet, or a failed breaker itself. We trace which of the three in 30-60 minutes."
+      },
+      {
+        "summary": "An outlet or switch plate feels warm to the touch",
+        "body": "Stop using the circuit and call us today. Heat at a connection means resistance, and resistance behind drywall is how house fires start. Most common in 1960s-1980s Kings Park and Mantua colonials with original wire-nut splices in junction boxes."
+      },
+      {
+        "summary": "You smell burning plastic or \"hot\" electrical odor",
+        "body": "Treat this as urgent. Shut off the breaker for the affected area if you can identify it. We triage these calls to the earliest slot — typically same-day in Fairfax since our shop is right here. The cause is almost always overheated insulation at a loose connection."
+      },
+      {
+        "summary": "Half your house has power, half doesn't",
+        "body": "An open neutral at the service entrance. Serious condition — it can fluctuate voltage between 50V and 200V and damage electronics. We test each leg of the panel and identify the failure point. Often a utility-side issue but we confirm before calling Dominion Energy."
+      },
+      {
+        "summary": "Your EV charger throttles, trips, or warms the outlet",
+        "body": "EV charging puts continuous 30-50 amp draw on circuits that older Fairfax homes weren't designed for. The cause is usually upstream of the charger — a feeder, a breaker, or a connection that can't sustain the load. Common in Fair Oaks and Penderbrook townhomes where owners added a Level 2 charger to a pre-2010 panel."
+      }
     ]
   },
-
   "most_common_problem_paragraph": {
     "troubleshooting": "Two patterns dominate. In 1950s-1970s homes (Mosby Woods, Country Club Hills), the most common issue is circuit overload from modern appliances on original circuits. In 1960s-1980s homes (Mantua, Kings Park), the most common issue is intermittent power loss from aging connections in outlet boxes, panels, or junction boxes hidden in walls."
   },
-
   "specific_problems_neighborhood_phrase": {
     "troubleshooting": "Fairfax City and the surrounding Fair Oaks corridor have one of the highest EV adoption rates in Northern Virginia."
   },
-
   "ev_charger_homes_phrase": "older Fairfax homes weren't designed for"
 }

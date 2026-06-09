@@ -7,7 +7,9 @@
   "state_full": "Virginia",
   "county": "Fairfax County",
   "county_full": "Fairfax County, Virginia",
-  "electric_utilities": ["Dominion Energy"],
+  "electric_utilities": [
+    "Dominion Energy"
+  ],
   "utility_coordination_phrase": "Dominion Energy coordination",
   "dispatch_time_phrase": "10–15 minute",
   "dispatch_time_short": "10–15 min",
@@ -22,10 +24,34 @@
     "Falls Church"
   ],
   "area_served_schema": [
-    {"@type": "AdministrativeArea", "name": "Fairfax County, VA"},
-    {"@type": "City", "name": "Tysons", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
-    {"@type": "City", "name": "McLean", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
-    {"@type": "City", "name": "Vienna", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}}
+    {
+      "@type": "AdministrativeArea",
+      "name": "Fairfax County, VA"
+    },
+    {
+      "@type": "City",
+      "name": "Tysons",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "McLean",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Vienna",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    }
   ],
   "neighborhoods": [
     {
@@ -61,7 +87,7 @@
       "blurb": "distinctive circular-plan condominium complex of 1970s high-rises near Tysons Corner Center"
     }
   ],
-  "other_areas_paragraph": "Outside Tysons, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Falls Church, Arlington, and the rest of Fairfax County. We also cover Montgomery County, MD and Washington, DC.",
+  "other_areas_paragraph": "Outside Tysons, we serve Vienna, Fairfax, McLean, Falls Church, Arlington, and the rest of Fairfax County. We also cover Montgomery County, MD and Washington, DC.",
   "housing_patterns": [
     {
       "title": "1950s–1960s ramblers &amp; early colonials",
@@ -84,12 +110,30 @@
   ],
   "quick_ref_localized_items": {
     "troubleshooting": [
-      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Tysons' 1970s–1980s homes (Westpark, Tysons Woods, Spring Hill), 150-amp panels are overwhelmed by modern loads including home offices and EV chargers." },
-      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes." },
-      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging Dominion Energy service connection. Common in Tysons' 1970s–1980s neighborhoods where the original service was sized for lower loads than today's renovated homes demand." },
-      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. In Tysons' 1970s homes with aluminum wiring (Westpark, Tysons Woods), warm outlets require immediate professional inspection." },
-      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Can occur after storms or when aging service entrance connections corrode." },
-      { "summary": "AFCI breaker trips on normal appliances", "body": "AFCI breakers in Tysons' 2010s+ new construction (Scotts Run, International Drive area) are sensitive by design and trip on noisy loads like vacuums and treadmills. We confirm whether the trip is nuisance or a real arc fault, and adjust the circuit accordingly." }
+      {
+        "summary": "Breaker trips repeatedly or won't reset",
+        "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Tysons' 1970s–1980s homes (Westpark, Tysons Woods, Spring Hill), 150-amp panels are overwhelmed by modern loads including home offices and EV chargers."
+      },
+      {
+        "summary": "Outlets dead in one room but not others",
+        "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes."
+      },
+      {
+        "summary": "Lights flicker when the AC or heat pump kicks on",
+        "body": "Voltage drop from a loose neutral at the meter base or an aging Dominion Energy service connection. Common in Tysons' 1970s–1980s neighborhoods where the original service was sized for lower loads than today's renovated homes demand."
+      },
+      {
+        "summary": "Burning smell or warm switch plates",
+        "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. In Tysons' 1970s homes with aluminum wiring (Westpark, Tysons Woods), warm outlets require immediate professional inspection."
+      },
+      {
+        "summary": "Half the house has power, half doesn't",
+        "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Can occur after storms or when aging service entrance connections corrode."
+      },
+      {
+        "summary": "AFCI breaker trips on normal appliances",
+        "body": "AFCI breakers in Tysons' 2010s+ new construction (Scotts Run, International Drive area) are sensitive by design and trip on noisy loads like vacuums and treadmills. We confirm whether the trip is nuisance or a real arc fault, and adjust the circuit accordingly."
+      }
     ]
   },
   "most_common_problem_paragraph": {

@@ -7,14 +7,40 @@
   "state_full": "Virginia",
   "county": "Fairfax County",
   "county_full": "Fairfax County, Virginia",
-  "electric_utilities": ["Dominion Energy"],
+  "electric_utilities": [
+    "Dominion Energy"
+  ],
   "dispatch_time_phrase": "20–30 minute",
   "dispatch_time_short": "20–30 min",
   "area_served_schema": [
-    {"@type": "AdministrativeArea", "name": "Fairfax County, VA"},
-    {"@type": "City", "name": "Springfield", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
-    {"@type": "City", "name": "Burke", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
-    {"@type": "City", "name": "Lorton", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}}
+    {
+      "@type": "AdministrativeArea",
+      "name": "Fairfax County, VA"
+    },
+    {
+      "@type": "City",
+      "name": "Springfield",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Burke",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Lorton",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    }
   ],
   "distance_from_hq_phrase": "Springfield is about 15 miles from our Woodbridge base — we reach most Springfield neighborhoods in 15-20 minutes via I-95",
   "geographic_anchor_paragraph": "Springfield, VA sits at the intersection of three interstates — I-95, I-395, and I-495 — in southern Fairfax County. The community is anchored by the Springfield Town Center, the Franconia-Springfield Metro station, and some of the region's most connected highway infrastructure. Springfield is 15 miles from downtown DC and within 15 minutes of Burke, Lorton, Annandale, and Alexandria.",
@@ -61,7 +87,7 @@
       "blurb": "the postwar neighborhood north of Braddock Road"
     }
   ],
-  "other_areas_paragraph": "Outside Springfield, we serve <a href=\"/electrical-troubleshooting-burke-va/\">Burke</a>, <a href=\"/electrical-troubleshooting-lorton-va/\">Lorton</a>, <a href=\"/electrical-troubleshooting-alexandria-va/\">Alexandria</a>, Annandale, Franconia, and the rest of Fairfax County. We also cover <a href=\"/electrical-troubleshooting-woodbridge-va/\">Woodbridge</a>, <a href=\"/electrical-troubleshooting-manassas-va/\">Manassas</a>, and the broader Northern Virginia region.",
+  "other_areas_paragraph": "Outside Springfield, we serve Burke, Lorton, Alexandria, Annandale, Franconia, and the rest of Fairfax County. We also cover Woodbridge, Manassas, and the broader Northern Virginia region.",
   "housing_patterns": [
     {
       "title": "1950s-1960s ramblers, split-levels &amp; Cape Cods",

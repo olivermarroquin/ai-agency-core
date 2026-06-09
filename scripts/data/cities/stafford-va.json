@@ -7,15 +7,39 @@
   "state_full": "Virginia",
   "county": "Stafford County",
   "county_full": "Stafford County, Virginia",
-  "electric_utilities": ["Dominion Energy", "NOVEC", "Rappahannock Electric Cooperative (REC)"],
+  "electric_utilities": [
+    "Dominion Energy",
+    "NOVEC",
+    "Rappahannock Electric Cooperative (REC)"
+  ],
   "utility_coordination_phrase": "utility coordination — Dominion, NOVEC, or REC —",
   "dispatch_time_phrase": "35–50 minute",
   "dispatch_time_short": "35–50 min",
   "area_served_schema": [
-    {"@type": "AdministrativeArea", "name": "Stafford County, VA"},
-    {"@type": "City", "name": "Fredericksburg", "containedInPlace": {"@type": "AdministrativeArea", "name": "Virginia"}},
-    {"@type": "City", "name": "Woodbridge", "containedInPlace": {"@type": "AdministrativeArea", "name": "Prince William County, VA"}},
-    {"@type": "AdministrativeArea", "name": "Spotsylvania County, VA"}
+    {
+      "@type": "AdministrativeArea",
+      "name": "Stafford County, VA"
+    },
+    {
+      "@type": "City",
+      "name": "Fredericksburg",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Virginia"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Woodbridge",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Prince William County, VA"
+      }
+    },
+    {
+      "@type": "AdministrativeArea",
+      "name": "Spotsylvania County, VA"
+    }
   ],
   "distance_from_hq_phrase": "Stafford is 20-25 min from our home base in Woodbridge",
   "geographic_anchor_paragraph": "Stafford County, VA sits along the I-95 corridor about 40 miles south of Washington, D.C., bordered by Prince William County and Marine Corps Base Quantico to the north and the City of Fredericksburg to the south. The county runs from the Potomac River on the east to the foothills of the Blue Ridge to the west, with most residential development clustered along the I-95 and US Route 1 corridors. Stafford is 15-20 minutes from downtown Fredericksburg, 20-25 minutes from Woodbridge, and 50-75 minutes from DC depending on traffic.",
@@ -69,7 +93,7 @@
       "blurb": "Ryan Homes subdivision along Jefferson Davis Highway"
     }
   ],
-  "other_areas_paragraph": "Outside Stafford, we serve Fredericksburg, Spotsylvania, <a href=\"/electrical-troubleshooting-woodbridge-va/\">Woodbridge</a>, <a href=\"/electrical-troubleshooting-dale-city-va/\">Dale City</a>, and communities throughout the I-95 corridor. We also cover <a href=\"/electrical-troubleshooting-manassas-va/\">Manassas</a>, <a href=\"/electrical-troubleshooting-lake-ridge-va/\">Lake Ridge</a>, <a href=\"/electrical-troubleshooting-springfield-va/\">Springfield</a>, and the rest of Northern Virginia.",
+  "other_areas_paragraph": "Outside Stafford, we serve Fredericksburg, Spotsylvania, Woodbridge, Dale City, and communities throughout the I-95 corridor. We also cover Manassas, Lake Ridge, Springfield, and the rest of Northern Virginia.",
   "housing_patterns": [
     {
       "title": "Pre-1970s historic &amp; rural homes",

@@ -723,7 +723,51 @@ def render_html(ctx: dict, hero_image_path: Path | None = None) -> str:
     ctx["faq_items_html"] = render_faq_items(ctx)
     ctx["map_iframe_html"] = get_map_iframe_html(ctx)
     ctx["jsonld"] = build_jsonld(ctx)
-    return template.format_map(ctx)
+    html = template.format_map(ctx)
+
+    # Post-render body-level link validation: check every internal <a href>
+    # against page-existence on disk. Warn on any dead links so the operator
+    # sees them before publish — catches other_areas_paragraph hrefs, inline
+    # cross-references, and any other source of internal links, not just
+    # related_cards (which is already existence-checked at render time).
+    _validate_internal_links(html, ctx.get("client_slug", ""))
+
+    return html
+
+
+def _validate_internal_links(html: str, client_slug: str) -> None:
+    """Scan rendered HTML for internal <a href="/slug/"> links that point to
+    pages that don't exist on disk. Prints warnings to stderr. Does NOT
+    block the scaffold — the operator decides whether to fix or accept."""
+    import re as _re
+    internal_hrefs = _re.findall(r'href="/([a-z0-9][a-z0-9\-]*)/"', html)
+    SERVICE_KEYWORDS = [
+        'troubleshooting', 'panel-upgrade', 'ev-charger', 'light-fixture',
+        'smoke-alarm', 'outlet-installation', 'emergency-electrician',
+        'whole-house', 'generator',
+    ]
+    dead = []
+    checked = set()
+    for slug in internal_hrefs:
+        if slug in checked:
+            continue
+        checked.add(slug)
+        if not any(kw in slug for kw in SERVICE_KEYWORDS):
+            continue
+        if not _page_exists_on_disk(slug, client_slug):
+            dead.append(slug)
+    if dead:
+        sys.stderr.write(
+            f"\n⚠ INTERNAL LINK WARNING: {len(dead)} href(s) point to "
+            f"pages that don't exist on disk for client '{client_slug}':\n"
+        )
+        for slug in dead:
+            sys.stderr.write(f"    → /{slug}/\n")
+        sys.stderr.write(
+            "  These will 404 if published. Fix the source (city JSON "
+            "other_areas_paragraph or service JSON related_cards) or "
+            "unlink before publishing.\n\n"
+        )
 
 
 def render_markdown(ctx: dict) -> str:

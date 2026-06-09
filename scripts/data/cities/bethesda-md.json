@@ -7,8 +7,14 @@
   "state_full": "Maryland",
   "county": "Montgomery County",
   "county_full": "Montgomery County, Maryland",
-  "zip_codes": ["20814", "20816", "20817"],
-  "electric_utilities": ["PEPCO"],
+  "zip_codes": [
+    "20814",
+    "20816",
+    "20817"
+  ],
+  "electric_utilities": [
+    "PEPCO"
+  ],
   "utility_coordination_phrase": "PEPCO coordination",
   "dispatch_time_phrase": "35–45 minute",
   "dispatch_time_short": "35–45 min",
@@ -23,10 +29,34 @@
     "Kensington"
   ],
   "area_served_schema": [
-    {"@type": "AdministrativeArea", "name": "Montgomery County, MD"},
-    {"@type": "City", "name": "Bethesda", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
-    {"@type": "City", "name": "Chevy Chase", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
-    {"@type": "City", "name": "Potomac", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}}
+    {
+      "@type": "AdministrativeArea",
+      "name": "Montgomery County, MD"
+    },
+    {
+      "@type": "City",
+      "name": "Bethesda",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Chevy Chase",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Potomac",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    }
   ],
   "neighborhoods": [
     {
@@ -70,7 +100,7 @@
       "blurb": "colonial homes with large yards and Little Falls Stream Valley Park access near the DC line"
     }
   ],
-  "other_areas_paragraph": "Outside Bethesda, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Chevy Chase, Potomac, Rockville, Kensington, Silver Spring, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.",
+  "other_areas_paragraph": "Outside Bethesda, we serve Vienna, Fairfax, McLean, Chevy Chase, Potomac, Rockville, Kensington, Silver Spring, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.",
   "housing_patterns": [
     {
       "title": "1920s–1950s colonials, Cape Cods &amp; bungalows",
@@ -93,12 +123,30 @@
   ],
   "quick_ref_localized_items": {
     "troubleshooting": [
-      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Bethesda's 1920s–1950s homes (Kenwood, Bradley Hills, Battery Park), the original 60-amp fuse box or early 100-amp panel is overwhelmed by modern loads." },
-      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes." },
-      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging overhead PEPCO service connection. Bethesda's older tree-canopy neighborhoods are especially prone to weather-related service-entrance damage." },
-      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads." },
-      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in Bethesda's tree-heavy neighborhoods." },
-      { "summary": "AFCI breaker trips on normal appliances", "body": "AFCI breakers in Bethesda's 2010s+ teardown rebuilds are sensitive by design and trip on noisy loads like vacuums and treadmills. We confirm whether the trip is nuisance or a real arc fault, and adjust the circuit accordingly." }
+      {
+        "summary": "Breaker trips repeatedly or won't reset",
+        "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Bethesda's 1920s–1950s homes (Kenwood, Bradley Hills, Battery Park), the original 60-amp fuse box or early 100-amp panel is overwhelmed by modern loads."
+      },
+      {
+        "summary": "Outlets dead in one room but not others",
+        "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes."
+      },
+      {
+        "summary": "Lights flicker when the AC or heat pump kicks on",
+        "body": "Voltage drop from a loose neutral at the meter base or an aging overhead PEPCO service connection. Bethesda's older tree-canopy neighborhoods are especially prone to weather-related service-entrance damage."
+      },
+      {
+        "summary": "Burning smell or warm switch plates",
+        "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads."
+      },
+      {
+        "summary": "Half the house has power, half doesn't",
+        "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in Bethesda's tree-heavy neighborhoods."
+      },
+      {
+        "summary": "AFCI breaker trips on normal appliances",
+        "body": "AFCI breakers in Bethesda's 2010s+ teardown rebuilds are sensitive by design and trip on noisy loads like vacuums and treadmills. We confirm whether the trip is nuisance or a real arc fault, and adjust the circuit accordingly."
+      }
     ]
   },
   "most_common_problem_paragraph": {

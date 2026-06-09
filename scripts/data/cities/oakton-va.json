@@ -7,7 +7,9 @@
   "state_full": "Virginia",
   "county": "Fairfax County",
   "county_full": "Fairfax County, Virginia",
-  "electric_utilities": ["Dominion Energy"],
+  "electric_utilities": [
+    "Dominion Energy"
+  ],
   "utility_coordination_phrase": "Dominion Energy coordination",
   "dispatch_time_phrase": "10–15 minute",
   "dispatch_time_short": "10–15 min",
@@ -55,7 +57,7 @@
       "blurb": "the eastern Oakton residential strip along Blake Lane"
     }
   ],
-  "other_areas_paragraph": "Outside Oakton, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Tysons, Burke, Annandale, Falls Church, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
+  "other_areas_paragraph": "Outside Oakton, we serve Vienna, Fairfax, McLean, Tysons, Burke, Annandale, Falls Church, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
   "housing_patterns": [
     {
       "title": "1960s-1970s ranches &amp; split-levels",
@@ -78,12 +80,30 @@
   ],
   "quick_ref_localized_items": {
     "troubleshooting": [
-      { "summary": "Breaker trips repeatedly", "body": "A breaker that trips once is doing its job. If it trips daily or won't stay reset, there's a short, an overloaded circuit, or a failed breaker behind it. Common in Oakton's 1960s-1970s ranches where 100-amp panels carry modern loads." },
-      { "summary": "Outlets dead in one room", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that came loose, or a wire nut that failed in a hidden junction box. We trace the circuit and find the break in 15-30 minutes." },
-      { "summary": "Flickering or dimming lights", "body": "When lights dim as the AC or fridge cycles on, it signals a voltage drop — often from a loose neutral at the meter base or an undersized feeder. Persistent voltage drops damage electronics and are a fire-risk signal." },
-      { "summary": "Warm outlets or switch plates", "body": "Heat at an outlet or switch means a loose connection is building resistance. This is a fire risk. Stop using the circuit and call us — we treat warm-outlet calls as urgent diagnostics." },
-      { "summary": "AFCI breaker nuisance trips", "body": "Common in Oakton's newer townhomes and post-2008 builds. AFCI breakers are sensitive by design and trip on vacuum cleaners, treadmills, and certain LED dimmers. We identify whether it's a nuisance trip or a real arc fault." },
-      { "summary": "Half the house lost power", "body": "If one side of your home has power and the other doesn't, you may have an open neutral at the service entrance — a serious condition that can damage appliances. We test both legs of the panel and find the failure point." }
+      {
+        "summary": "Breaker trips repeatedly",
+        "body": "A breaker that trips once is doing its job. If it trips daily or won't stay reset, there's a short, an overloaded circuit, or a failed breaker behind it. Common in Oakton's 1960s-1970s ranches where 100-amp panels carry modern loads."
+      },
+      {
+        "summary": "Outlets dead in one room",
+        "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that came loose, or a wire nut that failed in a hidden junction box. We trace the circuit and find the break in 15-30 minutes."
+      },
+      {
+        "summary": "Flickering or dimming lights",
+        "body": "When lights dim as the AC or fridge cycles on, it signals a voltage drop — often from a loose neutral at the meter base or an undersized feeder. Persistent voltage drops damage electronics and are a fire-risk signal."
+      },
+      {
+        "summary": "Warm outlets or switch plates",
+        "body": "Heat at an outlet or switch means a loose connection is building resistance. This is a fire risk. Stop using the circuit and call us — we treat warm-outlet calls as urgent diagnostics."
+      },
+      {
+        "summary": "AFCI breaker nuisance trips",
+        "body": "Common in Oakton's newer townhomes and post-2008 builds. AFCI breakers are sensitive by design and trip on vacuum cleaners, treadmills, and certain LED dimmers. We identify whether it's a nuisance trip or a real arc fault."
+      },
+      {
+        "summary": "Half the house lost power",
+        "body": "If one side of your home has power and the other doesn't, you may have an open neutral at the service entrance — a serious condition that can damage appliances. We test both legs of the panel and find the failure point."
+      }
     ]
   },
   "most_common_problem_paragraph": {

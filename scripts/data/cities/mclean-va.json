@@ -7,7 +7,9 @@
   "state_full": "Virginia",
   "county": "Fairfax County",
   "county_full": "Fairfax County, Virginia",
-  "electric_utilities": ["Dominion Energy"],
+  "electric_utilities": [
+    "Dominion Energy"
+  ],
   "utility_coordination_phrase": "Dominion Energy coordination",
   "dispatch_time_phrase": "20–25 minute",
   "dispatch_time_short": "20–25 min",
@@ -63,7 +65,7 @@
       "blurb": "McLean's western edge near the Tysons commercial district"
     }
   ],
-  "other_areas_paragraph": "Outside McLean, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, Oakton, Tysons, Great Falls, Falls Church, Arlington, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
+  "other_areas_paragraph": "Outside McLean, we serve Vienna, Fairfax, Oakton, Tysons, Great Falls, Falls Church, Arlington, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
   "housing_patterns": [
     {
       "title": "1950s-1970s ramblers, colonials &amp; split-levels",
@@ -86,20 +88,56 @@
   ],
   "quick_ref_localized_items": {
     "troubleshooting": [
-      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In McLean's 1950s-1970s homes (Chesterbrook, Bryn Mawr, El Nido), the original 100-amp panel may simply be overwhelmed by modern loads." },
-      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15-30 minutes." },
-      { "summary": "Lights flicker when the AC or fridge kicks on", "body": "Voltage drop from a loose neutral at the meter base or a damaged feeder. McLean's older neighborhoods with overhead Dominion service and heavy tree canopy are especially prone to service-entrance connection issues." },
-      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads." },
-      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in McLean's tree-canopy neighborhoods." },
-      { "summary": "AFCI breaker trips on normal appliances", "body": "AFCI breakers in McLean's 2010s+ teardown rebuilds are sensitive by design and trip on noisy loads like vacuums and treadmills. We confirm whether the trip is nuisance or a real arc fault, and adjust the circuit accordingly." }
+      {
+        "summary": "Breaker trips repeatedly or won't reset",
+        "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In McLean's 1950s-1970s homes (Chesterbrook, Bryn Mawr, El Nido), the original 100-amp panel may simply be overwhelmed by modern loads."
+      },
+      {
+        "summary": "Outlets dead in one room but not others",
+        "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15-30 minutes."
+      },
+      {
+        "summary": "Lights flicker when the AC or fridge kicks on",
+        "body": "Voltage drop from a loose neutral at the meter base or a damaged feeder. McLean's older neighborhoods with overhead Dominion service and heavy tree canopy are especially prone to service-entrance connection issues."
+      },
+      {
+        "summary": "Burning smell or warm switch plates",
+        "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads."
+      },
+      {
+        "summary": "Half the house has power, half doesn't",
+        "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in McLean's tree-canopy neighborhoods."
+      },
+      {
+        "summary": "AFCI breaker trips on normal appliances",
+        "body": "AFCI breakers in McLean's 2010s+ teardown rebuilds are sensitive by design and trip on noisy loads like vacuums and treadmills. We confirm whether the trip is nuisance or a real arc fault, and adjust the circuit accordingly."
+      }
     ],
     "light-fixture-installation": [
-      { "summary": "Chandelier installation in a two-story foyer", "body": "Heavy chandeliers in Langley and Georgetown Pike estates need structural ceiling support, a fan-rated or heavy-duty junction box, and safe high-access rigging. We assess the ceiling, install the right bracket, and wire the fixture to code." },
-      { "summary": "Replacing builder-grade fixtures after a renovation", "body": "McLean's teardown rebuilds often come with generic builder fixtures the new owner wants to upgrade. We swap them out and update the junction box and dimmer if needed." },
-      { "summary": "Recessed lighting layout for a kitchen or living area", "body": "Evenly spaced recessed lights transform a room. We cut the ceiling, install IC-rated housings, wire the layout, and connect a dimmer. Most 6-8 fixture layouts take half a day." },
-      { "summary": "Outdoor sconce or landscape lighting installation", "body": "Exterior fixtures need weatherproof boxes, GFCI protection, and outdoor-rated wiring. We install porch sconces, pathway bollards, and soffit lights that survive Northern Virginia weather." },
-      { "summary": "Upgrading 1950s lighting in older McLean homes", "body": "Original fixtures in Chesterbrook, Bryn Mawr, and El Nido homes often connect to cloth-insulated wiring and undersized junction boxes. We rewire the connection and bring the box up to current code before mounting the new fixture." },
-      { "summary": "Installing a fixture you bought yourself", "body": "You found it at Lamps Unlimited, Restoration Hardware, or online. We install customer-supplied fixtures of any brand and weight — just make sure it arrives with mounting hardware." }
+      {
+        "summary": "Chandelier installation in a two-story foyer",
+        "body": "Heavy chandeliers in Langley and Georgetown Pike estates need structural ceiling support, a fan-rated or heavy-duty junction box, and safe high-access rigging. We assess the ceiling, install the right bracket, and wire the fixture to code."
+      },
+      {
+        "summary": "Replacing builder-grade fixtures after a renovation",
+        "body": "McLean's teardown rebuilds often come with generic builder fixtures the new owner wants to upgrade. We swap them out and update the junction box and dimmer if needed."
+      },
+      {
+        "summary": "Recessed lighting layout for a kitchen or living area",
+        "body": "Evenly spaced recessed lights transform a room. We cut the ceiling, install IC-rated housings, wire the layout, and connect a dimmer. Most 6-8 fixture layouts take half a day."
+      },
+      {
+        "summary": "Outdoor sconce or landscape lighting installation",
+        "body": "Exterior fixtures need weatherproof boxes, GFCI protection, and outdoor-rated wiring. We install porch sconces, pathway bollards, and soffit lights that survive Northern Virginia weather."
+      },
+      {
+        "summary": "Upgrading 1950s lighting in older McLean homes",
+        "body": "Original fixtures in Chesterbrook, Bryn Mawr, and El Nido homes often connect to cloth-insulated wiring and undersized junction boxes. We rewire the connection and bring the box up to current code before mounting the new fixture."
+      },
+      {
+        "summary": "Installing a fixture you bought yourself",
+        "body": "You found it at Lamps Unlimited, Restoration Hardware, or online. We install customer-supplied fixtures of any brand and weight — just make sure it arrives with mounting hardware."
+      }
     ]
   },
   "most_common_problem_paragraph": {

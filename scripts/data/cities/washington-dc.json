@@ -7,7 +7,9 @@
   "state_full": "District of Columbia",
   "county": "District of Columbia",
   "county_full": "District of Columbia (independent jurisdiction)",
-  "electric_utilities": ["PEPCO"],
+  "electric_utilities": [
+    "PEPCO"
+  ],
   "utility_coordination_phrase": "PEPCO coordination",
   "permit_authority": "DC Department of Buildings (DOB)",
   "dispatch_time_phrase": "25–40 minute",
@@ -23,10 +25,34 @@
     "Arlington"
   ],
   "area_served_schema": [
-    {"@type": "AdministrativeArea", "name": "District of Columbia"},
-    {"@type": "City", "name": "Washington", "containedInPlace": {"@type": "AdministrativeArea", "name": "District of Columbia"}},
-    {"@type": "City", "name": "Bethesda", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
-    {"@type": "City", "name": "McLean", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}}
+    {
+      "@type": "AdministrativeArea",
+      "name": "District of Columbia"
+    },
+    {
+      "@type": "City",
+      "name": "Washington",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "District of Columbia"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Bethesda",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "McLean",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    }
   ],
   "neighborhoods": [
     {
@@ -70,7 +96,7 @@
       "blurb": "1940s–1960s homes and apartment buildings on elevated terrain near the Washington National Cathedral"
     }
   ],
-  "other_areas_paragraph": "Outside Washington, DC, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Bethesda, Chevy Chase, Potomac, Arlington, and all of Northern Virginia and Montgomery County, MD.",
+  "other_areas_paragraph": "Outside Washington, DC, we serve Vienna, Fairfax, McLean, Bethesda, Chevy Chase, Potomac, Arlington, and all of Northern Virginia and Montgomery County, MD.",
   "housing_patterns": [
     {
       "title": "1800s–1920s historic row houses, Victorians &amp; Federal-style homes",
@@ -93,12 +119,30 @@
   ],
   "quick_ref_localized_items": {
     "troubleshooting": [
-      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In DC's 1920s–1950s homes (Chevy Chase DC, Tenleytown, American University Park), the original 100-amp panel is overwhelmed by decades of added loads." },
-      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind plaster walls. We trace the circuit map and find the break in 15–30 minutes." },
-      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging PEPCO service connection. DC's tree-heavy NW neighborhoods (Palisades, Spring Valley, Cleveland Park) are prone to weather-related service-entrance damage from overhead lines." },
-      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections behind plaster-and-lath walls are especially dangerous. We find the heat source with an IR thermal camera and repair it before damage spreads." },
-      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in DC's mature-canopy neighborhoods." },
-      { "summary": "Only two-prong outlets throughout the home", "body": "Pre-1960 DC homes (Georgetown, Cleveland Park, Glover Park, Tenleytown) were wired without equipment grounding conductors. Upgrading to three-prong grounded outlets requires either running new ground wires or installing GFCI protection — we assess the best approach for your home's construction." }
+      {
+        "summary": "Breaker trips repeatedly or won't reset",
+        "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In DC's 1920s–1950s homes (Chevy Chase DC, Tenleytown, American University Park), the original 100-amp panel is overwhelmed by decades of added loads."
+      },
+      {
+        "summary": "Outlets dead in one room but not others",
+        "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind plaster walls. We trace the circuit map and find the break in 15–30 minutes."
+      },
+      {
+        "summary": "Lights flicker when the AC or heat pump kicks on",
+        "body": "Voltage drop from a loose neutral at the meter base or an aging PEPCO service connection. DC's tree-heavy NW neighborhoods (Palisades, Spring Valley, Cleveland Park) are prone to weather-related service-entrance damage from overhead lines."
+      },
+      {
+        "summary": "Burning smell or warm switch plates",
+        "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections behind plaster-and-lath walls are especially dangerous. We find the heat source with an IR thermal camera and repair it before damage spreads."
+      },
+      {
+        "summary": "Half the house has power, half doesn't",
+        "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in DC's mature-canopy neighborhoods."
+      },
+      {
+        "summary": "Only two-prong outlets throughout the home",
+        "body": "Pre-1960 DC homes (Georgetown, Cleveland Park, Glover Park, Tenleytown) were wired without equipment grounding conductors. Upgrading to three-prong grounded outlets requires either running new ground wires or installing GFCI protection — we assess the best approach for your home's construction."
+      }
     ]
   },
   "most_common_problem_paragraph": {

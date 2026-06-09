@@ -7,7 +7,9 @@
   "state_full": "Virginia",
   "county": "Fairfax County / City of Falls Church",
   "county_full": "Fairfax County, Virginia and the independent City of Falls Church",
-  "electric_utilities": ["Dominion Energy"],
+  "electric_utilities": [
+    "Dominion Energy"
+  ],
   "utility_coordination_phrase": "Dominion Energy coordination",
   "dispatch_time_phrase": "10–15 minute",
   "dispatch_time_short": "10–15 min",
@@ -22,10 +24,34 @@
     "Arlington"
   ],
   "area_served_schema": [
-    {"@type": "AdministrativeArea", "name": "Fairfax County, VA"},
-    {"@type": "City", "name": "Falls Church", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
-    {"@type": "City", "name": "McLean", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
-    {"@type": "City", "name": "Vienna", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}}
+    {
+      "@type": "AdministrativeArea",
+      "name": "Fairfax County, VA"
+    },
+    {
+      "@type": "City",
+      "name": "Falls Church",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "McLean",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Vienna",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    }
   ],
   "neighborhoods": [
     {
@@ -65,7 +91,7 @@
       "blurb": "1960s split-levels and colonials along Lee Highway corridor with easy I-66 access"
     }
   ],
-  "other_areas_paragraph": "Outside Falls Church, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Arlington, Tysons, and the rest of Fairfax County. We also cover Montgomery County, MD and Washington, DC.",
+  "other_areas_paragraph": "Outside Falls Church, we serve Vienna, Fairfax, McLean, Arlington, Tysons, and the rest of Fairfax County. We also cover Montgomery County, MD and Washington, DC.",
   "housing_patterns": [
     {
       "title": "1940s–1950s Cape Cods, brick ramblers &amp; bungalows",
@@ -88,12 +114,30 @@
   ],
   "quick_ref_localized_items": {
     "troubleshooting": [
-      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Falls Church's 1940s–1950s homes (Greenway Downs, Jefferson Village, East Falls Church), the original 60-amp fuse box or early 100-amp panel is overwhelmed by modern loads." },
-      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes." },
-      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging Dominion Energy service connection. Falls Church's tree-heavy neighborhoods (West Falls Church, Cherry Hill, Broadmont) are prone to weather-related service-entrance damage." },
-      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads." },
-      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in Falls Church's mature-canopy neighborhoods." },
-      { "summary": "Panel buzzing or crackling sounds", "body": "Buzzing from the breaker panel indicates a loose bus bar connection or a failing breaker. In Falls Church's 1960s–1970s split-levels (Broadmont, Madison Manor), Federal Pacific and Zinsco panels are still common — both are known fire hazards that should be replaced." }
+      {
+        "summary": "Breaker trips repeatedly or won't reset",
+        "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Falls Church's 1940s–1950s homes (Greenway Downs, Jefferson Village, East Falls Church), the original 60-amp fuse box or early 100-amp panel is overwhelmed by modern loads."
+      },
+      {
+        "summary": "Outlets dead in one room but not others",
+        "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes."
+      },
+      {
+        "summary": "Lights flicker when the AC or heat pump kicks on",
+        "body": "Voltage drop from a loose neutral at the meter base or an aging Dominion Energy service connection. Falls Church's tree-heavy neighborhoods (West Falls Church, Cherry Hill, Broadmont) are prone to weather-related service-entrance damage."
+      },
+      {
+        "summary": "Burning smell or warm switch plates",
+        "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads."
+      },
+      {
+        "summary": "Half the house has power, half doesn't",
+        "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in Falls Church's mature-canopy neighborhoods."
+      },
+      {
+        "summary": "Panel buzzing or crackling sounds",
+        "body": "Buzzing from the breaker panel indicates a loose bus bar connection or a failing breaker. In Falls Church's 1960s–1970s split-levels (Broadmont, Madison Manor), Federal Pacific and Zinsco panels are still common — both are known fire hazards that should be replaced."
+      }
     ]
   },
   "most_common_problem_paragraph": {

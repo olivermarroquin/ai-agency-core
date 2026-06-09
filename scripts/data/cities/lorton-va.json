@@ -7,14 +7,40 @@
   "state_full": "Virginia",
   "county": "Fairfax County",
   "county_full": "Fairfax County, Virginia",
-  "electric_utilities": ["Dominion Energy"],
+  "electric_utilities": [
+    "Dominion Energy"
+  ],
   "dispatch_time_phrase": "15–20 minute",
   "dispatch_time_short": "15–20 min",
   "area_served_schema": [
-    {"@type": "AdministrativeArea", "name": "Fairfax County, VA"},
-    {"@type": "City", "name": "Lorton", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
-    {"@type": "City", "name": "Springfield", "containedInPlace": {"@type": "AdministrativeArea", "name": "Fairfax County, VA"}},
-    {"@type": "City", "name": "Woodbridge", "containedInPlace": {"@type": "AdministrativeArea", "name": "Prince William County, VA"}}
+    {
+      "@type": "AdministrativeArea",
+      "name": "Fairfax County, VA"
+    },
+    {
+      "@type": "City",
+      "name": "Lorton",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Springfield",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Fairfax County, VA"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Woodbridge",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Prince William County, VA"
+      }
+    }
   ],
   "distance_from_hq_phrase": "Lorton is 8-10 min from our home base in Woodbridge",
   "geographic_anchor_paragraph": "Lorton, VA sits in southern Fairfax County where I-95 meets the Occoquan River, adjacent to Fort Belvoir and the Mason Neck peninsula. The community runs roughly between Springfield to the north, the Prince William County line to the south, Fort Belvoir to the east, and the I-95 corridor to the west. Lorton is 10-15 minutes from Springfield, 20-30 minutes from Alexandria, and 30-45 minutes from downtown DC, depending on traffic.",
@@ -64,7 +90,7 @@
       "blurb": "newer subdivisions near South Run District Park"
     }
   ],
-  "other_areas_paragraph": "Outside Lorton, we serve <a href=\"/electrical-troubleshooting-springfield-va/\">Springfield</a>, <a href=\"/electrical-troubleshooting-woodbridge-va/\">Woodbridge</a>, Burke, Fairfax Station, and the rest of southern Fairfax County. We also cover <a href=\"/electrical-troubleshooting-alexandria-va/\">Alexandria</a>, Dale City, Lake Ridge, and communities throughout Northern Virginia.",
+  "other_areas_paragraph": "Outside Lorton, we serve Springfield, Woodbridge, Burke, Fairfax Station, and the rest of southern Fairfax County. We also cover Alexandria, Dale City, Lake Ridge, and communities throughout Northern Virginia.",
   "housing_patterns": [
     {
       "title": "1960s-1970s ranches &amp; split-levels",

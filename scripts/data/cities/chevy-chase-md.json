@@ -7,7 +7,9 @@
   "state_full": "Maryland",
   "county": "Montgomery County",
   "county_full": "Montgomery County, Maryland",
-  "electric_utilities": ["PEPCO"],
+  "electric_utilities": [
+    "PEPCO"
+  ],
   "utility_coordination_phrase": "PEPCO coordination",
   "dispatch_time_phrase": "30–40 minute",
   "dispatch_time_short": "30–40 min",
@@ -22,10 +24,34 @@
     "Silver Spring"
   ],
   "area_served_schema": [
-    {"@type": "AdministrativeArea", "name": "Montgomery County, MD"},
-    {"@type": "City", "name": "Chevy Chase", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
-    {"@type": "City", "name": "Bethesda", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
-    {"@type": "City", "name": "Potomac", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}}
+    {
+      "@type": "AdministrativeArea",
+      "name": "Montgomery County, MD"
+    },
+    {
+      "@type": "City",
+      "name": "Chevy Chase",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Bethesda",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Potomac",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    }
   ],
   "neighborhoods": [
     {
@@ -65,7 +91,7 @@
       "blurb": "quiet residential streets of 1940s–1950s homes near Rosemary Hills and Rock Creek Park"
     }
   ],
-  "other_areas_paragraph": "Outside Chevy Chase, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Bethesda, Potomac, Kensington, Rockville, Silver Spring, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.",
+  "other_areas_paragraph": "Outside Chevy Chase, we serve Vienna, Fairfax, McLean, Bethesda, Potomac, Kensington, Rockville, Silver Spring, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.",
   "housing_patterns": [
     {
       "title": "1910s–1940s colonials, Tudors &amp; Craftsman homes",
@@ -88,12 +114,30 @@
   ],
   "quick_ref_localized_items": {
     "troubleshooting": [
-      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Chevy Chase's 1910s–1940s homes (Chevy Chase Village, Section 3, Brookdale), the original 60-amp fuse box or early 100-amp panel is overwhelmed by modern loads." },
-      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes." },
-      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging overhead PEPCO service connection. Chevy Chase's dense tree canopy and overhead lines make service-entrance connections vulnerable to storm damage and branch contact." },
-      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads." },
-      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in Chevy Chase's tree-heavy streets." },
-      { "summary": "Knob-and-tube wiring discovered during renovation", "body": "Pre-1930 homes in Chevy Chase Village and Section 3 often have knob-and-tube remnants in attics and wall cavities — especially if blown-in insulation covers the wiring, creating a fire hazard. We assess extent, isolate active circuits, and plan replacement." }
+      {
+        "summary": "Breaker trips repeatedly or won't reset",
+        "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Chevy Chase's 1910s–1940s homes (Chevy Chase Village, Section 3, Brookdale), the original 60-amp fuse box or early 100-amp panel is overwhelmed by modern loads."
+      },
+      {
+        "summary": "Outlets dead in one room but not others",
+        "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes."
+      },
+      {
+        "summary": "Lights flicker when the AC or heat pump kicks on",
+        "body": "Voltage drop from a loose neutral at the meter base or an aging overhead PEPCO service connection. Chevy Chase's dense tree canopy and overhead lines make service-entrance connections vulnerable to storm damage and branch contact."
+      },
+      {
+        "summary": "Burning smell or warm switch plates",
+        "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads."
+      },
+      {
+        "summary": "Half the house has power, half doesn't",
+        "body": "An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in Chevy Chase's tree-heavy streets."
+      },
+      {
+        "summary": "Knob-and-tube wiring discovered during renovation",
+        "body": "Pre-1930 homes in Chevy Chase Village and Section 3 often have knob-and-tube remnants in attics and wall cavities — especially if blown-in insulation covers the wiring, creating a fire hazard. We assess extent, isolate active circuits, and plan replacement."
+      }
     ]
   },
   "most_common_problem_paragraph": {

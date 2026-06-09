@@ -7,8 +7,15 @@
   "state_full": "Maryland",
   "county": "Montgomery County",
   "county_full": "Montgomery County, Maryland",
-  "zip_codes": ["20850", "20851", "20852", "20853"],
-  "electric_utilities": ["PEPCO (Potomac Electric Power Company)"],
+  "zip_codes": [
+    "20850",
+    "20851",
+    "20852",
+    "20853"
+  ],
+  "electric_utilities": [
+    "PEPCO (Potomac Electric Power Company)"
+  ],
   "utility_coordination_phrase": "PEPCO coordination",
   "dispatch_time_phrase": "35–50 minute",
   "dispatch_time_short": "35–50 min",
@@ -65,7 +72,7 @@
       "blurb": "upscale 1950s–1960s neighborhood with larger lots adjacent to the country club"
     }
   ],
-  "other_areas_paragraph": "Outside Rockville, we serve Bethesda, Potomac, Gaithersburg, Kensington, North Bethesda, Silver Spring, and the rest of Montgomery County. Across the river in Virginia, we cover <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Arlington, Alexandria, and all of Northern Virginia.",
+  "other_areas_paragraph": "Outside Rockville, we serve Bethesda, Potomac, Gaithersburg, Kensington, North Bethesda, Silver Spring, and the rest of Montgomery County. Across the river in Virginia, we cover Vienna, Fairfax, McLean, Arlington, Alexandria, and all of Northern Virginia.",
   "housing_patterns": [
     {
       "title": "1940s–1960s post-war Cape Cods, ramblers &amp; small colonials",
@@ -88,20 +95,56 @@
   ],
   "quick_ref_localized_items": {
     "troubleshooting": [
-      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that trips daily — or immediately upon reset — indicates a short circuit, an overloaded circuit, or a failed breaker mechanism. In Rockville's 1940s–1960s post-war homes (Twinbrook, East Rockville, Hungerford), the original 60-amp or 100-amp panel is often overwhelmed by modern loads." },
-      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that failed in a junction box. In Twinbrook Cape Cods with finished upper floors, the issue is often an unpermitted circuit that was never properly connected to the panel." },
-      { "summary": "Lights flicker when the AC or heat pump kicks on", "body": "Voltage drop from a loose neutral at the meter base or an aging PEPCO service connection. Common in Rockville's older neighborhoods with overhead service lines and mature tree canopy." },
-      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us immediately. Almost always heat at a loose connection — backstabbed outlets in post-war homes and oxidized aluminum wiring in 1970s split-levels are the most common causes in Rockville." },
-      { "summary": "Half the house has power, half doesn't", "body": "An open neutral at the service entrance — a serious condition that can damage electronics on the 'high leg.' We test voltage on each leg of the panel and locate the failure. Common after storms bring down PEPCO overhead lines in Rockville's tree-heavy neighborhoods." },
-      { "summary": "AFCI breaker trips on normal appliances", "body": "AFCI breakers in King Farm, Fallsgrove, and other 2000s+ construction are sensitive by design. They trip on motor noise from vacuums, treadmills, and garage door openers. We confirm whether the trip is nuisance or a real arc fault and adjust the circuit accordingly." }
+      {
+        "summary": "Breaker trips repeatedly or won't reset",
+        "body": "A breaker that trips daily — or immediately upon reset — indicates a short circuit, an overloaded circuit, or a failed breaker mechanism. In Rockville's 1940s–1960s post-war homes (Twinbrook, East Rockville, Hungerford), the original 60-amp or 100-amp panel is often overwhelmed by modern loads."
+      },
+      {
+        "summary": "Outlets dead in one room but not others",
+        "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that failed in a junction box. In Twinbrook Cape Cods with finished upper floors, the issue is often an unpermitted circuit that was never properly connected to the panel."
+      },
+      {
+        "summary": "Lights flicker when the AC or heat pump kicks on",
+        "body": "Voltage drop from a loose neutral at the meter base or an aging PEPCO service connection. Common in Rockville's older neighborhoods with overhead service lines and mature tree canopy."
+      },
+      {
+        "summary": "Burning smell or warm switch plates",
+        "body": "Stop using the circuit and call us immediately. Almost always heat at a loose connection — backstabbed outlets in post-war homes and oxidized aluminum wiring in 1970s split-levels are the most common causes in Rockville."
+      },
+      {
+        "summary": "Half the house has power, half doesn't",
+        "body": "An open neutral at the service entrance — a serious condition that can damage electronics on the 'high leg.' We test voltage on each leg of the panel and locate the failure. Common after storms bring down PEPCO overhead lines in Rockville's tree-heavy neighborhoods."
+      },
+      {
+        "summary": "AFCI breaker trips on normal appliances",
+        "body": "AFCI breakers in King Farm, Fallsgrove, and other 2000s+ construction are sensitive by design. They trip on motor noise from vacuums, treadmills, and garage door openers. We confirm whether the trip is nuisance or a real arc fault and adjust the circuit accordingly."
+      }
     ],
     "light-fixture-installation": [
-      { "summary": "Replacing outdated fixtures in post-war homes", "body": "Original fixtures in Twinbrook, East Rockville, and Hungerford homes connect to cloth-insulated wiring and undersized junction boxes. We rewire the connection and bring the box up to current code before mounting the new fixture." },
-      { "summary": "Recessed lighting layout for a kitchen or living area", "body": "Evenly spaced recessed lights transform a room. We cut the ceiling, install IC-rated housings, wire the layout, and connect a dimmer. Most 6–8 fixture layouts take half a day." },
-      { "summary": "Chandelier installation in a two-story foyer", "body": "Larger homes in Luxmanor, College Gardens, and Woodley Gardens have foyers designed for statement chandeliers. We assess ceiling structure, install the correct bracket, and wire to code." },
-      { "summary": "Outdoor sconce or landscape lighting", "body": "Exterior fixtures need weatherproof boxes, GFCI protection, and outdoor-rated wiring. We install porch sconces, pathway lights, and soffit fixtures built to handle Maryland weather year-round." },
-      { "summary": "Upgrading builder-grade fixtures in King Farm or Fallsgrove", "body": "Newer townhomes and condos come with generic builder fixtures. We swap them out, upgrade the junction box and dimmer if needed, and handle the shared-wall access challenges common in attached homes." },
-      { "summary": "Installing a fixture you bought yourself", "body": "You found it online or at a local showroom. We install customer-supplied fixtures of any brand and weight — just make sure it arrives with mounting hardware included." }
+      {
+        "summary": "Replacing outdated fixtures in post-war homes",
+        "body": "Original fixtures in Twinbrook, East Rockville, and Hungerford homes connect to cloth-insulated wiring and undersized junction boxes. We rewire the connection and bring the box up to current code before mounting the new fixture."
+      },
+      {
+        "summary": "Recessed lighting layout for a kitchen or living area",
+        "body": "Evenly spaced recessed lights transform a room. We cut the ceiling, install IC-rated housings, wire the layout, and connect a dimmer. Most 6–8 fixture layouts take half a day."
+      },
+      {
+        "summary": "Chandelier installation in a two-story foyer",
+        "body": "Larger homes in Luxmanor, College Gardens, and Woodley Gardens have foyers designed for statement chandeliers. We assess ceiling structure, install the correct bracket, and wire to code."
+      },
+      {
+        "summary": "Outdoor sconce or landscape lighting",
+        "body": "Exterior fixtures need weatherproof boxes, GFCI protection, and outdoor-rated wiring. We install porch sconces, pathway lights, and soffit fixtures built to handle Maryland weather year-round."
+      },
+      {
+        "summary": "Upgrading builder-grade fixtures in King Farm or Fallsgrove",
+        "body": "Newer townhomes and condos come with generic builder fixtures. We swap them out, upgrade the junction box and dimmer if needed, and handle the shared-wall access challenges common in attached homes."
+      },
+      {
+        "summary": "Installing a fixture you bought yourself",
+        "body": "You found it online or at a local showroom. We install customer-supplied fixtures of any brand and weight — just make sure it arrives with mounting hardware included."
+      }
     ]
   },
   "most_common_problem_paragraph": {
@@ -122,10 +165,41 @@
   },
   "ev_charger_homes_phrase": "Rockville's older homes were not wired for",
   "area_served_schema": [
-    {"@type": "AdministrativeArea", "name": "Montgomery County, MD"},
-    {"@type": "City", "name": "Rockville", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
-    {"@type": "City", "name": "Bethesda", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
-    {"@type": "City", "name": "Gaithersburg", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
-    {"@type": "City", "name": "Potomac", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}}
+    {
+      "@type": "AdministrativeArea",
+      "name": "Montgomery County, MD"
+    },
+    {
+      "@type": "City",
+      "name": "Rockville",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Bethesda",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Gaithersburg",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Potomac",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    }
   ]
 }

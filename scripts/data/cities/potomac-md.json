@@ -7,7 +7,9 @@
   "state_full": "Maryland",
   "county": "Montgomery County",
   "county_full": "Montgomery County, Maryland",
-  "electric_utilities": ["PEPCO"],
+  "electric_utilities": [
+    "PEPCO"
+  ],
   "utility_coordination_phrase": "PEPCO coordination",
   "dispatch_time_phrase": "25–35 minute",
   "dispatch_time_short": "25–35 min",
@@ -22,10 +24,34 @@
     "North Potomac"
   ],
   "area_served_schema": [
-    {"@type": "AdministrativeArea", "name": "Montgomery County, MD"},
-    {"@type": "City", "name": "Potomac", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
-    {"@type": "City", "name": "Bethesda", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}},
-    {"@type": "City", "name": "Rockville", "containedInPlace": {"@type": "AdministrativeArea", "name": "Montgomery County, MD"}}
+    {
+      "@type": "AdministrativeArea",
+      "name": "Montgomery County, MD"
+    },
+    {
+      "@type": "City",
+      "name": "Potomac",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Bethesda",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    },
+    {
+      "@type": "City",
+      "name": "Rockville",
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Montgomery County, MD"
+      }
+    }
   ],
   "neighborhoods": [
     {
@@ -65,7 +91,7 @@
       "blurb": "1970s–1980s colonials on wooded one-acre lots near Cabin John Regional Park"
     }
   ],
-  "other_areas_paragraph": "Outside Potomac, we serve <a href=\"/electrical-troubleshooting-vienna-va/\">Vienna</a>, <a href=\"/electrical-troubleshooting-fairfax-va/\">Fairfax</a>, <a href=\"/electrical-troubleshooting-mclean-va/\">McLean</a>, Bethesda, Chevy Chase, Rockville, Kensington, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.",
+  "other_areas_paragraph": "Outside Potomac, we serve Vienna, Fairfax, McLean, Bethesda, Chevy Chase, Rockville, Kensington, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.",
   "housing_patterns": [
     {
       "title": "1960s–1970s estate colonials &amp; contemporaries",
@@ -88,12 +114,30 @@
   ],
   "quick_ref_localized_items": {
     "troubleshooting": [
-      { "summary": "Breaker trips repeatedly or won't reset", "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Potomac's larger estate homes (River Falls, Avenel, Congressional area), 200-amp panels installed in the 1980s are overwhelmed by pool equipment, multiple HVAC zones, and home entertainment systems." },
-      { "summary": "Outlets dead in one room but not others", "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box. In Potomac's large homes, the tripped GFCI may be in a garage, basement, or pool house — far from the dead outlet." },
-      { "summary": "Lights flicker or dim when pool pump or AC starts", "body": "Voltage drop from long service runs — common in Potomac's estate-lot homes where the PEPCO transformer may be 200–400 feet from the main panel. Also caused by loose connections at the meter base or weathered overhead service drops." },
-      { "summary": "Burning smell or warm switch plates", "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads." },
-      { "summary": "Generator runs but doesn't power the whole house", "body": "Transfer switch load management issues — common in Potomac homes where the generator was sized for essential circuits but the homeowner expects whole-house coverage. We audit the transfer switch programming and load priorities." },
-      { "summary": "Landscape lighting or pool equipment trips breakers", "body": "Ground faults in direct-burial landscape lighting connections or deteriorating underground feeders to pool equipment. Potomac's wooded lots with mature root systems are prone to underground cable damage from root intrusion and soil movement." }
+      {
+        "summary": "Breaker trips repeatedly or won't reset",
+        "body": "A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Potomac's larger estate homes (River Falls, Avenel, Congressional area), 200-amp panels installed in the 1980s are overwhelmed by pool equipment, multiple HVAC zones, and home entertainment systems."
+      },
+      {
+        "summary": "Outlets dead in one room but not others",
+        "body": "Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box. In Potomac's large homes, the tripped GFCI may be in a garage, basement, or pool house — far from the dead outlet."
+      },
+      {
+        "summary": "Lights flicker or dim when pool pump or AC starts",
+        "body": "Voltage drop from long service runs — common in Potomac's estate-lot homes where the PEPCO transformer may be 200–400 feet from the main panel. Also caused by loose connections at the meter base or weathered overhead service drops."
+      },
+      {
+        "summary": "Burning smell or warm switch plates",
+        "body": "Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads."
+      },
+      {
+        "summary": "Generator runs but doesn't power the whole house",
+        "body": "Transfer switch load management issues — common in Potomac homes where the generator was sized for essential circuits but the homeowner expects whole-house coverage. We audit the transfer switch programming and load priorities."
+      },
+      {
+        "summary": "Landscape lighting or pool equipment trips breakers",
+        "body": "Ground faults in direct-burial landscape lighting connections or deteriorating underground feeders to pool equipment. Potomac's wooded lots with mature root systems are prone to underground cable damage from root intrusion and soil movement."
+      }
     ]
   },
   "most_common_problem_paragraph": {
