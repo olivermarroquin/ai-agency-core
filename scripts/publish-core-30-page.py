@@ -1454,6 +1454,40 @@ def publish(
     print(f"→ Published:     {live_url}")
     print(f"→ WP page ID:    {page_id}")
 
+    # Guard 4 — wp:html wrapper verify-after-write (Issue: S&H 28/29 leaves
+    # published without their wp:html wrapper, causing wpautop to inject <p>
+    # tags into inline <style> blocks and breaking all CSS).
+    # The source HTML includes <!-- wp:html --> / <!-- /wp:html --> to tell
+    # WordPress not to apply wpautop/wptexturize. If the stored content lost
+    # the wrapper during create/update, the page will render broken.
+    # Uses context=edit to read content.raw (the block-markup source).
+    if html.lstrip().startswith("<!-- wp:html -->"):
+        verify_url = (
+            f"{client.base_url}/wp-json/wp/v2/pages/{page_id}"
+            f"?context=edit&_fields=content"
+        )
+        verify_resp = requests.get(
+            verify_url, headers=client.headers, timeout=client.timeout
+        )
+        if verify_resp.status_code == 200:
+            stored_raw = verify_resp.json().get("content", {}).get("raw", "")
+            if not stored_raw.lstrip().startswith("<!-- wp:html -->"):
+                print("→ wp:html guard: ⚠ wrapper stripped by WP — re-posting with wrapper")
+                client.update_page(page_id, {"content": html})
+                # Verify the re-post stuck
+                r2 = requests.get(
+                    verify_url, headers=client.headers, timeout=client.timeout
+                )
+                r2_raw = r2.json().get("content", {}).get("raw", "") if r2.ok else ""
+                if r2_raw.lstrip().startswith("<!-- wp:html -->"):
+                    print("→ wp:html guard: ✓ wrapper restored on re-post")
+                else:
+                    print("→ wp:html guard: ✗ FAILED — wrapper still missing after re-post. "
+                          "Page will render with broken CSS (wpautop corruption). "
+                          "Manual fix required: wrap content in <!-- wp:html --> via wp-admin.")
+            else:
+                print("→ wp:html guard: ✓ wrapper preserved")
+
     # Set theme page-display options via the Keelworks bridge plugin.
     # These are theme-specific post-meta keys (not registered with show_in_rest)
     # that control header, padding, breadcrumb, and title visibility.
