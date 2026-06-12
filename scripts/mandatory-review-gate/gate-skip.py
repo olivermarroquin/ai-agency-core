@@ -29,7 +29,6 @@ _spec.loader.exec_module(_gate)
 
 load_scoped_dirty = _gate.load_scoped_dirty
 load_scoped_reviewed = _gate.load_scoped_reviewed
-extract_session_ids_from_dirty = _gate.extract_session_ids_from_dirty
 get_unreviewed = _gate.get_unreviewed
 determine_review_tier = _gate.determine_review_tier
 
@@ -47,16 +46,9 @@ def main():
               file=sys.stderr)
         sys.exit(1)
 
-    # Load unreviewed entries
+    # Load unreviewed entries (own-ledger-only scoping, RGH-1.6)
     dirty_entries = load_scoped_dirty(STATE_DIR, args.session)
-    if dirty_entries:
-        session_start = min(e.get('timestamp', float('inf'))
-                            for e in dirty_entries)
-        dirty_sids = extract_session_ids_from_dirty(
-            STATE_DIR, args.session, session_start)
-    else:
-        dirty_sids = {args.session}
-    reviewed_entries = load_scoped_reviewed(STATE_DIR, args.session, dirty_sids)
+    reviewed_entries = load_scoped_reviewed(STATE_DIR, args.session)
     unreviewed = get_unreviewed(dirty_entries, reviewed_entries)
 
     if not unreviewed:
@@ -110,7 +102,11 @@ def main():
         pass
 
     # Write LOUD event-log row
-    event_log = os.path.join(WORKSPACE_ROOT, 'second-brain', '_meta', '_event-log.md')
+    # REVIEW_GATE_EVENT_LOG env override for test isolation (default unchanged)
+    event_log = os.environ.get(
+        'REVIEW_GATE_EVENT_LOG',
+        os.path.join(WORKSPACE_ROOT, 'second-brain', '_meta', '_event-log.md')
+    )
     skipped_files = ', '.join(e.get('file_path', '?')[:60] for e in unreviewed[:5])
     if count > 5:
         skipped_files += f' (+{count - 5} more)'

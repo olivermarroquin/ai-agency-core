@@ -49,10 +49,15 @@ EXPECTED_WORKSPACE_ROOT = os.path.realpath(os.path.join(SCRIPTS, '..', '..', '..
 SUBDIR_CWD = os.path.join(EXPECTED_WORKSPACE_ROOT, 'repos', 'ai-agency-core', 'scripts')
 
 
-def _make_env(state_dir, source=None):
+def _make_env(state_dir, source=None, event_log=None):
     """Build a subprocess env dict with REVIEW_GATE_STATE_DIR set."""
     env = os.environ.copy()
     env['REVIEW_GATE_STATE_DIR'] = state_dir
+    # Isolate event-log writes (gate-skip) to a temp file by default
+    if event_log is not None:
+        env['REVIEW_GATE_EVENT_LOG'] = event_log
+    elif 'REVIEW_GATE_EVENT_LOG' not in env:
+        env['REVIEW_GATE_EVENT_LOG'] = os.path.join(state_dir, '_event-log-test.md')
     if source is not None:
         env['REVIEW_GATE_SOURCE'] = source
     elif 'REVIEW_GATE_SOURCE' in env:
@@ -374,6 +379,85 @@ class TestSelfReferentialExclusion(unittest.TestCase):
                          'dirty-ledger-track.py command must be excluded')
 
 
+class TestReviewGatePathExclusion(unittest.TestCase):
+    """Writes to .review-gate/ paths must NOT create dirty entries (verdict-loop fix)."""
+
+    SID = 'conformance-rg-exclude'
+
+    def setUp(self):
+        self.state_dir = tempfile.mkdtemp(prefix='rg-test-')
+
+    def tearDown(self):
+        shutil.rmtree(self.state_dir, ignore_errors=True)
+
+    def test_verdict_file_write_excluded(self):
+        """Writing a verdict JSON into .review-gate/ must not create a dirty entry."""
+        verdict_path = os.path.join(self.state_dir, '.review-gate', 'state', 'verdict-test.json')
+        os.makedirs(os.path.dirname(verdict_path), exist_ok=True)
+        # Use a path that contains /.review-gate/ when normalized
+        _run_track(self.SID, 'Write', {
+            'file_path': '/tmp/workspace/.review-gate/state/verdict-test.json',
+            'content': '{}',
+        }, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        self.assertFalse(os.path.exists(dirty),
+                         '.review-gate/ verdict file must be excluded from tracking')
+
+    def test_non_review_gate_path_still_tracked(self):
+        """A normal file path must still be tracked."""
+        _run_track(self.SID, 'Write', {
+            'file_path': os.path.join(self.state_dir, 'normal-artifact.md'),
+            'content': '# test',
+        }, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        self.assertTrue(os.path.exists(dirty),
+                        'Normal file must still be tracked')
+
+
+class TestSelfRefPerSegment(unittest.TestCase):
+    """Self-referential exclusion must be per-segment: mixed commands tracked."""
+
+    SID = 'conformance-selfref-seg'
+
+    def setUp(self):
+        self.state_dir = tempfile.mkdtemp(prefix='rg-test-')
+
+    def tearDown(self):
+        shutil.rmtree(self.state_dir, ignore_errors=True)
+
+    def test_pure_gate_command_excluded(self):
+        """A pure gate command (all segments self-ref) is excluded."""
+        cmd = f'python3 {LOG} --session x --files /tmp/x --verdict PASS --tier full --gate-id G-default --verdict-file /tmp/v.json'
+        _run_track(self.SID, 'Bash', {'command': cmd}, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        self.assertFalse(os.path.exists(dirty),
+                         'Pure gate command must be excluded')
+
+    def test_mixed_command_tracked(self):
+        """cat > file && python3 .../log-review-pass.py must be TRACKED (evasion shape)."""
+        cmd = f'cat > /tmp/evil.md && python3 {LOG} --session x --files /tmp/x --verdict PASS --tier full --gate-id G-default --verdict-file /tmp/v.json'
+        _run_track(self.SID, 'Bash', {'command': cmd}, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        self.assertTrue(os.path.exists(dirty),
+                        'Mixed command (state-change + gate) must be tracked')
+
+    def test_two_gate_segments_excluded(self):
+        """Two gate commands chained are still excluded."""
+        cmd = f'python3 {STATUS} --session x && python3 {LOG} --session x --files /tmp/x --verdict PASS --tier full --gate-id G-default --verdict-file /tmp/v.json'
+        _run_track(self.SID, 'Bash', {'command': cmd}, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        self.assertFalse(os.path.exists(dirty),
+                         'Multiple gate commands chained must be excluded')
+
+    def test_state_change_before_gate_tracked(self):
+        """echo data > file ; python3 .../gate-status.py must be TRACKED."""
+        cmd = f'echo data > /tmp/out.txt ; python3 {STATUS} --session x'
+        _run_track(self.SID, 'Bash', {'command': cmd}, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        self.assertTrue(os.path.exists(dirty),
+                        'State-change segment before gate command must be tracked')
+
+
 class TestVerdictFileRequired(unittest.TestCase):
     """RGH-1: verdict file kills the self-claim. Bare evidence rejected."""
 
@@ -539,12 +623,12 @@ class TestTierEnforcement(unittest.TestCase):
 
 
 class TestSubAgentCoverage(unittest.TestCase):
-    """D-13: Sub-agent artifacts must be caught by parent Stop.
-    Sub-agents write to their own session ledger; the parent's Stop
-    scans ALL *-dirty.jsonl in the state dir."""
+    """D-13 (RGH-1.6): Sub-agent artifacts are caught because sub-agent
+    PostToolUse events inherit the parent session_id in Claude Code
+    (confirmed by real-runner evidence 2026-06-12). All entries land in
+    the parent's own dirty ledger — no sibling scan needed."""
 
-    PARENT_SID = 'conformance-parent'
-    CHILD_SID = 'conformance-child-subagent'
+    SID = 'conformance-parent'
 
     def setUp(self):
         self.state_dir = tempfile.mkdtemp(prefix='rg-test-')
@@ -552,70 +636,91 @@ class TestSubAgentCoverage(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.state_dir, ignore_errors=True)
 
-    def test_parent_stop_blocks_on_child_dirty(self):
-        """Parent Stop must block when a sub-agent wrote an unreviewed file.
-        The parent must have its own dirty entry first (establishes session
-        start for scoping — D-24)."""
-        # Parent writes first (establishes session start timestamp)
+    def test_parent_stop_blocks_on_subagent_artifact(self):
+        """Sub-agent artifact (same session_id) blocks parent Stop."""
+        # Parent writes
         parent_file = os.path.join(self.state_dir, 'parent-work.md')
-        _run_track(self.PARENT_SID, 'Write', {
+        _run_track(self.SID, 'Write', {
             'file_path': parent_file, 'content': '# parent work',
         }, self.state_dir)
         time.sleep(0.05)
-        # Sub-agent writes to its own session ledger (concurrent)
+        # Sub-agent writes (same session_id — real CC behavior)
         child_file = os.path.join(self.state_dir, 'subagent-artifact.md')
-        _run_track(self.CHILD_SID, 'Write', {
+        _run_track(self.SID, 'Write', {
             'file_path': child_file, 'content': '# subagent output',
         }, self.state_dir)
         # Review parent file only
         time.sleep(0.05)
-        _run_log(self.PARENT_SID, [os.path.realpath(parent_file)],
+        _run_log(self.SID, [os.path.realpath(parent_file)],
                  self.state_dir)
         time.sleep(0.05)
-        # Parent Stop must still block (child file unreviewed)
-        r = _run_gate(self.PARENT_SID, self.state_dir)
+        # Must still block (child file unreviewed)
+        r = _run_gate(self.SID, self.state_dir)
         self.assertEqual(r.returncode, 2,
-                         'Parent Stop must block on sub-agent dirty entry')
+                         'Stop must block on unreviewed sub-agent artifact')
         self.assertIn('unreviewed', r.stderr.lower())
 
-    def test_parent_stop_clears_after_child_reviewed(self):
-        """Parent Stop approves once the sub-agent artifact is reviewed."""
+    def test_stop_clears_after_subagent_reviewed(self):
+        """Stop approves once sub-agent artifact is reviewed."""
         child_file = os.path.join(self.state_dir, 'subagent-artifact.md')
-        _run_track(self.CHILD_SID, 'Write', {
+        _run_track(self.SID, 'Write', {
             'file_path': child_file, 'content': '# subagent output',
         }, self.state_dir)
-        # Review the sub-agent artifact (logged under parent session)
         time.sleep(0.05)
-        _run_log(self.PARENT_SID, [os.path.realpath(child_file)], self.state_dir)
+        _run_log(self.SID, [os.path.realpath(child_file)], self.state_dir)
         time.sleep(0.05)
-        r = _run_gate(self.PARENT_SID, self.state_dir)
+        r = _run_gate(self.SID, self.state_dir)
         self.assertEqual(r.returncode, 0,
-                         'Parent Stop must approve after sub-agent artifact reviewed')
+                         'Stop must approve after sub-agent artifact reviewed')
 
-    def test_mixed_parent_and_child_dirty(self):
-        """Both parent and child dirty entries must be reviewed."""
+    def test_mixed_parent_and_subagent_dirty(self):
+        """Both parent and sub-agent entries must be reviewed."""
         parent_file = os.path.join(self.state_dir, 'parent-artifact.md')
         child_file = os.path.join(self.state_dir, 'child-artifact.md')
-        _run_track(self.PARENT_SID, 'Write', {
+        _run_track(self.SID, 'Write', {
             'file_path': parent_file, 'content': '# parent',
         }, self.state_dir)
-        _run_track(self.CHILD_SID, 'Write', {
+        _run_track(self.SID, 'Write', {
             'file_path': child_file, 'content': '# child',
         }, self.state_dir)
         # Only review parent — should still block
         time.sleep(0.05)
-        _run_log(self.PARENT_SID, [os.path.realpath(parent_file)], self.state_dir)
+        _run_log(self.SID, [os.path.realpath(parent_file)], self.state_dir)
         time.sleep(0.05)
-        r = _run_gate(self.PARENT_SID, self.state_dir)
+        r = _run_gate(self.SID, self.state_dir)
         self.assertEqual(r.returncode, 2,
                          'Must still block when child artifact unreviewed')
         # Now review child too — should approve
         time.sleep(0.05)
-        _run_log(self.PARENT_SID, [os.path.realpath(child_file)], self.state_dir)
+        _run_log(self.SID, [os.path.realpath(child_file)], self.state_dir)
         time.sleep(0.05)
-        r = _run_gate(self.PARENT_SID, self.state_dir)
+        r = _run_gate(self.SID, self.state_dir)
         self.assertEqual(r.returncode, 0,
                          'Must approve when both parent and child reviewed')
+
+    def test_sibling_ledger_ignored(self):
+        """A separate session's dirty ledger is NOT scanned (own-ledger-only).
+        This eliminates the parallel-chat cross-block residual."""
+        # Parent session writes + reviews its own file
+        parent_file = os.path.join(self.state_dir, 'parent.md')
+        _run_track(self.SID, 'Write', {
+            'file_path': parent_file, 'content': '# parent',
+        }, self.state_dir)
+        time.sleep(0.05)
+        # A completely separate session writes an unreviewed file
+        other_sid = 'conformance-other-chat'
+        other_file = os.path.join(self.state_dir, 'other-chat.md')
+        _run_track(other_sid, 'Write', {
+            'file_path': other_file, 'content': '# other chat',
+        }, self.state_dir)
+        # Review parent's own file
+        time.sleep(0.05)
+        _run_log(self.SID, [os.path.realpath(parent_file)], self.state_dir)
+        time.sleep(0.05)
+        # Parent Stop must approve — other session's ledger is not scanned
+        r = _run_gate(self.SID, self.state_dir)
+        self.assertEqual(r.returncode, 0,
+                         'Sibling session ledger must be ignored (own-ledger-only)')
 
 
 class TestSubstrateTagging(unittest.TestCase):
@@ -675,16 +780,16 @@ class TestSubstrateTagging(unittest.TestCase):
                          f'Cowork-source entries must not block CC Stop: {r.stderr}')
 
     def test_cc_stop_still_catches_cc_subagent(self):
-        """CC-source sub-agent entries still block CC Stop (D-13 preserved)."""
+        """CC-source sub-agent entries still block CC Stop (D-13 preserved).
+        RGH-1.6: sub-agent uses same session_id as parent."""
         # CC parent writes
         parent_file = os.path.join(self.state_dir, 'parent.md')
         _run_track(self.SID_CC, 'Write', {
             'file_path': parent_file, 'content': '# parent',
         }, self.state_dir)
         time.sleep(0.05)
-        # CC sub-agent writes (default source = claude-code)
-        child_sid = 'conformance-substrate-child'
-        _run_track(child_sid, 'Write', {
+        # CC sub-agent writes (same session_id — real CC behavior)
+        _run_track(self.SID_CC, 'Write', {
             'file_path': os.path.join(self.state_dir, 'child.md'),
             'content': '# child',
         }, self.state_dir)
@@ -698,12 +803,13 @@ class TestSubstrateTagging(unittest.TestCase):
                          'CC sub-agent entries must still block CC Stop')
 
 
-class TestScopeExcludesStale(unittest.TestCase):
-    """D-24: Stale ledgers from prior/parallel sessions must NOT block
-    the current session's Stop. Only concurrent sub-agents are included."""
+class TestOwnLedgerOnlyScoping(unittest.TestCase):
+    """RGH-1.6: own-ledger-only scoping. Other sessions' ledgers are never
+    scanned. Sub-agent coverage comes from session-id inheritance, not
+    sibling-ledger scanning."""
 
     CURRENT_SID = 'conformance-current'
-    STALE_SID = 'conformance-stale-prior'
+    OTHER_SID = 'conformance-other'
 
     def setUp(self):
         self.state_dir = tempfile.mkdtemp(prefix='rg-test-')
@@ -712,34 +818,10 @@ class TestScopeExcludesStale(unittest.TestCase):
         shutil.rmtree(self.state_dir, ignore_errors=True)
 
     def test_stale_ledger_does_not_block_current(self):
-        """A dirty ledger from a prior session (earlier timestamps) must
-        not block the current session's Stop."""
-        # Write a stale entry with an old timestamp directly
+        """A dirty ledger from another session must not block current Stop."""
         os.makedirs(self.state_dir, exist_ok=True)
         stale_path = os.path.join(self.state_dir,
-                                  f'{self.STALE_SID}-dirty.jsonl')
-        stale_entry = {
-            'timestamp': 1000.0,  # very old
-            'iso_time': '2020-01-01T00:00:00Z',
-            'tool': 'Write',
-            'file_path': '/tmp/stale-artifact.md',
-            'tier': 'full',
-        }
-        with open(stale_path, 'w') as f:
-            f.write(json.dumps(stale_entry) + '\n')
-
-        # Current session has no dirty entries → should approve
-        r = _run_gate(self.CURRENT_SID, self.state_dir)
-        self.assertEqual(r.returncode, 0,
-                         'Stale prior-session ledger must not block current Stop')
-
-    def test_stale_ledger_excluded_when_current_has_entries(self):
-        """Even when current session is dirty, a prior session's stale
-        entries must not appear in the unreviewed list."""
-        # Stale entry from long ago
-        os.makedirs(self.state_dir, exist_ok=True)
-        stale_path = os.path.join(self.state_dir,
-                                  f'{self.STALE_SID}-dirty.jsonl')
+                                  f'{self.OTHER_SID}-dirty.jsonl')
         stale_entry = {
             'timestamp': 1000.0,
             'iso_time': '2020-01-01T00:00:00Z',
@@ -749,7 +831,24 @@ class TestScopeExcludesStale(unittest.TestCase):
         }
         with open(stale_path, 'w') as f:
             f.write(json.dumps(stale_entry) + '\n')
+        r = _run_gate(self.CURRENT_SID, self.state_dir)
+        self.assertEqual(r.returncode, 0,
+                         'Other session ledger must not block current Stop')
 
+    def test_other_ledger_ignored_when_current_has_entries(self):
+        """Even when current session is dirty, other session's entries are ignored."""
+        os.makedirs(self.state_dir, exist_ok=True)
+        other_path = os.path.join(self.state_dir,
+                                  f'{self.OTHER_SID}-dirty.jsonl')
+        other_entry = {
+            'timestamp': time.time() + 100,  # even in the future
+            'iso_time': '2099-01-01T00:00:00Z',
+            'tool': 'Write',
+            'file_path': '/tmp/other-artifact.md',
+            'tier': 'full',
+        }
+        with open(other_path, 'w') as f:
+            f.write(json.dumps(other_entry) + '\n')
         # Current session writes + reviews its own file
         current_file = os.path.join(self.state_dir, 'current.md')
         _run_track(self.CURRENT_SID, 'Write', {
@@ -759,75 +858,32 @@ class TestScopeExcludesStale(unittest.TestCase):
         _run_log(self.CURRENT_SID, [os.path.realpath(current_file)],
                  self.state_dir)
         time.sleep(0.05)
-
-        # Current session should approve (its own file reviewed;
-        # stale file excluded by scoping)
         r = _run_gate(self.CURRENT_SID, self.state_dir)
         self.assertEqual(r.returncode, 0,
-                         f'Stale ledger must be excluded by scoping: {r.stderr}')
+                         f'Other session ledger must be ignored: {r.stderr}')
 
-
-class TestScopeIncludesConcurrent(unittest.TestCase):
-    """D-24 positive case: a concurrent sibling ledger (timestamp >= session
-    start) MUST be included and block the parent's Stop."""
-
-    PARENT_SID = 'conformance-scope-parent'
-    CONCURRENT_SID = 'conformance-scope-concurrent'
-
-    def setUp(self):
-        self.state_dir = tempfile.mkdtemp(prefix='rg-test-')
-
-    def tearDown(self):
-        shutil.rmtree(self.state_dir, ignore_errors=True)
-
-    def test_concurrent_sibling_blocks_parent_stop(self):
-        """A sibling ledger created after the parent session started must
-        be included in the parent's Stop scan and block if unreviewed."""
-        # Parent writes first (establishes session start timestamp)
+    def test_concurrent_other_session_also_ignored(self):
+        """A concurrent other session's ledger is also ignored (no cross-block)."""
+        # Current session writes
         parent_file = os.path.join(self.state_dir, 'parent.md')
-        _run_track(self.PARENT_SID, 'Write', {
+        _run_track(self.CURRENT_SID, 'Write', {
             'file_path': parent_file, 'content': '# parent',
         }, self.state_dir)
         time.sleep(0.05)
-        # Concurrent sibling writes after parent started
-        sibling_file = os.path.join(self.state_dir, 'sibling.md')
-        _run_track(self.CONCURRENT_SID, 'Write', {
-            'file_path': sibling_file, 'content': '# concurrent sibling',
+        # Another session writes concurrently (after current started)
+        other_file = os.path.join(self.state_dir, 'other.md')
+        _run_track(self.OTHER_SID, 'Write', {
+            'file_path': other_file, 'content': '# concurrent other',
         }, self.state_dir)
-        # Review parent only
+        # Review current's file only
         time.sleep(0.05)
-        _run_log(self.PARENT_SID, [os.path.realpath(parent_file)],
+        _run_log(self.CURRENT_SID, [os.path.realpath(parent_file)],
                  self.state_dir)
         time.sleep(0.05)
-        # Parent Stop MUST block — concurrent sibling is unreviewed
-        r = _run_gate(self.PARENT_SID, self.state_dir)
-        self.assertEqual(r.returncode, 2,
-                         f'Concurrent sibling must be included and block: {r.stderr}')
-        # Verify the block message references the sibling file
-        self.assertIn('sibling.md', r.stderr,
-                      'Block message must name the concurrent sibling artifact')
-
-    def test_concurrent_sibling_clears_when_reviewed(self):
-        """After both parent and concurrent sibling are reviewed, Stop approves."""
-        parent_file = os.path.join(self.state_dir, 'parent.md')
-        _run_track(self.PARENT_SID, 'Write', {
-            'file_path': parent_file, 'content': '# parent',
-        }, self.state_dir)
-        time.sleep(0.05)
-        sibling_file = os.path.join(self.state_dir, 'sibling.md')
-        _run_track(self.CONCURRENT_SID, 'Write', {
-            'file_path': sibling_file, 'content': '# concurrent sibling',
-        }, self.state_dir)
-        # Review both
-        time.sleep(0.05)
-        _run_log(self.PARENT_SID,
-                 [os.path.realpath(parent_file),
-                  os.path.realpath(sibling_file)],
-                 self.state_dir)
-        time.sleep(0.05)
-        r = _run_gate(self.PARENT_SID, self.state_dir)
+        # Must approve — other session is not scanned
+        r = _run_gate(self.CURRENT_SID, self.state_dir)
         self.assertEqual(r.returncode, 0,
-                         'Stop must approve after both parent + sibling reviewed')
+                         'Concurrent other session must not cross-block')
 
 
 class TestBlockMessageContent(unittest.TestCase):
@@ -1229,6 +1285,40 @@ class TestGateSkip(unittest.TestCase):
         r = self._run_skip(reason='short')
         self.assertEqual(r.returncode, 1,
                          'Short reason must be rejected')
+
+    def test_skip_writes_to_isolated_event_log(self):
+        """gate-skip must write to REVIEW_GATE_EVENT_LOG, not production event log."""
+        # Use a unique SID to avoid matching pre-existing pollution in prod log
+        unique_sid = f'conformance-skip-isolation-{int(time.time() * 1000)}'
+        artifact = os.path.join(self.state_dir, 'skipped.md')
+        with open(artifact, 'w') as f:
+            f.write('# content\n')
+        _run_track(unique_sid, 'Write', {
+            'file_path': artifact, 'content': '# content\n',
+        }, self.state_dir)
+        isolated_log = os.path.join(self.state_dir, '_event-log-test.md')
+        # Run skip with the unique SID
+        r = subprocess.run(
+            ['python3', SKIP, '--session', unique_sid,
+             '--reason', 'Testing event-log isolation for conformance'],
+            capture_output=True, text=True,
+            cwd=SUBDIR_CWD, env=_make_env(self.state_dir))
+        self.assertEqual(r.returncode, 0, f'Skip failed: {r.stderr}')
+        # The isolated event log must exist and have content
+        self.assertTrue(os.path.exists(isolated_log),
+                        'gate-skip must write to REVIEW_GATE_EVENT_LOG')
+        with open(isolated_log) as f:
+            content = f.read()
+        self.assertIn('GATE SKIP', content)
+        self.assertIn(unique_sid, content)
+        # Production event log must NOT contain the unique SID
+        prod_log = os.path.join(EXPECTED_WORKSPACE_ROOT, 'second-brain',
+                                '_meta', '_event-log.md')
+        if os.path.exists(prod_log):
+            with open(prod_log) as f:
+                prod_content = f.read()
+            self.assertNotIn(unique_sid, prod_content,
+                             'gate-skip must NOT write test session to production event log')
 
     def test_skip_on_empty_is_noop(self):
         """Skip on an already-clear gate is a harmless no-op."""

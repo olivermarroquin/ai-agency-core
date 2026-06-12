@@ -3,20 +3,22 @@
 
 Invoked by Claude Code before the model stops (returns control to the user).
 
-RGH-1 COVERAGE: scans ALL *-dirty.jsonl files in the state dir — not just the
-current session's. This catches sub-agent artifacts (which get their own session
-ledger) at the parent's Stop, closing D-13 without re-introducing SubagentStop.
+OWN-LEDGER-ONLY SCOPING (RGH-1.6): scans only the current session's dirty
+ledger. Sub-agent coverage is preserved because sub-agent PostToolUse events
+inherit the parent session_id in Claude Code (confirmed by real-runner evidence
+2026-06-12, CC v2.1.85). This eliminates the sibling-ledger scan and the
+parallel-chat cross-block residual. Source-tag filter retained as belt-and-
+suspenders.
 
-Cross-references against ALL *-reviewed.jsonl files. If any artifact has been
-written/edited since its last review pass — or has never been reviewed — the
-hook exits with code 2, blocking the stop.
+Cross-references against the session's *-reviewed.jsonl file. If any artifact
+has been written/edited since its last review pass — or has never been
+reviewed — the hook exits with code 2, blocking the stop.
 
 Stdin:  JSON from Claude Code hook system (session_id, stop_reason, etc.)
 Stdout: JSON acknowledgment when all clean (exit 0)
 Stderr: Block message with unreviewed file list (exit 2)
 """
 
-import glob
 import json
 import os
 import re
@@ -79,16 +81,13 @@ CC_INCLUDED_SOURCES = frozenset({'claude-code', ''})  # '' = legacy entries with
 
 
 def load_scoped_dirty(state_dir: str, session_id: str) -> list:
-    """Load dirty entries scoped to the current run.
+    """Load dirty entries scoped to the current session's own ledger only.
 
-    Scoping policy (D-24 + F3):
-    - Always include the current session's dirty ledger.
-    - Also include any OTHER dirty ledger whose earliest entry timestamp
-      is >= the current session's earliest entry timestamp AND whose entries
-      have a CC-compatible source (claude-code or missing/legacy). This
-      catches sub-agents spawned during this session (D-13) while excluding
-      stale ledgers (D-24) and other-substrate ledgers (F3).
-    - If the current session has no dirty ledger, return empty (no scan).
+    Own-ledger-only scoping (RGH-1.6): sub-agent PostToolUse events inherit
+    the parent session_id in Claude Code (confirmed by real-runner evidence
+    2026-06-12), so sub-agent artifacts land in the parent's own ledger.
+    No sibling-ledger scan needed. Source-tag filter retained as belt-and-
+    suspenders (F3).
     """
     own_path = os.path.join(state_dir, f'{session_id}-dirty.jsonl')
     own_entries = load_jsonl(own_path)
@@ -96,81 +95,17 @@ def load_scoped_dirty(state_dir: str, session_id: str) -> list:
     if not own_entries:
         return []
 
-    # Filter own entries by source (should all be CC, but be safe)
+    # Filter own entries by source (belt-and-suspenders F3)
     own_entries = [e for e in own_entries
                    if e.get('source', '') in CC_INCLUDED_SOURCES]
 
-    if not own_entries:
-        return []
-
-    # Earliest timestamp in this session's ledger = session start time
-    session_start = min(e.get('timestamp', float('inf')) for e in own_entries)
-
-    all_entries = list(own_entries)
-
-    # Scan sibling dirty ledgers for concurrent CC sub-agents
-    pattern = os.path.join(state_dir, '*-dirty.jsonl')
-    for path in glob.glob(pattern):
-        if os.path.basename(path) == f'{session_id}-dirty.jsonl':
-            continue  # already loaded
-        sibling_entries = load_jsonl(path)
-        if not sibling_entries:
-            continue
-        # Filter to CC-source entries only
-        cc_entries = [e for e in sibling_entries
-                      if e.get('source', '') in CC_INCLUDED_SOURCES]
-        if not cc_entries:
-            continue
-        # Include if the sibling's earliest CC entry is concurrent with us
-        sibling_start = min(e.get('timestamp', float('inf'))
-                            for e in cc_entries)
-        if sibling_start >= session_start:
-            all_entries.extend(cc_entries)
-
-    return all_entries
+    return own_entries
 
 
-def load_scoped_reviewed(state_dir: str, session_id: str,
-                         dirty_session_ids: set) -> list:
-    """Load reviewed entries from ledgers relevant to the dirty scope.
-
-    Loads the current session's reviewed ledger plus reviewed ledgers
-    for any session whose dirty ledger was included in the scan.
-    """
-    all_entries = []
-    # Always load own reviewed ledger
+def load_scoped_reviewed(state_dir: str, session_id: str) -> list:
+    """Load reviewed entries for the current session."""
     own_path = os.path.join(state_dir, f'{session_id}-reviewed.jsonl')
-    all_entries.extend(load_jsonl(own_path))
-
-    # Load reviewed ledgers for included dirty sessions
-    for sid in dirty_session_ids:
-        if sid == session_id:
-            continue
-        path = os.path.join(state_dir, f'{sid}-reviewed.jsonl')
-        all_entries.extend(load_jsonl(path))
-
-    return all_entries
-
-
-def extract_session_ids_from_dirty(state_dir: str, session_id: str,
-                                   session_start: float) -> set:
-    """Return session IDs of dirty ledgers included in the scope."""
-    sids = {session_id}
-    pattern = os.path.join(state_dir, '*-dirty.jsonl')
-    for path in glob.glob(pattern):
-        basename = os.path.basename(path)
-        if not basename.endswith('-dirty.jsonl'):
-            continue
-        sid = basename[:-len('-dirty.jsonl')]
-        if sid == session_id:
-            continue
-        entries = load_jsonl(path)
-        if not entries:
-            continue
-        sibling_start = min(e.get('timestamp', float('inf')) for e in entries)
-        if sibling_start >= session_start:
-            sids.add(sid)
-    return sids
+    return load_jsonl(own_path)
 
 
 def get_unreviewed(dirty_entries: list, reviewed_entries: list) -> list:
@@ -422,26 +357,16 @@ def main():
 
     try:
         raw = sys.stdin.read()
+
         data = json.loads(raw) if raw.strip() else {}
     except (json.JSONDecodeError, Exception):
         data = {}
 
     session_id = data.get('session_id', 'unknown')
 
-    # RGH-1 + D-24: scoped scan — current session + concurrent sub-agents.
-    # Catches sub-agent writes (D-13) without wedging on stale parallel-chat
-    # ledgers (D-24).
+    # Own-ledger-only scoping (RGH-1.6): sub-agents share parent session_id.
     dirty_entries = load_scoped_dirty(STATE_DIR, session_id)
-
-    # Determine which sessions' reviewed ledgers to check
-    if dirty_entries:
-        session_start = min(e.get('timestamp', float('inf'))
-                            for e in dirty_entries)
-        dirty_sids = extract_session_ids_from_dirty(
-            STATE_DIR, session_id, session_start)
-    else:
-        dirty_sids = {session_id}
-    reviewed_entries = load_scoped_reviewed(STATE_DIR, session_id, dirty_sids)
+    reviewed_entries = load_scoped_reviewed(STATE_DIR, session_id)
 
     if not dirty_entries:
         wall_ms = (time.monotonic() - t_start) * 1000

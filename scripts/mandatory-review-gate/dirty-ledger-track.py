@@ -282,6 +282,7 @@ def normalize_path(path: str) -> str:
 def main():
     try:
         raw = sys.stdin.read()
+
         if not raw.strip():
             return
         data = json.loads(raw)
@@ -292,12 +293,17 @@ def main():
     tool_name = data.get('tool_name', '')
     tool_input = data.get('tool_input', {})
 
-    # Self-referential exclusion
+    # Self-referential exclusion — per-segment: split compound commands and
+    # exclude ONLY if EVERY segment is self-referential. A mixed command
+    # (state-change + gate command) must be tracked.
     if tool_name == 'Bash':
         bash_cmd = tool_input.get('command', '')
-        for pat in SELF_PATTERNS:
-            if pat in bash_cmd:
-                return
+        segments = _split_compound(bash_cmd.strip()) if bash_cmd.strip() else []
+        if segments and all(
+            any(pat in seg for pat in SELF_PATTERNS)
+            for seg in segments
+        ):
+            return
 
     file_path = None
     display = None  # Human-readable display for Bash commands
@@ -307,6 +313,10 @@ def main():
         if not file_path:
             return
         file_path = normalize_path(file_path)
+        # Exclude .review-gate/ paths — verdict files, ledgers, metrics
+        # are gate infrastructure, not reviewable artifacts (kills verdict-loop)
+        if '/.review-gate/' in file_path:
+            return
     elif tool_name == 'Bash':
         bash_cmd = tool_input.get('command', '')
         if is_read_only_bash(bash_cmd):

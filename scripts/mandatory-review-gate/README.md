@@ -46,22 +46,24 @@ To clean up: `rm -f .claude/state/*-dirty.jsonl .claude/state/*-reviewed.jsonl`
 | Sub-agent Write/Edit/NotebookEdit | PostToolUse → dirty-ledger-track (sub-agent's session ledger) | Same hook fires in sub-agent context |
 | Sub-agent Bash (state-changing) | PostToolUse → dirty-ledger-track (sub-agent's session ledger) | Same hook fires in sub-agent context |
 
-**How the parent Stop catches sub-agent artifacts:**
+**How the parent Stop catches sub-agent artifacts (RGH-1.6):**
 
-The Stop hook scans the current session's dirty ledger plus any sibling dirty
-ledgers whose earliest entry timestamp is >= the current session's earliest
-entry. This catches sub-agents spawned during this session (D-13) while
-excluding stale ledgers from prior/parallel sessions (D-24).
+Sub-agent PostToolUse events inherit the parent `session_id` in Claude Code
+(confirmed by real-runner evidence 2026-06-12, CC v2.1.85). All sub-agent
+dirty entries land in the parent's own ledger. The Stop hook scans only the
+current session's own ledger — no sibling-ledger scan needed.
 
-**Scoping policy (D-24):**
+Sub-agent events also carry `agent_id` + `agent_type` lineage fields, which
+can be used for attribution but are not needed for coverage scoping.
+
+**Scoping policy (RGH-1.6, own-ledger-only):**
 
 | Scenario | Included in Stop scan? |
 |---|---|
 | Current session's own dirty ledger | Always |
-| Sub-agent spawned during this session (concurrent timestamps) | Yes |
-| Prior session's stale ledger (earlier timestamps) | No |
-| Parallel CC chat's ledger (may be earlier or concurrent) | Only if concurrent |
-| Cowork session (any) | No — precautionary exclusion via source tag (F3). Empirically verified (2026-06-12): Cowork does NOT run workspace PostToolUse hooks, so no Cowork dirty ledger is created in practice. The source-tag filter is a belt-and-suspenders guard in case this changes. |
+| Sub-agent artifacts (same session_id via inheritance) | Yes (in own ledger) |
+| Other session's dirty ledger (any timestamp) | No |
+| Cowork session (any) | No — source-tag filter (F3) as belt-and-suspenders |
 
 **Substrate scoping (F3).** Dirty entries carry a `source` field (`claude-code`,
 `cowork`, `other`). The CC Stop hook only includes entries with `source:
@@ -74,23 +76,58 @@ hooks, so no Cowork dirty ledger is created in practice. The source-tag filter
 is a precautionary guard in case this changes in a future Claude Code release.
 
 **Cleanup of orphan ledgers:** Stale ledgers from prior sessions accumulate
-harmlessly (excluded by timestamp scoping + source filtering). Clean up
-periodically: `rm .review-gate/state/*-dirty.jsonl` between sessions (safe
-when no session is active).
+harmlessly (never scanned by other sessions). Clean up periodically:
+`rm .review-gate/state/*-dirty.jsonl` between sessions (safe when no session
+is active).
 
 **What the gate does NOT catch (honest boundary):**
 
 - Read-only Bash commands (by design — classified by the read-only whitelist)
-- Sub-agent writes when the parent has no dirty entries of its own (no session
-  start timestamp to scope from — the sub-agent output hasn't been incorporated
-  into the parent's work). **Operator-accepted boundary (2026-06-12):** no
-  recency-window fix planned; RGH-2's git pre-commit hook is the structural
-  close (every substrate commits, so the hook catches everything regardless of
-  session scoping).
 - Tool calls in substrates other than Claude Code (no hook fires). Covered by
   Tier B (git pre-commit hook, Phase 2) and Tier C (Hermes daemon, Phase 3)
 - External state changes made outside the agent (manual edits, other processes).
   The gate enforces at the agent boundary, not at the filesystem level
+
+## Claude Code Stop hook output contract (D-11)
+
+The real runner validates Stop hook JSON output against this schema (captured
+live 2026-06-12, CC v2.1.85). The runner error on invalid output:
+
+```
+JSON validation failed: Invalid input
+Expected: { continue: boolean; stopReason?: string; systemMessage?: string;
+            suppressOutput?: boolean; decision?: "block"; reason?: string; }
+```
+
+**Accepted shapes (Stop hook):**
+- Approve: `{"continue": true}` — optional fields `stopReason`, `systemMessage`,
+  `suppressOutput` are accepted but not used by the gate.
+- Block: `{"decision": "block", "reason": "..."}` — blocks the stop with the
+  reason surfaced to the user via stderr.
+
+The rejection that triggered D-11 was specifically `hookSpecificOutput` on the
+Stop hook — that field is valid on PostToolUse but NOT on Stop. The schema above
+is the canonical D-11 fixture from the real-runner evidence session.
+
+**CRITICAL: The gate FAILS OPEN on invalid hook output.** Claude Code surfaces
+the validation error to the user but does **not** block the stop. A broken gate
+script = ungated sessions with a loud error as the only signal. There is no
+hard-block fallback — the error message is the entire safety net.
+
+### CC-upgrade tripwire
+
+The Stop hook output schema and sub-agent session-id inheritance are both
+**version-dependent** (captured on CC v2.1.85, 2026-06-12). After every Claude
+Code upgrade, re-run the real-runner mini-check:
+
+1. Verify Stop hook still accepts `{"continue": true}` (approve path)
+2. Verify Stop hook still blocks on `{"decision": "block", "reason": "..."}` (block path)
+3. Verify sub-agent PostToolUse events still carry the parent `session_id`
+4. Verify `agent_id` + `agent_type` lineage fields still present in sub-agent events
+5. If any of the above changed, file as a blocking finding before re-enabling the Stop hook
+
+Raw evidence is preserved in `.review-gate/state/raw-hook-events.jsonl` from the
+2026-06-12 evidence session. Compare against post-upgrade captures.
 
 ## Verdict file contract (RGH-1)
 
@@ -151,18 +188,17 @@ Operator-driven. Execute in a fresh CC session, capture all output.
 
 1. **Temporarily re-enable Stop hook** in `.claude/settings.json`
 2. **Start from a subdirectory cwd** (e.g. `repos/ai-agency-core/scripts/`)
-3. **Capture raw hook-event JSON** — add a debug line to `dirty-ledger-track.py`
-   and `mandatory-review-gate.py` that writes the raw stdin JSON to
-   `.review-gate/state/raw-hook-events.jsonl`. This captures the actual
-   Claude Code hook schema including any session lineage fields.
+3. **Capture raw hook-event JSON** — add a temporary debug line to
+   `dirty-ledger-track.py` and `mandatory-review-gate.py` that writes the raw
+   stdin JSON to `.review-gate/state/raw-hook-events.jsonl`. Remove debug
+   lines after the session (they are instrumentation, not permanent).
 4. **Block→review→clear cycle** — write a file, observe the Stop block
    (exit 2 + block message), run gate-peer-reviewer + log-review-pass with
    verdict file, observe the Stop approve (exit 0)
-5. **Sub-agent demo (both variants)**:
-   - Parent-with-writes: spawn a Task sub-agent that writes a file; observe
-     parent Stop blocks on the sub-agent artifact until reviewed
-   - Parent-clean: demonstrate the documented escape (parent with zero dirty
-     entries → sub-agent ledger not scanned → Stop approves)
+5. **Sub-agent demo** — spawn a sub-agent that writes a file; observe that
+   the sub-agent's PostToolUse events land in the parent's own dirty ledger
+   (same session_id) and the parent's Stop blocks on the sub-agent artifact.
+   (The "parent-clean escape" does not exist — confirmed 2026-06-12.)
 6. **Deliberate re-break** — introduce a known bug (e.g. add
    `hookSpecificOutput` back to the approve path), re-run the conformance
    suite, show it fails on the re-break; revert
@@ -170,7 +206,7 @@ Operator-driven. Execute in a fresh CC session, capture all output.
 8. **Package** — deliver raw-hook-events.jsonl + session transcript +
    exit codes + conformance suite output to operator for final review
 
-**Lineage field investigation:** If the raw hook-event JSON contains a
-`parent_session_id` or equivalent lineage field, file it as a candidate fix
-for the timestamp-heuristic sub-agent scoping — lineage-based scoping would
-eliminate the parallel-chat cross-block residual and the parent-clean escape.
+**Lineage fields (RESOLVED 2026-06-12):** Sub-agent hook events carry
+`agent_id` + `agent_type` lineage fields, and inherit the parent `session_id`.
+This was used to justify RGH-1.6 own-ledger-only scoping (sibling-ledger scan
+removed, parallel-chat cross-block eliminated). See CC-upgrade tripwire above.

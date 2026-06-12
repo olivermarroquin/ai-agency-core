@@ -26,7 +26,6 @@ _spec.loader.exec_module(_gate)
 
 load_scoped_dirty = _gate.load_scoped_dirty
 load_scoped_reviewed = _gate.load_scoped_reviewed
-extract_session_ids_from_dirty = _gate.extract_session_ids_from_dirty
 get_unreviewed = _gate.get_unreviewed
 determine_review_tier = _gate.determine_review_tier
 
@@ -38,16 +37,9 @@ def main():
                         help='Output as JSON')
     args = parser.parse_args()
 
+    # Own-ledger-only scoping (RGH-1.6)
     dirty_entries = load_scoped_dirty(STATE_DIR, args.session)
-
-    if dirty_entries:
-        session_start = min(e.get('timestamp', float('inf'))
-                            for e in dirty_entries)
-        dirty_sids = extract_session_ids_from_dirty(
-            STATE_DIR, args.session, session_start)
-    else:
-        dirty_sids = {args.session}
-    reviewed_entries = load_scoped_reviewed(STATE_DIR, args.session, dirty_sids)
+    reviewed_entries = load_scoped_reviewed(STATE_DIR, args.session)
 
     if not dirty_entries:
         if args.as_json:
