@@ -30,6 +30,8 @@ SELF_PATTERNS = [
     'mandatory-review-gate',
     'log-review-pass',
     'dirty-ledger-track',
+    'gate-status',
+    'gate-skip',
     '_paths.py',
     'from _paths import',
 ]
@@ -321,12 +323,17 @@ def main():
 
     ledger_path = os.path.join(STATE_DIR, f'{session_id}-dirty.jsonl')
 
+    # Substrate source: env override or default 'claude-code' (PostToolUse
+    # only fires in Claude Code; other substrates set REVIEW_GATE_SOURCE)
+    source = os.environ.get('REVIEW_GATE_SOURCE', 'claude-code')
+
     entry = {
         'timestamp': time.time(),
         'iso_time': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
         'tool': tool_name,
         'file_path': file_path,
         'tier': tier,
+        'source': source,
     }
     if display is not None:
         entry['display'] = display
