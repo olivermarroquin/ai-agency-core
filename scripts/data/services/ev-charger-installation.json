@@ -170,7 +170,7 @@
   "related_cards": [
     { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
     { "href_slug": "emergency-electrician-{city_slug}", "label": "24/7 Emergency Electrician" },
-    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures &amp; Chandeliers" }
+    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures & Chandeliers" }
   ],
 
   "faq_heading": "Frequently asked questions",

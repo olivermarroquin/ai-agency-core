@@ -174,7 +174,7 @@
   "related_cards": [
     { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
     { "href_slug": "ev-charger-installation-{city_slug}", "label": "EV Charger Installation" },
-    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures &amp; Chandeliers" }
+    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures & Chandeliers" }
   ],
 
   "faq_heading": "Frequently asked questions",

@@ -88,9 +88,9 @@
   "related_cards": [
     { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
     { "href_slug": "ev-charger-{city_slug}", "label": "EV Charger Installation" },
-    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures &amp; Chandeliers" },
+    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures & Chandeliers" },
     { "href_slug": "smoke-alarm-{city_slug}", "label": "Smoke Alarm Installation" },
-    { "href_slug": "outlet-installation-{city_slug}", "label": "Outlet &amp; Switch Installation" }
+    { "href_slug": "outlet-installation-{city_slug}", "label": "Outlet & Switch Installation" }
   ],
 
   "faq_heading": "Frequently asked questions",

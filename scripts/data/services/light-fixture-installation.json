@@ -163,7 +163,7 @@
   "related_intro_template": "FILL: Related intro.",
   "related_cards": [
     { "href_slug": "electrical-troubleshooting-{city_slug}", "label": "Electrical Troubleshooting" },
-    { "href_slug": "outlet-installation-{city_slug}", "label": "Outlet &amp; Switch Installation" },
+    { "href_slug": "outlet-installation-{city_slug}", "label": "Outlet & Switch Installation" },
     { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
     { "href_slug": "ev-charger-{city_slug}", "label": "EV Charger Installation" },
     { "href_slug": "smoke-alarm-{city_slug}", "label": "Smoke Alarm Installation" }
