@@ -1,0 +1,304 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://keelworks.ai/schemas/website-factory/client.schema.json",
+  "title": "Client Configuration",
+  "description": "Client-level business identity, contact, branding, and operational data. One file per client at data/client-<client_slug>.json. This is the single source of truth for all client-specific values that templates and renderers substitute.",
+  "type": "object",
+  "required": [
+    "client_slug",
+    "name",
+    "alternate_name",
+    "owner_name",
+    "owner_first_name",
+    "owner_title",
+    "website_url",
+    "phone_display",
+    "phone_tel",
+    "phone_e164",
+    "email",
+    "primary_color",
+    "navy",
+    "accent_yellow",
+    "heading_color",
+    "hero_gradient_dark",
+    "hero_gradient_mid",
+    "hero_gradient_bright",
+    "address",
+    "geo",
+    "hours",
+    "license",
+    "business_description_schema",
+    "brand_image_url",
+    "brand_logo_url",
+    "price_range_token",
+    "review_count",
+    "review_rating",
+    "review_count_phrase",
+    "review_pitch",
+    "brand_areas_served",
+    "brand_area_county",
+    "brand_extended_coverage_phrase",
+    "owner_bio_paragraphs",
+    "contact_page_path",
+    "secondary_cta_label",
+    "primary_cta_label_template",
+    "final_cta_response_promise"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_comment": {
+      "type": "string",
+      "description": "Human-readable note describing file purpose. Not rendered."
+    },
+    "_scaffolded": {
+      "type": "object",
+      "description": "Build metadata tracking scaffolding origin and confirmation state. Not rendered.",
+      "properties": {
+        "from_brief": { "type": "boolean" },
+        "brief_research_date": { "type": ["string", "null"] },
+        "brief_researcher": { "type": ["string", "null"] },
+        "needs_authoring": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "needs_confirmation": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "patternProperties": {
+        "^operator_confirmed_\\d{4}-\\d{2}-\\d{2}$": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields confirmed by operator on this date."
+        }
+      },
+      "additionalProperties": false
+    },
+    "client_slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "URL-safe client identifier. Used in file paths, template substitution, and overlay lookups."
+    },
+    "name": {
+      "type": "string",
+      "description": "Full legal/brand name (e.g., 'EV Electric Services')."
+    },
+    "alternate_name": {
+      "type": "string",
+      "description": "Shortened brand name for informal use (e.g., 'EV Electric')."
+    },
+    "owner_name": {
+      "type": "string",
+      "description": "Full name of the business owner/principal."
+    },
+    "owner_first_name": {
+      "type": "string",
+      "description": "First name only, for personalized copy."
+    },
+    "owner_title": {
+      "type": "string",
+      "description": "Professional credential or title (e.g., 'Master Electrician')."
+    },
+    "website_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full URL with trailing slash."
+    },
+    "website_url_no_slash": {
+      "type": "string",
+      "format": "uri",
+      "description": "Full URL without trailing slash."
+    },
+    "phone_display": {
+      "type": "string",
+      "description": "Human-readable phone format (e.g., '571-500-6637')."
+    },
+    "phone_tel": {
+      "type": "string",
+      "pattern": "^[0-9]+$",
+      "description": "Digits-only phone number for tel: links."
+    },
+    "phone_e164": {
+      "type": "string",
+      "description": "E.164 international format (e.g., '+1-571-500-6637')."
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Primary contact email address."
+    },
+    "primary_color": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "description": "Brand primary color as hex."
+    },
+    "navy": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "description": "Brand dark/navy color as hex."
+    },
+    "accent_yellow": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "description": "Brand accent color as hex."
+    },
+    "heading_color": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "description": "Heading text color as hex."
+    },
+    "hero_gradient_dark": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "description": "Hero gradient bottom/dark stop."
+    },
+    "hero_gradient_mid": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "description": "Hero gradient middle stop."
+    },
+    "hero_gradient_bright": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "description": "Hero gradient top/bright stop."
+    },
+    "address": {
+      "type": "object",
+      "required": ["street", "locality", "region", "postal_code", "country"],
+      "additionalProperties": false,
+      "properties": {
+        "street": { "type": "string" },
+        "locality": { "type": "string", "description": "City name." },
+        "region": { "type": "string", "description": "State/region code (e.g., 'VA')." },
+        "postal_code": { "type": "string" },
+        "country": { "type": "string", "description": "ISO 3166-1 alpha-2 country code." }
+      }
+    },
+    "geo": {
+      "type": "object",
+      "required": ["latitude", "longitude"],
+      "additionalProperties": false,
+      "properties": {
+        "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+        "longitude": { "type": "number", "minimum": -180, "maximum": 180 }
+      },
+      "description": "HQ coordinates. Used by [DA5] implementation to derive per-city HQ-relative distances."
+    },
+    "hours": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["days", "opens", "closes"],
+        "additionalProperties": false,
+        "properties": {
+          "days": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+            },
+            "minItems": 1
+          },
+          "opens": {
+            "type": "string",
+            "pattern": "^[0-2][0-9]:[0-5][0-9]$",
+            "description": "Opening time in HH:MM 24-hour format."
+          },
+          "closes": {
+            "type": "string",
+            "pattern": "^[0-2][0-9]:[0-5][0-9]$",
+            "description": "Closing time in HH:MM 24-hour format."
+          }
+        }
+      }
+    },
+    "license": {
+      "type": "object",
+      "required": ["category", "issuer", "state", "state_full"],
+      "additionalProperties": false,
+      "properties": {
+        "category": { "type": "string", "description": "License type (e.g., 'Master Electrician License')." },
+        "issuer": { "type": "string", "description": "Licensing authority full name." },
+        "state": { "type": "string", "description": "State abbreviation." },
+        "state_full": { "type": "string", "description": "Full state name or commonwealth." }
+      }
+    },
+    "business_description_schema": {
+      "type": "string",
+      "description": "SEO/schema description for structured data."
+    },
+    "brand_image_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Brand/owner photo URL."
+    },
+    "brand_logo_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Company logo image URL."
+    },
+    "brand_mark_description": {
+      "type": "string",
+      "description": "Visual description of logo/brand mark. Optional — not all clients have this."
+    },
+    "price_range_token": {
+      "type": "string",
+      "description": "Price indicator for local search (e.g., '$$')."
+    },
+    "review_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of reviews. Ground-truth value — must match GBP."
+    },
+    "review_rating": {
+      "type": "string",
+      "pattern": "^[0-5]\\.[0-9]$",
+      "description": "Average star rating as string (e.g., '5.0'). String type preserves display formatting."
+    },
+    "review_count_phrase": {
+      "type": "string",
+      "description": "Human-readable review statement (e.g., '5.0-star average across 148 customer reviews')."
+    },
+    "review_pitch": {
+      "type": "string",
+      "description": "Positioning statement about review authenticity."
+    },
+    "brand_areas_served": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "City names where brand actively operates. Used for schema markup and copy."
+    },
+    "brand_area_county": {
+      "type": "string",
+      "description": "Primary county identifier (e.g., 'Fairfax County, VA')."
+    },
+    "brand_extended_coverage_phrase": {
+      "type": "string",
+      "description": "Multi-county/region coverage statement."
+    },
+    "owner_bio_paragraphs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Owner biography paragraphs. May contain template placeholders like {service_lowercase}."
+    },
+    "contact_page_path": {
+      "type": "string",
+      "description": "Relative path to contact page (e.g., '/contact/')."
+    },
+    "secondary_cta_label": {
+      "type": "string",
+      "description": "Secondary call-to-action button text."
+    },
+    "primary_cta_label_template": {
+      "type": "string",
+      "description": "Primary CTA with placeholder (e.g., 'Call {phone}')."
+    },
+    "final_cta_response_promise": {
+      "type": "string",
+      "description": "Service commitment statement."
+    }
+  }
+}

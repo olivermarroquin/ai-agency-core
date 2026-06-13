@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://keelworks.ai/schemas/website-factory/service.schema.json",
+  "title": "Service Data",
+  "description": "Service-level page structure, content templates, and SEO metadata. One file per service at data/services/<service-slug>.json (shared) or data/services/<client-slug>/<service-slug>.json (client-specific override — full replacement, not merge). Template placeholders use {curly_brace} syntax and are substituted at render time from client + city + city-overlay data.",
+  "type": "object",
+  "required": [
+    "slug",
+    "page_slug_template",
+    "name",
+    "name_with_city",
+    "service_type_phrase",
+    "quoted_phrase",
+    "lowercase_phrase",
+    "tag_short",
+    "hero_eyebrow_template",
+    "hero_heading",
+    "hero_subheading_template",
+    "hero_image_alt_template",
+    "hero_image_url_template",
+    "what_it_means_heading",
+    "what_it_means_paragraphs",
+    "quick_ref_heading_template",
+    "quick_ref_intro",
+    "quick_ref_footer_html_template",
+    "why_city_heading_template",
+    "why_city_closing_note_template",
+    "problems_heading_template",
+    "problems_intro_template",
+    "problem_cards",
+    "process_heading_template",
+    "process_intro_template",
+    "process_steps",
+    "pricing_heading",
+    "pricing_intro_template",
+    "pricing_items",
+    "pricing_note_template",
+    "about_heading_template",
+    "about_text_paragraphs",
+    "about_portrait_alt_template",
+    "about_portrait_url_template",
+    "neighborhoods_heading_template",
+    "neighborhoods_intro_template",
+    "related_heading_template",
+    "related_intro_template",
+    "related_cards",
+    "faq_heading",
+    "faq_items",
+    "final_cta_heading",
+    "final_cta_paragraph_template",
+    "schema_service_description_template"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_comment": {
+      "type": "string",
+      "description": "Human-readable note. Not rendered."
+    },
+    "_dataforseo_verified": {
+      "type": "object",
+      "description": "SEO research metadata from DataForSEO. Not rendered — informs content strategy.",
+      "properties": {
+        "date": { "type": "string" },
+        "chat_id": { "type": "string" },
+        "national_volume": {
+          "type": "object",
+          "description": "Google Ads monthly search volumes keyed by keyword string.",
+          "patternProperties": { ".*": { "type": "integer" } }
+        },
+        "local_volume_note": { "type": "string" },
+        "local_pack_composition": { "type": "string" },
+        "competitor_notes": { "type": "string" },
+        "strategic_note": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "_scaffolded": {
+      "type": "object",
+      "description": "Build metadata tracking scaffolding origin.",
+      "properties": {
+        "from_brief": { "type": "boolean" },
+        "brief_research_date": { "type": ["string", "null"] },
+        "brief_researcher": { "type": ["string", "null"] },
+        "needs_authoring": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "needs_confirmation": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Service identifier (e.g., 'troubleshooting', 'ev-charger-installation')."
+    },
+    "page_slug_template": {
+      "type": "string",
+      "description": "Template for city-specific page slug (e.g., 'troubleshooting-{city_slug}')."
+    },
+    "name": {
+      "type": "string",
+      "description": "Service display name (e.g., 'Electrical Troubleshooting')."
+    },
+    "name_with_city": {
+      "type": "string",
+      "description": "Name with city placeholder (e.g., 'Electrical Troubleshooting in {city_name_with_state}')."
+    },
+    "service_type_phrase": {
+      "type": "string",
+      "description": "2-3 word service descriptor."
+    },
+    "quoted_phrase": {
+      "type": "string",
+      "description": "Quote-ready form for use in running text."
+    },
+    "lowercase_phrase": {
+      "type": "string",
+      "description": "Lowercase variant for natural language embedding."
+    },
+    "tag_short": {
+      "type": "string",
+      "description": "Short tag identifier."
+    },
+    "aioseo_page_title_template": {
+      "type": "string",
+      "description": "SEO page title template. Placeholders: {city_name_with_state}."
+    },
+    "aioseo_meta_description_template": {
+      "type": "string",
+      "description": "Meta description template, ≤155 chars rendered. Placeholders: {city_name_with_state}, {phone_display}."
+    },
+    "aioseo_focus_keyword_template": {
+      "type": "string",
+      "description": "Primary focus keyword template."
+    },
+    "aioseo_additional_keywords_template": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Secondary keyword templates (10-15 items)."
+    },
+    "wordpress_page_title_template": {
+      "type": "string",
+      "description": "WordPress page title template. Legacy — kept for WP→custom migration parity."
+    },
+    "hero_eyebrow_template": {
+      "type": "string",
+      "description": "Eyebrow text above hero heading."
+    },
+    "hero_heading": {
+      "type": "string",
+      "description": "Main hero heading. May start with 'FILL:' if not yet authored."
+    },
+    "hero_subheading_template": {
+      "type": "string",
+      "description": "Hero subheading with placeholders."
+    },
+    "hero_image_alt_template": {
+      "type": "string",
+      "description": "Alt text template for hero image."
+    },
+    "hero_image_url_template": {
+      "type": "string",
+      "description": "Hero image URL template. May reference PLACEHOLDER.png if not yet shot."
+    },
+    "what_it_means_heading": {
+      "type": "string"
+    },
+    "what_it_means_paragraphs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Paragraphs explaining the service (80-100 words each)."
+    },
+    "quick_ref_heading_template": { "type": "string" },
+    "quick_ref_intro": { "type": "string" },
+    "quick_ref_footer_html_template": {
+      "type": "string",
+      "description": "HTML footer CTA for quick-ref section."
+    },
+    "why_city_heading_template": { "type": "string" },
+    "why_city_closing_note_template": { "type": "string" },
+    "problems_heading_template": { "type": "string" },
+    "problems_intro_template": { "type": "string" },
+    "problem_cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "body"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string" },
+          "body": { "type": "string", "description": "May contain HTML links with placeholders." }
+        }
+      },
+      "minItems": 1,
+      "description": "Common problem cards (6-9 items)."
+    },
+    "process_heading_template": { "type": "string" },
+    "process_intro_template": { "type": "string" },
+    "process_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "body"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string" },
+          "body": { "type": "string" }
+        }
+      },
+      "minItems": 1,
+      "description": "Process step cards (5-6 items)."
+    },
+    "pricing_heading": { "type": "string" },
+    "pricing_intro_template": { "type": "string" },
+    "pricing_items": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Pricing line items (may contain HTML)."
+    },
+    "pricing_note_template": { "type": "string" },
+    "pricing_closing_note": {
+      "type": "string",
+      "description": "Final pricing statement. May be empty string."
+    },
+    "about_heading_template": { "type": "string" },
+    "about_text_paragraphs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "About section paragraphs with owner/company info."
+    },
+    "about_portrait_alt_template": { "type": "string" },
+    "about_portrait_url_template": { "type": "string" },
+    "neighborhoods_heading_template": { "type": "string" },
+    "neighborhoods_intro_template": { "type": "string" },
+    "related_heading_template": { "type": "string" },
+    "related_intro_template": { "type": "string" },
+    "related_cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["href_slug", "label"],
+        "additionalProperties": false,
+        "properties": {
+          "href_slug": { "type": "string", "description": "Link slug template with {city_slug}." },
+          "label": { "type": "string", "description": "Link label text. May contain HTML entities." }
+        }
+      },
+      "minItems": 1,
+      "description": "Related service cards for cross-sell (3-5 items)."
+    },
+    "faq_heading": { "type": "string" },
+    "faq_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["question", "answer_html", "answer_schema"],
+        "additionalProperties": false,
+        "properties": {
+          "question": { "type": "string", "description": "Question text, may contain placeholders." },
+          "question_schema": { "type": "string", "description": "Question text for schema markup (optional, plain-text)." },
+          "answer_html": { "type": "string", "description": "HTML answer with placeholders." },
+          "answer_schema": { "type": "string", "description": "Plain-text answer for schema markup." }
+        }
+      },
+      "minItems": 1,
+      "description": "FAQ question/answer pairs (7-8 items)."
+    },
+    "final_cta_heading": { "type": "string" },
+    "final_cta_paragraph_template": { "type": "string" },
+    "schema_service_description_template": {
+      "type": "string",
+      "description": "Structured data service description template."
+    },
+    "schema_service_price": {
+      "type": "string",
+      "description": "Structured data price. Typically empty — use price_layer.json instead for actual prices."
+    },
+    "schema_service_price_description": {
+      "type": "string",
+      "description": "Structured data price description."
+    },
+    "schema_service_terms": {
+      "type": "string",
+      "description": "Structured data terms of service."
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://keelworks.ai/schemas/website-factory/city-overlay.schema.json",
+  "title": "City Data — Per-Client Overlay",
+  "description": "Client-relative city fields that vary by which client serves the city. One file per (client, city) pair at data/cities/<client-slug>/<city-slug>.json. The scaffolder/renderer merges shared city data + the active client's overlay; a MISSING overlay for the build's client = SC-2 fail-loud (never fall back to another client's values, never silently use the shared file's defaults for these fields). Design authority: [WF-7] schemas. Implementation: [DA5] (scaffolder merge, SC-2 gate, auto-derivation, backfill).",
+  "type": "object",
+  "required": [
+    "distance_from_hq_phrase",
+    "dispatch_time_phrase",
+    "dispatch_time_short",
+    "no_trip_charge_cities",
+    "other_areas_paragraph"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_comment": {
+      "type": "string",
+      "description": "Human-readable note. Not rendered."
+    },
+    "distance_from_hq_phrase": {
+      "type": "string",
+      "description": "HQ-relative distance description (e.g., 'Vienna is 10-15 minutes from our home base in Fairfax'). Derived from client geo.latitude/longitude + city coordinates — not copy-pasted. See [DA5] implementation for auto-derivation."
+    },
+    "dispatch_time_phrase": {
+      "type": "string",
+      "description": "Descriptive dispatch time from this client's HQ (e.g., '15-20 minute'). Derived, not copied."
+    },
+    "dispatch_time_short": {
+      "type": "string",
+      "description": "Abbreviated dispatch time (e.g., '15-20 min'). Derived, not copied."
+    },
+    "no_trip_charge_cities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Cities where this client charges no trip fee. Client-specific — different clients have different no-charge zones."
+    },
+    "other_areas_paragraph": {
+      "type": "string",
+      "description": "Description of other service areas from this client's perspective."
+    },
+    "distance_phrase": {
+      "type": "object",
+      "description": "Service-slug-keyed distance overrides (e.g., emergency service may have different dispatch framing).",
+      "patternProperties": {
+        "^[a-z0-9]+(-[a-z0-9]+)*$": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "map_iframe_title": {
+      "type": "string",
+      "description": "Google Maps iframe title attribute, parameterized per client (e.g., '<Client Name> service area in <City>'). Prevents the brand-leak bug where one client's map title appears on another client's page."
+    }
+  }
+}

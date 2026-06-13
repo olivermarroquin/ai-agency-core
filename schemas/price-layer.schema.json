@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://keelworks.ai/schemas/website-factory/price-layer.schema.json",
+  "title": "Price Layer",
+  "description": "Single source of truth for every price displayed on the site. Referenced by slug everywhere (city pages, costs page, guides). Year-stamped to prevent price-drift (fixes AJ Long's price-drift bug, teardown §11). Blueprint §2 item 4. File location: data/price_layer.json (one file, all prices). Each entry is a price point for a specific service line item.",
+  "type": "object",
+  "required": ["schema_version", "default_currency", "prices"],
+  "additionalProperties": false,
+  "properties": {
+    "_comment": {
+      "type": "string",
+      "description": "Human-readable note. Not rendered."
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version for forward-compatibility."
+    },
+    "default_currency": {
+      "type": "string",
+      "const": "USD",
+      "description": "Default currency for all prices."
+    },
+    "prices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slug", "service_slug", "label", "year", "amount_type"],
+        "additionalProperties": false,
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+            "description": "Unique identifier for this price point (e.g., 'panel-upgrade-200a-standard'). Referenced by service_city_facts and templates."
+          },
+          "service_slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+            "description": "Which service this price belongs to."
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable label (e.g., '200-Amp Panel Upgrade (standard)')."
+          },
+          "year": {
+            "type": "integer",
+            "minimum": 2020,
+            "description": "Year this price was verified. Stale after 12 months — flag for refresh."
+          },
+          "amount_type": {
+            "type": "string",
+            "enum": ["fixed", "range", "starting_at", "per_unit", "hourly"],
+            "description": "How this price should be displayed."
+          },
+          "amount_low": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Low end (for 'range') or the single amount (for 'fixed', 'starting_at', 'per_unit', 'hourly')."
+          },
+          "amount_high": {
+            "type": "number",
+            "minimum": 0,
+            "description": "High end (for 'range'). Omit for non-range types."
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit description for per_unit/hourly types (e.g., 'per outlet', 'per hour')."
+          },
+          "includes_note": {
+            "type": "string",
+            "description": "What's included in this price (e.g., 'labor + standard panel + permit filing')."
+          },
+          "excludes_note": {
+            "type": "string",
+            "description": "What's excluded (e.g., 'does not include meter base replacement if required by utility')."
+          },
+          "source_note": {
+            "type": "string",
+            "description": "How this price was determined (e.g., 'client-provided 2026-Q2', 'HomeAdvisor + local market')."
+          },
+          "display_template": {
+            "type": "string",
+            "description": "Optional pre-formatted display string (e.g., '$1,800 – $3,500'). If omitted, renderer formats from amount_low/high + amount_type."
+          }
+        }
+      },
+      "description": "Array of all price entries. One number, one place, year-stamped."
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://keelworks.ai/schemas/website-factory/link-graph.schema.json",
+  "title": "Link Graph (Derived)",
+  "description": "Derived internal link graph — NOT authored, computed at build time from services.json + cities.json + the service×city matrix. For each page, the two-axis link set: same-service-other-cities + same-city-other-services + contextual cross-sell links. Because it's derived, a link can ONLY point at a page that exists (link integrity by construction). Blueprint §2 item 5. Existing implementation: repos/ai-agency-core/scripts/insert-internal-links.py (four-axis model). File location: data/link_graph.json (generated, not hand-edited). Regenerated on every build or data change.",
+  "type": "object",
+  "required": ["generated_at", "generator_version", "pages"],
+  "additionalProperties": false,
+  "properties": {
+    "_comment": {
+      "type": "string",
+      "description": "Human-readable note. Not rendered."
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this graph was last generated."
+    },
+    "generator_version": {
+      "type": "string",
+      "description": "Version of the link graph generator script."
+    },
+    "pages": {
+      "type": "object",
+      "description": "Keyed by page slug (e.g., 'troubleshooting-vienna-va'). Each value is the link set for that page.",
+      "patternProperties": {
+        "^[a-z0-9]+(-[a-z0-9]+)*$": {
+          "type": "object",
+          "required": ["service_slug", "city_slug", "same_service_other_cities", "same_city_other_services"],
+          "additionalProperties": false,
+          "properties": {
+            "service_slug": { "type": "string" },
+            "city_slug": { "type": "string" },
+            "same_service_other_cities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["page_slug", "city_name", "href"],
+                "additionalProperties": false,
+                "properties": {
+                  "page_slug": { "type": "string" },
+                  "city_name": { "type": "string", "description": "Display name for the link." },
+                  "href": { "type": "string", "description": "Relative URL path." },
+                  "distance_km": {
+                    "type": "number",
+                    "description": "Distance from this page's city to the linked city. Used for geographic proximity sorting."
+                  }
+                }
+              },
+              "description": "Links to the same service in other cities, sorted by geographic proximity."
+            },
+            "same_city_other_services": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["page_slug", "service_name", "href"],
+                "additionalProperties": false,
+                "properties": {
+                  "page_slug": { "type": "string" },
+                  "service_name": { "type": "string", "description": "Display name for the link." },
+                  "href": { "type": "string", "description": "Relative URL path." }
+                }
+              },
+              "description": "Links to other services in the same city."
+            },
+            "cross_sell": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["page_slug", "label", "href"],
+                "additionalProperties": false,
+                "properties": {
+                  "page_slug": { "type": "string" },
+                  "label": { "type": "string" },
+                  "href": { "type": "string" },
+                  "context": { "type": "string", "description": "Why this cross-sell is relevant." }
+                }
+              },
+              "description": "Contextual cross-sell links beyond the two primary axes."
+            },
+            "breadcrumb": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["label", "href"],
+                "additionalProperties": false,
+                "properties": {
+                  "label": { "type": "string" },
+                  "href": { "type": "string" }
+                }
+              },
+              "description": "Breadcrumb trail for this page."
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

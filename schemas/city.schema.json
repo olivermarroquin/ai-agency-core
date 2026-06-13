@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://keelworks.ai/schemas/website-factory/city.schema.json",
+  "title": "City Data (Shared Facts)",
+  "description": "Shared city facts that are true regardless of which client serves that city. One file per city at data/cities/<city-slug>.json. Client-relative fields (HQ distance, dispatch time, map-iframe title) live in per-client overlay files at data/cities/<client-slug>/<city-slug>.json — see city-overlay.schema.json. A missing overlay for the active client at build time = SC-2 fail-loud (never fall back to another client's values).",
+  "type": "object",
+  "required": [
+    "slug",
+    "name",
+    "state",
+    "state_full",
+    "county",
+    "county_full",
+    "geographic_anchor_paragraph",
+    "audience_descriptor",
+    "neighborhoods",
+    "housing_patterns",
+    "quick_ref_localized_items",
+    "most_common_problem_paragraph"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_comment": {
+      "type": "string",
+      "description": "Human-readable note. Not rendered."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "URL-safe city identifier (e.g., 'vienna-va', 'dc')."
+    },
+    "name": {
+      "type": "string",
+      "description": "City name only (e.g., 'Vienna')."
+    },
+    "name_with_state": {
+      "type": "string",
+      "description": "Full name with state code (e.g., 'Vienna, VA'). Omit only for jurisdictions where state suffix is non-standard (e.g., 'Washington, DC' uses this field; stand-alone 'DC' would not)."
+    },
+    "state": {
+      "type": "string",
+      "description": "State/jurisdiction code (e.g., 'VA', 'MD', 'DC')."
+    },
+    "state_full": {
+      "type": "string",
+      "description": "Full state name (e.g., 'Virginia', 'District of Columbia')."
+    },
+    "county": {
+      "type": "string",
+      "description": "County or independent jurisdiction name (e.g., 'Fairfax County')."
+    },
+    "county_full": {
+      "type": "string",
+      "description": "Full county with state (e.g., 'Fairfax County, Virginia')."
+    },
+    "population": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "City population (most recent census or ACS estimate). Year-stamp the source in _comment or a sibling _population_source field. Required for the Service Area Information card (blueprint §6b)."
+    },
+    "population_source": {
+      "type": "string",
+      "description": "Source and year for the population figure (e.g., '2020 US Census', '2023 ACS 5-year estimate')."
+    },
+    "zip_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9]{5}$"
+      },
+      "minItems": 1,
+      "description": "ZIP codes served in this city. Required for the Service Area Information card (blueprint §6b). Every city must have at least one."
+    },
+    "electric_utilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Electric utility provider(s) serving this city."
+    },
+    "utility_coordination_phrase": {
+      "type": "string",
+      "description": "Descriptive phrase about utility coordination for this city."
+    },
+    "permit_authority": {
+      "type": "string",
+      "description": "Jurisdiction-specific permitting authority. Typically needed for DC or independent cities."
+    },
+    "geographic_anchor_paragraph": {
+      "type": "string",
+      "description": "2-3 sentence location description providing geographic context."
+    },
+    "audience_descriptor": {
+      "type": "string",
+      "description": "Target audience description including neighborhood references."
+    },
+    "neighborhoods": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "blurb"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "description": "Neighborhood name." },
+          "blurb": { "type": "string", "description": "1-2 sentence description of the neighborhood." }
+        }
+      },
+      "minItems": 1,
+      "description": "Array of neighborhood objects for this city."
+    },
+    "housing_patterns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "neighborhood_examples", "context_paragraph", "symptoms"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string", "description": "Housing type era/name (e.g., '1950s-1960s colonials')." },
+          "neighborhood_examples": { "type": "string", "description": "Comma-separated neighborhoods with this housing type." },
+          "context_paragraph": { "type": "string", "description": "Historical/technical context about this housing era." },
+          "symptoms": { "type": "string", "description": "Common electrical/service problems in this housing type." }
+        }
+      },
+      "minItems": 1,
+      "description": "Array of housing pattern objects covering the city's building stock eras."
+    },
+    "quick_ref_localized_items": {
+      "type": "object",
+      "description": "Service-slug-keyed object. Each key is a service slug; value is an array of localized Q&A items for that service in this city.",
+      "patternProperties": {
+        "^[a-z0-9]+(-[a-z0-9]+)*$": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["summary", "body"],
+            "additionalProperties": false,
+            "properties": {
+              "summary": { "type": "string", "description": "Short issue title." },
+              "body": { "type": "string", "description": "Detailed explanation." }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "most_common_problem_paragraph": {
+      "type": "object",
+      "description": "Service-slug-keyed object. Each key is a service slug; value is a 1-2 sentence summary of the most common problem for that service in this city.",
+      "patternProperties": {
+        "^[a-z0-9]+(-[a-z0-9]+)*$": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "specific_problems_neighborhood_phrase": {
+      "type": "object",
+      "description": "Service-slug-keyed object. Each key is a service slug; value describes neighborhood-specific problem patterns.",
+      "patternProperties": {
+        "^[a-z0-9]+(-[a-z0-9]+)*$": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ev_charger_homes_phrase": {
+      "type": "string",
+      "description": "Phrase about EV charger readiness in older homes in this city."
+    },
+    "ev_neighborhood_phrase": {
+      "type": "object",
+      "description": "Service-slug-keyed EV neighborhood context phrasing.",
+      "patternProperties": {
+        "^[a-z0-9]+(-[a-z0-9]+)*$": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "area_served_schema": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["@type", "name"],
+        "properties": {
+          "@type": {
+            "type": "string",
+            "enum": ["AdministrativeArea", "City"]
+          },
+          "name": { "type": "string" },
+          "containedInPlace": {
+            "type": "object",
+            "properties": {
+              "@type": { "type": "string" },
+              "name": { "type": "string" }
+            }
+          }
+        }
+      },
+      "description": "JSON-LD areaServed entries for structured data."
+    }
+  }
+}
