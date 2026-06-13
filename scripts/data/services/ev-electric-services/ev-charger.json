@@ -1,0 +1,204 @@
+{
+  "_comment": "EV Electric client overlay for ev-charger service. Merges over the shared base data/services/ev-charger.json. Contains authored body copy harvested from the live page (2026-06-12, read-only). City-variable parts use {tokens} sourced from the city JSON at render time. Zero hardcoded city names.",
+  "_harvested_from": "https://evelectric.pro/ev-charger-vienna-va/",
+  "_harvested_date": "2026-06-12",
+  "_harvest_method": "WebFetch read-only extraction, zero writes to WP",
+
+  "aioseo_meta_description_template": "#1 EV electrician in NoVA installs Tesla, ChargePoint, JuiceBox Level 2 chargers in {city_name_with_state}. Hardwired or NEMA 14-50. Permit included. Call {phone_display}.",
+
+  "what_it_means_heading": "What a \"Level 2 EV charger installation\" actually involves",
+  "why_city_heading_template": "Why {city_name} EV owners call us for installations",
+  "problems_heading_template": "Specific EV charger installs we handle in {city_name}",
+  "process_heading_template": "Our EV charger install process — what happens when you call",
+
+  "hero_eyebrow": "Level 2 EV Charger Installation by a Master Electrician",
+  "hero_heading": "EV Charger Installation in {city_name_with_state}",
+  "hero_subheading_template": "New EV in the driveway, or a second one on the way? {owner_name} — {license_state}-licensed Master Electrician — installs Tesla, ChargePoint, JuiceBox, and any UL-listed Level 2 charger across {city_name} and surrounding areas. Same-week appointments, permit included, named the #1 EV electrician in the area.",
+
+  "what_it_means_paragraphs": [
+    "A Level 2 EV charger needs a dedicated 240-volt circuit pulled from your electrical panel to wherever the car parks — garage, driveway, carport, side of the house. The circuit is 40 or 50 amps in most residential installs, and it's a continuous load, which means the breaker, the wire, and the panel all have to be sized for sustained draw, not just the brief peak you see on a clothes dryer.",
+    "\"Installation\" covers the load calculation on your existing panel, the new breaker, the conduit and wire run, the hardwire termination (or the NEMA 14-50 outlet if you're using a plug-in unit), the charger mount, the connection to your home Wi-Fi if the unit is smart, and the permit and inspection. None of this is a single-trip job — it's a planned electrical install with code requirements."
+  ],
+
+  "quick_ref_intro": "Six things people ask us every week when they're ready to add a charger.",
+
+  "quick_ref_localized_items": [
+    { "summary": "NEMA 14-50 outlet vs. hardwired — which one should I get?" },
+    { "summary": "Will I need a panel upgrade?" },
+    { "summary": "Do you install Tesla, ChargePoint, JuiceBox, Wallbox, all of them?" },
+    { "summary": "Where should the charger go — garage, driveway, outside wall?" },
+    { "summary": "How long does the install take?" },
+    { "summary": "Do I need a permit for an EV charger in {city_name}?" }
+  ],
+
+  "why_city_closing_note_template": "If your home matches one of these patterns, the load calculation is what tells you whether you need a full service upgrade, a sub-panel, or just a breaker swap. We'd rather quote you the smaller job when the smaller job is the right answer.",
+
+  "scenario_cards": [
+    {
+      "title": "1950s-1970s split-levels & ranches",
+      "body": "Most are on 100-amp service. The garage panel run is usually the cleanest path. The constraint is panel capacity — a 100-amp panel feeding the rest of the house often can't fit a continuous 40-amp EV draw.",
+      "typical_install": "Panel upgrade plus 48-amp hardwired Wall Connector, or NEMA 14-50 on a 40-amp circuit if the load calc fits."
+    },
+    {
+      "title": "1970s-1990s colonials & traditionals",
+      "body": "200-amp service in most cases. The garage is often detached or under-house with a long run from the basement panel. Many of these homes already have a sub-panel in the garage — that simplifies the install dramatically.",
+      "typical_install": "50-amp circuit, hardwired Tesla Wall Connector or ChargePoint Home Flex, conduit run from basement panel or existing garage sub-panel."
+    },
+    {
+      "title": "2000s-2020s townhomes & newer detached",
+      "body": "200-amp or 225-amp panels, garage right next to the panel, plenty of capacity. The cleanest installs we do — wire pull is under 10 feet, charger mount is on a finished wall, and the conduit is mostly invisible.",
+      "typical_install": "48-amp hardwired Wall Connector or smart charger, clean conduit run, finished in 3-4 hours."
+    }
+  ],
+
+  "problem_cards": [
+    {
+      "title": "Tesla Wall Connector — hardwired, 48 amps",
+      "body": "The default install for new Tesla owners. Hardwired at 48 amps for the fastest residential charging speed. We mount the unit, run the circuit from your panel, terminate, commission, and pair to your Tesla account. Typical job: 3-4 hours."
+    },
+    {
+      "title": "NEMA 14-50 outlet for portable Level 2",
+      "body": "The flexible option. Same outlet that an RV uses. Lets you plug in the portable Level 2 cord that came with your car (most makes ship one). Cheaper than hardwired and lets you take the cord on road trips."
+    },
+    {
+      "title": "ChargePoint Home Flex install",
+      "body": "Smart charger with app control, hardwired up to 50 amps or plug-in at 40 amps. Popular with Ford Lightning, Rivian, and Mustang Mach-E owners who want load-sharing and remote monitoring."
+    },
+    {
+      "title": "JuiceBox / Wallbox Pulsar Plus install",
+      "body": "Smart chargers with utility-program integration (some support {utility_provider}'s EV time-of-use rates). Hardwired or plug-in. We install the electrical side; you configure the app."
+    },
+    {
+      "title": "Two-charger install (two-EV households)",
+      "body": "Two chargers can share a feeder if the equipment supports load sharing."
+    },
+    {
+      "title": "Outdoor / driveway install with weather-rated equipment",
+      "body": "For carports, driveway pedestals, or detached garages. Requires weather-rated charger and conduit."
+    },
+    {
+      "title": "Charger plus panel upgrade — combo project",
+      "body": "When the load calculation says the existing panel can't fit the EV load. We do both in the same project."
+    },
+    {
+      "title": "Service-entrance or feeder repair for an existing EV install",
+      "body": "If your current charger throttles, trips a breaker, or warms the outlet, the cause is almost always upstream."
+    }
+  ],
+
+  "process_steps": [
+    {
+      "title": "Phone consult — car, charger, panel",
+      "body": "{owner_name} or someone from his team picks up. We ask three things: what car (or cars) you have, whether you've picked a charger yet, and where the panel is relative to where the car parks."
+    },
+    {
+      "title": "On-site load calc and written estimate",
+      "body": "We come to your house, open the panel, look at the route from panel to charger location, and run a load calculation. You get a written estimate before the project is scheduled."
+    },
+    {
+      "title": "Permit pulled with {county}",
+      "body": "EV charger installs at residential amperages require a permit. We file it. Typically takes 2-5 business days. Permit fee is included in the estimate."
+    },
+    {
+      "title": "Install day — 3-5 hours typical",
+      "body": "Install the dedicated breaker. Run the conduit from panel to charger location. Pull the wire. Mount the charger or the NEMA 14-50 outlet. Terminate at both ends. Test, energize, verify charging."
+    },
+    {
+      "title": "Inspection by {county}",
+      "body": "The county inspector comes out within the scheduled window. We meet them on-site and pull the permit closed. You get a copy of the signed inspection card."
+    },
+    {
+      "title": "A clean exit, with documentation",
+      "body": "When we leave, you have a working charger, a copy of the permit, a copy of the inspection card, and a written workmanship warranty."
+    }
+  ],
+
+  "pricing_intro_template": "We publish our prices because we'd want them published if we were hiring an electrician. Most {city_name} electricians won't quote a number until they've been on-site. Ours:",
+
+  "pricing_items": [
+    {
+      "label": "Hardwired Level 2 charger install (40-50 amp)",
+      "range": "$1,500 to $2,500",
+      "detail": "Covers permit, dedicated breaker, conduit + wire run (typical 15-30 feet from panel to charger), hardwire termination, charger mount, and inspection coordination."
+    },
+    {
+      "label": "NEMA 14-50 outlet install",
+      "range": "$800 to $1,500",
+      "detail": "Covers permit, breaker, conduit + wire, outlet box, GFCI/EVSE breaker, and inspection. Cheaper than hardwired because no charger mounting is required."
+    },
+    {
+      "label": "Outdoor / driveway install",
+      "range": "add $300 to $600",
+      "detail": "Weather-rated conduit, longer wire pull, pedestal mount or wall mount on exterior surface."
+    },
+    {
+      "label": "Charger plus panel upgrade combo",
+      "range": "$4,000 to $6,500",
+      "detail": "When the load calc says you need both. Single permit covers both jobs. One day of work instead of two visits."
+    },
+    {
+      "label": "Two-charger install",
+      "range": "$2,500 to $4,000",
+      "detail": "Two dedicated circuits if panel capacity allows, or shared-feeder install with load-sharing equipment."
+    },
+    {
+      "label": "Permits & inspection",
+      "range": "included",
+      "detail": "No surprise add-ons at the end."
+    }
+  ],
+
+  "about_text_paragraphs": [
+    "{owner_name} is a Master Electrician licensed in {license_state}. The Master tier is the highest electrician license the state issues — it requires several years of journeyman work, a passed state exam, and a clean record. {owner_name} waited roughly four years for his Master license before opening {client_name}. He's fully insured and runs a maintenance team, so when you call us you're not waiting on one person's calendar.",
+    "EV chargers are one of {owner_name}'s signature service lines. Per the 2026 BrightLocal local-search scan, {client_name} ranks <strong>#1 in Northern Virginia for \"EV electrician\"</strong> — the top result on Google Maps when {city_name} homeowners search for someone to install a charger. He's been doing EV charger work since at least early 2024 and has installed across every major brand (Tesla, ChargePoint, JuiceBox, Wallbox, Grizzl-E, and OEM units).",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+
+  "faq_items": [
+    {
+      "question": "How much does Level 2 EV charger installation cost in {city_name_with_state}?",
+      "answer_html": "A hardwired Level 2 charger install (40-50 amp circuit) in {city_name} runs $1,500 to $2,500, including permit, dedicated breaker, conduit and wire, hardwire termination, charger mount, and inspection. A NEMA 14-50 outlet for a portable Level 2 cord runs $800-$1,500. Outdoor or driveway installs add $300-$600. If a panel upgrade is needed alongside the charger, the combo runs $4,000-$6,500.",
+      "answer_schema": "A hardwired Level 2 charger install (40-50 amp circuit) in {city_name} runs $1,500 to $2,500, including permit, dedicated breaker, conduit and wire, hardwire termination, charger mount, and inspection. A NEMA 14-50 outlet for a portable Level 2 cord runs $800-$1,500. Outdoor or driveway installs add $300-$600. If a panel upgrade is needed alongside the charger, the combo runs $4,000-$6,500."
+    },
+    {
+      "question": "NEMA 14-50 outlet vs. hardwired — which should I get?",
+      "answer_html": "A NEMA 14-50 outlet is cheaper and more flexible — you plug in the portable Level 2 cord that came with your car. Hardwired is faster (no plug-load 80% derating, so a Tesla Wall Connector hits the full 48 amps), looks cleaner, and is the only option for some chargers in their fastest mode. We recommend based on your car, charger choice, and how often you would swap setups.",
+      "answer_schema": "A NEMA 14-50 outlet is cheaper and more flexible — you plug in the portable Level 2 cord that came with your car. Hardwired is faster (no plug-load 80% derating, so a Tesla Wall Connector hits the full 48 amps), looks cleaner, and is the only option for some chargers in their fastest mode. We recommend based on your car, charger choice, and how often you would swap setups."
+    },
+    {
+      "question": "Do I need a panel upgrade for my EV charger?",
+      "answer_html": "Sometimes. A 200-amp panel feeding a normal {city_name} home usually fits a 40 or 50-amp EV circuit without an upgrade. A 100-amp panel feeding a modern home (central AC, electric water heater, range, dryer) often cannot — the load calculation comes out over the safe limit. We do the calc on-site and tell you up front. If an upgrade is needed, we handle both jobs in the same project.",
+      "answer_schema": "Sometimes. A 200-amp panel feeding a normal {city_name} home usually fits a 40 or 50-amp EV circuit without an upgrade. A 100-amp panel feeding a modern home (central AC, electric water heater, range, dryer) often cannot — the load calculation comes out over the safe limit. We do the calc on-site and tell you up front. If an upgrade is needed, we handle both jobs in the same project."
+    },
+    {
+      "question": "What charger brands do you install?",
+      "answer_html": "Anything UL-listed. Tesla Wall Connector, ChargePoint Home Flex, JuiceBox 40 and 48, Wallbox Pulsar Plus, Grizzl-E, Enphase, Emporia, and the OEM chargers that ship with new Fords, Rivians, Hyundais, Kias, and BMWs. We are charger-brand-neutral — pick what works for your car and we will install it.",
+      "answer_schema": "Anything UL-listed. Tesla Wall Connector, ChargePoint Home Flex, JuiceBox 40 and 48, Wallbox Pulsar Plus, Grizzl-E, Enphase, Emporia, and the OEM chargers that ship with new Fords, Rivians, Hyundais, Kias, and BMWs. We are charger-brand-neutral — pick what works for your car and we will install it."
+    },
+    {
+      "question": "How long does the installation take?",
+      "answer_html": "Most residential {city_name} installs are 3-5 hours. Panel-to-charger runs in a finished basement or attached garage are straightforward; long outdoor or in-ground runs take longer. If a panel upgrade is also needed, plan on a full day. We give the time window with the written estimate.",
+      "answer_schema": "Most residential {city_name} installs are 3-5 hours. Panel-to-charger runs in a finished basement or attached garage are straightforward; long outdoor or in-ground runs take longer. If a panel upgrade is also needed, plan on a full day. We give the time window with the written estimate."
+    },
+    {
+      "question": "Do I need a permit for an EV charger in {county}?",
+      "answer_html": "Yes. {county} requires an electrical permit for any new dedicated circuit at this amperage. We pull the permit. The fee is included in our estimate. Inspection is scheduled after the install. You get a copy of the signed inspection card for your records and for any utility rebate or federal tax credit application.",
+      "answer_schema": "Yes. {county} requires an electrical permit for any new dedicated circuit at this amperage. We pull the permit. The fee is included in our estimate. Inspection is scheduled after the install. You get a copy of the signed inspection card for your records and for any utility rebate or federal tax credit application."
+    },
+    {
+      "question": "Can you put the charger outside or in the driveway?",
+      "answer_html": "Yes — with weather-rated equipment. Most major chargers (Tesla Wall Connector, ChargePoint Home Flex, Wallbox Pulsar Plus, Grizzl-E) are rated for outdoor install. We add $300-$600 to the standard estimate for outdoor runs depending on distance and mounting surface.",
+      "answer_schema": "Yes — with weather-rated equipment. Most major chargers (Tesla Wall Connector, ChargePoint Home Flex, Wallbox Pulsar Plus, Grizzl-E) are rated for outdoor install. We add $300-$600 to the standard estimate for outdoor runs depending on distance and mounting surface."
+    },
+    {
+      "question": "Are you licensed and insured?",
+      "answer_html": "Yes. {owner_name} holds a Master Electrician license issued by the {license_issuer} — the state's highest electrician credential. {client_name} is fully insured. We are happy to provide proof of license and insurance on request before any work begins.",
+      "answer_schema": "Yes. {owner_name} holds a Master Electrician license issued by the {license_issuer} — the state's highest electrician credential. {client_name} is fully insured. We are happy to provide proof of license and insurance on request before any work begins."
+    }
+  ],
+
+  "final_cta_heading": "Ready to charge at home?",
+  "final_cta_paragraph_template": "Level 2 EV charger installation in {city_name_with_state} — same-week appointments, permit included. {final_cta_response_promise}",
+
+  "related_intro_template": "The EV charger is often one piece of a larger electrical project. Here's what we handle alongside it:"
+}

@@ -1,0 +1,227 @@
+{
+  "_comment": "Per-service data for Electrical Panel Upgrades. Used by scaffold-core-30-page.py for every Core 30 page of this service across cities. One file per service. {city} and {client} placeholders inside text strings are substituted at render time. Scaffolded by scaffold-service-data.py from brief: panel-upgrade.md.",
+  "_scaffolded": {
+    "from_brief": true,
+    "brief_research_date": "2026-05-26",
+    "brief_researcher": "service-seo-research-skill-v1",
+    "needs_authoring": [
+      "aioseo_meta_description_template",
+      "hero_heading",
+      "hero_subheading_template",
+      "hero_image_url_template",
+      "what_it_means_paragraphs",
+      "quick_ref_intro",
+      "why_city_closing_note_template",
+      "pricing_intro_template",
+      "about_text_paragraphs",
+      "about_portrait_url_template",
+      "related_intro_template",
+      "faq_items[*].answer_html",
+      "faq_items[*].answer_schema",
+      "final_cta_heading",
+      "final_cta_paragraph_template"
+    ],
+    "needs_confirmation": []
+  },
+  "slug": "panel-upgrade",
+  "page_slug_template": "panel-upgrade-{city_slug}",
+  "name": "Electrical Panel Upgrades",
+  "name_with_city": "Electrical Panel Upgrades in {city_name_with_state}",
+  "service_type_phrase": "Electrical panel upgrades and replacements",
+  "quoted_phrase": "panel upgrade",
+  "lowercase_phrase": "panel upgrade",
+  "tag_short": "panel-upgrade",
+  "aioseo_page_title_template": "Electrical Panel Upgrades in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "FILL: Meta description (≤155 chars). See §3 keyword targets and §6 tone anchor. Pattern: '<value prop> in {city_name_with_state}. <proof / differentiator>. Call {phone_display}.'",
+  "aioseo_focus_keyword_template": "panel upgrade {city_slug}",
+  "aioseo_additional_keywords_template": [
+    "100 amp to 200 amp panel upgrade {city_slug}",
+    "federal pacific panel replacement {city_slug}",
+    "zinsco panel replacement {city_slug}",
+    "fuse box to breaker panel {city_slug}",
+    "panel upgrade cost {city_slug}",
+    "panel upgrade permit {city_slug}",
+    "electric panel installation {city_slug}",
+    "electrical service entrance upgrade {city_slug}",
+    "200 amp service installation {city_slug}",
+    "panel upgrade for ev charger {city_slug}",
+    "panel upgrade for hot tub {city_slug}",
+    "main breaker replacement {city_slug}",
+    "subpanel installation {city_slug}",
+    "outdated electrical panel {city_slug}",
+    "panel upgrade financing {city_slug}",
+    "licensed electrician panel upgrade {city_slug}",
+    "same day panel upgrade {city_slug}",
+    "emergency panel replacement {city_slug}"
+  ],
+  "wordpress_page_title_template": "Electrical Panel Upgrades in {city_name_with_state}",
+  "hero_eyebrow_template": "Electrical Panel Upgrades in {city_name_with_state}",
+  "hero_heading": "FILL: Hero heading — value-prop sentence (≤8 words). See §6 voice anchor and the troubleshooting reference ('Same-Day Diagnosis from a Master Electrician').",
+  "hero_subheading_template": "FILL: Hero subheading — 2-3 sentences, contractor-folksy per §6. Should mention {owner_name}, {license_state}, and the city. See troubleshooting.json for the reference shape.",
+  "hero_image_alt_template": "{owner_name}, master electrician, performing a panel upgrade in {city_name_with_state}",
+  "hero_image_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-panel-upgrade-hero-PLACEHOLDER.png",
+  "what_it_means_heading": "What \"panel upgrade\" actually means",
+  "what_it_means_paragraphs": [
+    "FILL: Paragraph 1 — 80-100 words. Open with the answer-first rule (§4.5A). Define the service in plain language. See §6 voice anchor.",
+    "FILL: Paragraph 2 — 80-100 words. Specifics — common scenarios, brand names that matter (Federal Pacific, Zinsco, etc. per §4.5C attribute density), what differentiates the work.",
+    "FILL: Paragraph 3 — 80-100 words. Owner-grounded. Mention {owner_name}, {license_state}-licensed Master Electrician, {city_name} service area. Match the troubleshooting paragraph 3 pattern."
+  ],
+  "quick_ref_heading_template": "Common signs you need a {city_name} panel upgrade",
+  "quick_ref_intro": "FILL: Quick-ref intro — short pitch like 'Six symptoms we see every week. Tap any to learn what it might mean.'",
+  "quick_ref_footer_html_template": "Don't see your issue?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll diagnose it.",
+  "why_city_heading_template": "Why {city_name} homeowners call us for panel upgrade",
+  "why_city_closing_note_template": "FILL: Why-city closing note — 1-2 sentences tying city-specific patterns back to why people call. See §6 tone.",
+  "problems_heading_template": "Specific situations we handle every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    {
+      "title": "Frequent breaker trips",
+      "body": "A breaker that trips once is doing its job. A breaker that trips daily, or that pops the moment you reset it, points to a panel that can't handle the load you're putting on it. We trace the circuit, measure the load, and tell you whether you need a new circuit, a new panel, or a fix upstream."
+    },
+    {
+      "title": "Fuse box instead of breakers",
+      "body": "If your panel still has screw-in fuses instead of breakers, you're on a system that hasn't been the standard since the 1960s. Modern appliances draw loads fuse boxes weren't designed for. We replace the fuse panel with a current-code 200-amp breaker panel that supports today's electrical demand."
+    },
+    {
+      "title": "Federal Pacific or Zinsco panel",
+      "body": "Both brands are documented fire risks — Federal Pacific Stab-Lok breakers fail to trip in measurable percentages of cases, and Zinsco panels overheat at the bus bar. If you have one, replacement is the safety call, not a maintenance call. We can identify the brand on-site in 5 minutes."
+    },
+    {
+      "title": "Lights dim when the AC or fridge kicks on",
+      "body": "A voltage drop when a large appliance starts means your service can't deliver consistent power. The cause is often an undersized panel, a loose neutral, or a feeder that wasn't sized for what's now drawing on it. Diagnostic first; upgrade if the cause traces to panel capacity."
+    },
+    {
+      "title": "Burning smell or warm panel cover",
+      "body": "Stop using the affected circuits and call us today. Heat at the panel is almost always a loose connection on a breaker or bus bar, and loose connections in panels are the leading cause of electrical fires inside homes. We treat this as urgent."
+    },
+    {
+      "title": "Planning an EV charger or hot tub",
+      "body": "Most older panels can't safely take a continuous 40–50 amp load on top of the existing house demand. If you're planning to add an EV charger, hot tub, or kitchen renovation, a panel upgrade often comes first. We size the upgrade to support both today's load and what you're adding."
+    },
+    {
+      "title": "Outdated 60- or 100-amp service",
+      "body": "Homes built before 1965 often have 60-amp service; homes built 1965–2000 typically have 100-amp. Modern homes need 200-amp service to support HVAC, kitchen appliances, EV charging, and the rest of how you actually live. Upgrading is standard work, not exotic."
+    },
+    {
+      "title": "Adding a major addition or finished basement",
+      "body": "A major remodel triggers a code-required load calculation. If the new load pushes past your panel's safe capacity, the upgrade happens as part of the project. We coordinate the upgrade with the general contractor's schedule so the inspector signs off the first time."
+    }
+  ],
+  "process_heading_template": "Our panel upgrade process — what happens when you call",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    {
+      "title": "A real conversation, not a script",
+      "body": "We pick up the phone. You tell us what's driving the upgrade — outdated panel, EV charger plans, home addition, frequent trips. We ask about your home's age, your panel's brand if you know it, and what's on your wish list. If there's any safety concern (burning smell, warm panel, sparking), we treat it as urgent and slot you in same-week."
+    },
+    {
+      "title": "Diagnostic visit and written estimate",
+      "body": "We come to your house, open the panel, check the service entrance and meter, and run a load calculation against what you're using today plus what you're adding. You get a written estimate with the panel brand, amperage, breaker count, permit fee, and labor laid out clearly. No surprise pricing on the work day."
+    },
+    {
+      "title": "Permit and utility coordination",
+      "body": "Most jurisdictions require a permit pulled by a licensed electrician for any panel upgrade. We file the permit, schedule the inspection, and coordinate with your utility for the temporary power-down. You don't talk to the permit office or the utility — that's our job."
+    },
+    {
+      "title": "The upgrade itself — typically one day",
+      "body": "Morning: utility cuts power at the meter. We remove the old panel, install the new panel, re-land every circuit on the new breakers, and label them clearly. Afternoon: utility re-energizes the service, we power up, test every circuit, and walk you through the new panel. Most residential upgrades finish in one day."
+    },
+    {
+      "title": "Inspection and sign-off",
+      "body": "The county inspector visits within a few days. We meet them at your house, walk them through the work, and they sign off. You get a copy of the permit and inspection record. The work is on the books with the county — protects your home insurance and your resale value."
+    }
+  ],
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "FILL: Pricing intro — 2-3 sentences matching §11 recommended pattern. Default reframe: diagnostic-visit-first, written-estimate-before-work, no surprise charges.",
+  "pricing_items": [
+    "A diagnostic visit comes first. We look at the panel, the service entrance, and what's drawing power. You get a written estimate before any work starts.",
+    "The estimate covers the panel hardware, the labor, the permit fee, and the utility coordination. No add-ons on the work day.",
+    "Major related work — service-entrance changes, meter-base replacements, sub-panels, EV-charger circuits — gets its own line item, not bundled in. You see what each piece costs.",
+    "After-hours and weekend work is available; we mention the premium up-front before booking."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}. We don't charge to drive to your house for the estimate.",
+  "pricing_closing_note": "We don't post fixed prices because every house is different — service entrance condition, meter location, breaker count, code upgrades triggered by the work. The estimate after a real diagnostic visit is the only honest number.",
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "FILL: About paragraph 1 — license tier, years to earn, team scale, insurance. See §12 trust-signal norms.",
+    "FILL: About paragraph 2 — owner-on-the-job-site framing. See §12 differentiation signals.",
+    "FILL: About paragraph 3 — AggregateRating sentence + review pitch. Pattern: '{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}'."
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-panel-upgrade-about-PLACEHOLDER.png",
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "FILL: Related intro — 1-2 sentences connecting this service to the related cards. See §9 anchor-text patterns and the troubleshooting reference.",
+  "related_cards": [
+    {
+      "href_slug": "electrical-troubleshooting-{city_slug}",
+      "label": "Electrical Troubleshooting & Diagnostics"
+    },
+    {
+      "href_slug": "ev-charger-{city_slug}",
+      "label": "EV Charger Installation"
+    },
+    {
+      "href_slug": "whole-house-rewire-{city_slug}",
+      "label": "Whole-House Rewiring"
+    },
+    {
+      "href_slug": "generator-installation-{city_slug}",
+      "label": "Standby Generator Installation"
+    },
+    {
+      "href_slug": "smoke-alarm-{city_slug}",
+      "label": "Smoke Alarm Installation"
+    }
+  ],
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    {
+      "question": "How much does an electrical panel upgrade cost in {city_name_with_state}?",
+      "answer_html": "FILL: FAQ answer prose (80-120 words). §7 hint: no hint captured in brief — see §7 for recurrence + tone.",
+      "answer_schema": "FILL: FAQ answer prose (80-120 words). §7 hint: no hint captured in brief — see §7 for recurrence + tone."
+    },
+    {
+      "question": "How long does a panel upgrade take?",
+      "answer_html": "FILL: FAQ answer prose (80-120 words). §7 hint: One-day typical with morning power-down + afternoon restore.",
+      "answer_schema": "FILL: FAQ answer prose (80-120 words). §7 hint: One-day typical with morning power-down + afternoon restore."
+    },
+    {
+      "question": "Do I need a permit for a panel upgrade in {city_name_with_state}?",
+      "answer_html": "FILL: FAQ answer prose (80-120 words). §7 hint: Yes universally. County-specific in Tier 3.",
+      "answer_schema": "FILL: FAQ answer prose (80-120 words). §7 hint: Yes universally. County-specific in Tier 3."
+    },
+    {
+      "question": "What are the signs I need to upgrade my electrical panel?",
+      "answer_html": "FILL: FAQ answer prose (80-120 words). §7 hint: no hint captured in brief — see §7 for recurrence + tone.",
+      "answer_schema": "FILL: FAQ answer prose (80-120 words). §7 hint: no hint captured in brief — see §7 for recurrence + tone."
+    },
+    {
+      "question": "What size panel do I need for my home?",
+      "answer_html": "FILL: FAQ answer prose (80-120 words). §7 hint: 200 amp is the modern default since 2015 per This Old House. 100 amp legacy; 400 amp for high-load homes.",
+      "answer_schema": "FILL: FAQ answer prose (80-120 words). §7 hint: 200 amp is the modern default since 2015 per This Old House. 100 amp legacy; 400 amp for high-load homes."
+    },
+    {
+      "question": "Is my Federal Pacific or Zinsco panel dangerous?",
+      "answer_html": "FILL: FAQ answer prose (80-120 words). §7 hint: no hint captured in brief — see §7 for recurrence + tone.",
+      "answer_schema": "FILL: FAQ answer prose (80-120 words). §7 hint: no hint captured in brief — see §7 for recurrence + tone."
+    },
+    {
+      "question": "Can my panel handle an EV charger / hot tub / addition?",
+      "answer_html": "FILL: FAQ answer prose (80-120 words). §7 hint: Often no for older panels; trigger for upgrade.",
+      "answer_schema": "FILL: FAQ answer prose (80-120 words). §7 hint: Often no for older panels; trigger for upgrade."
+    },
+    {
+      "question": "Does upgrading my panel increase my home's value?",
+      "answer_html": "FILL: FAQ answer prose (80-120 words). §7 hint: Yes per This Old House FAQ; vague resale-value claim.",
+      "answer_schema": "FILL: FAQ answer prose (80-120 words). §7 hint: Yes per This Old House FAQ; vague resale-value claim."
+    }
+  ],
+  "final_cta_heading": "FILL: Final CTA heading — short, action-oriented (e.g. 'Ready to get your <service> done?'). See §6 tone.",
+  "final_cta_paragraph_template": "FILL: Final CTA paragraph (1-2 short lines). Pattern: '<value-prop> in {city_name_with_state}.<br>{response_promise}'.",
+  "schema_service_description_template": "Residential electrical panel upgrades in {city_name_with_state}. Master electrician handles permit, utility coordination, panel installation, and inspection. Most upgrades complete in one day with morning power-down and afternoon restoration.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "Diagnostic visit and written estimate before any panel work begins. Most residential panel upgrades scheduled within 5–10 business days of estimate acceptance; permit pull and utility coordination handled by us."
+}

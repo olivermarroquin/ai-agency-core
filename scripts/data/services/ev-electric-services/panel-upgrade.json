@@ -1,0 +1,153 @@
+{
+  "_comment": "EV Electric client overlay for panel-upgrade service. Merges over the shared base data/services/panel-upgrade.json. Contains authored body copy harvested from the live page (2026-06-13, read-only). City-variable parts use {tokens} sourced from the city JSON at render time. Zero hardcoded city names.",
+  "_harvested_from": "https://evelectric.pro/panel-upgrade-vienna-va/",
+  "_harvested_date": "2026-06-13",
+  "_harvest_method": "WebFetch read-only extraction, zero writes to WP",
+
+  "aioseo_meta_description_template": "Master electrician in {city_name_with_state} for residential panel upgrades. 100A to 200A. Permit, {utility_provider} coordination, and inspection included. Call {phone_display}.",
+
+  "what_it_means_heading": "What an \"electrical panel upgrade\" actually means",
+  "quick_ref_heading_template": "Signs your {city_name} home needs a panel upgrade",
+  "why_city_heading_template": "Why {city_name} homeowners call us for panel upgrades",
+  "problems_heading_template": "Specific panel scenarios we handle in {city_name}",
+
+  "hero_heading": "Electrical Panel Upgrade in {city_name_with_state}",
+  "hero_subheading_template": "Tripping breakers? Adding an EV charger or a heat pump? Still running a fuse box or a 100-amp panel? {owner_name} — {license_state}-licensed Master Electrician — replaces residential panels across {city_name} and surrounding areas. Permit pulled, code-compliant, one-day install in most cases.",
+
+  "what_it_means_paragraphs": [
+    "Your electrical panel is the metal cabinet — usually in the garage, basement, or utility closet — where every circuit in the house connects to incoming power. When the panel is too small, too old, or the wrong brand, it limits what your home can safely run and what insurance companies will write coverage for.",
+    "A panel upgrade replaces the entire cabinet, the main breaker, every branch breaker, and the connections at the meter. The new panel is sized for how your house is actually used in 2026 — central AC, induction or electric range, two refrigerators, heat pump, EV charger, finished basement — instead of how a builder in 1972 expected it to be used.",
+    "{owner_name} is a {license_state}-licensed Master Electrician with a maintenance team behind him. Panel upgrades are full-day jobs that involve pulling a permit, coordinating with {utility_provider} to drop the meter, installing the new panel and breakers, transferring every circuit, and getting a final inspection. We do this the right way — code-compliant, labeled, photographed, and warrantied."
+  ],
+
+  "quick_ref_intro": "Six common situations we see across {city_name} homes. Tap any to learn what it means for you.",
+
+  "quick_ref_localized_items": [
+    { "summary": "Your panel still has fuses (not breakers)" },
+    { "summary": "The panel says 'Federal Pacific' or 'Zinsco'" },
+    { "summary": "Your panel is 100 amps and you want an EV charger" },
+    { "summary": "You see 'double-tapped' breakers (two wires under one screw)" },
+    { "summary": "Your panel is full of 'tandem' breakers" },
+    { "summary": "You're selling the home — buyer's inspector flagged the panel" }
+  ],
+
+  "why_city_closing_note_template": "If your home matches one of these patterns, the load calculation is what tells you whether you need a full service upgrade, a sub-panel, or just a breaker swap. We'd rather quote you the smaller job when the smaller job is the right answer.",
+
+  "problem_cards": [
+    {
+      "title": "100-amp to 200-amp service upgrade",
+      "body": "The most common upgrade we do. Replaces the meter base, service entrance conductors, main breaker, and panel cabinet. Doubles your usable capacity and gives you slots for new circuits. Required coordination with {utility_provider} for the meter drop. Typically a 6-8 hour job."
+    },
+    {
+      "title": "Federal Pacific Stab-Lok replacement",
+      "body": "If you have an FPE panel, the panel itself is the problem — not just the breakers. We swap the entire cabinet for a current-code panel (Eaton, Square D, or Siemens depending on what's available locally), transfer every circuit, label everything, and document the work for your insurer."
+    },
+    {
+      "title": "Zinsco panel replacement",
+      "body": "Same story as FPE — replacement, not repair. Zinsco breakers fail to trip in roughly 30% of fault conditions per independent testing, and Zinsco's bus bars are known to corrode at the breaker connections."
+    },
+    {
+      "title": "Fuse box to breaker conversion",
+      "body": "Modern code requires breakers. Fuse boxes are also an insurance flag — many carriers will surcharge or refuse coverage. The upgrade swaps the entire enclosure for a new panel sized to your current and projected loads, typically 200 amps."
+    },
+    {
+      "title": "Panel upgrade ahead of an EV charger install",
+      "body": "Level 2 EV chargers draw 30-50 amps continuously. Many older panels can't fit the load. We run the load calculation, recommend the right panel size, install it, and then add the EV charger circuit."
+    },
+    {
+      "title": "Sub-panel for finished basement or addition",
+      "body": "Often cheaper than a full service upgrade if the main panel still has headroom. A sub-panel gives the new area its own breakers without overloading the main, and lets you cleanly separate the addition's circuits for easier diagnosis later."
+    },
+    {
+      "title": "Pre-sale panel upgrade on a tight timeline",
+      "body": "Home-inspection findings often surface a panel issue in the closing window. We've handled a lot of 7-10 day permit-to-inspection jobs for sellers. Honest scoping up front and a written estimate so your agent and buyer know what's happening."
+    },
+    {
+      "title": "Service mast or weatherhead repair",
+      "body": "The pipe and weatherhead that bring the overhead service into your house take weather damage over the decades. A leaning or damaged mast is a utility concern and a code violation. We replace it during the upgrade, or as a stand-alone job if the panel itself is in good shape."
+    }
+  ],
+
+  "process_steps": [
+    {
+      "title": "On-site load assessment and written estimate",
+      "body": "We come to your house, open the panel, check the service entrance and meter, and run a load calculation against what you're using today plus what you're adding. You get a written estimate with the panel brand, amperage, breaker count, permit fee, and labor laid out clearly. No surprise pricing on the work day."
+    },
+    {
+      "title": "Permit pulled with {county}",
+      "body": "Most jurisdictions require a permit pulled by a licensed electrician for any panel upgrade. We file the permit, schedule the inspection, and coordinate with {utility_provider} for the temporary power-down. You don't talk to the permit office or {utility_provider} — that's our job."
+    },
+    {
+      "title": "Utility coordination for meter drop",
+      "body": "Replacing the panel means disconnecting at the meter. We schedule the meter drop with {utility_provider} as part of the project and re-energize when the new panel is in place. You'll be without power for most of the install day — we'll give you the window so you can plan around the fridge, your work calendar, and any medical equipment."
+    },
+    {
+      "title": "Install day — 6-10 hours typical",
+      "body": "Morning: utility cuts power at the meter. We remove the old panel, install the new panel, re-land every circuit on the new breakers, and label them clearly. Afternoon: utility re-energizes the service, we power up, test every circuit, and walk you through the new panel. Most residential upgrades finish in one day."
+    },
+    {
+      "title": "Inspection by {county}",
+      "body": "The county inspector visits within a few days. We meet them at your house, walk them through the work, and they sign off. You get a copy of the permit and inspection record. The work is on the books with the county — protects your home insurance and your resale value."
+    },
+    {
+      "title": "A clean exit, with documentation",
+      "body": "We hand you the permit card, the inspection sign-off, photos of the completed panel, and a circuit directory. The work is warrantied. If anything comes up after we leave, you call us."
+    }
+  ],
+
+  "pricing_intro_template": "We come to the house, look at the actual work, and give a written estimate before any job is scheduled. The estimate is firm — no surprise charges at the end. No charge for the diagnostic visit in our primary service area.",
+
+  "about_text_paragraphs": [
+    "{owner_name} is a Master Electrician licensed in {license_state}. The Master tier is the highest electrician license the state issues — it requires several years of journeyman work, a passed state exam, and a clean record. {owner_name} waited roughly four years for his Master license before opening {client_name}. He's fully insured and runs a maintenance team, so when you call us you're not waiting on one person's calendar.",
+    "Panel upgrades are the work where credentials matter most. The job touches the service entrance, the meter, and every circuit in the house — and it gets inspected by the county. {owner_name} has been pulling permits, coordinating with utilities, and passing inspections across the region for years. We hand you the documentation when we leave so the upgrade is on the record for your insurer and your next buyer.",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+
+  "faq_items": [
+    {
+      "question": "How does pricing work for a panel upgrade in {city_name_with_state}?",
+      "answer_html": "We come to the house, look at the existing panel and service entrance, and give a written estimate before any work is scheduled. The estimate covers permit, the new panel cabinet, all branch breakers, meter base replacement if needed, labeling, and inspection coordination. Federal Pacific and Zinsco replacements involve more work at the terminations; fuse box conversions often need meter base and weatherhead replacement. All of that is itemized in the written estimate before scheduling.",
+      "answer_schema": "We come to the house, look at the existing panel and service entrance, and give a written estimate before any work is scheduled. The estimate covers permit, the new panel cabinet, all branch breakers, meter base replacement if needed, labeling, and inspection coordination. Federal Pacific and Zinsco replacements involve more work at the terminations; fuse box conversions often need meter base and weatherhead replacement. All of that is itemized in the written estimate before scheduling."
+    },
+    {
+      "question": "How long does a panel upgrade take?",
+      "answer_html": "The install itself is typically 6-10 hours — one full day. Permit lead time is usually 2-5 business days, and the final inspection happens within a few days of the install. From your first call to the final inspection, most upgrades wrap in 2-3 weeks. We can compress that to 7-10 business days when there's a real-estate closing or other hard deadline.",
+      "answer_schema": "The install itself is typically 6-10 hours — one full day. Permit lead time is usually 2-5 business days, and the final inspection happens within a few days of the install. From your first call to the final inspection, most upgrades wrap in 2-3 weeks. We can compress that to 7-10 business days when there's a real-estate closing or other hard deadline."
+    },
+    {
+      "question": "Do I need a permit for a panel upgrade in {county}?",
+      "answer_html": "Yes. {county} requires an electrical permit for any panel replacement or service upgrade. We file the permit, schedule the inspection, and pull it closed when the work is done. You get a copy of the signed inspection card for your records.",
+      "answer_schema": "Yes. {county} requires an electrical permit for any panel replacement or service upgrade. We file the permit, schedule the inspection, and pull it closed when the work is done. You get a copy of the signed inspection card for your records."
+    },
+    {
+      "question": "Will {utility_provider} need to come out and disconnect power?",
+      "answer_html": "Yes. Replacing the panel means disconnecting at the meter. We schedule the meter drop with {utility_provider} as part of the project and re-energize when the new panel is in place. You'll be without power for most of the install day — we'll give you the window so you can plan around the fridge, your work calendar, and any medical equipment.",
+      "answer_schema": "Yes. Replacing the panel means disconnecting at the meter. We schedule the meter drop with {utility_provider} as part of the project and re-energize when the new panel is in place. You'll be without power for most of the install day — we'll give you the window so you can plan around the fridge, your work calendar, and any medical equipment."
+    },
+    {
+      "question": "Should I upgrade from 100-amp to 200-amp service?",
+      "answer_html": "If you're planning an EV charger, a heat pump conversion, an addition, a finished basement, or a kitchen renovation with new appliances — yes, almost always. The cost difference between staying at 100 amps and going to 200 amps is small compared to the cost of upgrading later when the panel is full. If your current loads are modest and not changing, a 100-amp panel can stay if it's not a Federal Pacific or Zinsco and the breaker count isn't maxed out.",
+      "answer_schema": "If you're planning an EV charger, a heat pump conversion, an addition, a finished basement, or a kitchen renovation with new appliances — yes, almost always. The cost difference between staying at 100 amps and going to 200 amps is small compared to the cost of upgrading later when the panel is full. If your current loads are modest and not changing, a 100-amp panel can stay if it's not a Federal Pacific or Zinsco and the breaker count isn't maxed out."
+    },
+    {
+      "question": "Should I replace a Federal Pacific or Zinsco panel?",
+      "answer_html": "Yes. Both brands are well-documented fire-risk panels and are widely flagged by home inspectors, real-estate agents, and home insurance carriers. Federal Pacific Stab-Lok and Zinsco breakers fail to trip in 30-50% of fault conditions per independent testing, which means a short circuit can overheat the wire instead of cutting power. Replacement is the safe, code-compliant answer.",
+      "answer_schema": "Yes. Both brands are well-documented fire-risk panels and are widely flagged by home inspectors, real-estate agents, and home insurance carriers. Federal Pacific Stab-Lok and Zinsco breakers fail to trip in 30-50% of fault conditions per independent testing, which means a short circuit can overheat the wire instead of cutting power. Replacement is the safe, code-compliant answer."
+    },
+    {
+      "question": "Can you handle the panel upgrade if I'm adding an EV charger?",
+      "answer_html": "Yes — we do these together regularly. The right sequence is: load calculation first, then panel upgrade if needed, then EV charger circuit. Many older homes can't fit a 40 or 50-amp continuous EV load without an upgrade. We do both in the same project when that's the case.",
+      "answer_schema": "Yes — we do these together regularly. The right sequence is: load calculation first, then panel upgrade if needed, then EV charger circuit. Many older homes can't fit a 40 or 50-amp continuous EV load without an upgrade. We do both in the same project when that's the case."
+    },
+    {
+      "question": "Are you licensed and insured?",
+      "answer_html": "Yes. {owner_name} holds a Master Electrician license issued by the {license_issuer} — the state's highest electrician credential. {client_name} is fully insured. We're happy to provide proof of license and insurance on request before any work begins, and we hand you a copy of the permit and inspection card when the upgrade is complete.",
+      "answer_schema": "Yes. {owner_name} holds a Master Electrician license issued by the {license_issuer} — the state's highest electrician credential. {client_name} is fully insured. We're happy to provide proof of license and insurance on request before any work begins, and we hand you a copy of the permit and inspection card when the upgrade is complete."
+    }
+  ],
+
+  "final_cta_heading": "Ready for a panel that fits your house?",
+  "final_cta_paragraph_template": "Modern panel upgrades in {city_name_with_state} — permitted, code-compliant, one-day install. {final_cta_response_promise}",
+
+  "related_intro_template": "The panel upgrade is often the unlock for a larger project. Here's what we handle alongside it:"
+}

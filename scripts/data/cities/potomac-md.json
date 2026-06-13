@@ -94,19 +94,19 @@
   "other_areas_paragraph": "Outside Potomac, we serve Vienna, Fairfax, McLean, Bethesda, Chevy Chase, Rockville, Kensington, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.",
   "housing_patterns": [
     {
-      "title": "1960s–1970s estate colonials &amp; contemporaries",
+      "title": "1960s–1970s estate colonials & contemporaries",
       "neighborhood_examples": "Potomac Manors, Potomac Falls (original homes), Falconhurst, River Falls (early sections)",
       "context_paragraph": "Potomac's first wave of residential development came in the 1960s and 1970s as affluent families built large colonials and contemporary-style homes on one-to-five-acre wooded lots. These homes — typically 3,000–5,000 square feet — were generous by the standards of their era and have 200-amp panels with copper wiring. However, 'large for 1970' is not 'large for today.' Many have been expanded with wings, pool houses, and guest quarters over the decades. The electrical systems were sized for the original footprint, not the expanded structure. Long driveway runs from the road to the home mean extended service-entrance conductors with inherent voltage drop.",
       "symptoms": "200-amp panels that are full after decades of additions — pool equipment, landscape lighting, workshop circuits, and guest house sub-panels consuming all available capacity. Long service-entrance runs (200+ feet from PEPCO transformer to panel) causing voltage drop during peak loads — lights dim when the pool pump and AC run simultaneously. No GFCI protection on older outdoor circuits serving pool equipment, landscape lighting, and detached structures. Aging underground feeder cables to pool houses, barns, and detached garages with deteriorating insulation."
     },
     {
-      "title": "1980s–1990s luxury colonials &amp; gated community homes",
+      "title": "1980s–1990s luxury colonials & gated community homes",
       "neighborhood_examples": "Avenel, River Falls (later sections), Congressional Country Club Area, Piney Glen",
       "context_paragraph": "Potomac's second building wave produced the gated communities and estate-lot subdivisions of the 1980s and 1990s — Avenel, later sections of River Falls, and custom homes near Congressional Country Club. These are 4,000–8,000-square-foot colonials with 200-amp panels, copper wiring, and early home automation systems (hardwired intercoms, whole-house audio, security systems). The wiring is generally sound but sized for 1990s loads — before home theaters, server closets, heated bathroom floors, and Level 2 EV chargers were standard expectations in homes of this caliber.",
       "symptoms": "200-amp panels approaching capacity — pool heaters, multiple HVAC zones, home theaters, and wine cellar cooling consuming most available amperage. Outdated low-voltage systems (hardwired intercoms, whole-house audio, security panels) that no longer function and create confusion about which wires are active. Sub-panels in detached structures (pool houses, guest cottages) with undersized feeders for current loads. Landscape lighting circuits with deteriorating direct-burial connections causing ground faults that trip outdoor GFCI breakers."
     },
     {
-      "title": "2000s–2020s custom new builds &amp; estate renovations",
+      "title": "2000s–2020s custom new builds & estate renovations",
       "neighborhood_examples": "Glen Road Estates (new builds), Potomac Falls (rebuilds), Congressional Country Club Area (new construction), Avenel (renovated)",
       "context_paragraph": "Potomac's most recent construction includes custom estate homes on Glen Road (many on former horse farm parcels), teardown-rebuilds in Potomac Falls, and gut renovations in Avenel. These homes are 6,000–12,000+ square feet with 400-amp services (sometimes dual 200-amp panels), whole-house generators, pre-wired EV charging, and sophisticated automation systems. The scale creates unique challenges — long wire runs to detached garages, barns, and guest houses; multiple sub-panels requiring coordinated load management; and utility service that must be specially coordinated with PEPCO for 400-amp residential feeds.",
       "symptoms": "Generator transfer switch coordination issues — whole-house generators that don't properly manage loads during utility outages, causing nuisance shutdowns. Voltage drop to detached structures 300+ feet from the main panel — pool houses, guest cottages, barns, and workshops. Complex automation system failures where lighting control panels, motorized shades, and HVAC integration create cascading electrical issues. PEPCO service coordination for 400-amp residential feeds requiring transformer upgrades."
@@ -152,5 +152,6 @@
   "distance_phrase": {
     "troubleshooting": "Potomac is about 18 miles from our Fairfax Blvd office — roughly 25–35 minutes via the Capital Beltway and River Road"
   },
-  "ev_charger_homes_phrase": "Potomac's estate homes were not originally wired for"
+  "ev_charger_homes_phrase": "Potomac's estate homes were not originally wired for",
+  "utility_provider": "PEPCO"
 }

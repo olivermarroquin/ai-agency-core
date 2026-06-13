@@ -1,0 +1,191 @@
+{
+  "_comment": "Per-service data for Light Fixture & Chandelier Installation. Used by scaffold-core-30-page.py for every Core 30 page of this service across cities. {city} and {client} placeholders substituted at render time.",
+  "_dataforseo_verified": {
+    "date": "2026-06-03",
+    "chat_id": "ev-pages-06-12-dataforseo-202606032350",
+    "national_volume": {
+      "light fixture installation": 2400,
+      "ceiling light installation": 1300,
+      "light fixture replacement": 1000,
+      "install light fixture": 2400,
+      "lighting installation": 3600,
+      "chandelier installation": 1000
+    },
+    "local_volume_note": "All city-specific keywords returned 0 (below Google Ads threshold). National volumes are moderate (2,400 primary) — not a high-volume service. Chandelier is a niche at 1,000/mo nationally.",
+    "local_pack_composition": "Vienna: AJ Long LP #1 for fixture + chandelier queries (1100 reviews). McLean: ULTRA LP #1 for fixture, Lamps Unlimited LP #1 for chandelier. Non-electrician businesses (lighting stores, lighting specialists) dominate chandelier LP. EV absent from all fixture/chandelier LP + organic.",
+    "competitor_notes": "AJ Long organic #5-6 + LP #1-2 for fixture/chandelier in Vienna/McLean. ULTRA (4.9/5, 152 reviews) is a lighting specialist appearing in 4 queries. Cedar Electrical surfaces for chandelier Vienna organic #2. New Age Lighting, DC Lighting Pro in chandelier LP. McLean chandelier LP = retail stores, not electricians."
+  },
+  "_scaffolded": {
+    "from_brief": true,
+    "brief_research_date": "2026-06-02",
+    "brief_researcher": "service-seo-research-skill-v1",
+    "needs_authoring": [
+      "what_it_means_paragraphs",
+      "quick_ref_intro",
+      "why_city_closing_note_template",
+      "about_text_paragraphs",
+      "about_portrait_url_template",
+      "related_intro_template",
+      "faq_items[*].answer_html",
+      "faq_items[*].answer_schema",
+      "final_cta_heading",
+      "final_cta_paragraph_template"
+    ],
+    "needs_confirmation": []
+  },
+  "slug": "light-fixture-installation",
+  "page_slug_template": "light-fixture-installation-{city_slug}",
+  "name": "Light Fixtures & Chandeliers",
+  "name_with_city": "Light Fixture & Chandelier Installation in {city_name_with_state}",
+  "service_type_phrase": "Light fixture, chandelier, and ceiling light installation and replacement",
+  "quoted_phrase": "light fixture installation",
+  "lowercase_phrase": "light fixture installation",
+  "tag_short": "light-fixture",
+
+  "aioseo_page_title_template": "Light Fixture & Chandelier Installation in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "FILL: Meta description (≤155 chars). Pattern: '<value prop> in {city_name_with_state}. <proof / differentiator>. Call {phone_display}.'",
+  "aioseo_focus_keyword_template": "light fixture installation {city_slug}",
+  "aioseo_additional_keywords_template": [
+    "chandelier installation {city_slug}",
+    "ceiling light installation {city_slug}",
+    "light fixture replacement {city_slug}",
+    "pendant light installation {city_slug}",
+    "recessed lighting installation {city_slug}",
+    "electrician to install light fixture {city_slug}",
+    "light fixture installation near me",
+    "outdoor light fixture installation {city_slug}",
+    "bathroom light fixture installation {city_slug}",
+    "kitchen light fixture installation {city_slug}",
+    "ceiling fan to light fixture swap {city_slug}",
+    "light fixture installation cost",
+    "how much to install a light fixture"
+  ],
+  "wordpress_page_title_template": "Light Fixture & Chandelier Installation in {city_name_with_state}",
+
+  "hero_eyebrow_template": "Light Fixture & Chandelier Installation in {city_name_with_state}",
+  "hero_heading": "FILL: Hero heading — value-prop sentence (≤8 words).",
+  "hero_subheading_template": "FILL: Hero subheading — 2-3 sentences. Mention {owner_name}, {license_state}, chandeliers as specialty, {city_name}.",
+  "hero_image_alt_template": "{owner_name}, master electrician, installing a chandelier in a residential home in {city_name_with_state}",
+  "hero_image_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-light-fixture-hero-PLACEHOLDER.png",
+
+  "what_it_means_heading": "What light fixture installation involves",
+  "what_it_means_paragraphs": [
+    "FILL: Paragraph 1 — 80-100 words. Answer-first: what the service covers (new fixtures, replacements, chandeliers, pendants, recessed, outdoor). Why you need a licensed electrician (junction box wiring, load-bearing support for heavy fixtures, code compliance).",
+    "FILL: Paragraph 2 — 80-100 words. Specifics: chandelier installation (structural support, dimmer compatibility, weight limits), recessed lighting (ceiling access, insulation clearance), customer-supplied fixtures (we work with what you buy).",
+    "FILL: Paragraph 3 — 80-100 words. Owner-grounded. {owner_name}, {license_state}-licensed Master Electrician, {city_name} service area. Chandeliers as specialty — McLean/Vienna luxury home market."
+  ],
+
+  "quick_ref_heading_template": "Common light fixture projects in {city_name}",
+  "quick_ref_intro": "FILL: Quick-ref intro.",
+  "quick_ref_footer_html_template": "Have a specific fixture in mind?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll tell you what's involved.",
+
+  "why_city_heading_template": "Why {city_name} homeowners call us for light fixture installation",
+  "why_city_closing_note_template": "FILL: Why-city closing note — tie city-specific housing stock (luxury homes, renovations) to fixture work.",
+
+  "problems_heading_template": "Light fixture situations we handle every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    {
+      "title": "Chandelier installation in a two-story foyer",
+      "body": "Heavy chandeliers (50-200+ lbs) in two-story foyers require structural support rated for the fixture weight, proper junction box reinforcement, and safe access at height. We assess the ceiling structure, install a rated fan brace or mounting bracket, and wire the fixture to code. This is a two-person job — don't attempt it with a YouTube video and a ladder."
+    },
+    {
+      "title": "Replacing an old fixture with a modern one",
+      "body": "Swapping a flush-mount for a pendant, or a builder-grade fixture for something you actually chose, is the most common call we get. The wiring is usually in place but the junction box, dimmer switch, or mounting bracket may need updating. We handle the full swap — old fixture down, new fixture up, tested and working."
+    },
+    {
+      "title": "Installing a light where there wasn't one before",
+      "body": "Adding a new ceiling light means running wire from the nearest circuit, cutting a ceiling hole, installing a junction box, and connecting the fixture. If there's attic access, it's straightforward. If the ceiling is finished with no access above, we run conduit or fish wire through the wall cavity. Either way, it's permitted work."
+    },
+    {
+      "title": "Recessed lighting installation",
+      "body": "Recessed (can) lights require cutting holes in the ceiling, ensuring insulation clearance (IC-rated housings), running wire between each fixture, and connecting to a dimmer. We install 4, 6, 8, or more in a layout that actually lights the room evenly — not the builder-grade placement that leaves dark corners."
+    },
+    {
+      "title": "Outdoor lighting installation",
+      "body": "Exterior wall sconces, soffit lights, pathway bollards, and landscape lighting all require weatherproof junction boxes, GFCI protection, and outdoor-rated wiring. We install exterior fixtures to code so they survive Northern Virginia weather and don't trip your indoor circuits."
+    },
+    {
+      "title": "Ceiling fan to light fixture swap (or vice versa)",
+      "body": "Ceiling fans and light fixtures use the same junction box location but different mounting hardware and wiring (fans need a fan-rated box for the vibration and weight). Swapping one for the other means verifying or upgrading the box, rewiring the switch (fan has two circuits — light and motor), and mounting the new unit."
+    },
+    {
+      "title": "Customer-supplied fixture — you bought it, we install it",
+      "body": "You picked the perfect fixture online or at a showroom. We install it. We work with any brand, any style, any weight — just make sure it arrives with mounting hardware and instructions. If parts are missing, we'll tell you before we start."
+    }
+  ],
+
+  "process_heading_template": "Our installation process — what happens when you call",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    {
+      "title": "Tell us about the fixture and the location",
+      "body": "We ask what fixture you're installing (or whether you need help choosing), where it's going (room, ceiling type, height), and whether there's existing wiring at the location. For chandeliers, we ask about weight and whether the ceiling is drywall-only or has structural backing."
+    },
+    {
+      "title": "On-site assessment if needed",
+      "body": "For straightforward replacements, we can quote over the phone. For new locations, heavy chandeliers, or recessed lighting layouts, we visit the house, look at the ceiling, check the circuit, and give a written estimate. No charge for the visit in our primary service area."
+    },
+    {
+      "title": "Installation — typically 1-3 hours per fixture",
+      "body": "We arrive with the tools and hardware. Simple replacements take 30-60 minutes. Chandeliers and new-location installs take 2-3 hours. Recessed lighting layouts (6-8 fixtures) take half a day. We test every fixture and clean up when we're done."
+    },
+    {
+      "title": "Dimmer and switch upgrades included",
+      "body": "If your new fixture needs a dimmer switch, or if the existing switch doesn't match (toggle vs. rocker, single-pole vs. three-way), we swap it as part of the install. No separate appointment needed."
+    }
+  ],
+
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "FILL: Pricing intro — 2-3 sentences.",
+  "pricing_items": [
+    "Simple fixture replacements (existing wiring, standard junction box) — per-fixture pricing given over the phone or on-site.",
+    "Chandelier installation — depends on weight, height, ceiling structure, and whether structural reinforcement is needed. Written estimate after on-site assessment.",
+    "New fixture locations (no existing wiring) — includes circuit run, junction box, switch, and fixture mount. Written estimate after on-site assessment.",
+    "Recessed lighting — priced per layout (number of fixtures + dimmer). Written estimate after measuring the room."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}.",
+  "pricing_closing_note": "",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "FILL: About paragraph 1 — license, team, insurance.",
+    "FILL: About paragraph 2 — chandelier specialty, luxury home experience.",
+    "FILL: About paragraph 3 — AggregateRating + review pitch."
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-light-fixture-about-PLACEHOLDER.png",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "FILL: Related intro.",
+  "related_cards": [
+    { "href_slug": "electrical-troubleshooting-{city_slug}", "label": "Electrical Troubleshooting" },
+    { "href_slug": "outlet-installation-{city_slug}", "label": "Outlet &amp; Switch Installation" },
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
+    { "href_slug": "ev-charger-{city_slug}", "label": "EV Charger Installation" },
+    { "href_slug": "smoke-alarm-{city_slug}", "label": "Smoke Alarm Installation" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    { "question": "How much does it cost to install a light fixture in {city_name_with_state}?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: depends on fixture type, existing wiring, and complexity.", "answer_schema": "FILL" },
+    { "question": "Can I install a chandelier myself?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: technically possible for lightweight fixtures, but heavy chandeliers (50+ lbs) need structural support, fan-rated boxes, and licensed work.", "answer_schema": "FILL" },
+    { "question": "How long does it take to install a light fixture?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: 30-60 min for simple swap, 2-3 hours for chandeliers/new locations, half-day for recessed layouts.", "answer_schema": "FILL" },
+    { "question": "Can you install a light where there isn't one now?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: yes — requires running wire, cutting ceiling, installing junction box. Attic access simplifies it.", "answer_schema": "FILL" },
+    { "question": "Do I need a permit for light fixture installation?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: simple swaps usually don't; new circuits or locations typically do.", "answer_schema": "FILL" },
+    { "question": "Can you install a fixture I bought myself?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: yes — we work with any brand. Just make sure it comes with mounting hardware.", "answer_schema": "FILL" },
+    { "question": "What's the difference between a regular junction box and a fan-rated box?", "question_schema": "What is the difference between a regular junction box and a fan-rated box?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: fan-rated boxes support weight + vibration. Required for heavy chandeliers and ceiling fans.", "answer_schema": "FILL" },
+    { "question": "Do you install recessed lighting?", "answer_html": "FILL: FAQ answer (80-120 words). Hint: yes — IC-rated housings, proper layout, dimmer included.", "answer_schema": "FILL" }
+  ],
+
+  "final_cta_heading": "FILL: Final CTA heading.",
+  "final_cta_paragraph_template": "FILL: Final CTA paragraph.",
+
+  "schema_service_description_template": "Light fixture and chandelier installation in {city_name_with_state}. Master electrician handles fixture replacement, new fixture locations, recessed lighting layouts, heavy chandelier mounting, and outdoor lighting. Written on-site estimate before work begins.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "On-site assessment and written estimate for chandelier, recessed, and new-location installs. Simple fixture replacements can be quoted over the phone. Most installations completed same-day."
+}

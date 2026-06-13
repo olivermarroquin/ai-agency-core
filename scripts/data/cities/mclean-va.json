@@ -68,19 +68,19 @@
   "other_areas_paragraph": "Outside McLean, we serve Vienna, Fairfax, Oakton, Tysons, Great Falls, Falls Church, Arlington, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
   "housing_patterns": [
     {
-      "title": "1950s-1970s ramblers, colonials &amp; split-levels",
+      "title": "1950s-1970s ramblers, colonials & split-levels",
       "neighborhood_examples": "Chesterbrook, Bryn Mawr, El Nido, Langley Forest (original homes), Franklin Park (original homes)",
       "context_paragraph": "Built with 100-amp or early 200-amp panels and circuits sized for the appliances of the era — toaster, fridge, color TV, a window AC unit if you were lucky. Wiring is original cloth-insulated copper in the oldest homes, transitioning to thermoplastic in the 1960s. Some mid-1970s homes in McLean have aluminum branch wiring (NEC deprecated aluminum in 1972 but installation continued for several years). Plumbing is original galvanized steel running to copper at the fixtures. Insulation is thin — R-13 walls at best, often less. Fast-forward to 2026: induction range, central AC, two refrigerators, a tankless water heater, EV charger in the garage, and a home office running three monitors plus a printer. Modern load patterns overwhelm circuits the original builder never planned for.",
       "symptoms": "Breakers tripping under modern loads on 100-amp panels never sized for today's appliances. Warm or discolored outlets from backstabbed connections in original wiring. Flickering lights when the HVAC cycles — often a loose neutral at the meter mast. Federal Pacific Electric (FPE) or Zinsco panels that fail to trip on overcurrent, a documented fire risk in 22101's unrenovated 1950s housing stock. Aluminum branch wiring (mid-1970s homes) with oxidized connections at outlets and switches."
     },
     {
-      "title": "1970s-1990s colonials, traditionals &amp; custom estates",
+      "title": "1970s-1990s colonials, traditionals & custom estates",
       "neighborhood_examples": "Georgetown Pike corridor, Wolf Trap-adjacent, Langley Forest (renovated), Hunter Mill-adjacent McLean parcels",
       "context_paragraph": "200-amp service is standard but many homes were wired with GFCI gaps in kitchens and bathrooms that predate the 1996 code requirement (NEC 1996 made GFCIs mandatory at every kitchen counter receptacle; pre-1996 builds usually have one or two if any). Estate-scale homes from this era often have detached structures — pool houses, guest cottages, workshops — with separate sub-panels that may not have been permitted or inspected. Plumbing is mostly copper with early PEX appearing in the 1990s. Central AC is standard. Many of these homes have been partially updated over the decades — a kitchen remodel here, a bathroom addition there — creating a patchwork of wiring vintages that can make troubleshooting complex.",
       "symptoms": "GFCI gaps in kitchens and bathrooms — pre-1996 homes often have one GFCI or none where current code requires them at every counter receptacle. Intermittent faults from patchwork wiring vintages created by decades of partial remodels (a 1985 kitchen circuit spliced to a 1970s branch run). Unreliable sub-panels in detached pool houses, guest cottages, and workshops — many added without permits, with undersized feeders or incorrect grounding and bonding."
     },
     {
-      "title": "2000s-2020s teardown rebuilds, new construction &amp; townhomes",
+      "title": "2000s-2020s teardown rebuilds, new construction & townhomes",
       "neighborhood_examples": "Evans Farm, Tysons-edge (Spring Hill / Route 7 corridor), Langley Farms (new builds), Bryn Mawr (new builds), El Nido (new builds)",
       "context_paragraph": "McLean's 2010-2019 construction wave (17.6% of housing stock) is the largest single-decade share — most of these are teardown/rebuild projects on lots originally built for 1950s-1960s ramblers. Newer homes are built to current code with 200-amp panels, AFCI protection on living-area circuits (NEC 2008+), and tamper-resistant outlets (NEC 2008). But newer homes aren't exempt from issues. AFCI breakers are sensitive by design and trip on noisy loads. Smart-home wiring done by a previous owner's contractor can leave neutral bonds incorrect. The service drop from Dominion may have been sized for the original 1960s rambler and not upgraded when a 6,000-square-foot replacement went up on the same lot — the panel is modern but the utility feed is undersized.",
       "symptoms": "Nuisance AFCI breaker trips on vacuum cleaners, treadmills, and other motor-driven loads — the breaker is working as designed but the homeowner thinks the circuit is faulty. Smart-home wiring with incorrect neutral bonds causing phantom loads and intermittent switch failures. Undersized Dominion Energy service drops — the panel is 200-amp modern but the utility feed was sized for the 1960s rambler that previously occupied the lot, throttling the home's actual capacity."
@@ -156,5 +156,6 @@
     "troubleshooting": "McLean is about 12 miles from our Fairfax Blvd office — roughly 22 minutes without traffic",
     "light-fixture-installation": "McLean is about 12 miles from our Fairfax Blvd office — roughly 22 minutes without traffic"
   },
-  "ev_charger_homes_phrase": "McLean's larger homes were not wired for"
+  "ev_charger_homes_phrase": "McLean's larger homes were not wired for",
+  "utility_provider": "Dominion Energy"
 }

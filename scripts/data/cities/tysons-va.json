@@ -90,19 +90,19 @@
   "other_areas_paragraph": "Outside Tysons, we serve Vienna, Fairfax, McLean, Falls Church, Arlington, and the rest of Fairfax County. We also cover Montgomery County, MD and Washington, DC.",
   "housing_patterns": [
     {
-      "title": "1950s–1960s ramblers &amp; early colonials",
+      "title": "1950s–1960s ramblers & early colonials",
       "neighborhood_examples": "Pimmit Hills Border, Chain Bridge Road Corridor (original homes), Tysons Woods (early lots)",
       "context_paragraph": "Before Tysons became an urban center, it was low-density farmland and scattered post-war subdivisions. The 1950s and 1960s homes that remain — mostly along the edges near Pimmit Hills and the Chain Bridge Road corridor — are modest ramblers and colonials with 100-amp panels and thermoplastic copper wiring. Many of these homes sit on lots now worth more than the structures, making them prime teardown candidates. Those still occupied often have decades of DIY modifications as owners squeezed more utility from aging infrastructure.",
       "symptoms": "100-amp panels with every slot filled and no room for modern additions. Ungrounded two-prong outlets in bedrooms and living areas. Decades of DIY wiring modifications — romex spliced to cloth-insulated wire, circuits extended without proper junction boxes. Undersized service entrance cables that were adequate for a 1,200-square-foot rambler but cannot support central AC and modern kitchen loads."
     },
     {
-      "title": "1970s–1990s colonials, split-levels &amp; townhomes",
+      "title": "1970s–1990s colonials, split-levels & townhomes",
       "neighborhood_examples": "Westpark, Tysons Woods, Spring Hill, Rotonda (condos), Chain Bridge Road Corridor (later construction)",
       "context_paragraph": "Tysons' residential growth peaked in the 1970s–1990s as the commercial center expanded and surrounding neighborhoods filled in. Westpark, Tysons Woods, and Spring Hill are dominated by colonials and split-levels with 150-amp or 200-amp panels and copper wiring adequate for their era. Some 1970s construction used aluminum branch wiring. These homes were built when Tysons was a suburban office park — now they sit in an urbanizing area with Metro access and rising property values, driving major renovation and addition activity that strains original electrical systems.",
       "symptoms": "Aluminum branch wiring (1970s homes) with oxidized connections at outlets and switches. 150-amp panels that are full — no capacity for EV chargers, heat pump systems, or kitchen remodels. Federal Pacific Stab-Lok panels in some 1970s construction — a known fire hazard. Outdated sub-panels in finished basements that were added without load calculations."
     },
     {
-      "title": "2010s–2020s luxury new construction &amp; teardown rebuilds",
+      "title": "2010s–2020s luxury new construction & teardown rebuilds",
       "neighborhood_examples": "Scotts Run (new builds), International Drive Area, Spring Hill (infill), Pimmit Hills Border (rebuilds)",
       "context_paragraph": "The Silver Line Metro's arrival in 2014 accelerated Tysons' transformation. Single-family teardown-rebuilds now produce 4,000–7,000-square-foot luxury homes on lots previously occupied by modest ramblers. New townhome communities and infill developments fill gaps between commercial parcels. These homes are built to current code with 200-amp (sometimes 400-amp) panels, whole-house AFCI protection, and pre-wired EV charging circuits. But the rapid development pace means some builders cut corners on load calculations, and Dominion Energy service drops may not reflect the new home's actual demand.",
       "symptoms": "Nuisance AFCI breaker trips on motor-driven loads — vacuums, treadmills, and garage door openers. Undersized Dominion Energy service drops that were sized for the previous structure on the lot. Smart-home wiring conflicts — incorrectly shared neutrals on multi-wire branch circuits causing phantom loads. Voltage drop to detached garages and outdoor kitchens fed by undersized conductors run at build time."
@@ -148,5 +148,6 @@
   "distance_phrase": {
     "troubleshooting": "Tysons is about 4 miles from our Fairfax Blvd office — roughly 10–15 minutes via Route 123 or I-495"
   },
-  "ev_charger_homes_phrase": "Tysons' older residential homes were not wired for"
+  "ev_charger_homes_phrase": "Tysons' older residential homes were not wired for",
+  "utility_provider": "Dominion Energy"
 }

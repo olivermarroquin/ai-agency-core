@@ -60,19 +60,19 @@
   "other_areas_paragraph": "Outside Oakton, we serve Vienna, Fairfax, McLean, Tysons, Burke, Annandale, Falls Church, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
   "housing_patterns": [
     {
-      "title": "1960s-1970s ranches &amp; split-levels",
+      "title": "1960s-1970s ranches & split-levels",
       "neighborhood_examples": "Berryland Farm, eastern Blake Lane corridor, older pockets near Hunter Mill Road",
       "context_paragraph": "The earliest wave of Oakton's suburban development. Built with 100-amp panels (occasionally upgraded to 150-amp by prior owners) and circuits sized for the appliances of the era -- a window AC unit, a refrigerator, a color TV. Wiring is cloth-insulated copper in the 1960s builds and PVC-insulated copper in the 1970s, with a window of aluminum branch wiring in the late 1960s through early 1970s (NEC deprecated aluminum branch circuits in 1972, but installation continued for several years). Plumbing is original galvanized steel supply lines running to copper at fixtures. Insulation is thin -- R-13 walls at best, often less. These homes are now 50-60 years old, running modern loads (central AC, induction ranges, EV chargers, home offices with multiple monitors) on infrastructure never designed for them.",
       "symptoms": "Persistent breaker trips when running the AC or a space heater on the same circuit as the kitchen. Warm outlet cover plates on original receptacles with backstabbed connections. Flickering lights throughout the house when the HVAC compressor kicks on — a voltage-drop signal from undersized service entrance wiring or a loose neutral at the meter base. Aluminum branch wiring connections oxidizing at switches and outlets, producing intermittent arcing."
     },
     {
-      "title": "1970s-1990s colonials &amp; traditionals",
+      "title": "1970s-1990s colonials & traditionals",
       "neighborhood_examples": "Fox Mill Estates, Waples Mill Manor, Hunt Valley, Taylor Run, Foxvale Estates",
       "context_paragraph": "The dominant housing era in Oakton -- these neighborhoods define the community's suburban character. Most have 200-amp service as original equipment (the 1990s builds almost universally). The 1970s-early-1980s homes may have 150-amp or early 200-amp panels. GFCI coverage varies: homes built before the 1996 NEC requirement (which mandated GFCIs at every kitchen counter receptacle) typically have GFCIs only at outdoor and garage circuits, if at all. Plumbing transitions from copper (1970s-1980s) to early PEX (1990s). Central AC is standard in all of these. Gas furnaces with Washington Gas service are the dominant HVAC configuration. These homes are 30-50 years old -- old enough that original panels, breakers, and wiring connections are showing their age, but young enough that most homeowners assume everything is fine until a symptom appears.",
       "symptoms": "Outlets that worked yesterday and don't today — usually a tripped GFCI upstream that the homeowner doesn't know exists, or a wire-nut connection that loosened inside a buried junction box. Intermittent power loss to a single room when the dryer or dishwasher runs (circuit sharing on a panel that looked fine at 150 amps but can't sustain today's loads). GFCIs in kitchens and bathrooms that nuisance-trip because pre-1996 homes were retrofitted with GFCI outlets but the downstream wiring has grounding defects."
     },
     {
-      "title": "2000s-2020s townhomes, condos &amp; newer detached",
+      "title": "2000s-2020s townhomes, condos & newer detached",
       "neighborhood_examples": "Newer developments near Fair Oaks, I-66 corridor townhomes, teardown-rebuilds on Blake Lane",
       "context_paragraph": "Oakton's newer housing stock includes both purpose-built townhome/condo communities (contributing to the 37% multi-unit share) and teardown-rebuild custom homes on older lots. All have 200-amp service minimum, AFCI breakers per NEC 2008+ requirements, and modern PEX plumbing. The issues here are different from older stock: AFCI breakers are sensitive by design and trip on noisy loads (arc-fault nuisance tripping is the most common callback in newer homes); smart-home wiring installed by the previous owner may have neutral-bonding issues; and townhome owners face HOA approval requirements for visible exterior work (EV chargers on garage walls, generator pads). Some teardown-rebuilds sit on lots where the Dominion Energy service drop was sized for the original 1960s ranch and hasn't been upgraded to match the 4,000+ sq ft replacement home.",
       "symptoms": "AFCI breakers that nuisance-trip on vacuum cleaners, treadmills, or LED dimmer switches — the most common callback in post-2008 homes. Smart-home devices (smart switches, video doorbells, whole-house audio) causing neutral-bonding faults that trip breakers or produce buzzing at switch plates. Townhome EV charger circuits tripping because the Dominion service drop was sized for the original building load and hasn't been upgraded. Teardown-rebuild homes where the 4,000+ sq ft replacement draws more than the original 1960s-era service entrance can deliver — voltage sags under peak load."
@@ -112,5 +112,6 @@
   "specific_problems_neighborhood_phrase": {
     "troubleshooting": "In Oakton's Fox Mill Estates, Waples Mill, and Blake Lane corridor neighborhoods,"
   },
-  "ev_charger_homes_phrase": "older Oakton homes weren't designed for"
+  "ev_charger_homes_phrase": "older Oakton homes weren't designed for",
+  "utility_provider": "Dominion Energy"
 }

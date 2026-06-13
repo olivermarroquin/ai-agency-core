@@ -1,0 +1,154 @@
+{
+  "_comment": "EV Electric client overlay for light-fixture-installation service. Merges over the shared base data/services/light-fixture-installation.json. Contains authored body copy harvested from the live page (2026-06-12, read-only). City-variable parts use {tokens} sourced from the city JSON at render time. Zero hardcoded city names.",
+  "_harvested_from": "https://evelectric.pro/light-fixture-installation-vienna-va/",
+  "_harvested_date": "2026-06-12",
+  "_harvest_method": "WebFetch read-only extraction, zero writes to WP",
+
+  "aioseo_meta_description_template": "Licensed master electrician for light fixture and chandelier installation in {city_name_with_state}. Written estimate before work begins. Call {phone_display}.",
+
+  "hero_heading": "Light Fixture & Chandelier Installation in {city_name_with_state}",
+  "hero_subheading": "Licensed Electrician for Every Fixture in Your Home",
+  "hero_subheading_template": "Licensed electrician for every fixture in your {city_name} home — chandeliers, recessed lighting, under-cabinet LED, outdoor fixtures. {owner_name}, {license_state}-licensed Master Electrician. Free on-site estimates.",
+  "hero_body_template": "From a simple flush-mount swap to a 150-pound chandelier in a two-story foyer, {owner_name} — {license_state}-licensed Master Electrician — handles light fixture installation across {city_name} and Northern {county}. We work with fixtures you supply or help you choose the right one.",
+
+  "quick_ref_intro": "These are the fixture projects {city_name} homeowners ask about most. Tap any to see what's involved.",
+
+  "quick_ref_localized_items": [
+    { "summary": "Chandelier installation in a two-story foyer" },
+    { "summary": "Replacing an old fixture with a modern one" },
+    { "summary": "Installing a light where there wasn't one before" },
+    { "summary": "Recessed lighting installation" },
+    { "summary": "Outdoor lighting installation" },
+    { "summary": "Ceiling fan to light fixture swap (or vice versa)" },
+    { "summary": "Customer-supplied fixture — you bought it, we install it" }
+  ],
+
+  "what_it_means_paragraphs": [
+    "Light fixture installation covers everything from replacing a builder-grade flush-mount with a pendant you picked out online, to mounting a heavy chandelier in a two-story foyer, to adding recessed lighting where none existed before. Every fixture connects to your home's electrical system through a junction box — and that junction box has to be rated for the fixture's weight, wired correctly, and grounded to code. A loose connection behind drywall is invisible until it overheats — if you notice flickering or warm switch plates, that warrants electrical troubleshooting in {city_name} before installing anything new. That's why {license_state} requires a licensed electrician for new fixture wiring and circuit work.",
+    "Chandelier installation is the job most homeowners underestimate. A 75-pound chandelier needs a fan-rated or heavy-duty junction box bolted to ceiling joists — not just the drywall. The dimmer has to be compatible with the fixture's bulb type (LED chandeliers are especially sensitive to dimmer mismatch, causing flicker or buzz). If the dimmer or switch needs replacing as part of the install, our outlet and switch installation in {city_name} service covers that in the same visit. Recessed lighting layouts require IC-rated housings where insulation touches the can, and proper spacing so the room lights evenly. If you bought a fixture at a showroom, Home Depot, or Wayfair, we install it — any brand, any style.",
+    "{owner_name} is a {license_state}-licensed Master Electrician and the owner of {client_name}. He runs a maintenance team covering {city_name} and the rest of Northern {county}. Chandelier work in {city_name}'s luxury home market is a regular part of his schedule. {owner_name} is the person who shows up, assesses the ceiling, and installs the fixture to code."
+  ],
+
+  "why_city_section_title": "Why {city_name} homeowners call us for light fixture installation",
+
+  "why_city_closing_note_template": "{city_name}'s housing stock spans decades of electrical standards. Whether you're updating the original fixtures in a mid-century split-level, installing a statement chandelier in a newly renovated colonial, or adding recessed lighting to a newer townhome — the wiring behind the ceiling tells us what the job actually requires. We look before we install.",
+
+  "problem_cards": [
+    {
+      "title": "Chandelier installation in a two-story foyer",
+      "body": "Heavy chandeliers (50-200+ lbs) in two-story foyers require structural support rated for the fixture weight, proper junction box reinforcement, and safe access at height. We assess the ceiling structure, install a rated fan brace or mounting bracket, and wire the fixture to code. This is a two-person job — don't attempt it with a YouTube video and a ladder."
+    },
+    {
+      "title": "Replacing an old fixture with a modern one",
+      "body": "Swapping a flush-mount for a pendant, or a builder-grade fixture for something you actually chose, is the most common call we get. The wiring is usually in place but the junction box, dimmer switch, or mounting bracket may need updating. We handle the full swap — old fixture down, new fixture up, tested and working."
+    },
+    {
+      "title": "Installing a light where there wasn't one before",
+      "body": "Adding a new ceiling light means running wire from the nearest circuit, cutting a ceiling hole, installing a junction box, and connecting the fixture. If there's attic access, it's straightforward. If the ceiling is finished with no access above, we run conduit or fish wire through the wall cavity. Either way, it's permitted work. While we're running new circuits, many {city_name} homeowners also add hardwired smoke alarms since the wiring access is already open."
+    },
+    {
+      "title": "Recessed lighting installation",
+      "body": "Recessed (can) lights require cutting holes in the ceiling, ensuring insulation clearance (IC-rated housings), running wire between each fixture, and connecting to a dimmer. We install 4, 6, 8, or more in a layout that actually lights the room evenly — not the builder-grade placement that leaves dark corners."
+    },
+    {
+      "title": "Outdoor lighting installation",
+      "body": "Exterior wall sconces, soffit lights, pathway bollards, and landscape lighting all require weatherproof junction boxes, GFCI protection, and outdoor-rated wiring. Outdoor outlets feeding landscape lighting need the same weatherproof treatment we cover under outdoor outlet installation in {city_name}. We install exterior fixtures to code so they survive Northern Virginia weather and don't trip your indoor circuits."
+    },
+    {
+      "title": "Ceiling fan to light fixture swap (or vice versa)",
+      "body": "Ceiling fans and light fixtures use the same junction box location but different mounting hardware and wiring (fans need a fan-rated box for the vibration and weight). Swapping one for the other means verifying or upgrading the box, rewiring the switch (fan has two circuits — light and motor), and mounting the new unit."
+    },
+    {
+      "title": "Customer-supplied fixture — you bought it, we install it",
+      "body": "You picked the perfect fixture online or at a showroom. We install it. We work with any brand, any style, any weight — just make sure it arrives with mounting hardware and instructions. If parts are missing, we'll tell you before we start."
+    }
+  ],
+
+  "process_section_title": "Our installation process — what happens when you call",
+
+  "process_steps": [
+    {
+      "title": "Tell us about the fixture and the location",
+      "body": "We ask what fixture you're installing (or whether you need help choosing), where it's going (room, ceiling type, height), and whether there's existing wiring at the location. For chandeliers, we ask about weight and whether the ceiling is drywall-only or has structural backing."
+    },
+    {
+      "title": "On-site assessment if needed",
+      "body": "For straightforward replacements, we can quote over the phone. For new locations, heavy chandeliers, or recessed lighting layouts, we visit the house, look at the ceiling, check the circuit, and give a written estimate. No charge for the visit in our primary service area."
+    },
+    {
+      "title": "Installation — typically 1-3 hours per fixture",
+      "body": "We arrive with the tools and hardware. Simple replacements take 30-60 minutes. Chandeliers and new-location installs take 2-3 hours. Recessed lighting layouts (6-8 fixtures) take half a day. We test every fixture and clean up when we're done."
+    },
+    {
+      "title": "Dimmer and switch upgrades included",
+      "body": "If your new fixture needs a dimmer switch, or if the existing switch doesn't match (toggle vs. rocker, single-pole vs. three-way), we swap it as part of the install. No separate appointment needed. If you also need EV charger installation in {city_name} or other panel work while we're at the house, we can bundle the projects."
+    }
+  ],
+
+  "pricing_section_title": "How estimates work",
+
+  "pricing_intro_template": "Light fixture installation pricing depends on the fixture type, ceiling height, existing wiring condition, and whether structural reinforcement is needed. We give you a written estimate before any work starts — no surprises. Simple swaps can often be quoted over the phone; chandeliers, new locations, and recessed layouts get an on-site assessment first.",
+
+  "pricing_tiers": [
+    "Simple fixture replacements (existing wiring, standard junction box) — per-fixture pricing given over the phone or on-site.",
+    "Chandelier installation — depends on weight, height, ceiling structure, and whether structural reinforcement is needed. Written estimate after on-site assessment.",
+    "New fixture locations (no existing wiring) — includes circuit run, junction box, switch, and fixture mount. Written estimate after on-site assessment.",
+    "Recessed lighting — priced per layout (number of fixtures + dimmer). Written estimate after measuring the room."
+  ],
+
+  "pricing_closing_note": "No trip charge for {city_name} or surrounding areas in {county}.",
+
+  "about_text_paragraphs": [
+    "{owner_name} is a Master Electrician licensed in the Commonwealth of {license_state} — the highest electrician credential the state issues. He waited four years at the journeyman level, passed the state exam, and opened {client_name} with a focus on residential work across {county}. {owner_name} runs a maintenance team, so scheduling isn't bottlenecked on one person's calendar. {client_name} is fully insured.",
+    "Chandelier and decorative fixture work is where {owner_name}'s team spends a meaningful share of its time. {city_name} homes — especially the renovated colonials and the newer custom builds — regularly need heavy fixtures mounted safely. {owner_name} handles the ceiling assessment, junction box reinforcement, dimmer compatibility, and final wiring personally. He prefers to install once and correctly rather than revisit a fixture that buzzes or flickers because the dimmer was wrong.",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+
+  "faq_items": [
+    {
+      "question": "How much does it cost to install a light fixture in {city_name_with_state}?",
+      "answer_html": "It depends on the fixture type, the condition of your existing wiring, and whether the junction box needs upgrading. A straightforward fixture swap — removing the old unit and connecting a new one to existing wiring — is the most affordable option and can often be quoted over the phone. Chandelier installations, new fixture locations that require running wire, and recessed lighting layouts are more involved and priced after an on-site assessment. We give you a written estimate before work begins so there are no surprises. No trip charge for {city_name} or surrounding areas in {county}.",
+      "answer_schema": "It depends on the fixture type, the condition of your existing wiring, and whether the junction box needs upgrading. A straightforward fixture swap — removing the old unit and connecting a new one to existing wiring — is the most affordable option and can often be quoted over the phone. Chandelier installations, new fixture locations that require running wire, and recessed lighting layouts are more involved and priced after an on-site assessment. We give you a written estimate before work begins so there are no surprises. No trip charge for {city_name} or surrounding areas in {county}."
+    },
+    {
+      "question": "Can I install a chandelier myself?",
+      "answer_html": "A small, lightweight chandelier (under 35 lbs) on an existing junction box is technically a DIY swap if you're comfortable turning off the breaker, testing with a voltage tester, and matching wires. But most chandeliers worth calling 'chandeliers' weigh 50-200+ lbs and require a fan-rated or heavy-duty junction box secured to ceiling joists — not just drywall anchors. Two-story foyer installations add height risk and typically need two people plus scaffolding. If the fixture is heavy, the ceiling is high, or you're uncertain about the box rating, hire a licensed electrician. The cost of doing it right is far less than repairing a fallen fixture.",
+      "answer_schema": "A small, lightweight chandelier (under 35 lbs) on an existing junction box is technically a DIY swap if you're comfortable turning off the breaker, testing with a voltage tester, and matching wires. But most chandeliers worth calling 'chandeliers' weigh 50-200+ lbs and require a fan-rated or heavy-duty junction box secured to ceiling joists — not just drywall anchors. Two-story foyer installations add height risk and typically need two people plus scaffolding. If the fixture is heavy, the ceiling is high, or you're uncertain about the box rating, hire a licensed electrician. The cost of doing it right is far less than repairing a fallen fixture."
+    },
+    {
+      "question": "How long does it take to install a light fixture?",
+      "answer_html": "A simple fixture swap — removing the old unit and connecting a new one to existing wiring with a standard junction box — takes 30-60 minutes per fixture. Chandelier installations and new-location installs (where we run wire, install a junction box, and add a switch) take 2-3 hours. Recessed lighting layouts with 6-8 fixtures plus a dimmer take half a day. If you're scheduling multiple fixtures in one visit, we can usually knock out 3-5 simple swaps in a single morning. We confirm the time estimate before we arrive so you know what to expect.",
+      "answer_schema": "A simple fixture swap — removing the old unit and connecting a new one to existing wiring with a standard junction box — takes 30-60 minutes per fixture. Chandelier installations and new-location installs (where we run wire, install a junction box, and add a switch) take 2-3 hours. Recessed lighting layouts with 6-8 fixtures plus a dimmer take half a day. If you're scheduling multiple fixtures in one visit, we can usually knock out 3-5 simple swaps in a single morning. We confirm the time estimate before we arrive so you know what to expect."
+    },
+    {
+      "question": "Can you install a light where there isn't one now?",
+      "answer_html": "Yes. Adding a new ceiling light where none existed means running wire from the nearest circuit to the new location, cutting a hole in the ceiling, installing a junction box, and connecting the fixture. If there's attic access above the ceiling, the job is straightforward — we run Romex through the attic and drop it to the new box. If the ceiling is finished with no access above (common in {city_name}'s two-story colonials), we fish wire through wall cavities or run surface conduit. Either way, it's permitted work in {county} and typically requires an electrical permit filed through the PLUS system.",
+      "answer_schema": "Yes. Adding a new ceiling light where none existed means running wire from the nearest circuit to the new location, cutting a hole in the ceiling, installing a junction box, and connecting the fixture. If there's attic access above the ceiling, the job is straightforward — we run Romex through the attic and drop it to the new box. If the ceiling is finished with no access above (common in {city_name}'s two-story colonials), we fish wire through wall cavities or run surface conduit. Either way, it's permitted work in {county} and typically requires an electrical permit filed through the PLUS system."
+    },
+    {
+      "question": "Do I need a permit for light fixture installation?",
+      "answer_html": "For a straightforward fixture replacement — swapping one fixture for another on existing wiring with no new circuits — a permit is typically not required in {county}. When the job involves running new wire, adding a new circuit, or installing a fixture where none existed before, an electrical permit is required through {county}'s PLUS system. {city_name} is one of two {county} towns that also requires a separate Town of {city_name} approval uploaded to the same PLUS record. We handle the permit paperwork when it's needed and factor it into the timeline. If you're also upgrading your electrical panel in {city_name} as part of the project, the permit covers both.",
+      "answer_schema": "For a straightforward fixture replacement — swapping one fixture for another on existing wiring with no new circuits — a permit is typically not required in {county}. When the job involves running new wire, adding a new circuit, or installing a fixture where none existed before, an electrical permit is required through {county}'s PLUS system. {city_name} is one of two {county} towns that also requires a separate Town of {city_name} approval uploaded to the same PLUS record. We handle the permit paperwork when it's needed and factor it into the timeline. If you're also upgrading your electrical panel in {city_name} as part of the project, the permit covers both."
+    },
+    {
+      "question": "Can you install a fixture I bought myself?",
+      "answer_html": "Yes — we install customer-supplied fixtures every week. You pick the fixture from Home Depot, Wayfair, Restoration Hardware, Amazon, or anywhere else; we install it. We work with any brand, any style, and any weight class. Just make sure the fixture arrives with its mounting hardware, wire connectors, and installation instructions. If parts are missing or the fixture isn't UL-listed for its intended location (wet-rated for outdoor, damp-rated for bathrooms), we'll flag it before we start so you're not surprised mid-install. Buying the fixture yourself and hiring us to install it is the most common way {city_name} homeowners handle this.",
+      "answer_schema": "Yes — we install customer-supplied fixtures every week. You pick the fixture from Home Depot, Wayfair, Restoration Hardware, Amazon, or anywhere else; we install it. We work with any brand, any style, and any weight class. Just make sure the fixture arrives with its mounting hardware, wire connectors, and installation instructions. If parts are missing or the fixture isn't UL-listed for its intended location (wet-rated for outdoor, damp-rated for bathrooms), we'll flag it before we start so you're not surprised mid-install. Buying the fixture yourself and hiring us to install it is the most common way {city_name} homeowners handle this."
+    },
+    {
+      "question": "What's the difference between a regular junction box and a fan-rated box?",
+      "answer_html": "A standard junction box is rated for roughly 35-50 lbs of static weight — enough for a typical flush-mount or small pendant. A fan-rated box (sometimes called a 'fan brace box') is engineered to handle both heavier weight (up to 70+ lbs, depending on the model) and the continuous vibration that ceiling fans produce. NEC code requires a fan-rated box for ceiling fans and any fixture heavy enough to exceed the standard box's rating. For large chandeliers that exceed even fan-rated limits, we install a heavy-duty mounting bracket bolted directly to ceiling joists. We check the box before every installation — if it needs upgrading, we replace it as part of the job.",
+      "answer_schema": "A standard junction box is rated for roughly 35-50 lbs of static weight — enough for a typical flush-mount or small pendant. A fan-rated box (sometimes called a 'fan brace box') is engineered to handle both heavier weight (up to 70+ lbs, depending on the model) and the continuous vibration that ceiling fans produce. NEC code requires a fan-rated box for ceiling fans and any fixture heavy enough to exceed the standard box's rating. For large chandeliers that exceed even fan-rated limits, we install a heavy-duty mounting bracket bolted directly to ceiling joists. We check the box before every installation — if it needs upgrading, we replace it as part of the job."
+    },
+    {
+      "question": "Do you install recessed lighting?",
+      "answer_html": "Yes. Recessed (can) lighting is one of the most popular upgrade requests we get from {city_name} homeowners — especially in kitchens, living rooms, and finished basements. We use IC-rated housings (insulation-contact rated) so the cans can sit against attic insulation without creating a fire hazard. We lay out the fixture positions to light the room evenly — not the builder-grade pattern that clusters lights near walls and leaves the center dim. Every recessed layout includes a compatible dimmer switch. We price recessed lighting per layout (number of fixtures plus the dimmer) and give you a written estimate after measuring the room.",
+      "answer_schema": "Yes. Recessed (can) lighting is one of the most popular upgrade requests we get from {city_name} homeowners — especially in kitchens, living rooms, and finished basements. We use IC-rated housings (insulation-contact rated) so the cans can sit against attic insulation without creating a fire hazard. We lay out the fixture positions to light the room evenly — not the builder-grade pattern that clusters lights near walls and leaves the center dim. Every recessed layout includes a compatible dimmer switch. We price recessed lighting per layout (number of fixtures plus the dimmer) and give you a written estimate after measuring the room."
+    }
+  ],
+
+  "final_cta_heading": "Ready to get your new fixtures installed?",
+  "final_cta_paragraph_template": "Light fixture installation in {city_name_with_state} — from a single pendant to a full-house lighting upgrade. {final_cta_response_promise}",
+
+  "related_intro_template": "Light fixture work often reveals other electrical needs — an outdated panel, missing GFCI outlets, or a circuit that can't handle the new load. Here are the services {city_name} homeowners pair with fixture installation most often:"
+}

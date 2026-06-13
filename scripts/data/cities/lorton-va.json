@@ -93,13 +93,13 @@
   "other_areas_paragraph": "Outside Lorton, we serve Springfield, Woodbridge, Burke, Fairfax Station, and the rest of southern Fairfax County. We also cover Alexandria, Dale City, Lake Ridge, and communities throughout Northern Virginia.",
   "housing_patterns": [
     {
-      "title": "1960s-1970s ranches &amp; split-levels",
+      "title": "1960s-1970s ranches & split-levels",
       "neighborhood_examples": "Pohick Estates, Gunston area, parts of Lorton Valley",
       "context_paragraph": "Lorton's oldest significant housing cluster. Built with 100-amp panels (sometimes original Federal Pacific or Zinsco brands), cloth-insulated or early thermoplastic copper wiring, galvanized steel supply plumbing running to copper at fixtures, and minimal insulation (R-13 walls at best). Central AC was an afterthought — many had window units only. Fast-forward to 2026: these homes now run modern loads (central AC, multiple refrigerators, home offices, EV chargers) on circuits the original builder never planned for. Panel upgrades and rewiring are common needs in this stock.",
       "symptoms": "60-100A panels with circuits sized for 1960s-70s loads; possible Federal Pacific or Zinsco panels; fuse boxes in some units; overhead service in non-HOA areas; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal."
     },
     {
-      "title": "1980s-1990s colonials &amp; planned communities",
+      "title": "1980s-1990s colonials & planned communities",
       "neighborhood_examples": "Crosspointe, Newington Forest, South Run area, parts of Lorton Valley",
       "context_paragraph": "200-amp service became standard in this era. Wiring is copper with PVC insulation; GFCI (ground-fault circuit interrupter) protection is present at bathrooms but may be absent at kitchen counters in pre-1996 builds (NEC 1996 made kitchen-counter GFCIs mandatory). Plumbing is mostly copper with early PEX (cross-linked polyethylene) appearing in the 1990s builds. Central AC is standard. Many of these neighborhoods have HOAs that add an approval layer for visible exterior work like generator pads or EV charger installations.",
       "symptoms": "200A panels standard at construction; upgrades here are about adding capacity — EV charger circuits, home office loads, hot tub wiring; AFCI breaker nuisance-tripping on noisy loads; HOA coordination may be needed for visible exterior panel work."
@@ -225,5 +225,6 @@
     "emergency-electrician": "Lorton's emergency electrical risk concentrates in the older South County neighborhoods with overhead service and in the Mason Neck area where properties run on well/septic — meaning a power loss is also a water loss. The newer Lorton Station and Laurel Hill communities with underground service are more resilient, but no home is immune to panel-level emergencies.",
     "ev-charger-installation": "Lorton has the newest housing stock in the S&H service area — most homes in Lorton Station and Laurel Hill were built with 200-amp panels that can support EV charging without a panel upgrade. The older South County homes are the exception, and Mason Neck's rural properties may need longer wire runs for outdoor charger installations."
   },
-  "ev_charger_homes_phrase": "Many Lorton homes built after 1995 are already"
+  "ev_charger_homes_phrase": "Many Lorton homes built after 1995 are already",
+  "utility_provider": "Dominion Energy"
 }

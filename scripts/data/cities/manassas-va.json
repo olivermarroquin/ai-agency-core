@@ -54,19 +54,19 @@
   "other_areas_paragraph": "Outside Manassas, we serve Manassas Park, Gainesville, Bristow, Centreville, Haymarket, Woodbridge, Dale City, Lake Ridge, and the rest of Prince William County. We also cover western Fairfax County and Fauquier County communities.",
   "housing_patterns": [
     {
-      "title": "Pre-1970s historic homes &amp; mid-century ranches",
+      "title": "Pre-1970s historic homes & mid-century ranches",
       "neighborhood_examples": "Old Town Manassas, Sudley area, older blocks near downtown",
       "context_paragraph": "Manassas's oldest housing stock includes late-19th-century homes in the Historic Overlay District and mid-century ranches and Cape Cods from the 1950s-1960s. These homes were built with 60-100 amp panels (pre-1960) or 100-amp panels (1960s), cloth-insulated copper wiring, galvanized steel plumbing, and minimal insulation (R-13 walls at best). Many still have original fuse boxes or early breaker panels. Plumbing is typically galvanized steel supply lines running to copper at the fixtures; pipe corrosion and reduced pressure are common in unrenovated homes of this era.",
       "symptoms": "60-100A panels with circuits sized for 1950s-1960s loads; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands in some units; fuse boxes instead of breakers in unrenovated homes; cloth-insulated copper wiring with brittle insulation; overhead service drops from city utility poles; insurance carriers flagging FPE/Zinsco at renewal."
     },
     {
-      "title": "1970s-1990s colonials, split-levels &amp; townhomes",
+      "title": "1970s-1990s colonials, split-levels & townhomes",
       "neighborhood_examples": "Wellington, Signal Hill, Blooms Crossing area, inner subdivisions",
       "context_paragraph": "The 1980s were Manassas's biggest growth decade — about 35% of the city's housing stock dates from this era. These homes typically have 200-amp service (the new standard by the mid-1980s), copper wiring with PVC insulation, and central AC. However, 1970s-era homes in the mix may have aluminum branch wiring (deprecated by NEC 1972 but installed through the mid-1970s) or undersized panels at 100-150 amps. GFCI protection is inconsistent — NEC 1975 required GFCIs in bathrooms only; kitchen counter receptacles weren't required until NEC 1987. Plumbing transitioned from galvanized + copper (1970s) to all-copper and early PEX (late 1980s-1990s). Insulation improved to R-19 walls and R-30 attics by the late 1980s.",
       "symptoms": "100-200A panels original at construction — now 35-50 years old; some aluminum branch wiring in mid-1970s homes; GFCI coverage spotty in pre-1987 builds (NEC 1987 added kitchen counter requirements); EV charger or whole-house renovation triggers the 200A upgrade; overhead service in older areas near Sudley, underground in later subdivisions like Wellington."
     },
     {
-      "title": "2000s-2020s townhomes &amp; newer infill",
+      "title": "2000s-2020s townhomes & newer infill",
       "neighborhood_examples": "Route 28 corridor communities, Ashton Glen, newer subdivisions near city edges",
       "context_paragraph": "About 17% of Manassas housing was built since 2000. These homes have 200-amp service, AFCI breakers (required by NEC 2008 for bedroom circuits, expanded in NEC 2014 and NEC 2020), tamper-resistant outlets (NEC 2008), and PEX plumbing. Common issues include AFCI nuisance tripping on noisy loads (by design — the breakers are sensitive), smart-home wiring done incorrectly by previous owners, and tankless water heaters or heat pumps pulling continuous high loads that strain branch circuits. Many townhomes in this era have shared walls and smaller service drops — coordination with the city's municipal electric utility for any service-entrance work is required.",
       "symptoms": "200A panels standard; upgrades here are usually about adding capacity for EV chargers, heat pumps, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; smart-home wiring done incorrectly by previous owners; coordination with the city's municipal electric utility required for any service-entrance work; HOA coordination needed in Route 28 corridor townhome communities."
@@ -222,5 +222,6 @@
     "ev-charger-installation": "Manassas runs its own electric utility with residential rates 14% below the Virginia average — meaning your overnight EV charging costs less here than in most of Northern Virginia. And because the city issues its own permits through the Building Division, contractors who know Manassas work directly with one city office for both utility coordination and permits.",
     "light-fixture-installation": "Manassas homes span from pre-1940s Old Town historic houses with cloth-insulated wiring to 2010s Route 28 corridor townhomes with recessed LED lighting. The fixture that works in one doesn't always work in the other — and knowing what's inside the junction box before you hang a new chandelier is the difference between a clean install and a surprise."
   },
-  "ev_charger_homes_phrase": "Most Manassas homes were built in the 1980s — old enough that the original wiring may need assessment for a high-draw EV charger circuit, but new enough that the panel is usually 200 amps with room for the dedicated breaker your charger needs."
+  "ev_charger_homes_phrase": "Most Manassas homes were built in the 1980s — old enough that the original wiring may need assessment for a high-draw EV charger circuit, but new enough that the panel is usually 200 amps with room for the dedicated breaker your charger needs.",
+  "utility_provider": "Dominion Energy"
 }

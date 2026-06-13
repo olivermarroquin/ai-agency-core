@@ -90,19 +90,19 @@
   "other_areas_paragraph": "Outside Springfield, we serve Burke, Lorton, Alexandria, Annandale, Franconia, and the rest of Fairfax County. We also cover Woodbridge, Manassas, and the broader Northern Virginia region.",
   "housing_patterns": [
     {
-      "title": "1950s-1960s ramblers, split-levels &amp; Cape Cods",
+      "title": "1950s-1960s ramblers, split-levels & Cape Cods",
       "neighborhood_examples": "North Springfield, Ravensworth, Kings Park, Springfield Forest",
       "context_paragraph": "Springfield's first wave of suburban homes arrived in the 1950s when developer Edward Carr began building ramblers along the newly opened Shirley Highway (now I-95/I-395). These homes were built with 60-100 amp panels and circuits sized for a 1950s appliance load — refrigerator, toaster, a window AC unit if you were lucky. Plumbing is original galvanized steel running to copper at the fixtures. Insulation is thin (R-13 walls at best, often less). By the 1960s, the typical Springfield home had grown to 3-4 bedrooms and 1,200-2,200 square feet, but the electrical infrastructure stayed modest. Fast-forward to 2026: induction range, central AC, two refrigerators, a tankless water heater, and an EV charger in the garage. Modern load overwhelms circuits the original builder never planned for.",
       "symptoms": "60-100A panels with circuits sized for 1950s-1960s loads; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands; fuse boxes instead of breakers in some units; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal; overhead service drops from utility poles."
     },
     {
-      "title": "1970s-1980s colonials, split-levels &amp; townhomes",
+      "title": "1970s-1980s colonials, split-levels & townhomes",
       "neighborhood_examples": "West Springfield, Saratoga, Newington, Orange Hunt, Rolling Valley",
       "context_paragraph": "Springfield's second major building wave brought colonials, larger split-levels, and early townhome communities. These homes typically have 100-200 amp panels — better than the 1950s stock, but a subset from the mid-1970s may have aluminum branch wiring (NEC banned aluminum branch circuits in 1972 but installation continued for several years after). GFCI coverage is spotty — the 1996 NEC made GFCIs mandatory at every kitchen counter receptacle, but pre-1996 homes usually have one or two if any. Central AC is standard, plumbing is mostly copper with early PEX appearing in the late 1980s. Insulation improves to R-19 walls.",
       "symptoms": "100-200A panels original at construction; EV charger or whole-house renovation triggers the upgrade to modern 200A with AFCI/GFCI breakers; some aluminum branch wiring in mid-1970s homes; GFCI coverage spotty in pre-1996 builds."
     },
     {
-      "title": "2000s-2020s townhomes, condos &amp; infill",
+      "title": "2000s-2020s townhomes, condos & infill",
       "neighborhood_examples": "Franconia-area near Metro, Springfield Town Center-adjacent, Kingstowne-edge",
       "context_paragraph": "Newer construction in Springfield clusters around transit and the Town Center redevelopment. These homes have 200-amp service, AFCI breakers (arc-fault circuit interrupters required by NEC 2008 and tightened in subsequent code cycles), and PEX plumbing. But newer homes aren't exempt from issues. AFCI breakers are sensitive by design and trip on noisy loads. Smart-home wiring done by previous owners can leave neutral wires bonded incorrectly. High-efficiency heat pumps and tankless water heaters pull continuous high loads the original branch circuits sometimes can't sustain. Townhome HOAs add an approval layer for visible-from-street work like EV charger installations.",
       "symptoms": "200A panels standard; upgrades here are usually about adding capacity for EV chargers, hot tubs, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; HOA coordination may be needed for visible exterior panel work in planned communities."
@@ -222,5 +222,6 @@
     "emergency-electrician": "Springfield's older neighborhoods — North Springfield, Ravensworth, and parts of Kings Park — still run on 1950s-1960s wiring and overhead service. These are the most likely to need emergency electrical response after a storm or when an aging panel finally gives out.",
     "ev-charger-installation": "Springfield's NoVA commuter profile — DC, Pentagon, Fort Belvoir, Quantico — makes it a natural EV adoption zone. But the 1950s-1980s housing stock in North Springfield, Kings Park, and West Springfield means most homeowners need a panel capacity assessment before a Level 2 charger can be safely installed."
   },
-  "ev_charger_homes_phrase": "Springfield homes built in the 1950s through 1980s weren't designed for the electrical loads of a Level 2 EV charger — most need a panel assessment and many need an upgrade before installation can begin."
+  "ev_charger_homes_phrase": "Springfield homes built in the 1950s through 1980s weren't designed for the electrical loads of a Level 2 EV charger — most need a panel assessment and many need an upgrade before installation can begin.",
+  "utility_provider": "Dominion Energy"
 }

@@ -54,13 +54,13 @@
   "other_areas_paragraph": "Outside Lake Ridge, we serve Woodbridge, Dale City, Occoquan, Dumfries, Lorton, Manassas, and the rest of Prince William County. We also cover Fairfax County, Stafford County, and the broader Northern Virginia region.",
   "housing_patterns": [
     {
-      "title": "1970s split-levels &amp; ranches",
+      "title": "1970s split-levels & ranches",
       "neighborhood_examples": "Thousand Oaks, The Point, Plantation Harbor, The Hamlet, Village of Lake Ridge",
       "context_paragraph": "Lake Ridge's original developments were built with 100-150 amp panels and circuits sized for 1970s appliance loads — a central AC unit, a couple of window units if needed, a fridge, a range, and a color TV. Plumbing is typically copper supply lines with some galvanized steel runs to older fixtures. Gas service (Columbia Gas) was standard in many homes for heating and water heaters. Insulation is thin by modern standards (R-13 walls at best). Fast-forward to 2026: these homes now run multiple flat-screen TVs, home offices with computer equipment, modern kitchen appliances, and potentially an EV charger — loads the original panels and branch circuits weren't designed for.",
       "symptoms": "100-150A panels with circuits sized for 1970s loads; possible Federal Pacific Stab-Lok or Zinsco panels in original subdivisions — documented fire-risk brands; fuse boxes instead of breakers in some early units; underground service from pad-mount transformers; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal; GFCI protection limited to outdoor circuits only (pre-1996 NEC)."
     },
     {
-      "title": "1980s-1990s colonials &amp; townhomes",
+      "title": "1980s-1990s colonials & townhomes",
       "neighborhood_examples": "Westridge, Old Bridge Estates, Cardinal Glen, most of Lake Ridge's 70+ subdivisions",
       "context_paragraph": "The bulk of Lake Ridge's housing — the massive 1980s-1990s build-out wave. These homes typically have 200-amp service but were wired before the 2008 AFCI requirement and before the 1996 NEC expansion of GFCI requirements to all kitchen counter receptacles. Townhomes in this era often have shared electrical infrastructure considerations — panel access may be in a shared mechanical room or constrained by party walls. Plumbing is mostly copper with early PEX (cross-linked polyethylene piping) appearing in the 1990s builds. Central AC is standard. Many of these homes are now 30-40 years old and hitting the window where original HVAC systems, water heaters, and electrical panels reach end-of-life simultaneously.",
       "symptoms": "200A panels original at construction; wired before 2008 AFCI requirement and before 1996 GFCI kitchen-counter expansion; EV charger or whole-house renovation triggers capacity assessment; townhome panel access may be constrained by shared walls or mechanical rooms; HOA coordination needed for any visible exterior panel work; underground service standard — Dominion trenching coordination if service entrance needs replacement."
@@ -226,5 +226,6 @@
     "ev-charger-installation": "Lake Ridge is a planned community where nearly every home falls under the Lake Ridge Parks and Recreation Association HOA. Visible exterior work — like mounting an EV charger on the outside of your garage or townhome — typically requires HOA architectural review before the work starts. Virginia's Right-to-Charge law protects your right to install a charger on your own property, but knowing the process saves time.",
     "light-fixture-installation": "Lake Ridge homes are concentrated in a single 30-year construction window — from 1970s split-levels in Thousand Oaks and The Hamlet to 1990s townhomes in Ridgeleigh. The fixture that works in an 8-foot ceiling doesn't always fit in a townhome with shared walls, and a 40-year-old junction box may not hold a modern chandelier safely."
   },
-  "ev_charger_homes_phrase": "Lake Ridge homes built in the 1970s through 1990s weren't designed for"
+  "ev_charger_homes_phrase": "Lake Ridge homes built in the 1970s through 1990s weren't designed for",
+  "utility_provider": "Dominion Energy"
 }

@@ -99,19 +99,19 @@
   "other_areas_paragraph": "Outside Washington, DC, we serve Vienna, Fairfax, McLean, Bethesda, Chevy Chase, Potomac, Arlington, and all of Northern Virginia and Montgomery County, MD.",
   "housing_patterns": [
     {
-      "title": "1800s–1920s historic row houses, Victorians &amp; Federal-style homes",
+      "title": "1800s–1920s historic row houses, Victorians & Federal-style homes",
       "neighborhood_examples": "Georgetown, Cleveland Park (Victorians), Glover Park (early row houses), Palisades (early homes)",
       "context_paragraph": "DC's oldest residential neighborhoods contain housing stock predating modern electrical systems entirely. Georgetown's Federal-style row houses date to the late 1700s and early 1800s — electricity was retrofitted decades after construction. Cleveland Park's Queen Anne Victorians and Craftsman homes were built in the 1890s–1910s with early knob-and-tube wiring. These homes present unique challenges: thick plaster-and-lath walls, no accessible wall cavities for new wiring, historic preservation requirements (some in Historic Districts), and layers of electrical work from every decade since the 1920s. DC's own permitting authority (DC Department of Buildings (DOB)) and historic preservation review add complexity beyond suburban jurisdictions.",
       "symptoms": "Knob-and-tube wiring still active in wall cavities and attics — especially in Georgetown and Cleveland Park homes that have never been fully rewired. Original 60-amp fuse boxes or early panel upgrades mounted in awkward locations (closets, under stairs) where the retrofit electrician could access masonry walls. Two-prong ungrounded outlets throughout — running a ground wire through plaster-and-lath walls without damage requires specialized technique. Overloaded circuits from 100+ years of adding loads to wiring designed for a few light bulbs."
     },
     {
-      "title": "1920s–1950s colonials, Tudors &amp; Cape Cods",
+      "title": "1920s–1950s colonials, Tudors & Cape Cods",
       "neighborhood_examples": "Chevy Chase DC, Tenleytown, Spring Valley, American University Park, Palisades (later homes), Cathedral Heights",
       "context_paragraph": "DC's NW residential expansion in the 1920s–1950s produced the colonials, Tudors, and Cape Cods that define neighborhoods like Chevy Chase DC, Spring Valley, and Tenleytown. These homes were built with 60-amp or 100-amp panels and cloth-insulated copper wiring — a significant improvement over earlier construction but still undersized for today's loads. Spring Valley's estate homes (3,000–5,000 square feet) have more circuits than typical homes of the era but are still overwhelmed by modern demands. Foxhall's secluded properties often have long service runs from the street. GFCI protection is absent in all pre-1975 construction.",
       "symptoms": "100-amp panels with no spare breaker slots — common in Tenleytown and American University Park homes where central AC, updated kitchens, and home offices were added over decades. Cloth-insulated wiring with cracking insulation in attics and wall cavities. No GFCI protection in kitchens, bathrooms, or exterior outlets. Long service-entrance runs in Spring Valley and Foxhall causing voltage drop during peak loads. Backstabbed outlet connections from 1970s–1980s renovation work failing after decades."
     },
     {
-      "title": "2000s–2020s gut renovations &amp; major additions",
+      "title": "2000s–2020s gut renovations & major additions",
       "neighborhood_examples": "Georgetown (gut renovations), Spring Valley (additions), Chevy Chase DC (modernized), Palisades (updated), Foxhall (estate renovations)",
       "context_paragraph": "DC's NW neighborhoods have seen extensive renovation activity — gut renovations in Georgetown that preserve the facade while completely replacing interior systems, large additions in Spring Valley and Foxhall, and systematic modernization in Chevy Chase DC and Tenleytown. These projects install 200-amp panels with AFCI protection and modern wiring, but must interface with PEPCO's existing infrastructure and navigate DC Department of Buildings (DOB) permitting (which differs significantly from Virginia and Maryland county permits). Historic District requirements in Georgetown may limit exterior modifications to service entrances. The combination of modern interior systems with aged utility feeds creates recurring issues.",
       "symptoms": "Undersized PEPCO service drops — the utility feed was sized for the original home's modest loads, not the renovated structure's modern demands. AFCI nuisance trips in renovated portions where new wiring runs near old (abandoned but not removed) wiring in shared wall cavities. DC Department of Buildings (DOB) inspection requirements that differ from Virginia/Maryland — specific grounding electrode requirements, panel labeling standards, and historic district constraints. Voltage drop to rear additions and carriage houses fed by undersized conductors."
@@ -157,5 +157,6 @@
   "distance_phrase": {
     "troubleshooting": "Washington, DC (NW neighborhoods) is about 15–20 miles from our Fairfax Blvd office — roughly 25–40 minutes via I-66 or the George Washington Parkway"
   },
-  "ev_charger_homes_phrase": "DC's historic homes were not wired for"
+  "ev_charger_homes_phrase": "DC's historic homes were not wired for",
+  "utility_provider": "PEPCO"
 }

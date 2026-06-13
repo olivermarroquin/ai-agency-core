@@ -98,19 +98,19 @@
   "other_areas_paragraph": "Outside Burke, we serve Springfield, Lorton, Fairfax Station, Annandale, and the rest of central Fairfax County. We also cover Vienna, Fairfax City, Centreville, and communities throughout Northern Virginia.",
   "housing_patterns": [
     {
-      "title": "1960s split-levels &amp; ranches",
+      "title": "1960s split-levels & ranches",
       "neighborhood_examples": "Kings Park, Kings Park West, parts of Rolling Valley West",
       "context_paragraph": "Burke's earliest significant housing cluster, built when the first large subdivision (Kings Park) went up beginning in 1960 after the proposed airport site was abandoned. These homes have 100-amp panels (sometimes original Federal Pacific or Zinsco brands — both discontinued due to fire-risk concerns), cloth-insulated or early thermoplastic copper wiring, galvanized steel supply plumbing running to copper at fixtures, and minimal insulation (R-13 walls at best). Central AC was not standard — many were retrofitted with window units or had AC added later. Fast-forward to 2026: these homes now run modern loads (central AC, multiple refrigerators, home offices, EV chargers) on circuits the original builder never planned for. Panel upgrades and rewiring are common needs in this stock.",
       "symptoms": "100A panels with circuits sized for 1960s-1970s loads; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal; overhead service drops from utility poles."
     },
     {
-      "title": "1970s-1980s colonials, split-levels &amp; planned communities",
+      "title": "1970s-1980s colonials, split-levels & planned communities",
       "neighborhood_examples": "Burke Centre (all five neighborhoods), Rolling Valley West, Signal Hill, Lake Braddock, Lakepointe, Longwood Knolls",
       "context_paragraph": "The dominant housing stock in Burke — roughly 67% of all units were built between 1970 and 1989. This era spans the Burke Centre planned community (late 1970s onward) and dozens of surrounding subdivisions. Panels are typically 150-200 amp; wiring is copper with PVC insulation. GFCI (ground-fault circuit interrupter) protection is present at bathrooms in 1980s builds but absent in many 1970s homes. Plumbing transitions from galvanized supply lines in early-1970s builds to copper throughout in late-1970s and 1980s builds. Central AC is standard. The 1970s portion of this stock — now 45-55 years old — is entering the era where original panels, water heaters, and HVAC systems have reached or exceeded their design lifespan. The 1980s portion is 35-45 years old and showing wear on original wiring connections and plumbing joints.",
       "symptoms": "150A panels original to construction; Burke Centre Conservancy ARB may need notification for exterior service-entrance work; EV charger or whole-house renovation triggers the upgrade to modern 200A with AFCI/GFCI breakers; townhome configurations add shared-wall and exterior-access considerations."
     },
     {
-      "title": "1990s colonials &amp; townhomes",
+      "title": "1990s colonials & townhomes",
       "neighborhood_examples": "Cherry Run, Walden at Burke Centre, newer sections of Signal Hill, Edgewater",
       "context_paragraph": "About 21% of Burke's housing stock was built in the 1990s — the final significant wave of construction before Burke was essentially built-out. These homes meet the 200-amp panel standard. Wiring is copper with PVC insulation; GFCI protection is present at bathrooms and kitchen counters (NEC 1996 made kitchen-counter GFCIs mandatory). Plumbing is mostly copper with early PEX (cross-linked polyethylene) appearing in mid-to-late 1990s builds. AFCI (arc-fault circuit interrupter — the breaker that detects dangerous electrical arcs) protection is not present (NEC 2008 requirement). Many of these neighborhoods have HOAs that add an approval layer for visible exterior work like generator pads or EV charger installations. At 25-35 years old, these homes are reaching the point where original HVAC systems and water heaters need replacement, and electrical panels may need service updates for modern loads.",
       "symptoms": "200A panels standard; upgrades here are usually about adding capacity for EV chargers, hot tubs, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; HOA coordination may be needed for visible exterior panel work."
@@ -194,5 +194,6 @@
     "panel-upgrade": "Burke homes span three decades of suburban development — from 1960s Signal Hill colonials with 100-amp Federal Pacific panels to 1985 Burke Centre townhomes with 150-amp service. The panel-upgrade path depends on which era your home was built in, what you're asking it to power today, and whether your insurance carrier has flagged your existing panel brand.",
     "emergency-electrician": "Burke's emergency electrical calls come from three decades of suburban development — 1960s Signal Hill colonials with aluminum wiring and Federal Pacific panels, 1980s Burke Centre planned-community homes with aging GFCI protection, and storm damage across every neighbourhood from Burke's mature tree canopy. The emergency path depends on whether it's a panel failure, a storm hit, or a wiring fault — and whether it's a Dominion grid issue or a house-side problem."
   },
-  "ev_charger_homes_phrase": "Burke homes built in the 1960s through 1990s weren't designed for"
+  "ev_charger_homes_phrase": "Burke homes built in the 1960s through 1990s weren't designed for",
+  "utility_provider": "Dominion Energy"
 }

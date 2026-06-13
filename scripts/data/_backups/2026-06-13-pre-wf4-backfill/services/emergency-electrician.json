@@ -1,0 +1,231 @@
+{
+  "_comment": "Per-service data for Emergency Electrician (24/7). Used by scaffold-core-30-page.py for every Core 30 emergency-electrician page across cities. {city} and {client} placeholders substituted at render time. Authored from the Tier 1 emergency-electrician research brief (2026-06-01).",
+  "_scaffolded": {
+    "from_brief": true,
+    "brief_research_date": "2026-06-01",
+    "brief_researcher": "service-seo-research-skill-v1 (orchestrator first-real-run chat)",
+    "needs_authoring": [
+      "hero_heading",
+      "hero_subheading_template",
+      "what_it_means_paragraphs",
+      "quick_ref_intro",
+      "why_city_closing_note_template",
+      "pricing_intro_template",
+      "about_text_paragraphs",
+      "about_portrait_url_template",
+      "related_intro_template",
+      "faq_items[*].answer_html",
+      "faq_items[*].answer_schema",
+      "final_cta_heading",
+      "final_cta_paragraph_template"
+    ],
+    "needs_confirmation": []
+  },
+  "slug": "emergency-electrician",
+  "page_slug_template": "emergency-electrician-{city_slug}",
+  "name": "24/7 Emergency Electrician",
+  "name_with_city": "24/7 Emergency Electrician in {city_name_with_state}",
+  "service_type_phrase": "24/7 emergency electrical service and repair",
+  "quoted_phrase": "emergency electrician",
+  "lowercase_phrase": "emergency electrician",
+  "tag_short": "emergency-electrician",
+
+  "aioseo_page_title_template": "24/7 Emergency Electrician in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "24/7 emergency electrician in {city_name_with_state}. Master Electrician, {dispatch_time_short} response, on-site diagnosis before any work starts. Call {phone_display}.",
+  "aioseo_focus_keyword_template": "emergency electrician {city_slug}",
+  "aioseo_additional_keywords_template": [
+    "24 hour electrician {city_slug}",
+    "24/7 electrician {city_slug}",
+    "emergency electrical service {city_slug}",
+    "emergency electrical repair {city_slug}",
+    "after hours electrician {city_slug}",
+    "weekend electrician {city_slug}",
+    "electrician open now {city_slug}",
+    "24/7 emergency electrical repair {city_slug}",
+    "electrical panel emergency {city_slug}",
+    "power outage electrician {city_slug}",
+    "burning smell electrical {city_slug}",
+    "sparking outlet electrician {city_slug}",
+    "breaker tripped won't reset electrician {city_slug}",
+    "emergency electrician near me",
+    "emergency electrician open Sunday {city_slug}"
+  ],
+  "wordpress_page_title_template": "24/7 Emergency Electrician in {city_name_with_state}",
+
+  "hero_eyebrow_template": "24/7 Emergency Electrician in {city_name_with_state}",
+  "hero_heading": "Master Electrician. 24/7 Emergency Dispatch.",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician with 16+ years in the trade. We dispatch 24/7 — overnight, Sundays, holidays — with a typical {dispatch_time_phrase} response inside the {city_name} service area. Call comes in, technician rolls, diagnosis before any work starts.",
+  "hero_image_alt_template": "{owner_name}, master electrician, providing emergency electrical service in {city_name_with_state}",
+  "hero_image_url_template": "FILL: Hero image URL. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-emergency-electrician-hero.png",
+
+  "what_it_means_heading": "What counts as an electrical emergency",
+  "what_it_means_paragraphs": [
+    "An electrical emergency is any situation that poses an immediate risk of fire, shock, or loss of essential power in your home. Sparks from an outlet, a burning smell behind a wall, a breaker panel that's hot to the touch, exposed wiring, water pooling near electrical equipment, or a partial power outage when your neighbors still have power — these are all active safety risks. If you see fire, smoke, or active sparking, call 911 first. Then call us. We handle the electrical side once the scene is safe.",
+    "Not every electrical issue is an emergency. A single dead outlet, lights that dim briefly when the AC kicks on, or an intermittent flicker in one room — those are worth a service call, but they can usually wait for a scheduled appointment. An emergency is when there's an active safety risk to people in the house or when you've lost power entirely and the utility confirms the outage isn't on their end. If you're not sure which side your situation falls on, call {phone_display} and describe what you see — we'll tell you straight whether it needs a truck now or a Tuesday appointment.",
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues — with 16+ years diagnosing residential electrical failures across Northern Virginia, DC, and Maryland. {owner_name} runs a maintenance team, which is what makes the 24/7 dispatch and {dispatch_time_phrase} response time inside the {city_name} service area a real operational number, not a marketing claim. Call comes in. Technician rolls. Temporary safe state first, then targeted diagnosis, then the permanent fix — scheduled or completed the same visit."
+  ],
+
+  "quick_ref_heading_template": "Common electrical emergencies in {city_name}",
+  "quick_ref_intro": "Nine red flags that mean call now — not next week. If you see any of these, don't wait for business hours.",
+  "quick_ref_footer_html_template": "Not sure if it's an emergency?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll tell you straight.",
+
+  "why_city_heading_template": "Why {city_name} homeowners call us for emergency electrical service",
+  "why_city_closing_note_template": "Most of the emergency calls we get from {city_name} trace back to the same few causes — aging panels in homes built before 1990, overloaded circuits from modern appliance loads, and storm damage to service-entrance hardware. If your home fits that profile, you already know our number.",
+
+  "problems_heading_template": "Electrical emergencies we handle every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, call now — don't wait.",
+  "problem_cards": [
+    {
+      "title": "Sparking outlet or arcing",
+      "body": "Visible sparks, burn marks around the outlet plate, or an electrical arcing sound means something is failing inside the box — a loose connection, damaged wiring, or a worn outlet. Kill the breaker for that circuit if you can identify it safely. Don't plug anything back in. Call us."
+    },
+    {
+      "title": "Burning smell from an outlet, switch, or panel",
+      "body": "An acrid electrical burning smell with no visible fire source usually means a connection is overheating — inside a junction box, behind a switch plate, or at the breaker panel bus bar. This is the leading cause of residential electrical fires. Stop using the circuit immediately. If the smell is at the panel, call us today — we treat this as urgent."
+    },
+    {
+      "title": "Power out in part of the house — not a utility outage",
+      "body": "If your neighbors still have power and part of your house is dark, the cause is inside your system — a tripped main, a failed breaker, a loose service-entrance connection, or a blown neutral. We diagnose which level the failure is at and fix it. If it's a utility-side issue (meter base, weatherhead), we coordinate with Dominion Energy so you're not bouncing between calls."
+    },
+    {
+      "title": "Breaker keeps tripping or won't reset",
+      "body": "A breaker that trips once is doing its job. A breaker that trips every time you reset it, or that's hot to the touch, points to an overloaded circuit, a short downstream, or a worn breaker that's no longer holding. Don't tape the breaker or hold it in the ON position — that defeats the safety mechanism. We trace the circuit and find the cause."
+    },
+    {
+      "title": "Buzzing or humming from the panel",
+      "body": "A low hum from a transformer is normal. A loud buzz or crackle from inside the breaker panel is not — it usually means a loose breaker connection, a failing bus bar, or arcing inside the panel. Don't open the panel cover yourself. Call us and we'll assess it same-day."
+    },
+    {
+      "title": "Hot outlet, plug, or switch plate",
+      "body": "An outlet or switch that's warm to the touch is a warning sign — overloaded circuit, loose wiring, or degraded contact inside the device. Unplug everything from that outlet and stop using the switch. If the heat is significant (too hot to hold your hand on), kill the breaker and call us immediately."
+    },
+    {
+      "title": "Electrical shock from an appliance or fixture",
+      "body": "A tingling shock when you touch a tap, appliance, or light fixture means there's a ground fault somewhere in the system — current is traveling a path it shouldn't. This is a safety risk, especially in wet areas (kitchen, bathroom, laundry). We test for ground faults, identify the source, and repair the wiring."
+    },
+    {
+      "title": "Storm damage — fallen wires or damaged service mast",
+      "body": "After a storm, if you see a downed line on your property, a broken service mast, or damage to the weatherhead where the utility connects to your house — stay away from the wires, call 911 if lines are on the ground, then call us. We coordinate with the utility for the service-side work and handle the house-side repairs."
+    },
+    {
+      "title": "Water near outlets or the electrical panel",
+      "body": "A flood, burst pipe, or roof leak near electrical outlets or the breaker panel is a combination emergency. If you can safely reach the main breaker, kill it. Never touch wet electrical equipment. We come out, assess the water/electrical intersection, and make it safe before any restoration work begins."
+    }
+  ],
+
+  "process_heading_template": "What happens when you call — our emergency response process",
+  "process_intro_template": "When you call {phone_display} with an electrical emergency, here's what happens.",
+  "process_steps": [
+    {
+      "title": "Phone triage — 5 minutes",
+      "body": "We pick up. You describe the symptoms — what you see, smell, hear. We ask about your panel location, whether you've been able to kill the breaker, and whether anyone was shocked or injured. If there's an active fire or someone is injured, we tell you to call 911 first — we're electricians, not first responders."
+    },
+    {
+      "title": "Dispatch — typically within {dispatch_time_phrase}",
+      "body": "{owner_first_name} runs a maintenance team, so there's almost always a truck within the response radius. We give you a real ETA on the phone, not a window. If the team is already dispatched and we can't hit that window, we say so and give you the honest timeline."
+    },
+    {
+      "title": "On-site safety check",
+      "body": "First priority is making the scene safe — kill the right breakers, isolate the problem circuit, confirm no one is at risk. We don't start diagnosing until the immediate danger is resolved."
+    },
+    {
+      "title": "Targeted diagnosis",
+      "body": "We find the root cause, not just the symptom. A tripping breaker might be the breaker itself, a short downstream, a load-balance issue, or a failing connection at the bus bar. We test until we know which one, and we explain what we found in plain English."
+    },
+    {
+      "title": "Plain-language quote before any work",
+      "body": "You get a written estimate on-site before we start the repair. Emergency rates vary by time-of-day — after-hours, Sunday, and holiday dispatch may include a surcharge. We name the surcharge before we dispatch, not after."
+    },
+    {
+      "title": "Repair — most emergencies resolved in one visit",
+      "body": "Our trucks carry common parts — breakers, outlets, wire, connectors, disconnect hardware. Most residential emergencies get resolved the same visit. If the repair requires parts we don't carry or a permit for larger work, we do the temporary safe-state fix and schedule the permanent repair."
+    },
+    {
+      "title": "Walk-through and prevention advice",
+      "body": "Before we leave, we explain what failed and why. If the emergency points to a larger issue — an aging panel, undersized service, Federal Pacific breakers — we name it so you can plan the fix on your schedule, not ours."
+    }
+  ],
+
+  "pricing_heading": "How emergency estimates work",
+  "pricing_intro_template": "Emergency electrical rates vary by time of day and the scope of the repair — a midnight breaker swap costs differently than a Tuesday-afternoon outlet replacement. We give you a written estimate on-site before any work starts, and if the dispatch is after-hours, Sunday, or a holiday, we name the emergency surcharge on the phone before we roll — not after we arrive.",
+  "pricing_items": [
+    "Emergency electrical pricing varies by time of day and the work required. We give you the exact number before any work starts — no surprises, no fine print.",
+    "Standard rates during business hours. After-hours dispatch (overnight, Sunday, holidays) may include an emergency surcharge that we name on the phone before we dispatch — not after we arrive.",
+    "The estimate covers the diagnosis, the repair labor, and any parts from the truck. If the repair requires follow-up work (panel upgrade, rewiring), that gets a separate estimate on a separate visit.",
+    "Diagnostic-only visits are available if you want the diagnosis without committing to same-visit repair. We tell you what's wrong and what it costs to fix — you decide."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase} during business hours. Emergency dispatch outside business hours includes a trip/surcharge component named before we roll.",
+  "pricing_closing_note": "We don't post fixed prices for emergency work because every emergency is different — time of day, scope of failure, parts needed. The on-site estimate is the only honest number.",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "{owner_name} is a Master Electrician licensed in Virginia — the highest electrician tier the state issues, requiring several years of journeyman work, a passed state exam, and a clean record. Over 16+ years in the trade, {owner_name} has built a licensed and insured residential and commercial electrical practice serving Northern Virginia, Washington DC, Maryland, and Pennsylvania. He runs a maintenance team, which is what makes the 24/7 emergency dispatch and {dispatch_time_phrase} response time an operational reality, not a phone-room promise.",
+    "{owner_name} leads the diagnostic on most residential emergency calls personally. The approach is diagnostic-first, fix-second — he reads the panel, runs the tests, and explains what's happening in plain English before any work starts. Half the time a homeowner calls expecting a full panel replacement, the actual cause is a single worn breaker, a load-balance issue, or a downstream short. The walk-through costs nothing. The misdiagnosis costs everything.",
+    "S&H Contracting Unlimited holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "FILL: About portrait URL. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-emergency-electrician-about.png",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "Emergency visits often uncover issues worth fixing on a planned schedule — an aging panel, undersized service, or a circuit layout that can't keep up with modern loads. These are the services {city_name} homeowners book most after an emergency call.",
+  "related_cards": [
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
+    { "href_slug": "ev-charger-installation-{city_slug}", "label": "EV Charger Installation" },
+    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures &amp; Chandeliers" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    {
+      "question": "What is considered an electrical emergency?",
+      "answer_html": "An electrical emergency is any situation that poses an immediate risk of fire, shock, or injury. Sparking outlets, a burning smell from behind a wall or at the panel, a breaker panel that's hot to the touch, exposed or damaged wiring, water pooling near electrical equipment, and partial or total power loss when the utility confirms no outage on their end — all of these qualify. If you see active fire, smoke, or sparks, call 911 first, then call us at {phone_display}. We handle the electrical diagnosis and repair once the scene is safe.",
+      "answer_schema": "An electrical emergency is any situation that poses an immediate risk of fire, shock, or injury. Sparking outlets, a burning smell from behind a wall or at the panel, a breaker panel that is hot to the touch, exposed or damaged wiring, water pooling near electrical equipment, and partial or total power loss when the utility confirms no outage on their end all qualify. If you see active fire, smoke, or sparks, call 911 first, then call the electrician. The electrician handles the electrical diagnosis and repair once the scene is safe."
+    },
+    {
+      "question": "How quickly can you arrive for an emergency in {city_name_with_state}?",
+      "answer_html": "Typically within {dispatch_time_phrase} inside the {city_name} service area. That number is real because {owner_name} runs a maintenance team — there's almost always a truck within the response radius, day or night. We dispatch 24/7, including overnight, Sundays, and holidays. If the team is already out on another emergency and we can't hit that window, we tell you on the phone and give you an honest ETA — not a vague arrival window. Call {phone_display} and we'll confirm the timeline before we roll.",
+      "answer_schema": "Typically within {dispatch_time_phrase} inside the service area. The response time is real because the owner runs a maintenance team with trucks within the response radius day and night. Dispatch is 24/7 including overnight, Sundays, and holidays. If the team is already out on another emergency and cannot hit that window, the company provides an honest ETA on the phone, not a vague arrival window."
+    },
+    {
+      "question": "What should I do before the electrician arrives?",
+      "answer_html": "Six things, in this order: <strong>1.</strong> If there's active fire, smoke, or someone was shocked and injured, call 911 first. <strong>2.</strong> Kill the main breaker if you can reach it safely — this de-energizes the house. <strong>3.</strong> Do not touch any wet electrical equipment, ever. <strong>4.</strong> If there's water near outlets or the panel, stay clear and wait for us. <strong>5.</strong> Keep children and pets away from the affected area. <strong>6.</strong> Do not re-energize circuits that tripped — if a breaker tripped, it tripped for a reason. Then call {phone_display} and describe what you see.",
+      "answer_schema": "Six steps in order: 1. If there is active fire, smoke, or someone was shocked and injured, call 911 first. 2. Kill the main breaker if you can reach it safely to de-energize the house. 3. Do not touch any wet electrical equipment. 4. If there is water near outlets or the panel, stay clear and wait for the electrician. 5. Keep children and pets away from the affected area. 6. Do not re-energize circuits that tripped, because they tripped for a reason. Then call the electrician and describe what you see."
+    },
+    {
+      "question": "When should I call 911 instead of an electrician?",
+      "answer_html": "Call 911 first when there's active fire, visible smoke, sustained sparking, a downed power line on your property, or someone who has been shocked and is injured or unresponsive. These are life-safety situations — firefighters and EMS come first. Once the scene is safe, call us at {phone_display}. We handle the electrical diagnosis and repair after the immediate danger is resolved. If you're unsure whether your situation is a 911 call or an electrician call, err on the side of 911. We'd rather show up to a scene the fire department already cleared than have you wait on a situation that needed first responders.",
+      "answer_schema": "Call 911 first when there is active fire, visible smoke, sustained sparking, a downed power line on the property, or someone who has been shocked and is injured or unresponsive. These are life-safety situations where firefighters and EMS come first. Once the scene is safe, call the electrician. The electrician handles the electrical diagnosis and repair after the immediate danger is resolved. If unsure whether the situation is a 911 call or an electrician call, err on the side of 911."
+    },
+    {
+      "question": "How much does an emergency electrician cost in {city_name_with_state}?",
+      "answer_html": "We don't post fixed prices for emergency work because every emergency is different — time of day, scope of failure, and parts needed all factor in. What we do: you get a written estimate on-site before any work starts, so you know the exact number and approve it before we pick up a tool. If the call is after-hours, on a Sunday, or on a holiday, there may be an emergency surcharge — and we name that surcharge on the phone before we dispatch, not after we arrive. No surprise charges. The on-site estimate is the only honest number for emergency electrical work.",
+      "answer_schema": "Fixed prices are not posted for emergency work because every emergency differs in time of day, scope of failure, and parts needed. The company provides a written estimate on-site before any work starts, so the customer knows the exact number and approves it before work begins. After-hours, Sunday, or holiday calls may include an emergency surcharge named on the phone before dispatch, not after arrival. No surprise charges. The on-site estimate is the only honest number for emergency electrical work."
+    },
+    {
+      "question": "Are you really available 24/7 — including Sundays and holidays?",
+      "answer_html": "Yes. 24/7 means 24/7 — overnight, Sundays, Thanksgiving, New Year's, no exceptions. This isn't a marketing line. {owner_name} runs a maintenance team with trucks in the Northern Virginia service area, so there's almost always someone within the response radius regardless of the day or hour. The typical response inside the {city_name} area is {dispatch_time_phrase}. If you call at 2 AM on Christmas morning with a melted HVAC pull-out disconnect, we answer the phone, triage the symptoms, and dispatch. The maintenance team is what makes the 24/7 claim credible — it's not one person on call, it's a team.",
+      "answer_schema": "Yes, 24/7 means 24/7 including overnight, Sundays, Thanksgiving, New Year's, and all holidays with no exceptions. The owner runs a maintenance team with trucks in the Northern Virginia service area, so there is almost always a technician within the response radius regardless of the day or hour. Typical response time is {dispatch_time_phrase}. The maintenance team is what makes the 24/7 claim credible."
+    },
+    {
+      "question": "What happens during an emergency electrician visit?",
+      "answer_html": "Safety check first — we confirm the scene is safe, kill the right breakers, and isolate the problem circuit before anything else. Then targeted diagnosis: we find the root cause, not just the symptom. A tripping breaker might be the breaker itself, a short downstream, a load-balance issue, or a failing bus-bar connection — we test until we know which one. Then you get a plain-language quote on-site before we touch anything. Most residential emergencies are resolved in one visit because our trucks carry common parts — breakers, outlets, wire, connectors, disconnect hardware. If the repair needs parts we don't carry or a permit, we do the temporary safe-state fix and schedule the permanent work.",
+      "answer_schema": "Safety check first: the electrician confirms the scene is safe, kills the right breakers, and isolates the problem circuit. Then targeted diagnosis to find the root cause, not just the symptom. A tripping breaker might be the breaker itself, a short downstream, a load-balance issue, or a failing bus-bar connection. The homeowner gets a plain-language quote on-site before any work begins. Most residential emergencies are resolved in one visit because the trucks carry common parts. If the repair needs special parts or a permit, a temporary safe-state fix is done and the permanent work is scheduled."
+    },
+    {
+      "question": "Do you dispatch to areas outside {city_name}?",
+      "answer_html": "Probably. The truck radius is 50 miles from the Fairfax / Prince William County corner, which covers Woodbridge, Lake Ridge, Dale City, Manassas, Oakton, Fairfax Station, Alexandria, McLean, Sterling, Ashburn, Chantilly, and into DC and Maryland. For emergency work inside that radius, we dispatch 24/7. For planned work outside it, or emergency work at the edges of the radius, we'll usually know within one phone call whether we can take the job or whether it's smarter to refer you to someone closer. Call {phone_display} and we'll tell you straight.",
+      "answer_schema": "The truck radius is 50 miles from the Fairfax and Prince William County corner, covering Woodbridge, Lake Ridge, Dale City, Manassas, Oakton, Fairfax Station, Alexandria, McLean, Sterling, Ashburn, Chantilly, and into DC and Maryland. For emergency work inside that radius, the company dispatches 24/7. For planned work outside the radius or emergency work at the edges, the company will usually know within one phone call whether it can take the job or refer the caller to someone closer."
+    }
+  ],
+
+  "final_cta_heading": "Electrical emergency? Call now.",
+  "final_cta_paragraph_template": "24/7 emergency electrician in {city_name_with_state}. {owner_name} and team dispatch within {dispatch_time_phrase} — overnight, Sundays, holidays, no exceptions. Diagnosis before any work starts, written estimate before we pick up a tool.<br>Call {phone_display} now.",
+
+  "schema_service_description_template": "24/7 emergency electrical service in {city_name_with_state}. Master electrician dispatches within {dispatch_time_phrase} for residential electrical emergencies — sparking outlets, burning smells, breaker failures, power loss, storm damage. On-site diagnosis and written estimate before repair begins.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "Emergency dispatch available 24/7 including nights, weekends, and holidays. On-site written estimate before any repair work begins. After-hours surcharge named on the phone before dispatch."
+}

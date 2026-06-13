@@ -90,19 +90,19 @@
   "other_areas_paragraph": "Outside Annandale, we serve Vienna, Fairfax, McLean, Falls Church, Springfield, Burke, and the rest of Fairfax County. We also cover Arlington, Montgomery County, MD, and Washington, DC.",
   "housing_patterns": [
     {
-      "title": "1950s–1960s ramblers, Cape Cods &amp; early split-levels",
+      "title": "1950s–1960s ramblers, Cape Cods & early split-levels",
       "neighborhood_examples": "Ravensworth, Sleepy Hollow, Lincolnia, Pine Ridge (original homes)",
       "context_paragraph": "Annandale's first wave of suburban development arrived in the 1950s and early 1960s — brick ramblers in Ravensworth, Cape Cods in Sleepy Hollow, and modest colonials near Annandale's commercial center. These homes were built with 100-amp panels (an upgrade from fuse boxes in older areas) and thermoplastic copper wiring sized for the appliance loads of their era. Ravensworth alone has over 1,500 homes built between 1951 and 1958, nearly all with identical electrical systems. Ungrounded outlets, no GFCI protection, and limited circuit counts are the norm. Many owners have added central AC, kitchen remodels, and finished basements without upgrading the original electrical service.",
       "symptoms": "100-amp panels with every breaker slot filled and no capacity for additional circuits. Two-prong ungrounded outlets in bedrooms and living areas — the original wiring has no equipment ground conductor. No GFCI protection in kitchens, bathrooms, or exterior outlets (pre-1975 construction). Breakers tripping when running the AC and a microwave simultaneously — the original circuits weren't sized for modern loads. Double-tapped breakers where a previous handyman added circuits without adding panel capacity."
     },
     {
-      "title": "1960s–1980s split-levels, split-foyers &amp; colonials",
+      "title": "1960s–1980s split-levels, split-foyers & colonials",
       "neighborhood_examples": "Columbia Pines, Heritage Hill, Wakefield Chapel, Mason District, Ravensworth (later sections)",
       "context_paragraph": "Annandale's continued growth through the 1960s–1980s brought split-levels, split-foyers, and larger colonials to neighborhoods like Columbia Pines, Heritage Hill, and Wakefield Chapel. These homes have 100-amp or 150-amp panels with copper wiring — adequate when built but insufficient for modern loads. Some 1970s construction used aluminum branch wiring on 15-amp and 20-amp circuits. Many of these homes have been expanded with sunrooms, finished basements, and updated kitchens, creating a patchwork of wiring vintages. Federal Pacific Stab-Lok panels are common in 1970s construction throughout Annandale.",
       "symptoms": "Federal Pacific Stab-Lok or Zinsco panels (1970s homes) — known fire hazards with breakers that fail to trip on overloads. Aluminum branch wiring with oxidized connections causing warm outlets and intermittent flickering at switches. 150-amp panels that are full — no room for EV charger circuits, heat pump upgrades, or additional kitchen circuits. Patchwork wiring from multiple renovation eras with incompatible connection methods at junction boxes."
     },
     {
-      "title": "2000s–2020s renovations, additions &amp; selective rebuilds",
+      "title": "2000s–2020s renovations, additions & selective rebuilds",
       "neighborhood_examples": "Ravensworth (renovated), Sleepy Hollow (expanded), Pine Ridge (updated), Columbia Pines (rebuilt)",
       "context_paragraph": "While Annandale has seen fewer full teardowns than closer-in communities like Falls Church, major renovations and additions are common — 1950s ramblers gaining second stories, kitchens gutted to the studs, and basements converted to full living space. Some lots have seen full teardown-rebuilds, especially along the Columbia Pike corridor. Renovated homes often have a modern sub-panel serving the addition while the original panel remains in place — creating two electrical systems of different vintages under one roof. New construction meets current code with 200-amp panels and AFCI protection.",
       "symptoms": "Dual-panel configurations where the original 100-amp panel feeds half the home and a newer sub-panel feeds the addition — the original panel becomes the weak link. Undersized service entrance conductors that were adequate for the original home but bottleneck the expanded structure. AFCI nuisance trips in new addition bedrooms connected to circuits that also serve the original portion of the home. Voltage imbalance between old and new sections during high-demand periods."
@@ -148,5 +148,6 @@
   "distance_phrase": {
     "troubleshooting": "Annandale is about 7 miles from our Fairfax Blvd office — roughly 15–20 minutes via Little River Turnpike or I-495"
   },
-  "ev_charger_homes_phrase": "Annandale's mid-century homes were not wired for"
+  "ev_charger_homes_phrase": "Annandale's mid-century homes were not wired for",
+  "utility_provider": "Dominion Energy"
 }

@@ -28,7 +28,7 @@
     },
     {
       "name": "Hunter Mill District",
-      "blurb": "south of the Vienna town line, between the W&amp;OD trail and Hunter Mill Road"
+      "blurb": "south of the Vienna town line, between the W&OD trail and Hunter Mill Road"
     },
     {
       "name": "Tysons-edge",
@@ -50,19 +50,19 @@
   "other_areas_paragraph": "Outside Vienna, we serve Fairfax, McLean, Oakton, Tysons, Burke, Annandale, Falls Church, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
   "housing_patterns": [
     {
-      "title": "1950s-1970s split-levels &amp; ranches",
+      "title": "1950s-1970s split-levels & ranches",
       "neighborhood_examples": "Vienna Woods, Country Club area, neighborhoods near Westwood",
       "context_paragraph": "Built with 100-amp panels and circuits sized for the appliances of the era — toaster, fridge, color TV, a window unit if you were lucky. Plumbing is original galvanized steel running to copper at the fixtures; gas service was an afterthought in many homes. Insulation is thin (R-13 walls at best, often less). Fast-forward to 2026: induction range, central AC, two refrigerators, a tankless water heater, and an EV charger in the garage. Modern load and load patterns overwhelm circuits the original builder never planned for.",
       "symptoms": "100-amp panels with circuits sized for 1960s loads; frequent breaker trips when modern appliances run simultaneously; pre-1985 Federal Pacific or Pushmatic panels often flagged by insurance at renewal."
     },
     {
-      "title": "1970s-1990s colonials &amp; traditionals",
+      "title": "1970s-1990s colonials & traditionals",
       "neighborhood_examples": "Hunter Mill District, Vienna proper, north of Maple Avenue",
       "context_paragraph": "200-amp service standard but wired with the now-deprecated aluminum branch wiring for a window in the mid-1970s (NEC banned aluminum branch circuits in 1972 but installation continued for several years), or with GFCI gaps in kitchens and bathrooms that predate the 1996 code requirement (NEC 1996 made GFCIs mandatory at every kitchen counter receptacle; pre-1996 builds usually have one or two if any). Plumbing is mostly copper with early PEX appearing in the 1990s. Central AC is standard.",
       "symptoms": "150A panels original at construction; some replaced with Federal Pioneer in the 1980s carrying the same risk profile; EV charger or whole-house renovation usually triggers the 200A upgrade."
     },
     {
-      "title": "2000s-2020s townhomes &amp; newer detached",
+      "title": "2000s-2020s townhomes & newer detached",
       "neighborhood_examples": "Tysons-edge, Wolf Trap area, newer subdivisions",
       "context_paragraph": "Newer homes are not exempt from electrical or plumbing issues. AFCI breakers (the arc-fault interrupters required by NEC 2008 and tightened in subsequent code cycles) are sensitive by design and trip on any noisy load. Smart-home wiring done by the previous owner's 'handy friend' can leave neutral wires bonded incorrectly. Tankless water heaters and high-efficiency heat pumps are common — both pull continuous high loads the original branch circuits sometimes can't sustain. The 2010-2019 'McMansion' tear-down wave added many of these homes on lots originally built for 1960s ranches; the service drop from the utility was sized for the original house and sometimes hasn't been upgraded.",
       "symptoms": "200A or 400A original service; upgrades here are usually about adding capacity for a second EV or pool equipment, not safety replacement."

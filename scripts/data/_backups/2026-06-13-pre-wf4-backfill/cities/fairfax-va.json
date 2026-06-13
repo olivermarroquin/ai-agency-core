@@ -58,19 +58,19 @@
   "other_areas_paragraph": "Outside Fairfax City, we serve Vienna, McLean, Oakton, Tysons, Burke, Annandale, Falls Church, and the rest of Fairfax County. We also cover DC and Montgomery County, MD (Rockville, Bethesda, Chevy Chase, Potomac).",
   "housing_patterns": [
     {
-      "title": "1950s-1970s split-levels & ranches",
+      "title": "1950s-1970s split-levels &amp; ranches",
       "neighborhood_examples": "Mosby Woods, Country Club Hills, neighborhoods bordering Old Town",
       "context_paragraph": "Built with 100-amp panels and circuits sized for the appliances of the era — toaster, fridge, color TV, a window unit if you were lucky. Fast-forward to 2026: induction range, central AC, two refrigerators, a tankless water heater, and an EV charger in the garage. Modern load patterns overwhelm circuits the original builder never planned for.",
       "symptoms": "persistent breaker trips, warm outlets, dimming lights when large appliances start."
     },
     {
-      "title": "1960s-1980s colonials & traditionals",
+      "title": "1960s-1980s colonials &amp; traditionals",
       "neighborhood_examples": "Mantua, Kings Park, older Greenbriar blocks",
       "context_paragraph": "200-amp service but wired with the now-deprecated aluminum branch wiring for a window in the mid-1970s, or with GFCI gaps in kitchens and bathrooms that predate the 1996 code requirement.",
       "symptoms": "outlets that worked yesterday and don't today, intermittent power loss to one room, GFCIs that trip the moment a hairdryer plugs in."
     },
     {
-      "title": "1990s-2020s townhomes & newer detached",
+      "title": "1990s-2020s townhomes &amp; newer detached",
       "neighborhood_examples": "Fair Oaks, Fair Lakes, Fairfax Corner, Penderbrook",
       "context_paragraph": "Newer homes are not exempt. AFCI breakers (the arc-fault interrupters required by modern code) are sensitive by design and trip on any noisy load. Smart-home wiring done by the previous owner's \"handy friend\" can leave neutral wires bonded incorrectly.",
       "symptoms": "failed dimmers, dead three-way switches, outlets that test fine but won't hold a plug."
@@ -110,6 +110,5 @@
   "specific_problems_neighborhood_phrase": {
     "troubleshooting": "Fairfax City and the surrounding Fair Oaks corridor have one of the highest EV adoption rates in Northern Virginia."
   },
-  "ev_charger_homes_phrase": "older Fairfax homes weren't designed for",
-  "utility_provider": "Dominion Energy"
+  "ev_charger_homes_phrase": "older Fairfax homes weren't designed for"
 }

@@ -1,0 +1,153 @@
+{
+  "_comment": "EV Electric client overlay for smoke-alarm service. Merges over the shared base data/services/smoke-alarm.json. Contains authored body copy harvested from the live page (2026-06-12, read-only). City-variable parts use {tokens} sourced from the city JSON at render time. Zero hardcoded city names.",
+  "_harvested_from": "https://evelectric.pro/smoke-alarm-vienna-va/",
+  "_harvested_date": "2026-06-12",
+  "_harvest_method": "WebFetch read-only extraction, zero writes to WP",
+
+  "aioseo_meta_description_template": "Hardwired interconnected smoke alarm installation in {city_name_with_state}. Master electrician, {license_state} fire code compliance, free on-site estimate. Call {phone_display}.",
+
+  "hero_heading": "Smoke Alarm Installation in {city_name_with_state}",
+  "hero_subheading_template": "Hardwired, interconnected, code-compliant smoke alarms installed by a {license_state}-licensed Master Electrician. Free on-site estimates.",
+  "why_city_closing_note_template": "{city_name}'s median home was built before interconnected smoke alarms were code-required, before GFCI protection was standard, and before the 10-year replacement rule existed. If your alarms are original to the house or you're not sure when they were installed, a code-compliance assessment tells you exactly where you stand.",
+  "hero_body_template": "{owner_name} — {license_state}-licensed Master Electrician — installs and replaces hardwired interconnected smoke alarms to current {license_state} fire code. Serving {city_name} and all of {county} with written on-site estimates.",
+
+  "quick_ref_intro": "These are the smoke alarm projects {city_name} homeowners ask about most. Tap any for details.",
+
+  "quick_ref_localized_items": [
+    { "summary": "Battery-only smoke alarms chirping or past 10-year life" },
+    { "summary": "Upgrading to hardwired interconnected alarms (whole house)" },
+    { "summary": "Smoke alarm code compliance for a home sale" },
+    { "summary": "Adding carbon monoxide detectors alongside smoke alarms" },
+    { "summary": "False alarms from kitchen or bathroom steam" },
+    { "summary": "Post-renovation alarm placement (finished basement, new bedroom)" }
+  ],
+
+  "what_it_means_paragraphs": [
+    "A hardwired smoke alarm connects to your home's electrical circuit with a battery backup, so it works even during a power outage. An interconnected system means when one alarm detects smoke, every alarm in the house sounds simultaneously. That's the difference between a bedroom fire waking only the person next door and waking the entire household. Installing hardwired interconnected alarms requires junction-box wiring, circuit integration, and code-compliant placement — work that belongs to a licensed electrician, not a battery swap from a stepladder. If your existing wiring shows signs of trouble during the assessment, our electrical troubleshooting in {city_name} service identifies the root cause before any alarms go up.",
+    "{license_state} fire code (Va. Code 15.2-922 and USBC R314, referencing NFPA 72) requires smoke alarms in every bedroom, outside each sleeping area, and on every level of the home. Alarms must be replaced every 10 years regardless of whether they appear to work — the sensor degrades. If you sell or renovate your home, the buyer's inspector or the building department may require interconnected hardwired alarms where standalone battery-only units existed before. This is also a good time to address GFCI outlet upgrades in {city_name} that inspectors commonly flag alongside smoke alarm deficiencies. New construction in {license_state} must have interconnected alarms by code.",
+    "{owner_name} is a {license_state}-licensed Master Electrician serving {city_name} and the rest of {county}. Smoke alarm work is one of his priority residential services — particularly for {city_name} homeowners in pre-1980 homes that still have the original battery-only alarms from construction. {owner_name} assesses the house, quotes the work on-site, installs in a single visit, and provides documentation for your records, your insurer, or your listing agent."
+  ],
+
+  "problem_cards": [
+    {
+      "title": "Battery-only smoke alarms chirping or expired",
+      "body": "Battery-only alarms expire after 10 years (sealed-battery models) or need battery replacement annually. If yours are chirping, yellowed, or you can't remember when they were installed, they're due. We can replace them with hardwired interconnected units so all alarms sound together — the code-required standard for new construction and renovations."
+    },
+    {
+      "title": "Upgrading to hardwired interconnected alarms",
+      "body": "Older homes often have standalone battery-only alarms that don't communicate with each other. If a downstairs alarm triggers, the upstairs bedrooms hear nothing. Hardwired interconnected alarms wire together on a single circuit — when one triggers, all sound throughout the house. We run the wiring, install the alarms, and test every unit."
+    },
+    {
+      "title": "Smoke alarm code compliance for a home sale",
+      "body": "When you sell a home in {license_state}, the buyer's inspector will flag non-compliant smoke alarms — missing from bedrooms, expired units, or non-interconnected systems. Getting compliant before listing avoids last-minute inspection delays. We assess the house, install what's needed, and give you documentation for the listing agent."
+    },
+    {
+      "title": "Adding carbon monoxide detectors",
+      "body": "{license_state} code requires CO detectors on every level of a dwelling with a fuel-burning appliance or an attached garage. Many homes have smoke alarms but no CO detectors, or have standalone CO detectors that aren't interconnected with the smoke alarms. We install combination smoke/CO units that cover both requirements in one device."
+    },
+    {
+      "title": "Post-renovation smoke alarm placement",
+      "body": "A finished basement, a new bedroom, or a major remodel triggers code requirements for smoke alarms in the new space. We add hardwired alarms in the new areas and integrate them with the existing system so the whole house is connected. Renovation projects often pair smoke alarm work with light fixture installation in {city_name} — we handle both while the ceiling access is open."
+    },
+    {
+      "title": "False alarms from old or poorly placed detectors",
+      "body": "Smoke alarms that trigger every time you cook, run the shower, or open the oven are usually either too close to the kitchen/bathroom or past their 10-year life. We relocate and replace with modern units that have better nuisance-alarm resistance while still meeting code placement requirements. If the false alarms coincide with flickering lights or breaker trips, that points to a wiring issue — see our electrical troubleshooting service for the full diagnostic."
+    }
+  ],
+
+  "process_steps": [
+    {
+      "title": "We assess your current setup",
+      "body": "We ask about your home — how many levels, how many bedrooms, whether you have hardwired or battery-only alarms, and whether you have gas appliances or an attached garage (triggers CO detector requirements). For phone quotes on straightforward replacements, this is enough. For upgrades to hardwired interconnected, we visit."
+    },
+    {
+      "title": "On-site assessment for hardwired upgrades",
+      "body": "We walk the house, count alarm locations, check attic/crawl access for running wire, and assess the circuit. While we're there, we also check whether your home needs an EV charger circuit or other panel work — bundling projects saves you a second trip. You get a written estimate covering the alarm units, the wiring, and the labor. No surprise pricing."
+    },
+    {
+      "title": "Installation — typically 2-4 hours for a full house",
+      "body": "For a standard 3-4 bedroom home, hardwired interconnected smoke/CO installation takes 2-4 hours. We run the wiring, mount each alarm, connect them, and test every unit — individually and as a system (triggering one to verify all sound). We label each alarm's manufacture date for the 10-year replacement cycle."
+    },
+    {
+      "title": "Testing and documentation",
+      "body": "We test every alarm, verify interconnection, and provide a written record of what was installed, where, and when. This documentation is useful for home insurance, for the next buyer's inspection, and for the 10-year replacement schedule."
+    }
+  ],
+
+  "pricing_intro_template": "Every home is different — alarm count, wiring access, and whether you need new circuits all affect the price. We quote after seeing the actual work, not before. Battery-only replacements can often be quoted over the phone. Hardwired interconnected upgrades get a written on-site estimate before any work starts.",
+
+  "pricing_tiers": [
+    {
+      "label": "Battery-only replacement (no wiring change)",
+      "body": "Per-alarm pricing, quoted over the phone. We carry Kidde, First Alert, and BRK units on the truck — most replacements finish in one visit."
+    },
+    {
+      "label": "Hardwired interconnected upgrade (full house)",
+      "body": "Depends on the number of alarms, wiring access, and home layout. A standard 3-4 bedroom home takes 2-4 hours. Written estimate after on-site assessment."
+    },
+    {
+      "label": "Single-room additions (post-renovation)",
+      "body": "Per-alarm pricing plus the wiring run to tie into the existing circuit. Quoted on-site after we see the access path."
+    },
+    {
+      "label": "Code-compliance assessment",
+      "body": "We walk the house, identify what's needed for {license_state} fire code compliance, and provide a written quote. No charge for the assessment in our primary service area."
+    }
+  ],
+
+  "pricing_closing_note": "No trip charge for {city_name} or surrounding areas in {county}.",
+
+  "about_text_paragraphs": [
+    "{owner_name} is a Master Electrician licensed in {license_state} — the highest electrician credential the Commonwealth issues. He waited roughly four years at the journeyman level, passed the state exam, and opened {client_name}. The company is fully insured and runs a maintenance team, so scheduling doesn't bottleneck on one person's calendar.",
+    "{owner_name}'s residential focus includes smoke alarm code compliance as a core service — not a side job he fits in between panel upgrades. He knows {license_state} fire code (Va. Code 15.2-922, USBC R314, NFPA 72), understands the interconnected-alarm requirements for new construction and renovations, and handles the {county} electrical permit plus the separate Town of {city_name} approval that most contractors forget about.",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+
+  "faq_items": [
+    {
+      "question": "How much does smoke alarm installation cost in {city_name_with_state}?",
+      "answer_html": "It depends on what you need. A straightforward battery-only replacement runs less than a full hardwired interconnected upgrade — and a full-house upgrade for a 3-4 bedroom {city_name} home varies based on how many alarms, how accessible the attic and crawl spaces are for running wire, and whether your panel needs a new circuit. We don't publish a flat rate because the range is too wide to be honest about it. We come to the house, count alarm locations, check wiring access, and give you a written estimate before any work starts. The assessment is free in our primary service area.",
+      "answer_schema": "It depends on what you need. A straightforward battery-only replacement runs less than a full hardwired interconnected upgrade — and a full-house upgrade for a 3-4 bedroom {city_name} home varies based on how many alarms, how accessible the attic and crawl spaces are for running wire, and whether your panel needs a new circuit. We don't publish a flat rate because the range is too wide to be honest about it. We come to the house, count alarm locations, check wiring access, and give you a written estimate before any work starts. The assessment is free in our primary service area."
+    },
+    {
+      "question": "How often should smoke alarms be replaced?",
+      "answer_html": "Every 10 years — no exceptions. That's per NFPA guidelines and every major manufacturer (Kidde, First Alert, BRK). The sensor inside the alarm degrades over time even if the unit still chirps when you press the test button. Flip the alarm over and look for a manufacture date stamped on the back. If you can't find the date or can't read it, replace it — it's past due. Many {city_name} homes built in the 1960s-1970s still have alarms from the last renovation in the 1990s or early 2000s. Those are overdue. We replace and label every unit with its install date so you know exactly when the next replacement is due.",
+      "answer_schema": "Every 10 years — no exceptions. That's per NFPA guidelines and every major manufacturer (Kidde, First Alert, BRK). The sensor inside the alarm degrades over time even if the unit still chirps when you press the test button. Flip the alarm over and look for a manufacture date stamped on the back. If you can't find the date or can't read it, replace it — it's past due. Many {city_name} homes built in the 1960s-1970s still have alarms from the last renovation in the 1990s or early 2000s. Those are overdue. We replace and label every unit with its install date so you know exactly when the next replacement is due."
+    },
+    {
+      "question": "What's the difference between hardwired and battery-only smoke alarms?",
+      "answer_html": "Hardwired alarms connect to your home's electrical system and include a battery backup, so they work during a power outage too. Battery-only alarms run solely on batteries — either replaceable 9V or sealed 10-year lithium. The real advantage of hardwired isn't the power source — it's interconnection. Hardwired interconnected alarms wire together on one circuit so when any single alarm detects smoke, every alarm in the house sounds at once. A battery-only alarm in the basement that triggers at 2 AM won't wake anyone in the upstairs bedrooms. Interconnected alarms will. {license_state} code requires interconnected alarms in all new construction and major renovations.",
+      "answer_schema": "Hardwired alarms connect to your home's electrical system and include a battery backup, so they work during a power outage too. Battery-only alarms run solely on batteries — either replaceable 9V or sealed 10-year lithium. The real advantage of hardwired isn't the power source — it's interconnection. Hardwired interconnected alarms wire together on one circuit so when any single alarm detects smoke, every alarm in the house sounds at once. A battery-only alarm in the basement that triggers at 2 AM won't wake anyone in the upstairs bedrooms. Interconnected alarms will. {license_state} code requires interconnected alarms in all new construction and major renovations."
+    },
+    {
+      "question": "Does {license_state} require interconnected smoke alarms?",
+      "answer_html": "Yes — for new construction and major renovations. The {license_state} Uniform Statewide Building Code (USBC R314, referencing NFPA 72) requires interconnected smoke alarms in every new dwelling and in existing homes undergoing renovations that require a building permit. Existing homes that haven't been renovated may be grandfathered under older code, but upgrading is strongly recommended — NFPA data shows working smoke alarms reduce the risk of dying in a home fire by 60%. Wireless interconnection kits exist as an alternative to running new wire, but hardwired is the more reliable long-term solution.",
+      "answer_schema": "Yes — for new construction and major renovations. The {license_state} Uniform Statewide Building Code (USBC R314, referencing NFPA 72) requires interconnected smoke alarms in every new dwelling and in existing homes undergoing renovations that require a building permit. Existing homes that haven't been renovated may be grandfathered under older code, but upgrading is strongly recommended — NFPA data shows working smoke alarms reduce the risk of dying in a home fire by 60%. Wireless interconnection kits exist as an alternative to running new wire, but hardwired is the more reliable long-term solution."
+    },
+    {
+      "question": "Do I need carbon monoxide detectors too?",
+      "answer_html": "If your {city_name} home has a gas furnace, gas water heater, gas stove, fireplace, or an attached garage, {license_state} code requires carbon monoxide detectors on every level of the dwelling. Most {city_name} homes have gas service and at least one gas appliance, so the answer is usually yes. The simplest approach is combination smoke/CO alarm units — one device covers both requirements, wires into the same interconnected circuit, and avoids doubling the number of ceiling-mounted devices. We install combo units as the default unless the homeowner has a specific reason to keep them separate. One visit, both requirements handled.",
+      "answer_schema": "If your {city_name} home has a gas furnace, gas water heater, gas stove, fireplace, or an attached garage, {license_state} code requires carbon monoxide detectors on every level of the dwelling. Most {city_name} homes have gas service and at least one gas appliance, so the answer is usually yes. The simplest approach is combination smoke/CO alarm units — one device covers both requirements, wires into the same interconnected circuit, and avoids doubling the number of ceiling-mounted devices. We install combo units as the default unless the homeowner has a specific reason to keep them separate. One visit, both requirements handled."
+    },
+    {
+      "question": "My smoke alarm keeps going off when I cook — what should I do?",
+      "answer_html": "Two common causes. First, the alarm is too close to the kitchen — NFPA recommends alarms be at least 10 feet from cooking appliances. Many older {city_name} homes have alarms mounted in hallways directly adjacent to open kitchens, which worked fine with the original galley layout but triggers constantly after a kitchen remodel removed the separating wall. Second, the alarm is past its 10-year life and the degraded sensor fires on anything. Modern photoelectric alarms have significantly better nuisance-alarm resistance than the ionization units common in 1990s and 2000s installations. We relocate to a code-compliant position and replace with current-generation units.",
+      "answer_schema": "Two common causes. First, the alarm is too close to the kitchen — NFPA recommends alarms be at least 10 feet from cooking appliances. Many older {city_name} homes have alarms mounted in hallways directly adjacent to open kitchens, which worked fine with the original galley layout but triggers constantly after a kitchen remodel removed the separating wall. Second, the alarm is past its 10-year life and the degraded sensor fires on anything. Modern photoelectric alarms have significantly better nuisance-alarm resistance than the ionization units common in 1990s and 2000s installations. We relocate to a code-compliant position and replace with current-generation units."
+    },
+    {
+      "question": "Do I need a permit for smoke alarm installation?",
+      "answer_html": "For straightforward battery-only replacements, no permit is needed. For hardwired interconnected systems that involve new circuit work — running wire through walls, adding a dedicated circuit, or tying into existing junction boxes — most Northern Virginia jurisdictions require an electrical permit. {city_name} is unique: because it's an incorporated town inside {county}, projects require both a {county} electrical permit (filed through the PLUS system) and a separate Town of {city_name} approval. Most contractors don't know about the dual-approval step. We handle the permitting so you don't have to navigate it yourself.",
+      "answer_schema": "For straightforward battery-only replacements, no permit is needed. For hardwired interconnected systems that involve new circuit work — running wire through walls, adding a dedicated circuit, or tying into existing junction boxes — most Northern Virginia jurisdictions require an electrical permit. {city_name} is unique: because it's an incorporated town inside {county}, projects require both a {county} electrical permit (filed through the PLUS system) and a separate Town of {city_name} approval. Most contractors don't know about the dual-approval step. We handle the permitting so you don't have to navigate it yourself."
+    },
+    {
+      "question": "Can you install smoke alarms for a home sale inspection?",
+      "answer_html": "Yes — this is one of our most common calls in {city_name}. We assess the entire house against current {license_state} code: alarm in every bedroom, outside each sleeping area, on every level, CO detectors where required, interconnection status, and age of each unit. Then we install whatever's needed to bring the house into compliance and provide written documentation for the listing agent. Getting ahead of the buyer's inspection avoids last-minute negotiation leverage (\"we need $2,000 off for smoke alarm compliance\") and prevents closing delays. Most pre-sale alarm installs are completed in a single visit — typically 2-4 hours for a full house.",
+      "answer_schema": "Yes — this is one of our most common calls in {city_name}. We assess the entire house against current {license_state} code: alarm in every bedroom, outside each sleeping area, on every level, CO detectors where required, interconnection status, and age of each unit. Then we install whatever's needed to bring the house into compliance and provide written documentation for the listing agent. Getting ahead of the buyer's inspection avoids last-minute negotiation leverage (\"we need $2,000 off for smoke alarm compliance\") and prevents closing delays. Most pre-sale alarm installs are completed in a single visit — typically 2-4 hours for a full house."
+    }
+  ],
+
+  "final_cta_heading": "Ready to Get Your Smoke Alarms Right?",
+  "final_cta_paragraph_template": "Code-compliant smoke alarm installation in {city_name_with_state}. Free on-site assessment. Written estimate before any work starts. {final_cta_response_promise}",
+
+  "related_intro_template": "Smoke alarm installation often uncovers other electrical needs — an aging panel, outdated outlets, or wiring that hasn't been touched since the house was built. Here are the services we handle alongside alarm work:"
+}

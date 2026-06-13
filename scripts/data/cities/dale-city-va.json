@@ -62,19 +62,19 @@
   "other_areas_paragraph": "Outside Dale City, we serve Woodbridge, Lake Ridge, Dumfries, Triangle, Manassas, and the rest of Prince William County. We also cover Lorton, Springfield, and surrounding Fairfax County and Stafford County communities.",
   "housing_patterns": [
     {
-      "title": "1960s-1970s ranches &amp; split-levels",
+      "title": "1960s-1970s ranches & split-levels",
       "neighborhood_examples": "Ashdale, Birchdale, Cloverdale, Darbydale, Evansdale, Forestdale, Glendale, Hillendale",
       "context_paragraph": "The original Dale City homes were built by Cecil Hylton's construction company as affordable suburban housing for families working in DC. These homes typically have 100-amp panels (some upgraded to 150-200 amp over the decades), original cloth-insulated or early PVC copper wiring, and in homes built between 1965-1972, aluminum branch wiring (a wiring method that was common in this era but is now deprecated because aluminum connections loosen over time and create fire risk). Plumbing is original galvanized steel supply lines running to copper at fixtures. Insulation is minimal — R-13 walls at best, often less. These homes are now 50-60 years old and carrying loads (central AC, multiple electronics, EV chargers) that the original builders never anticipated.",
       "symptoms": "100-amp panels with circuits sized for 1960s loads; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands; fuse boxes instead of breakers in some units; aluminum branch wiring in homes built 1965-1972 (Ashdale through Forestdale); overhead service drops from utility poles; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal."
     },
     {
-      "title": "1970s-1980s colonials &amp; townhomes",
+      "title": "1970s-1980s colonials & townhomes",
       "neighborhood_examples": "Kerrydale, Kirkdale, Lindendale, Mapledale, Nottingdale, Orangedale, Princedale, Queensdale, Ridgedale, Silverdale",
       "context_paragraph": "The second and third phases of Dale City development brought colonials and early townhome clusters. Panel sizes are typically 150-200 amps but may still have GFCI gaps — the NEC didn't require GFCIs at kitchen counter receptacles until 1996, and most of these homes predate that. Plumbing transitions from galvanized to copper, with early PEX appearing in the late 1980s builds. Central AC is standard. These homes are now 35-50 years old — past the point where original HVAC systems, water heaters, and panel components reach end-of-life.",
       "symptoms": "100-200 amp panels original at construction; GFCI coverage spotty in pre-1996 builds; EV charger or whole-house renovation triggers the 200A upgrade; overhead service in earlier areas, underground in later subdivisions; HOA approval may be needed for visible exterior panel work in planned communities."
     },
     {
-      "title": "2000s infill &amp; newer construction",
+      "title": "2000s infill & newer construction",
       "neighborhood_examples": "Scattered infill throughout Dale City; newer townhome developments near Dale Boulevard commercial corridor",
       "context_paragraph": "About 14.6% of Dale City's housing was built between 2000-2009, mostly townhomes and some detached infill on previously undeveloped parcels. These homes have modern 200-amp panels, AFCI breakers (arc-fault circuit interrupters, required by NEC 2008 for bedroom circuits), copper wiring with PVC insulation, and PEX plumbing. While newer, they're not problem-free — AFCI breakers are sensitive by design and trip on noisy loads, and smart-home additions by previous owners can introduce wiring issues. The original service drops from Dominion Energy may need upgrading if the homeowner adds an EV charger to the load.",
       "symptoms": "200 amp panels standard; upgrades here are usually about adding capacity for EV chargers, hot tubs, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; HOA coordination needed for visible exterior work; Dominion Energy service drop may need upgrading if adding EV charger to the load."
@@ -230,5 +230,6 @@
     "ev-charger-installation": "Dale City's housing was mostly built in the 1960s through 1980s by developer Cecil Hylton's construction company. That means most homes have original electrical panels — some with FPE or Zinsco breakers that need to be assessed before adding a high-draw EV charger circuit. The community's near-universal HOA coverage adds an approval step for exterior charger installations that homeowners in non-HOA neighborhoods don't face.",
     "light-fixture-installation": "Dale City's homes span from the 1960s Ashdale ranches to the 2000s infill townhomes off Dale Boulevard. The fixture that works in a 1960s split-level with 8-foot ceilings and original wiring isn't the same as what works in a 1980s Princedale colonial with 9-foot ceilings and updated circuits — and an experienced electrician knows the difference before anything gets mounted."
   },
-  "ev_charger_homes_phrase": "Dale City homes built in the 1960s through 1980s weren't designed for"
+  "ev_charger_homes_phrase": "Dale City homes built in the 1960s through 1980s weren't designed for",
+  "utility_provider": "Dominion Energy"
 }

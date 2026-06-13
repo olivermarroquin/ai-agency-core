@@ -94,19 +94,19 @@
   "other_areas_paragraph": "Outside Chevy Chase, we serve Vienna, Fairfax, McLean, Bethesda, Potomac, Kensington, Rockville, Silver Spring, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.",
   "housing_patterns": [
     {
-      "title": "1910s–1940s colonials, Tudors &amp; Craftsman homes",
+      "title": "1910s–1940s colonials, Tudors & Craftsman homes",
       "neighborhood_examples": "Chevy Chase Village, Section 3, Brookdale, Martin's Additions, Hamlet (original homes)",
       "context_paragraph": "Chevy Chase was developed as one of Washington's earliest streetcar suburbs — the Chevy Chase Land Company platted the community in the 1890s, and grand colonials, Tudor Revivals, and Craftsman homes filled the lots through the 1940s. These homes were built with 60-amp fuse boxes and cloth-insulated copper wiring (often with knob-and-tube in the earliest structures). Original galvanized steel conduit, push-button light switches, and gas-pipe converted to electrical conduit are common findings behind walls. These architecturally significant homes present unique challenges: homeowners want to preserve character while adding modern electrical capacity.",
       "symptoms": "Original 60-amp fuse boxes or early 100-amp panel upgrades with no room for additional circuits. Knob-and-tube wiring in attics and wall cavities — especially in pre-1930 homes in Chevy Chase Village and Section 3. Cloth-insulated wiring with brittle insulation that cracks when disturbed. Ungrounded two-prong outlets throughout (no equipment ground). Original gas-pipe conduit repurposed for electrical — a fire hazard if the wiring inside overheats."
     },
     {
-      "title": "1940s–1960s colonials, Cape Cods &amp; expanded originals",
+      "title": "1940s–1960s colonials, Cape Cods & expanded originals",
       "neighborhood_examples": "Section 5, Chevy Chase View, Rollingwood, Somerset (expanded homes), Martin's Additions (renovated)",
       "context_paragraph": "Chevy Chase's later sections and adjacent towns filled in during the 1940s–1960s with Colonial Revivals, Cape Cods, and brick ramblers on slightly smaller lots. These homes have 100-amp panels with thermoplastic copper wiring — a significant improvement over earlier construction but still undersized for today's loads. Many have been extensively renovated over decades, with updated kitchens, finished attics, and additions that strain original wiring capacity. GFCI protection is absent or minimal. The combination of architectural character and decades of piecemeal electrical work creates homes where no single electrician can predict what's behind any given wall.",
       "symptoms": "100-amp panels with every breaker slot filled — no capacity for heat pumps, EV chargers, or kitchen remodels. Patchwork wiring from multiple renovation eras — 1950s original, 1980s kitchen remodel, 2000s basement finish, each with different wire types and connection methods. No GFCI protection in kitchens, bathrooms, or exterior outlets. Backstabbed outlet connections (1970s–1980s renovation era) working loose after decades of thermal cycling."
     },
     {
-      "title": "2000s–2020s major renovations &amp; selective teardown rebuilds",
+      "title": "2000s–2020s major renovations & selective teardown rebuilds",
       "neighborhood_examples": "Chevy Chase Village (additions), Section 3 (gut renovations), Somerset (new builds), Brookdale (modernized)",
       "context_paragraph": "Chevy Chase's land values and desirable location have driven extensive renovation activity — though the community's historic character and village-level governance mean full teardowns are less common than in Bethesda. Instead, gut renovations preserve the original shell while completely replacing interior systems, or large additions double the home's footprint while keeping the street-facing facade intact. New electrical systems in these homes are built to code with 200-amp panels and AFCI protection, but the PEPCO service drop often remains the original size. Village-level permit requirements add complexity beyond standard Montgomery County permitting.",
       "symptoms": "Undersized PEPCO service drops — the panel is modern but the utility feed was sized for the original 1930s home before the addition doubled its square footage. AFCI nuisance trips on motor-driven loads in newly renovated portions of the home. Junction boxes where new wiring meets original wiring — transition points that require careful inspection. Voltage drop to detached garages and carriage houses fed by original-gauge conductors."
@@ -152,5 +152,6 @@
   "distance_phrase": {
     "troubleshooting": "Chevy Chase is about 20 miles from our Fairfax Blvd office — roughly 30–40 minutes via the Capital Beltway (I-495)"
   },
-  "ev_charger_homes_phrase": "Chevy Chase's pre-war homes were not wired for"
+  "ev_charger_homes_phrase": "Chevy Chase's pre-war homes were not wired for",
+  "utility_provider": "PEPCO"
 }

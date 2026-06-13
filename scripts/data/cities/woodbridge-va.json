@@ -59,19 +59,19 @@
   "other_areas_paragraph": "Outside Woodbridge, we serve Lake Ridge, Dale City, Dumfries, Occoquan, Lorton, and the rest of Prince William County. We also cover Manassas, Springfield, Burke, and Stafford.",
   "housing_patterns": [
     {
-      "title": "1950s-1960s postwar ranches &amp; split-levels",
+      "title": "1950s-1960s postwar ranches & split-levels",
       "neighborhood_examples": "Marumsco Village, Marumsco Woods, Marumsco Hills, older Route 1 corridor homes",
       "context_paragraph": "The earliest wave of suburban development in Woodbridge, anchored by C.D. Hylton's Marumsco Village project starting in 1956. Built with 60-100 amp panels and circuits sized for the appliances of the era — refrigerator, TV, a window AC unit if you were lucky. Wiring is cloth-insulated copper. Plumbing is original galvanized steel supply lines running to copper at fixtures. Insulation is minimal (R-13 walls at best, often less). These homes are now 60-70 years old and running modern loads — central AC, multiple refrigerators, induction ranges, EV chargers — that the original electrical system was never designed for.",
       "symptoms": "60-100A panels with circuits sized for 1960s loads; Federal Pacific Stab-Lok or Zinsco panels documented as fire-risk brands; fuse boxes instead of breakers in some units; overhead service drops from utility poles; frequent breaker trips when modern appliances run simultaneously; insurance carriers flagging FPE/Zinsco at renewal."
     },
     {
-      "title": "1970s-1980s colonials &amp; production-built subdivisions",
+      "title": "1970s-1980s colonials & production-built subdivisions",
       "neighborhood_examples": "Old Bridge area, Gordon Road corridor, older Lake Ridge-adjacent subdivisions, Dale Boulevard-area homes",
       "context_paragraph": "The mid-boom era when Woodbridge transitioned from rural to suburban. 100-200 amp panels are standard. Some mid-1970s homes contain aluminum branch wiring (NEC — National Electrical Code — banned aluminum branch circuits in 1972, but installation continued for several years after). GFCI (ground-fault circuit interrupter) coverage is spotty — the 1971 NEC required GFCIs only at outdoor and pool circuits; kitchen counter receptacle GFCIs didn't become mandatory until NEC 1996. Plumbing is mostly copper with galvanized supply lines in older units. Central AC is standard in this era. These homes are the workhorses of Woodbridge's residential stock — the most common housing type a service contractor will encounter.",
       "symptoms": "100-200A panels original at construction; some aluminum branch wiring in mid-1970s homes; GFCI coverage spotty in pre-1996 builds; EV charger or whole-house renovation triggers the 200A upgrade; overhead service in older areas, underground in later subdivisions."
     },
     {
-      "title": "1990s-2000s townhomes &amp; newer single-family",
+      "title": "1990s-2000s townhomes & newer single-family",
       "neighborhood_examples": "Eagles Pointe, Rippon Landing, Stonebridge, Four Seasons at Virginia Crossing",
       "context_paragraph": "200-amp panels standard. Copper wiring with PVC insulation throughout. AFCI (arc-fault circuit interrupter — the breaker that detects dangerous electrical arcs) breakers required per NEC 2008 in bedroom circuits; NEC 2014 expanded to most living-area circuits. PEX plumbing dominant. Central AC and high-efficiency heat pumps common. These are the newest homes in Woodbridge, but they're not exempt from issues — AFCI breakers are sensitive by design and trip on noisy loads; smart-home wiring done by previous owners' contractors sometimes leaves neutral wires bonded incorrectly; and townhomes share walls, which means electrical work sometimes requires HOA coordination.",
       "symptoms": "200A panels standard; upgrades here are usually about adding capacity for EV chargers, hot tubs, or home additions, not safety replacement; AFCI breaker nuisance-tripping on noisy loads; HOA coordination may be needed for visible exterior panel work in planned communities like Eagles Pointe and Rippon Landing."
@@ -227,5 +227,6 @@
     "ev-charger-installation": "Prince William County is expanding from 14 to 35 public EV charging stations, and Woodbridge's I-95 commuter corridor is one of the highest-density EV adoption zones in the county. Many Woodbridge homeowners are installing home chargers to avoid relying on public infrastructure — and the younger median age (33.8) means early EV adopters are a growing segment.",
     "light-fixture-installation": "Woodbridge homes span every construction era — from 1950s Marumsco Village ranches with cloth-insulated wiring at the junction box to 2010s Rippon Landing townhomes with 9-foot ceilings and recessed lighting. The fixture that works in one doesn't always work in the other, and an experienced electrician knows the difference."
   },
-  "ev_charger_homes_phrase": "Woodbridge homes built in the 1950s through 1990s weren't designed for"
+  "ev_charger_homes_phrase": "Woodbridge homes built in the 1950s through 1990s weren't designed for",
+  "utility_provider": "Dominion Energy"
 }

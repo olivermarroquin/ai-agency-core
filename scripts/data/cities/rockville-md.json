@@ -75,19 +75,19 @@
   "other_areas_paragraph": "Outside Rockville, we serve Bethesda, Potomac, Gaithersburg, Kensington, North Bethesda, Silver Spring, and the rest of Montgomery County. Across the river in Virginia, we cover Vienna, Fairfax, McLean, Arlington, Alexandria, and all of Northern Virginia.",
   "housing_patterns": [
     {
-      "title": "1940s–1960s post-war Cape Cods, ramblers &amp; small colonials",
+      "title": "1940s–1960s post-war Cape Cods, ramblers & small colonials",
       "neighborhood_examples": "Twinbrook, East Rockville, Hungerford, Lincoln Park, Rose Hill Falls",
       "context_paragraph": "Rockville's post-war housing boom began in the late 1940s when developers modeled Twinbrook after Levittown — affordable Cape Cods for returning GIs, initially priced under $12,000. These homes were built with 60-amp or early 100-amp panels and cloth-insulated copper wiring sized for a radio, a refrigerator, and a few ceiling lights. Plumbing is original galvanized steel. Many Twinbrook homes were designed with unfinished upper floors to be expanded later — and that expansion often happened without permits or proper wiring upgrades. By 2026, these homes carry central AC, kitchen appliances, home offices, and sometimes EV chargers on electrical systems designed for a fraction of that load.",
       "symptoms": "Breakers tripping on 60-amp or early 100-amp panels never designed for modern loads. Cloth-insulated wiring with brittle insulation cracking at junction boxes and outlet connections. Backstabbed outlets that worked loose after 70+ years of thermal cycling. Federal Pacific Electric (FPE) or Zinsco panels that fail to trip on overcurrent — a documented fire hazard common in 1950s Rockville housing stock. Unpermitted wiring in finished upper floors of Cape Cods originally built with unfinished attic space."
     },
     {
-      "title": "1960s–1980s split-levels, colonials &amp; planned communities",
+      "title": "1960s–1980s split-levels, colonials & planned communities",
       "neighborhood_examples": "Woodley Gardens, College Gardens, Luxmanor, Rockshire, Woodmont area",
       "context_paragraph": "As Rockville's population surged from 6,900 in 1950 to nearly 45,000 by 1980, developers built larger planned communities with split-levels, colonials, and bi-levels on bigger lots. These homes typically have 150-amp or 200-amp panels with copper wiring, but GFCI protection is absent or minimal in kitchens and bathrooms (the NEC didn't require kitchen counter GFCIs until 1996). Many homes from this era have additions — family rooms, finished basements, deck sub-panels — added over decades with varying quality of workmanship. Aluminum branch wiring appears in some mid-1970s Rockville homes, particularly in the larger split-levels and colonials built between 1972 and 1978.",
       "symptoms": "GFCI gaps in kitchens and bathrooms — pre-1996 homes often have one GFCI outlet or none where current code requires protection at every counter receptacle. Aluminum branch wiring with oxidized connections at outlets and switches, creating heat buildup at terminations. Intermittent faults from multiple wiring vintages where additions splice into original branch circuits. Undersized sub-panels in finished basements and additions added without permits or proper load calculations."
     },
     {
-      "title": "1990s–2020s townhomes, condos &amp; mixed-use (King Farm, Fallsgrove, Town Square)",
+      "title": "1990s–2020s townhomes, condos & mixed-use (King Farm, Fallsgrove, Town Square)",
       "neighborhood_examples": "King Farm, Fallsgrove, Rockville Town Square, Twinbrook Quarter, West End infill",
       "context_paragraph": "Rockville's modern era began with King Farm in 1997 — a 450-acre New Urbanist community with 3,300+ units — followed by Fallsgrove in the early 2000s and the Town Square redevelopment near the Metro. These homes are built to modern code with 200-amp panels, AFCI protection on bedroom and living-area circuits (NEC 2008+), and tamper-resistant receptacles. Townhomes and condos dominate, with shared walls creating unique wiring access challenges. The high density of these communities means PEPCO's distribution infrastructure serves far more load per transformer than older neighborhoods, and voltage sag during peak summer demand is not uncommon.",
       "symptoms": "Nuisance AFCI breaker trips on motor-driven loads like vacuums, treadmills, and garage door openers — the breaker is working correctly but the homeowner thinks the circuit is faulty. Shared-wall townhome wiring access limitations making troubleshooting and additions more complex than single-family homes. Voltage sag during peak summer demand in high-density developments where PEPCO transformers serve more units than originally planned. Smart-home wiring with incorrect neutral bonds causing phantom loads and intermittent switch or dimmer failures."
@@ -201,5 +201,6 @@
         "name": "Montgomery County, MD"
       }
     }
-  ]
+  ],
+  "utility_provider": "PEPCO"
 }
