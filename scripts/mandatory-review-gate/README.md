@@ -157,7 +157,7 @@ an isolated process (Phase 2/3). The operator remains the integrity backstop.
 
 ## Conformance test suite
 
-`test_conformance.py` — 72 tests covering:
+`test_conformance.py` — 79 tests covering:
 - State dir derivation (D-14/D-15): absolute path assertions from subdirectory cwd
 - Full block/review/approve cycle from subdirectory cwd
 - Production state isolation (tests use temp dirs, never touch live state)
