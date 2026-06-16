@@ -5,29 +5,21 @@ Usage:
     python3 gate-status.py --session <session_id>
     python3 gate-status.py --session <session_id> --json
 
-Reads the dirty/reviewed ledgers for the given session (with the same
-scoping policy as the Stop hook) and reports unreviewed entries.
+Reads the dirty/reviewed ledgers for the given session and reports
+unreviewed entries. Uses engine.check_gate for substrate-agnostic logic.
 """
 
 import argparse
 import json
-import os
 import sys
+import os
 
 sys.path.insert(0, os.path.dirname(__file__))
-from _paths import STATE_DIR
+from _paths import STATE_DIR, WORKSPACE_ROOT
+import engine
 
-# Import scoping logic from the gate script
-from importlib.util import spec_from_file_location, module_from_spec
-_gate_path = os.path.join(os.path.dirname(__file__), 'mandatory-review-gate.py')
-_spec = spec_from_file_location('gate', _gate_path)
-_gate = module_from_spec(_spec)
-_spec.loader.exec_module(_gate)
-
-load_scoped_dirty = _gate.load_scoped_dirty
-load_scoped_reviewed = _gate.load_scoped_reviewed
-get_unreviewed = _gate.get_unreviewed
-determine_review_tier = _gate.determine_review_tier
+# CC-scoped by default (same as Stop hook) — shows what CC Stop would see
+CC_INCLUDED_SOURCES = frozenset({'claude-code', ''})
 
 
 def main():
@@ -35,11 +27,16 @@ def main():
     parser.add_argument('--session', required=True, help='Session ID')
     parser.add_argument('--json', action='store_true', dest='as_json',
                         help='Output as JSON')
+    parser.add_argument('--all-sources', action='store_true',
+                        help='Show entries from all sources (not just claude-code)')
     args = parser.parse_args()
 
-    # Own-ledger-only scoping (RGH-1.6)
-    dirty_entries = load_scoped_dirty(STATE_DIR, args.session)
-    reviewed_entries = load_scoped_reviewed(STATE_DIR, args.session)
+    sources = None if args.all_sources else CC_INCLUDED_SOURCES
+
+    # Use engine for ledger loading + unreviewed computation
+    dirty_entries = engine.load_scoped_dirty(STATE_DIR, args.session,
+                                             included_sources=sources)
+    reviewed_entries = engine.read_reviewed_ledger(STATE_DIR, args.session)
 
     if not dirty_entries:
         if args.as_json:
@@ -48,7 +45,7 @@ def main():
             print('Gate status: CLEAN (no dirty entries)')
         return
 
-    unreviewed = get_unreviewed(dirty_entries, reviewed_entries)
+    unreviewed = engine.get_unreviewed(dirty_entries, reviewed_entries)
 
     if not unreviewed:
         if args.as_json:
@@ -57,7 +54,7 @@ def main():
             print('Gate status: CLEAR (all entries reviewed)')
         return
 
-    tier = determine_review_tier(unreviewed)
+    tier = engine.determine_review_tier(unreviewed)
 
     if args.as_json:
         print(json.dumps({

@@ -9,6 +9,7 @@ This is documented in CLAUDE.md as a hard rule.
 
 Clears all unreviewed entries for the session by writing skip markers.
 Writes a LOUD event-log row + metrics entry for audit trail.
+Uses engine.py for substrate-agnostic ledger operations.
 """
 
 import argparse
@@ -19,18 +20,10 @@ import time
 
 sys.path.insert(0, os.path.dirname(__file__))
 from _paths import STATE_DIR, WORKSPACE_ROOT
+import engine
 
-# Import scoping logic
-from importlib.util import spec_from_file_location, module_from_spec
-_gate_path = os.path.join(os.path.dirname(__file__), 'mandatory-review-gate.py')
-_spec = spec_from_file_location('gate', _gate_path)
-_gate = module_from_spec(_spec)
-_spec.loader.exec_module(_gate)
-
-load_scoped_dirty = _gate.load_scoped_dirty
-load_scoped_reviewed = _gate.load_scoped_reviewed
-get_unreviewed = _gate.get_unreviewed
-determine_review_tier = _gate.determine_review_tier
+# CC-scoped by default (same as Stop hook)
+CC_INCLUDED_SOURCES = frozenset({'claude-code', ''})
 
 
 def main():
@@ -47,59 +40,45 @@ def main():
         sys.exit(1)
 
     # Load unreviewed entries (own-ledger-only scoping, RGH-1.6)
-    dirty_entries = load_scoped_dirty(STATE_DIR, args.session)
-    reviewed_entries = load_scoped_reviewed(STATE_DIR, args.session)
-    unreviewed = get_unreviewed(dirty_entries, reviewed_entries)
+    dirty_entries = engine.load_scoped_dirty(STATE_DIR, args.session,
+                                             included_sources=CC_INCLUDED_SOURCES)
+    reviewed_entries = engine.read_reviewed_ledger(STATE_DIR, args.session)
+    unreviewed = engine.get_unreviewed(dirty_entries, reviewed_entries)
 
     if not unreviewed:
         print('[gate-skip] Nothing to skip — gate is already clear.')
         return
 
-    tier = determine_review_tier(unreviewed)
+    tier = engine.determine_review_tier(unreviewed)
     count = len(unreviewed)
 
     # Write skip markers to the reviewed ledger
-    os.makedirs(STATE_DIR, exist_ok=True)
-    reviewed_path = os.path.join(STATE_DIR, f'{args.session}-reviewed.jsonl')
     now = time.time()
     iso = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
 
-    with open(reviewed_path, 'a') as f:
-        for entry in unreviewed:
-            fp = entry.get('file_path', '')
-            marker = {
-                'timestamp': now,
-                'iso_time': iso,
-                'file_path': fp,
-                'verdict': 'SKIP',
-                'tier': entry.get('tier', 'unknown'),
-                'gate_id': 'G-skip',
-                'evidence': f'OPERATOR SKIP: {args.reason}',
-                'verdict_file': None,
-                'verdict_data': None,
-                'findings': None,
-                'skip': True,
-                'skip_reason': args.reason,
-            }
-            f.write(json.dumps(marker) + '\n')
+    skip_markers = []
+    for entry in unreviewed:
+        fp = entry.get('file_path', '')
+        skip_markers.append({
+            'timestamp': now,
+            'iso_time': iso,
+            'file_path': fp,
+            'verdict': 'SKIP',
+            'tier': entry.get('tier', 'unknown'),
+            'gate_id': 'G-skip',
+            'evidence': f'OPERATOR SKIP: {args.reason}',
+            'verdict_file': None,
+            'verdict_data': None,
+            'findings': None,
+            'skip': True,
+            'skip_reason': args.reason,
+        })
+
+    engine.append_reviewed_entries(STATE_DIR, args.session, skip_markers)
 
     # Write LOUD metrics entry
-    metrics_path = os.path.join(STATE_DIR, 'metrics.jsonl')
-    metrics_entry = {
-        'timestamp': now,
-        'iso_time': iso,
-        'session_id': args.session,
-        'outcome': 'SKIP',
-        'unreviewed_count': count,
-        'tier': tier,
-        'wall_ms': 0,
-        'skip_reason': args.reason,
-    }
-    try:
-        with open(metrics_path, 'a') as f:
-            f.write(json.dumps(metrics_entry) + '\n')
-    except OSError:
-        pass
+    engine.log_metrics(STATE_DIR, args.session, 'SKIP', count, tier, 0,
+                       extra={'skip_reason': args.reason})
 
     # Write LOUD event-log row
     # REVIEW_GATE_EVENT_LOG env override for test isolation (default unchanged)
