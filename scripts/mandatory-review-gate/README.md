@@ -1,7 +1,7 @@
 # Mandatory Pre-Land Review Gate — Scripts
 
-The enforcement layer for the mandatory pre-land review gate. Three scripts +
-one shared path module + one conformance test suite.
+The enforcement layer for the mandatory pre-land review gate. Gate scripts +
+Layer-A deterministic check suite + shared path module + conformance tests.
 
 ## Scripts
 
@@ -12,7 +12,22 @@ one shared path module + one conformance test suite.
 | `log-review-pass.py` | (called by reviewer) | Logs a review-pass marker backed by a verdict file |
 | `gate-status.py` | CLI | Shows what's blocking the gate and why (`--json` for structured output) |
 | `gate-skip.py` | CLI (OPERATOR-ONLY) | Emergency skip with mandatory `--reason`; writes loud event-log + metrics |
+| `dod-check.py` | CLI | Parses a handoff DoD manifest and runs bound Layer-A checks; emits verdict JSON |
 | `_paths.py` | (shared module) | Derives WORKSPACE_ROOT + STATE_DIR from file location |
+
+## Layer-A deterministic checks (OC-12..16, $0/no-LLM)
+
+Added by [RGH-7] (2026-06-15). Five exhaustive checks that hit every deliverable/file, not a spot-check.
+Each is `$0`, no-LLM, and fail-closed. Consumed by `dod-check.py`; cited by [RGH-6] (G-chat-close);
+run by [RGH-5] (independent dispatch). Source: COA-4b 25-catch replay corpus.
+
+| Script | Check ID | Catches | What it does |
+|---|---|---|---|
+| `oc-12-per-deliverable-existence.py` | OC-12 | C-11/C-18/C-19 | Enumerates DoD deliverables; `ls` + non-empty + placeholder-grep each. C-14 (empty field values) needs a `count` assertion on array length (OC-13), not file-level `non-stub` |
+| `oc-13-count-reconciliation.py` | OC-13 | C-12/C-13/C-15/C-16/C-17 | Count assertions reconcile against a named source fetched fresh; `value matches` deferred to RGH-5 judgment (C-20) |
+| `oc-14-rename-propagation.py` | OC-14 | C-03/C-04/C-05/C-08/C-09/C-10/C-25 | Grep old name across live paths with historical allowlist |
+| `oc-15-frontmatter-freshness.py` | OC-15 | C-24 | Dirty-ledger files with `updated:` field must equal today |
+| `oc-16-commit-staging-audit.py` | OC-16 | C-07/C-21/C-22/C-23 | `git status` vs dirty-ledger: staged-not-touched, touched-not-staged, build artifacts |
 
 ## State directory
 
