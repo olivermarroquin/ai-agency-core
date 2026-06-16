@@ -44,6 +44,12 @@ def main():
                              'derived from verdict file if omitted)')
     parser.add_argument('--findings', default='',
                         help='Blocking findings description (required when verdict=BLOCKING)')
+    parser.add_argument('--reviewer-type', default='producer',
+                        choices=['producer', 'independent'],
+                        help='Who authored this review: producer (self-review) or '
+                             'independent (separate adversarial reviewer). '
+                             'Full-tier items require reviewer-type=independent '
+                             'to clear the gate. (RGH-5)')
     args = parser.parse_args()
 
     if args.verdict == 'BLOCKING' and not args.findings:
@@ -64,6 +70,21 @@ def main():
               file=sys.stderr)
         sys.exit(1)
 
+    # RGH-5: independent reviewer-type requires the verdict file to carry
+    # the independent reviewer schema (fields only the mandate/dispatch produce).
+    # A producer calling --reviewer-type independent with a self-authored verdict
+    # is rejected here — the verdict must prove it came from the mandate flow.
+    if args.reviewer_type == 'independent':
+        indie_err = engine.validate_independent_verdict(verdict_data)
+        if indie_err:
+            print(f'[review-gate] REJECTED: --reviewer-type independent but '
+                  f'verdict file lacks independent reviewer schema — {indie_err}. '
+                  f'Only the independent reviewer dispatch/mandate produces '
+                  f'verdicts with these fields. A producer self-clearing with '
+                  f'--reviewer-type independent is a D-09 class defect.',
+                  file=sys.stderr)
+            sys.exit(1)
+
     # Derive evidence from verdict file; allow --evidence to supplement
     derived_evidence = engine.derive_evidence(verdict_data)
     if args.evidence:
@@ -83,10 +104,15 @@ def main():
         findings=args.findings if args.findings else None,
     )
 
+    # Stamp reviewer_type on each marker (RGH-5: producer-isolation)
+    for m in markers:
+        m['reviewer_type'] = args.reviewer_type
+
     engine.append_reviewed_entries(STATE_DIR, args.session, markers)
 
     print(f'[review-gate] Logged {args.verdict} for {len(markers)} file(s) '
-          f'(tier: {args.tier}, gate: {args.gate_id})')
+          f'(tier: {args.tier}, gate: {args.gate_id}, '
+          f'reviewer: {args.reviewer_type})')
     if args.findings:
         print(f'[review-gate] Findings: {args.findings}')
 

@@ -118,13 +118,23 @@ def _make_verdict_file(state_dir, verdict='PASS', tier='full', checks=None,
 
 def _run_log(sid, files, state_dir, verdict='PASS', tier='full',
              gate_id='G-default', evidence=None, findings=None,
-             verdict_file=None, cwd=None):
-    """Run log-review-pass. Creates a verdict file automatically if none provided."""
+             verdict_file=None, cwd=None, reviewer_type='independent'):
+    """Run log-review-pass. Creates a verdict file automatically if none provided.
+
+    Default reviewer_type='independent' (RGH-5): full-tier items require
+    independent review to clear the gate. Tests that need producer-only
+    review should pass reviewer_type='producer' explicitly.
+    """
+    extra = None
+    if reviewer_type == 'independent':
+        extra = {'reviewer_type': 'independent', 'mandate_version': '1.0'}
     if verdict_file is None:
-        verdict_file = _make_verdict_file(state_dir, verdict=verdict, tier=tier)
+        verdict_file = _make_verdict_file(state_dir, verdict=verdict, tier=tier,
+                                          extra_fields=extra)
     args = ['python3', LOG, '--session', sid, '--files'] + files + [
         '--verdict', verdict, '--tier', tier, '--gate-id', gate_id,
         '--verdict-file', verdict_file,
+        '--reviewer-type', reviewer_type,
     ]
     if evidence:
         args += ['--evidence', evidence]
@@ -525,7 +535,8 @@ class TestVerdictFileRequired(unittest.TestCase):
             {'surface': 'title', 'severity': 'low',
              'description': 'Minor wording issue'}
         ])
-        r = _run_log(self.SID, ['/tmp/x'], self.state_dir, verdict_file=vf)
+        r = _run_log(self.SID, ['/tmp/x'], self.state_dir, verdict_file=vf,
+                     reviewer_type='producer')
         self.assertEqual(r.returncode, 0,
                          f'Verdict with catches must be accepted: {r.stderr}')
 
@@ -562,7 +573,7 @@ class TestTierEnforcement(unittest.TestCase):
                                     {'name': 'leak-audit', 'result': 'PASS'},
                                 ])
         r = _run_log(self.SID, ['/tmp/x'], self.state_dir,
-                     tier='full', verdict_file=vf)
+                     tier='full', verdict_file=vf, reviewer_type='producer')
         self.assertEqual(r.returncode, 1,
                          f'Full tier with fast-path verdict must be rejected: {r.stderr}')
         self.assertIn('ground-truth', r.stderr.lower())
@@ -581,7 +592,7 @@ class TestTierEnforcement(unittest.TestCase):
                                     {'name': 'placeholder-sweep', 'result': 'PASS'},
                                 ])
         r = _run_log(self.SID, ['/tmp/x'], self.state_dir,
-                     tier='full', verdict_file=vf)
+                     tier='full', verdict_file=vf, reviewer_type='producer')
         self.assertEqual(r.returncode, 1,
                          f'Empty check name must not pass full-tier: {r.stderr}')
 
@@ -593,7 +604,7 @@ class TestTierEnforcement(unittest.TestCase):
                                     {'name': 'placeholder-sweep', 'result': 'PASS'},
                                 ])
         r = _run_log(self.SID, ['/tmp/x'], self.state_dir,
-                     tier='full', verdict_file=vf)
+                     tier='full', verdict_file=vf, reviewer_type='producer')
         self.assertEqual(r.returncode, 1,
                          f'Single-char "v" must not pass full-tier: {r.stderr}')
 
@@ -605,7 +616,7 @@ class TestTierEnforcement(unittest.TestCase):
                                     {'name': 'placeholder-sweep', 'result': 'PASS'},
                                 ])
         r = _run_log(self.SID, ['/tmp/x'], self.state_dir,
-                     tier='full', verdict_file=vf)
+                     tier='full', verdict_file=vf, reviewer_type='producer')
         self.assertEqual(r.returncode, 1,
                          f'Partial prefix "ground" must not pass full-tier: {r.stderr}')
 
@@ -617,7 +628,7 @@ class TestTierEnforcement(unittest.TestCase):
                                     {'name': 'leak-audit', 'result': 'PASS'},
                                 ])
         r = _run_log(self.SID, ['/tmp/x'], self.state_dir,
-                     tier='fast-path', verdict_file=vf)
+                     tier='fast-path', verdict_file=vf, reviewer_type='producer')
         self.assertEqual(r.returncode, 0,
                          f'Fast-path without ground-truth must pass: {r.stderr}')
 

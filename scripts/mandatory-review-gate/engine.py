@@ -597,6 +597,20 @@ def check_gate(
     unreviewed = get_unreviewed(dirty_entries, reviewed_entries)
 
     if not unreviewed:
+        # All files have review markers — but full-tier items require
+        # independent review (RGH-5). Check reviewer_type before clearing.
+        tier = determine_review_tier(dirty_entries)
+        if tier == 'full' and not has_independent_review(
+                reviewed_entries,
+                [e.get('file_path', '') for e in dirty_entries],
+                tier):
+            wall_ms = (time.monotonic() - t_start) * 1000
+            log_metrics(state_dir, session_id, 'block-needs-independent',
+                        len(dirty_entries), tier, wall_ms)
+            # Re-surface the dirty entries so the adapter can list them
+            return GateResult(status='blocked', unreviewed=dirty_entries,
+                              tier=tier, wall_ms=wall_ms)
+
         wall_ms = (time.monotonic() - t_start) * 1000
         log_metrics(state_dir, session_id, 'approve', 0, 'n/a', wall_ms)
         return GateResult(status='clear', unreviewed=[], tier='n/a',
@@ -694,6 +708,34 @@ def validate_verdict_file(path: str, tier: str) -> tuple:
     return data, ''
 
 
+INDEPENDENT_VERDICT_REQUIRED_KEYS = {'reviewer_type', 'mandate_version'}
+
+
+def validate_independent_verdict(verdict_data: dict) -> str:
+    """Validate that a verdict file has the independent reviewer schema.
+
+    The independent reviewer dispatch and mandate produce verdicts with
+    specific fields (reviewer_type, mandate_version, convergence) that a
+    self-authored producer verdict does not naturally contain. This raises
+    the bar on the D-09 cheat: the producer would have to fabricate the
+    full independent schema, not just pass --reviewer-type independent.
+
+    Returns empty string on success, error message on failure.
+    """
+    missing = INDEPENDENT_VERDICT_REQUIRED_KEYS - set(verdict_data.keys())
+    if missing:
+        return f'missing required independent-reviewer fields: {missing}'
+
+    if verdict_data.get('reviewer_type') != 'independent':
+        return (f'reviewer_type in verdict file must be "independent", '
+                f'got: {verdict_data.get("reviewer_type")}')
+
+    if not verdict_data.get('mandate_version'):
+        return 'mandate_version must be non-empty'
+
+    return ''
+
+
 def derive_evidence(verdict_data: dict) -> str:
     """Derive a human-readable evidence string from verdict file data."""
     checks = verdict_data.get('checks_run', [])
@@ -751,6 +793,56 @@ def build_review_markers(
             'findings': findings if findings else None,
         })
     return markers
+
+
+# ============================================================================
+# Independent-review enforcement (RGH-5)
+# ============================================================================
+
+def has_independent_review(reviewed_entries: list, unreviewed_file_paths: list,
+                           tier: str) -> bool:
+    """Check if all files have an independent reviewer's verdict.
+
+    For fast-path tier: auto-cleared entries with reviewer_type='independent'
+    or entries from the deterministic dispatch count.
+    For full tier: requires at least one entry with reviewer_type='independent'.
+
+    Returns True if independent review coverage is sufficient.
+    """
+    if tier == 'fast-path':
+        # Fast-path: deterministic auto-clear IS the independent review
+        # (the dispatch script writes these with reviewer_type='independent')
+        return True  # auto-clear path handles this
+
+    # Full tier: check that reviewed entries have independent reviewer_type.
+    # Gate-skip (G-skip) is an operator-only emergency bypass that overrides
+    # the independent review requirement — operator authority > gate rules.
+    independent_files = set()
+    for r in reviewed_entries:
+        if (r.get('reviewer_type', '').startswith('independent')
+                or r.get('gate_id') == 'G-skip'):
+            fp = r.get('file_path', '')
+            independent_files.add(fp)
+
+    # Check coverage: every unreviewed file needs an independent review
+    for fp in unreviewed_file_paths:
+        if fp not in independent_files:
+            return False
+
+    return True
+
+
+def needs_independent_review(unreviewed: list, reviewed: list, tier: str) -> bool:
+    """Return True if the gate should require independent review for these entries.
+
+    Full-tier items require independent review (RGH-5).
+    Fast-path items are auto-cleared by the deterministic dispatch.
+    """
+    if tier != 'full':
+        return False
+
+    file_paths = [e.get('file_path', '') for e in unreviewed]
+    return not has_independent_review(reviewed, file_paths, tier)
 
 
 # ============================================================================
