@@ -1584,6 +1584,78 @@ class TestProjectConfig(unittest.TestCase):
         self.assertIn('generic', name)
 
 
+class TestTestSuiteWhitelist(unittest.TestCase):
+    """RGH-1b item 4: test-suite invocations classify as read-only;
+    generic python3 scripts remain state-changing (over-whitelist guard)."""
+
+    SID = 'conformance-test-whitelist'
+
+    def setUp(self):
+        self.state_dir = tempfile.mkdtemp(prefix='rg-test-')
+
+    def tearDown(self):
+        shutil.rmtree(self.state_dir, ignore_errors=True)
+
+    def _assert_no_dirty(self, command, desc):
+        _run_track(self.SID, 'Bash', {'command': command}, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        if os.path.exists(dirty):
+            with open(dirty) as f:
+                entries = [json.loads(l) for l in f if l.strip()]
+            self.fail(f'{desc}: created {len(entries)} dirty entries')
+
+    def _assert_dirty(self, command, desc):
+        _run_track(self.SID, 'Bash', {'command': command}, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        self.assertTrue(os.path.exists(dirty), f'{desc}: no dirty entry')
+
+    def test_test_conformance_read_only(self):
+        """python3 test_conformance.py must classify as read-only."""
+        self._assert_no_dirty(
+            f'python3 {os.path.join(SCRIPTS, "test_conformance.py")}',
+            'python3 test_conformance.py (absolute path)')
+
+    def test_test_conformance_relative_read_only(self):
+        """python3 test_conformance.py with relative path must classify as read-only."""
+        self._assert_no_dirty(
+            'python3 test_conformance.py',
+            'python3 test_conformance.py (relative)')
+
+    def test_test_conformance_with_verbose_flag(self):
+        """python3 test_conformance.py -v must classify as read-only."""
+        self._assert_no_dirty(
+            'python3 -v test_conformance.py',
+            'python3 -v test_conformance.py')
+
+    def test_git_hook_conformance_read_only(self):
+        """python3 test_git_hook_conformance.py must classify as read-only."""
+        self._assert_no_dirty(
+            'python3 test_git_hook_conformance.py',
+            'python3 test_git_hook_conformance.py')
+
+    def test_generic_python_script_still_dirty(self):
+        """A generic python3 script invocation must still be state-changing.
+        OVER-WHITELIST GUARD: ensures python3 is NOT blanket-whitelisted."""
+        self._assert_dirty(
+            'python3 deploy_to_production.py',
+            'python3 deploy_to_production.py (generic script)')
+
+    def test_python3_bare_still_dirty(self):
+        """Bare python3 (no script) must still be state-changing."""
+        self._assert_dirty(
+            'python3 my_write_script.py --output /tmp/result.json',
+            'python3 my_write_script.py (unknown script)')
+
+    def test_python3_not_blanket_whitelisted(self):
+        """python3 as interpreter is NOT in READ_ONLY_CMDS."""
+        sys.path.insert(0, SCRIPTS)
+        import engine
+        self.assertNotIn('python3', engine.READ_ONLY_CMDS,
+                         'python3 must NEVER be in READ_ONLY_CMDS')
+        self.assertNotIn('python', engine.READ_ONLY_CMDS,
+                         'python must NEVER be in READ_ONLY_CMDS')
+
+
 if __name__ == '__main__':
     # Ensure the subdir cwd exists
     if not os.path.isdir(SUBDIR_CWD):

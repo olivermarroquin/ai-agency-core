@@ -164,6 +164,14 @@ READ_ONLY_GIT_SUBCMDS = frozenset({
     'cat-file', 'name-rev', 'for-each-ref',
 })
 
+# Read-only Python test scripts — exact basenames only (RGH-1b item 4).
+# SECURITY: Never whitelist 'python3' as an interpreter generically.
+# Only specific test-suite scripts that are known read-only belong here.
+READ_ONLY_PYTHON_SCRIPTS = frozenset({
+    'test_conformance.py',
+    'test_git_hook_conformance.py',
+})
+
 
 def _strip_stderr_redirects(cmd: str) -> str:
     """Remove stderr redirects (2>, 2>>, 2>&1, 2>/dev/null)."""
@@ -236,6 +244,16 @@ def _is_segment_read_only(segment: str) -> bool:
         return True
     if base in ('python3', 'python') and re.search(r"<<\s*['\"]?\w+['\"]?", segment):
         return True
+    # RGH-1b item 4: specific test-suite scripts whitelisted by exact basename.
+    if base in ('python3', 'python'):
+        parts = segment.split()
+        for p in parts[1:]:
+            if p.startswith('-'):
+                continue  # skip flags like -v, -m, etc.
+            # p is the script argument — check its basename
+            if os.path.basename(p) in READ_ONLY_PYTHON_SCRIPTS:
+                return True
+            break  # first non-flag arg checked; stop
 
     if base == 'git':
         parts = segment.split()
