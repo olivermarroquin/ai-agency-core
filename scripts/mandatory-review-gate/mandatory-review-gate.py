@@ -111,6 +111,7 @@ def main():
     unreviewed = result.unreviewed
     tier = result.tier
     count = len(unreviewed)
+    auto_clear_refusal = result.auto_clear_refusal  # RGH-1b item 1
 
     dispatch_result, dispatch_stderr = _run_independent_dispatch(
         session_id, tier, unreviewed)
@@ -141,11 +142,16 @@ def main():
     # Check if this needs independent review (full tier)
     needs_independent = tier == 'full'
 
+    # RGH-1b item 1: surface auto-clear refusal so operator can distinguish
+    # "auto-clear attempted but failed" from "auto-clear never attempted"
+    refusal_line = (f'\n[auto-clear] {auto_clear_refusal}\n'
+                    if auto_clear_refusal else '')
+
     if needs_independent:
         block_msg = f"""MANDATORY PRE-LAND REVIEW GATE — BLOCKED (independent review required)
 
 {count} unreviewed artifact(s) detected. Review tier: {tier}.
-{dispatch_findings}
+{refusal_line}{dispatch_findings}
 Unreviewed:
 {file_list}
 
@@ -185,7 +191,7 @@ That is a D-09 class defect. Only the independent reviewer agent does this."""
         block_msg = f"""MANDATORY PRE-LAND REVIEW GATE — BLOCKED
 
 {count} unreviewed artifact(s) detected. Review tier: {tier}.
-{dispatch_findings}
+{refusal_line}{dispatch_findings}
 Unreviewed:
 {file_list}
 

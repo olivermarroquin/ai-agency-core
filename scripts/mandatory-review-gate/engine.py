@@ -191,6 +191,24 @@ def _first_word(cmd: str) -> str:
     return ''
 
 
+# Shell control-flow keywords (RGH-1b item 9).
+# split_compound() splits on ; producing segments like "for repo in ...",
+# "do echo ...", "done". Two categories:
+#   STANDALONE: loop/conditional headers and terminators — the keyword IS the
+#     whole semantic content (e.g. "done", "fi", "for x in a b c").
+#   PREFIX: keywords that introduce a body command — "do <cmd>", "then <cmd>",
+#     "else <cmd>". For these, strip the keyword and check the remainder.
+_CONTROL_FLOW_STANDALONE = frozenset({
+    'for', 'while', 'until', 'select',   # loop headers (body follows after ;/do)
+    'if', 'case',                          # conditional headers
+    'done', 'fi', 'esac',                 # terminators
+    'in',                                  # part of for...in / case...in
+})
+_CONTROL_FLOW_PREFIX = frozenset({
+    'do', 'then', 'else', 'elif',         # introduce a body command
+})
+
+
 def _is_segment_read_only(segment: str) -> bool:
     """Check if a single command segment is read-only."""
     segment = segment.strip()
@@ -201,6 +219,17 @@ def _is_segment_read_only(segment: str) -> bool:
         return False
 
     first = _first_word(segment)
+
+    # Standalone control-flow keywords — the segment is structural, not a command
+    if first in _CONTROL_FLOW_STANDALONE:
+        return True
+
+    # Prefix control-flow keywords — strip and check the body command
+    if first in _CONTROL_FLOW_PREFIX:
+        remainder = segment[len(first):].strip()
+        if not remainder:
+            return True  # bare "do" / "then" (body on next line)
+        return _is_segment_read_only(remainder)
     base = os.path.basename(first)
 
     if base in ('python3', 'python') and re.match(r'^python3?\s+-c\s+', segment):
@@ -453,6 +482,12 @@ def classify_tier(file_path: str, tool_input: dict, tool_name: str) -> str:
             return 'full'
 
     if tool_name == 'Write':
+        # RGH-1b item 2: trivial new files (≤5 lines, non-state path) are
+        # fast-path. The state-path check above already caught state files.
+        content = tool_input.get('content', '')
+        line_count = len(content.strip().splitlines()) if content else 0
+        if line_count <= 5:
+            return 'fast-path'
         return 'full'
 
     if tool_name == 'Edit':
@@ -644,12 +679,17 @@ def run_fast_path_checks(file_path: str) -> dict:
 
 
 def try_fast_path_auto_clear(unreviewed: list, session_id: str,
-                              state_dir: str) -> bool:
+                              state_dir: str) -> tuple:
     """Attempt fast-path auto-clear for all-fast-path unreviewed entries.
-    Returns True if auto-cleared. Conservative: ANY doubt -> False."""
+
+    Returns (True, '') if auto-cleared.
+    Returns (False, refusal_msg) if auto-clear was attempted but failed.
+    The refusal_msg (RGH-1b item 1) tells the operator WHY auto-clear
+    refused, so they can distinguish refusal from absence.
+    """
     for entry in unreviewed:
         if entry.get('tier') != 'fast-path':
-            return False
+            return False, ''  # not attempted (wrong tier)
 
     all_results = []
     all_passed = True
@@ -662,7 +702,16 @@ def try_fast_path_auto_clear(unreviewed: list, session_id: str,
             all_passed = False
 
     if not all_passed:
-        return False
+        # Build refusal message with per-check hit counts (RGH-1b item 1)
+        failures = []
+        for r in all_results:
+            for c in r['checks']:
+                if c.get('result') == 'FAIL':
+                    failures.append(f"{c['name']}: {c.get('count', '?')} hits"
+                                    f" in {os.path.basename(r['file'])}")
+        refusal = ('auto-clear attempted, REFUSED: ' + '; '.join(failures)
+                   if failures else 'auto-clear attempted, failed (unknown)')
+        return False, refusal
 
     # All checks passed — write machine-generated verdict file
     checks_run = []
@@ -725,7 +774,7 @@ def try_fast_path_auto_clear(unreviewed: list, session_id: str,
             }
             f.write(json.dumps(marker) + '\n')
 
-    return True
+    return True, ''
 
 
 # ============================================================================
@@ -768,6 +817,7 @@ class GateResult:
     tier: str            # 'n/a' | 'fast-path' | 'full'
     wall_ms: float
     project_profile: str = 'generic (no project profile)'  # RGH-4
+    auto_clear_refusal: str = ''  # RGH-1b item 1: why auto-clear refused
 
 
 def _resolve_entries_profile(entries: list) -> str:
@@ -839,20 +889,25 @@ def check_gate(
 
     # Fast-path auto-clear
     tier = determine_review_tier(unreviewed)
+    auto_clear_refusal = ''
     if attempt_auto_clear and tier == 'fast-path':
-        if try_fast_path_auto_clear(unreviewed, session_id, state_dir):
+        cleared, refusal = try_fast_path_auto_clear(unreviewed, session_id,
+                                                     state_dir)
+        if cleared:
             wall_ms = (time.monotonic() - t_start) * 1000
             log_metrics(state_dir, session_id, 'auto-clear', len(unreviewed),
                         'fast-path', wall_ms)
             return GateResult(status='auto-cleared', unreviewed=[],
                               tier='fast-path', wall_ms=wall_ms)
+        auto_clear_refusal = refusal  # RGH-1b item 1
 
     # Blocked
     profile = _resolve_entries_profile(unreviewed)
     wall_ms = (time.monotonic() - t_start) * 1000
     log_metrics(state_dir, session_id, 'block', len(unreviewed), tier, wall_ms)
     return GateResult(status='blocked', unreviewed=unreviewed, tier=tier,
-                      wall_ms=wall_ms, project_profile=profile)
+                      wall_ms=wall_ms, project_profile=profile,
+                      auto_clear_refusal=auto_clear_refusal)
 
 
 # ============================================================================

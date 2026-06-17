@@ -22,14 +22,47 @@ import engine
 CC_INCLUDED_SOURCES = frozenset({'claude-code', ''})
 
 
+def _find_latest_session(state_dir: str) -> str:
+    """Find the most recently modified dirty ledger's session ID.
+
+    RGH-1b item 3: when --session is omitted, default to the most recent
+    dirty ledger so the model doesn't need to know the session ID.
+    """
+    if not os.path.isdir(state_dir):
+        return ''
+    candidates = []
+    for f in os.listdir(state_dir):
+        if f.endswith('-dirty.jsonl'):
+            path = os.path.join(state_dir, f)
+            mtime = os.path.getmtime(path)
+            sid = f[:-len('-dirty.jsonl')]
+            candidates.append((mtime, sid))
+    if not candidates:
+        return ''
+    candidates.sort(reverse=True)
+    return candidates[0][1]
+
+
 def main():
     parser = argparse.ArgumentParser(description='Show review gate status')
-    parser.add_argument('--session', required=True, help='Session ID')
+    parser.add_argument('--session', required=False, default=None,
+                        help='Session ID (defaults to most recent dirty ledger)')
     parser.add_argument('--json', action='store_true', dest='as_json',
                         help='Output as JSON')
     parser.add_argument('--all-sources', action='store_true',
                         help='Show entries from all sources (not just claude-code)')
     args = parser.parse_args()
+
+    # RGH-1b item 3: default to latest session if not specified
+    if not args.session:
+        args.session = _find_latest_session(STATE_DIR)
+        if not args.session:
+            if args.as_json:
+                print(json.dumps({'status': 'clean', 'unreviewed': [],
+                                  'note': 'no dirty ledgers found'}))
+            else:
+                print('Gate status: CLEAN (no dirty ledgers found in state dir)')
+            return
 
     sources = None if args.all_sources else CC_INCLUDED_SOURCES
 

@@ -60,6 +60,15 @@ def main():
     # (state-change + gate command) must be tracked.
     if tool_name == 'Bash':
         bash_cmd = tool_input.get('command', '')
+        # Gate-infrastructure path exclusion: Bash commands that target
+        # .review-gate/ are gate infrastructure (verdict files, ledgers,
+        # metrics), not reviewable artifacts. Analogous to the Write/Edit
+        # exclusion below (lines 78-81). Prevents the recursive trap where
+        # a reviewer's verdict-write Bash creates a new dirty entry that
+        # requires yet another reviewer to clear. (Bug: 2026-06-17 MI-8
+        # Chat 2 producer looped for 1h17m on this.)
+        if '/.review-gate/' in bash_cmd:
+            return
         segments = engine.split_compound(bash_cmd.strip()) if bash_cmd.strip() else []
         if segments and all(
             any(pat in seg for pat in SELF_PATTERNS)

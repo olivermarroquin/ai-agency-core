@@ -41,6 +41,8 @@ See `references/substrate-adapter-contract.md` for the full contract.
 | `log-review-pass.py` | (called by reviewer) | Logs a review-pass marker backed by a verdict file |
 | `gate-status.py` | CLI | Shows what's blocking the gate and why (`--json` for structured output) |
 | `gate-skip.py` | CLI (OPERATOR-ONLY) | Emergency skip with mandatory `--reason`; writes loud event-log + metrics |
+| `metrics-readout.py` | CLI | Analyzes `metrics.jsonl` — p50/p95/max wall-clock by outcome, slow-invocation flags (RGH-1b) |
+| `gate-canary.py` | CLI / scheduled | Fail-open block-test canary — writes synthetic dirty entry, confirms Stop hook blocks (RGH-1b) |
 
 ### Git hook adapter (Tier B — universal enforcement)
 
@@ -187,7 +189,7 @@ the structured return contract from `gate-peer-reviewer`:
 
 | Suite | Tests | Covers |
 |---|---|---|
-| `test_conformance.py` | 79 | CC adapter (Tier A): state dir derivation, full cycle, read-only exempt, state-changing caught, self-ref exclusion, verdict file required, tier enforcement, sub-agent coverage, substrate tagging, own-ledger scoping, protocol exemption, fast-path auto-clear, metrics, gate-status, gate-skip |
+| `test_conformance.py` | 93 | CC adapter (Tier A): state dir derivation, full cycle, read-only exempt, state-changing caught, self-ref exclusion, verdict file required, tier enforcement, sub-agent coverage, substrate tagging, own-ledger scoping, protocol exemption, fast-path auto-clear, metrics, gate-status, gate-skip |
 | `test_git_hook_conformance.py` | 24 | Git hook adapter (Tier B): block-on-skip, approve-clean, substrate-agnostic catch (codex/local-model/cross-session), metrics, re-edit blocks, installer idempotent/reversible, real `git commit` blocked/approved, OC-16 git-integration |
 
 ### CONTRACT: No change ships without both suites passing.
@@ -195,6 +197,62 @@ the structured return contract from `gate-peer-reviewer`:
 ```bash
 python3 test_conformance.py && python3 test_git_hook_conformance.py
 ```
+
+## Hook deployment after fresh clone (RGH-1b item 7)
+
+`.claude/settings.json` is **gitignored** in both `ai-agency-core` and
+`second-brain` (and most workspace repos). Hook configs live on disk only,
+not in git. After a fresh clone or any loss of the `.claude/` directory,
+hooks must be regenerated.
+
+**`deploy-hooks.sh` is the canonical regenerator.**
+
+```bash
+# PostToolUse only (default — tracking without blocking)
+./deploy-hooks.sh ~/workspace/second-brain
+./deploy-hooks.sh ~/workspace/repos/ai-agency-core
+
+# PostToolUse + Stop hook (full enforcement)
+./deploy-hooks.sh --with-stop ~/workspace
+
+# All workspace repos at once (PostToolUse only)
+for repo in ~/workspace ~/workspace/second-brain ~/workspace/repos/ai-agency-core \
+            ~/workspace/ai-factory ~/workspace/skills; do
+    ./deploy-hooks.sh "$repo"
+done
+```
+
+The script is idempotent (safe to re-run) and merges into existing
+`settings.json` without overwriting other config. It also powers the
+`app-factory` bootstrap flow for new projects.
+
+**Do not hand-edit `.claude/settings.json` hook entries** — use
+`deploy-hooks.sh` so all repos stay consistent. If you need to add
+non-hook settings, edit the file directly; deploy-hooks only touches
+the `hooks` key.
+
+## Reviewer recall eval (RGH-1b item 8 — deferred to Phase 5)
+
+**Status:** Design documented here; implementation deferred to
+`[[handoff-2026-06-11-phase-5-independent-reviewer-dispatch]]` where the
+isolated reviewer makes honest measurement feasible.
+
+**Problem:** Everything shipped so far enforces that reviews HAPPEN and are
+WELL-FORMED; nothing measures whether reviews are GOOD (catch real defects
+vs. rubber-stamp clean files).
+
+**Design (when built):**
+1. Maintain a corpus of planted-defect artifacts (seeds exist in
+   `gate-peer-reviewer/references/regression-fixtures/coa4b-*`, 25 fixtures).
+2. Periodically copy a real artifact, inject a known defect (placeholder,
+   leaked client name, broken wikilink, stale frontmatter date).
+3. Dispatch the reviewer blind on the injected copy.
+4. Score: did it catch the planted defect? Record recall over time.
+5. Alert if recall drops below threshold (e.g., <80% over 10 runs).
+
+**Why Phase 5:** The producer and reviewer are currently the same model in
+the same context. Measuring recall honestly requires the isolated reviewer
+from Phase 5 — a separate process that can't see the planted-defect metadata.
 
 ## CC-upgrade tripwire
 

@@ -413,6 +413,29 @@ class TestReviewGatePathExclusion(unittest.TestCase):
         self.assertFalse(os.path.exists(dirty),
                          '.review-gate/ verdict file must be excluded from tracking')
 
+    def test_bash_verdict_write_excluded(self):
+        """Bash commands targeting .review-gate/ must not create dirty entries.
+
+        This is the recursive-trap fix (2026-06-17): reviewer agents write
+        verdict files via Bash (mkdir + cat or TIMESTAMP= && cat >), which
+        the dirty-ledger tracked, requiring yet another reviewer to clear.
+        """
+        _run_track(self.SID, 'Bash', {
+            'command': 'TIMESTAMP=$(date +%s) && VERDICT_FILE="/workspace/.review-gate/state/verdict-test.json" && cat > "$VERDICT_FILE" <<EOF\n{"verdict":"PASS"}\nEOF',
+        }, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        self.assertFalse(os.path.exists(dirty),
+                         'Bash targeting .review-gate/ must be excluded (recursive-trap fix)')
+
+    def test_bash_mkdir_review_gate_excluded(self):
+        """mkdir -p .review-gate/state && cat > verdict must not be tracked."""
+        _run_track(self.SID, 'Bash', {
+            'command': 'mkdir -p /Users/me/workspace/.review-gate/state && cat > /Users/me/workspace/.review-gate/state/verdict.json',
+        }, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        self.assertFalse(os.path.exists(dirty),
+                         'mkdir + cat to .review-gate/ must be excluded')
+
     def test_non_review_gate_path_still_tracked(self):
         """A normal file path must still be tracked."""
         _run_track(self.SID, 'Write', {
@@ -422,6 +445,15 @@ class TestReviewGatePathExclusion(unittest.TestCase):
         dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
         self.assertTrue(os.path.exists(dirty),
                         'Normal file must still be tracked')
+
+    def test_bash_non_review_gate_still_tracked(self):
+        """Bash commands NOT targeting .review-gate/ must still be tracked."""
+        _run_track(self.SID, 'Bash', {
+            'command': 'echo "hello" > /tmp/some-artifact.txt',
+        }, self.state_dir)
+        dirty = os.path.join(self.state_dir, f'{self.SID}-dirty.jsonl')
+        self.assertTrue(os.path.exists(dirty),
+                        'Bash not targeting .review-gate/ must still be tracked')
 
 
 class TestSelfRefPerSegment(unittest.TestCase):
@@ -1013,10 +1045,12 @@ class TestProtocolFileExemption(unittest.TestCase):
     def test_non_protocol_file_not_exempt(self):
         """A non-protocol file alone is not exempt."""
         other = os.path.join(self.state_dir, 'some-file.md')
+        # >5 lines to ensure full tier (RGH-1b item 2: ≤5 lines → fast-path)
+        content = '# Content\n' + '\n'.join(f'line {i}' for i in range(6))
         with open(other, 'w') as f:
-            f.write('# Content\n')
+            f.write(content)
         _run_track(self.SID, 'Write', {
-            'file_path': other, 'content': '# Content\n',
+            'file_path': other, 'content': content,
         }, self.state_dir)
         r = _run_gate(self.SID, self.state_dir)
         self.assertEqual(r.returncode, 2,
@@ -1073,11 +1107,13 @@ class TestFastPathAutoClear(unittest.TestCase):
     def test_auto_clear_refuses_full_tier(self):
         """A full-tier entry must NOT auto-clear even if content is clean."""
         artifact = os.path.join(self.state_dir, 'full-artifact.md')
+        # >5 lines to ensure full tier (RGH-1b item 2: ≤5 lines → fast-path)
+        content = '# Clean content\n' + '\n'.join(f'line {i}' for i in range(6))
         with open(artifact, 'w') as f:
-            f.write('# Clean content\n')
+            f.write(content)
         # Track as Write (full tier)
         _run_track(self.SID, 'Write', {
-            'file_path': artifact, 'content': '# Clean content\n',
+            'file_path': artifact, 'content': content,
         }, self.state_dir)
         # Stop must block (full tier → no auto-clear)
         r = _run_gate(self.SID, self.state_dir)
@@ -1107,10 +1143,12 @@ class TestFastPathAutoClear(unittest.TestCase):
             'old_string': '# X', 'new_string': '# Clean',
         }, self.state_dir)
         full = os.path.join(self.state_dir, 'full.md')
+        # >5 lines to ensure full tier (RGH-1b item 2)
+        full_content = '# Also clean\n' + '\n'.join(f'line {i}' for i in range(6))
         with open(full, 'w') as f:
-            f.write('# Also clean\n')
+            f.write(full_content)
         _run_track(self.SID, 'Write', {
-            'file_path': full, 'content': '# Also clean\n',
+            'file_path': full, 'content': full_content,
         }, self.state_dir)
         r = _run_gate(self.SID, self.state_dir)
         self.assertEqual(r.returncode, 2,
@@ -1250,10 +1288,12 @@ class TestGateSkip(unittest.TestCase):
     def test_skip_clears_unreviewed(self):
         """Skip clears unreviewed entries so gate approves."""
         artifact = os.path.join(self.state_dir, 'skipped.md')
+        # >5 lines to ensure full tier (RGH-1b item 2)
+        content = '# content\n' + '\n'.join(f'line {i}' for i in range(6))
         with open(artifact, 'w') as f:
-            f.write('# content\n')
+            f.write(content)
         _run_track(self.SID, 'Write', {
-            'file_path': artifact, 'content': '# content\n',
+            'file_path': artifact, 'content': content,
         }, self.state_dir)
         # Gate blocks before skip
         r = _run_gate(self.SID, self.state_dir)
@@ -1269,10 +1309,12 @@ class TestGateSkip(unittest.TestCase):
     def test_skip_writes_metrics(self):
         """Skip writes a SKIP entry to metrics.jsonl."""
         artifact = os.path.join(self.state_dir, 'skipped.md')
+        # >5 lines to ensure full tier (RGH-1b item 2)
+        content = '# content\n' + '\n'.join(f'line {i}' for i in range(6))
         with open(artifact, 'w') as f:
-            f.write('# content\n')
+            f.write(content)
         _run_track(self.SID, 'Write', {
-            'file_path': artifact, 'content': '# content\n',
+            'file_path': artifact, 'content': content,
         }, self.state_dir)
         self._run_skip()
         metrics = os.path.join(self.state_dir, 'metrics.jsonl')
