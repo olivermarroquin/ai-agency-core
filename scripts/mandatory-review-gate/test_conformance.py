@@ -1356,6 +1356,192 @@ class TestGateSkip(unittest.TestCase):
                          'gate-status command must be self-excluded')
 
 
+# ============================================================================
+# RGH-4: Per-project config tests
+# ============================================================================
+
+class TestProjectConfig(unittest.TestCase):
+    """Tests for per-project configuration (RGH-4).
+
+    Covers: load_project_config, resolve_project, get_state_path_patterns,
+    _load_leak_identity_strings, get_project_profile_name, project-aware
+    classify_tier, project-aware run_fast_path_checks, no-config fallback.
+    """
+
+    def setUp(self):
+        self.state_dir = tempfile.mkdtemp(prefix='rgh4-test-')
+        self.config_dir = tempfile.mkdtemp(prefix='rgh4-config-')
+        os.environ['REVIEW_GATE_STATE_DIR'] = self.state_dir
+        # Reset the config cache before each test
+        import engine
+        engine._project_config_cache = None
+
+    def tearDown(self):
+        shutil.rmtree(self.state_dir, ignore_errors=True)
+        shutil.rmtree(self.config_dir, ignore_errors=True)
+        import engine
+        engine._project_config_cache = None
+
+    def _write_config(self, config_content):
+        """Write a config.yml to a temp dir and point load_project_config at it."""
+        import engine
+        config_path = os.path.join(self.config_dir, '.review-gate')
+        os.makedirs(config_path, exist_ok=True)
+        with open(os.path.join(config_path, 'config.yml'), 'w') as f:
+            f.write(config_content)
+        return self.config_dir
+
+    def test_load_project_config_with_real_config(self):
+        """load_project_config returns parsed config from .review-gate/config.yml."""
+        import engine
+        engine._project_config_cache = None
+        config = engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        self.assertIn('projects', config)
+        self.assertIn('core-30-seo', config['projects'])
+
+    def test_load_project_config_no_file_returns_empty(self):
+        """load_project_config returns empty dict when no config.yml exists."""
+        import engine
+        engine._project_config_cache = None
+        config = engine.load_project_config('/nonexistent/path')
+        self.assertEqual(config, {})
+
+    def test_resolve_project_matches_core30_path(self):
+        """resolve_project matches files in Core-30 data paths."""
+        import engine
+        engine._project_config_cache = None
+        config = engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        proj = engine.resolve_project(
+            os.path.join(EXPECTED_WORKSPACE_ROOT,
+                         'repos/ai-agency-core/scripts/data/client-ev.json'),
+            config)
+        self.assertIsNotNone(proj)
+        self.assertIn('Core 30', proj.get('description', ''))
+
+    def test_resolve_project_returns_none_for_unrelated(self):
+        """resolve_project returns None for paths outside any configured project."""
+        import engine
+        engine._project_config_cache = None
+        config = engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        proj = engine.resolve_project('/tmp/some-random-project/file.md', config)
+        self.assertIsNone(proj)
+
+    def test_get_state_path_patterns_defaults_only_for_generic(self):
+        """Generic paths get only DEFAULT_STATE_PATH_PATTERNS (no Core-30 extras)."""
+        import engine
+        engine._project_config_cache = None
+        # Force load from real config
+        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        patterns = engine.get_state_path_patterns('/tmp/unrelated.md')
+        self.assertEqual(len(patterns), len(engine.DEFAULT_STATE_PATH_PATTERNS))
+        pattern_str = str(patterns)
+        self.assertNotIn('publish-core-30-page', pattern_str)
+        self.assertNotIn('gsc_indexing', pattern_str)
+
+    def test_get_state_path_patterns_includes_extras_for_core30(self):
+        """Core-30 paths get DEFAULT + extra project-specific patterns."""
+        import engine
+        engine._project_config_cache = None
+        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        core30_path = os.path.join(EXPECTED_WORKSPACE_ROOT,
+                                   'repos/ai-agency-core/scripts/data/foo.json')
+        patterns = engine.get_state_path_patterns(core30_path)
+        self.assertGreater(len(patterns), len(engine.DEFAULT_STATE_PATH_PATTERNS))
+        self.assertTrue(any('publish-core-30-page' in p for p in patterns))
+
+    def test_get_project_profile_name_honest_reporting(self):
+        """Profile name is 'generic (no project profile)' for unmatched paths."""
+        import engine
+        engine._project_config_cache = None
+        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        name = engine.get_project_profile_name('/tmp/unrelated.md')
+        self.assertIn('generic', name)
+        # Core-30 path should name the project
+        core30_path = os.path.join(EXPECTED_WORKSPACE_ROOT,
+                                   'repos/ai-agency-core/scripts/data/x.json')
+        name = engine.get_project_profile_name(core30_path)
+        self.assertIn('Core 30', name)
+
+    def test_classify_tier_project_aware(self):
+        """classify_tier uses project-specific patterns for Core-30, defaults for generic."""
+        import engine
+        engine._project_config_cache = None
+        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+
+        # Core-30 script path → full (matched by extra pattern)
+        tier = engine.classify_tier(
+            os.path.join(EXPECTED_WORKSPACE_ROOT,
+                         'repos/ai-agency-core/scripts/publish-core-30-page.py'),
+            {'new_string': 'x', 'old_string': 'y'}, 'Edit')
+        self.assertEqual(tier, 'full')
+
+        # Generic trivial edit → fast-path
+        tier = engine.classify_tier(
+            '/tmp/notes.md',
+            {'new_string': 'a', 'old_string': 'b'}, 'Edit')
+        self.assertEqual(tier, 'fast-path')
+
+    def test_run_fast_path_checks_leak_audit_na_for_generic(self):
+        """Leak audit reports N/A on files outside any configured project."""
+        import engine
+        engine._project_config_cache = None
+        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+
+        tf = tempfile.NamedTemporaryFile(
+            mode='w', suffix='.md', delete=False,
+            dir=self.state_dir)
+        tf.write('This content mentions an open source client library.')
+        tf.close()
+        try:
+            result = engine.run_fast_path_checks(tf.name)
+            leak_check = [c for c in result['checks']
+                          if c['name'] == 'leak-audit'][0]
+            self.assertEqual(leak_check['result'], 'N/A')
+            self.assertTrue(result['passed'])
+            self.assertIn('generic', result.get('project_profile', ''))
+        finally:
+            os.unlink(tf.name)
+
+    def test_run_fast_path_checks_placeholder_still_catches(self):
+        """Placeholder sweep still catches real placeholders on generic files."""
+        import engine
+        engine._project_config_cache = None
+        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+
+        tf = tempfile.NamedTemporaryFile(
+            mode='w', suffix='.md', delete=False,
+            dir=self.state_dir)
+        tf.write('This has a FILL placeholder that should be caught.')
+        tf.close()
+        try:
+            result = engine.run_fast_path_checks(tf.name)
+            ph_check = [c for c in result['checks']
+                        if c['name'] == 'placeholder-sweep'][0]
+            self.assertEqual(ph_check['result'], 'FAIL')
+            self.assertGreater(ph_check['count'], 0)
+            self.assertFalse(result['passed'])
+        finally:
+            os.unlink(tf.name)
+
+    def test_no_config_fallback_graceful(self):
+        """Engine works correctly when no config.yml exists (graceful fallback)."""
+        import engine
+        engine._project_config_cache = None
+        # Load from a path with no config
+        config = engine.load_project_config('/nonexistent')
+        self.assertEqual(config, {})
+
+        # All functions degrade gracefully
+        proj = engine.resolve_project('/any/path.md', config)
+        self.assertIsNone(proj)
+
+        patterns = engine.get_state_path_patterns('/any/path.md')
+        self.assertEqual(len(patterns), len(engine.DEFAULT_STATE_PATH_PATTERNS))
+
+        name = engine.get_project_profile_name('/any/path.md')
+        self.assertIn('generic', name)
+
+
 if __name__ == '__main__':
     # Ensure the subdir cwd exists
     if not os.path.isdir(SUBDIR_CWD):

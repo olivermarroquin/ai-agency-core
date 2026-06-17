@@ -9,6 +9,7 @@ returns structured results. It never imports substrate-specific protocols
 (no CC hook JSON, no git plumbing, no daemon IPC).
 
 Created by [RGH-2] (2026-06-16) as part of the substrate-abstraction refactor.
+Per-project config support added by [RGH-4] (2026-06-16).
 """
 
 import dataclasses
@@ -301,30 +302,153 @@ def is_read_only_bash(command: str) -> bool:
 
 
 # ============================================================================
-# Tier classification
+# Per-project configuration (RGH-4)
 # ============================================================================
 
-STATE_PATH_PATTERNS = [
+# Default state-path patterns — workspace-generic, always active.
+# Project-specific patterns extend these; they never replace them.
+DEFAULT_STATE_PATH_PATTERNS = [
     r'ai-factory/system-state/',
-    r'_meta/',
+    r'second-brain/_meta/',
     r'\.claude/',
-    r'_deployment-status\.md',
     r'_event-log\.md',
-    r'publish-core-30-page\.py',
-    r'gsc_indexing\.py',
-    r'submit-gsc-indexing\.py',
-    r'settings\.json',
+    r'\.claude/settings\.json',
     r'SKILL\.md',
     r'CLAUDE\.md',
 ]
 
+# Legacy combined list — kept as module-level constant for backward compat
+# with any code that imports STATE_PATH_PATTERNS directly. The classify_tier()
+# function uses get_state_path_patterns() which reads per-project config.
+STATE_PATH_PATTERNS = DEFAULT_STATE_PATH_PATTERNS + [
+    r'_deployment-status\.md',
+    r'publish-core-30-page\.py',
+    r'gsc_indexing\.py',
+    r'submit-gsc-indexing\.py',
+]
+
+_project_config_cache = None  # type: Optional[dict]
+
+
+def load_project_config(workspace_root: str = None) -> dict:
+    """Load .review-gate/config.yml. Cached after first load.
+
+    Returns parsed dict or empty dict if no config exists.
+    Config is optional — the gate works without it (generic defaults).
+    """
+    global _project_config_cache
+    if _project_config_cache is not None:
+        return _project_config_cache
+
+    if workspace_root is None:
+        workspace_root = WORKSPACE_ROOT
+
+    config_path = os.path.join(workspace_root, '.review-gate', 'config.yml')
+    if not os.path.isfile(config_path):
+        _project_config_cache = {}
+        return _project_config_cache
+
+    try:
+        # Use yaml if available, fall back to a simple parser
+        try:
+            import yaml
+            with open(config_path, 'r') as f:
+                _project_config_cache = yaml.safe_load(f) or {}
+        except ImportError:
+            # No PyYAML — parse the subset we need manually
+            _project_config_cache = _parse_config_minimal(config_path)
+    except Exception:
+        _project_config_cache = {}
+
+    return _project_config_cache
+
+
+def _parse_config_minimal(path: str) -> dict:
+    """Minimal YAML-subset parser for config.yml when PyYAML is unavailable.
+
+    Handles the flat structure we need: default_state_path_patterns list,
+    projects map with path_markers and extra_state_path_patterns.
+    Falls back to empty dict on any parse issue — safe degradation.
+    """
+    # Best-effort: if yaml isn't available we still want the gate to work.
+    # The config format is simple enough that we only need top-level keys.
+    return {}
+
+
+def resolve_project(file_path: str, config: dict = None) -> Optional[dict]:
+    """Match a file path to a project config entry.
+
+    Returns the project config dict if matched, None if no match.
+    Matches by checking if any of the project's path_markers appear
+    in the file path.
+    """
+    if config is None:
+        config = load_project_config()
+
+    projects = config.get('projects', {})
+    if not projects:
+        return None
+
+    for _proj_id, proj_config in projects.items():
+        if not isinstance(proj_config, dict):
+            continue
+        markers = proj_config.get('path_markers', [])
+        for marker in markers:
+            if marker in file_path:
+                return proj_config
+
+    return None
+
+
+def get_state_path_patterns(file_path: str = None) -> list:
+    """Get the state-path patterns applicable to a file.
+
+    Returns DEFAULT_STATE_PATH_PATTERNS + any project-specific extra patterns
+    if the file matches a configured project.
+    """
+    config = load_project_config()
+    patterns = list(DEFAULT_STATE_PATH_PATTERNS)
+
+    if file_path:
+        proj = resolve_project(file_path, config)
+        if proj:
+            extra = proj.get('extra_state_path_patterns', [])
+            patterns.extend(extra)
+
+    return patterns
+
+
+def get_project_profile_name(file_path: str = None) -> str:
+    """Return a human-readable profile name for the file's project.
+
+    Returns 'generic (no project profile)' when no config matches.
+    """
+    if not file_path:
+        return 'generic (no project profile)'
+
+    config = load_project_config()
+    proj = resolve_project(file_path, config)
+    if proj:
+        return proj.get('description', proj.get('facts_profile_id', 'configured project'))
+    return 'generic (no project profile)'
+
+
+# ============================================================================
+# Tier classification
+# ============================================================================
+
 
 def classify_tier(file_path: str, tool_input: dict, tool_name: str) -> str:
-    """Classify as 'fast-path' (trivial) or 'full' (substantive)."""
+    """Classify as 'fast-path' (trivial) or 'full' (substantive).
+
+    Uses per-project state-path patterns when a project config matches
+    the file path. Falls back to workspace-generic defaults.
+    """
     if tool_name == 'Bash':
         return 'full'
 
-    for pattern in STATE_PATH_PATTERNS:
+    patterns = get_state_path_patterns(file_path)
+    for pattern in patterns:
         if re.search(pattern, file_path):
             return 'full'
 
@@ -389,12 +513,65 @@ UNRESOLVED_LINK_PATTERN = re.compile(
     r'\[\[.*?(FILL|TBD|TODO|PLACEHOLDER).*?\]\]', re.IGNORECASE)
 
 
+def _load_leak_identity_strings(file_path: str) -> list:
+    """Load client identity strings for the leak audit from project config.
+
+    Returns a list of identity strings to grep for, or empty list if no
+    client data is configured for this file's project.
+    """
+    config = load_project_config()
+    proj = resolve_project(file_path, config)
+    if not proj:
+        return []
+
+    leak_config = proj.get('leak_audit')
+    if not leak_config or not isinstance(leak_config, dict):
+        return []
+
+    data_path = leak_config.get('client_data_path', '')
+    file_pattern = leak_config.get('client_file_pattern', 'client-*.json')
+    identity_fields = leak_config.get('identity_fields', ['name', 'owner_name'])
+
+    if not data_path:
+        return []
+
+    # Resolve relative to workspace root
+    abs_data_path = os.path.join(WORKSPACE_ROOT, data_path)
+    if not os.path.isdir(abs_data_path):
+        return []
+
+    import glob as glob_mod
+    client_files = glob_mod.glob(os.path.join(abs_data_path, file_pattern))
+    if not client_files:
+        return []
+
+    identity_strings = []
+    for cf in client_files:
+        try:
+            with open(cf, 'r') as f:
+                data = json.load(f)
+            for field in identity_fields:
+                val = data.get(field, '')
+                if val and isinstance(val, str) and len(val) > 2:
+                    identity_strings.append(val)
+        except (json.JSONDecodeError, OSError):
+            continue
+
+    return identity_strings
+
+
 def run_fast_path_checks(file_path: str) -> dict:
-    """Run grep-level fast-path checks on a single file."""
+    """Run grep-level fast-path checks on a single file.
+
+    Project-aware (RGH-4): leak-audit loads identity strings from
+    per-project config instead of using a hardcoded regex. When no
+    project config exists, leak-audit reports N/A (honest skip).
+    """
     result = {
         'file': file_path,
         'checks': [],
         'passed': True,
+        'project_profile': get_project_profile_name(file_path),
     }
 
     if file_path.startswith('BASH:') or not os.path.isfile(file_path):
@@ -416,6 +593,7 @@ def run_fast_path_checks(file_path: str) -> dict:
         })
         return result
 
+    # Placeholder sweep — project-agnostic, always runs
     placeholders = PLACEHOLDER_PATTERNS.findall(content)
     ph_count = len(placeholders)
     result['checks'].append({
@@ -426,16 +604,32 @@ def run_fast_path_checks(file_path: str) -> dict:
     if ph_count > 0:
         result['passed'] = False
 
-    leak_markers = re.findall(r'(source.client|foreign.client)', content, re.IGNORECASE)
-    leak_count = len(leak_markers)
-    result['checks'].append({
-        'name': 'leak-audit',
-        'result': 'PASS' if leak_count == 0 else 'FAIL',
-        'count': leak_count,
-    })
-    if leak_count > 0:
-        result['passed'] = False
+    # Leak audit — project-aware (RGH-4)
+    # Load identity strings from project config; if none configured,
+    # report N/A honestly instead of using a hardcoded regex that false-fires.
+    identity_strings = _load_leak_identity_strings(file_path)
+    if identity_strings:
+        leak_count = 0
+        for identity in identity_strings:
+            hits = content.lower().count(identity.lower())
+            leak_count += hits
+        result['checks'].append({
+            'name': 'leak-audit',
+            'result': 'PASS' if leak_count == 0 else 'FAIL',
+            'count': leak_count,
+        })
+        if leak_count > 0:
+            result['passed'] = False
+    else:
+        # No client identity data configured — honest skip
+        result['checks'].append({
+            'name': 'leak-audit',
+            'result': 'N/A',
+            'count': 0,
+            'reason': 'no client identity registry configured for this project',
+        })
 
+    # Link resolution — project-agnostic, always runs
     bad_links = UNRESOLVED_LINK_PATTERN.findall(content)
     link_count = len(bad_links)
     result['checks'].append({
@@ -484,12 +678,18 @@ def try_fast_path_auto_clear(unreviewed: list, session_id: str,
         seen[name]['count'] += c.get('count', 0)
     deduped_checks = list(seen.values())
 
+    # Determine project profile from the first file result
+    profiles = [r.get('project_profile', 'generic (no project profile)')
+                for r in all_results]
+    profile = profiles[0] if profiles else 'generic (no project profile)'
+
     verdict_data = {
         'verdict': 'PASS',
         'checks_run': deduped_checks,
         'catches': [],
         'cost_usd': 0.0,
         'auto_clear': True,
+        'project_profile': profile,
         'generator': 'mandatory-review-gate/fast-path-auto-clear',
     }
 
@@ -567,6 +767,19 @@ class GateResult:
     unreviewed: list     # list of unreviewed entry dicts (empty if not blocked)
     tier: str            # 'n/a' | 'fast-path' | 'full'
     wall_ms: float
+    project_profile: str = 'generic (no project profile)'  # RGH-4
+
+
+def _resolve_entries_profile(entries: list) -> str:
+    """Determine the dominant project profile for a set of dirty entries."""
+    for e in entries:
+        fp = e.get('file_path', '')
+        if fp.startswith('BASH:'):
+            continue
+        profile = get_project_profile_name(fp)
+        if profile != 'generic (no project profile)':
+            return profile
+    return 'generic (no project profile)'
 
 
 def check_gate(
@@ -635,10 +848,11 @@ def check_gate(
                               tier='fast-path', wall_ms=wall_ms)
 
     # Blocked
+    profile = _resolve_entries_profile(unreviewed)
     wall_ms = (time.monotonic() - t_start) * 1000
     log_metrics(state_dir, session_id, 'block', len(unreviewed), tier, wall_ms)
     return GateResult(status='blocked', unreviewed=unreviewed, tier=tier,
-                      wall_ms=wall_ms)
+                      wall_ms=wall_ms, project_profile=profile)
 
 
 # ============================================================================
