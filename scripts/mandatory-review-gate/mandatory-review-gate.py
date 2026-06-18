@@ -16,6 +16,13 @@ and instructs the producer to spawn the LLM adversarial reviewer agent.
 Full-tier items require reviewer_type='independent' to clear. Fast-path items
 are auto-cleared by the deterministic dispatch ($0).
 
+CIRCUIT BREAKER (RGH-CB): tracks consecutive identical blocks via a per-session
+state file (<session>-stop-hook-history.json). If the same set of unreviewed
+entry keys blocks N consecutive times (N=3, configurable) with zero new entries
+between firings, auto-skips with a LOUD warning and logs a circuit-breaker-
+triggered event to metrics.jsonl. Counter resets when new entries appear or
+entries are cleared.
+
 Stdin:  JSON from Claude Code hook system (session_id, stop_reason, etc.)
 Stdout: JSON acknowledgment when all clean (exit 0)
 Stderr: Block message with unreviewed file list (exit 2)
@@ -36,6 +43,9 @@ import engine
 # Tier B git pre-commit hook (RGH-2).
 CC_INCLUDED_SOURCES = frozenset({'claude-code', ''})  # '' = legacy entries without source field
 
+# Circuit breaker: max consecutive identical blocks before auto-skip (RGH-CB)
+CIRCUIT_BREAKER_MAX = 3
+
 # Path to the independent reviewer dispatch script
 DISPATCH_SCRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                'independent-reviewer-dispatch.py')
@@ -46,6 +56,187 @@ MANDATE_PATH = os.path.normpath(os.path.join(
     '..', '..', '..', '..',
     'skills', 'gate-peer-reviewer', 'references',
     'independent-reviewer-mandate.md'))
+
+
+# ============================================================================
+# Circuit breaker (RGH-CB)
+# ============================================================================
+#
+# ANTI-POISONING (CR-011): The history file is append-only JSONL. Each stop-hook
+# firing appends one row with the entry-key fingerprint (SHA-256 of the sorted
+# entry keys). The circuit breaker reads ALL rows and counts trailing consecutive
+# rows with the same fingerprint. A poisoned/pre-seeded file cannot skip the
+# counter requirement — it would need to append rows with the correct fingerprint
+# for a set of entries that hasn't been seen yet, and the fingerprint is derived
+# from the actual unreviewed set at runtime. Overwriting the file resets the
+# counter to 0 (no rows = no history).
+
+import hashlib as _hashlib
+
+
+def _history_path(session_id):
+    """Path to the per-session stop-hook history file (append-only JSONL)."""
+    return os.path.join(STATE_DIR, f'{session_id}-stop-hook-history.jsonl')
+
+
+def _entry_fingerprint(entry_keys):
+    """SHA-256 fingerprint of the sorted entry key list."""
+    content = '\n'.join(entry_keys)
+    return _hashlib.sha256(content.encode()).hexdigest()
+
+
+def _read_history_tail(session_id):
+    """Read the history log and return trailing consecutive count + fingerprint.
+
+    Returns (consecutive_count, last_fingerprint). Counts how many trailing
+    rows share the same fingerprint. If the file doesn't exist or is empty,
+    returns (0, '').
+    """
+    path = _history_path(session_id)
+    if not os.path.isfile(path):
+        return 0, ''
+    rows = []
+    try:
+        with open(path, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        rows.append(json.loads(line))
+                    except json.JSONDecodeError:
+                        continue
+    except OSError:
+        return 0, ''
+
+    if not rows:
+        return 0, ''
+
+    # Count trailing rows with same fingerprint
+    last_fp = rows[-1].get('fingerprint', '')
+    count = 0
+    for row in reversed(rows):
+        if row.get('fingerprint', '') == last_fp:
+            count += 1
+        else:
+            break
+    return count, last_fp
+
+
+def _append_history(session_id, entry_keys):
+    """Append one row to the history log. Returns the fingerprint written."""
+    os.makedirs(STATE_DIR, exist_ok=True)
+    fp = _entry_fingerprint(entry_keys)
+    row = {
+        'timestamp': time.time(),
+        'iso_time': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+        'fingerprint': fp,
+        'entry_count': len(entry_keys),
+    }
+    path = _history_path(session_id)
+    with open(path, 'a') as f:
+        f.write(json.dumps(row) + '\n')
+    return fp
+
+
+def _reset_history(session_id):
+    """Truncate the history log (used after circuit breaker fires)."""
+    path = _history_path(session_id)
+    if os.path.isfile(path):
+        with open(path, 'w') as f:
+            pass  # truncate
+
+
+def _check_circuit_breaker(session_id, unreviewed):
+    """Check if the circuit breaker should fire.
+
+    Returns (should_skip: bool, consecutive_count: int).
+    Side effect: appends to the append-only history log.
+    """
+    current_keys = sorted(e.get('file_path', '') for e in unreviewed)
+    current_fp = _entry_fingerprint(current_keys)
+
+    # Read existing history BEFORE appending
+    tail_count, tail_fp = _read_history_tail(session_id)
+
+    # Append this firing
+    _append_history(session_id, current_keys)
+
+    if current_fp == tail_fp:
+        # Same set as previous firings — count is tail + 1 (this one)
+        count = tail_count + 1
+    else:
+        # Different set — this firing starts a new run of 1
+        count = 1
+
+    return count >= CIRCUIT_BREAKER_MAX, count
+
+
+def _circuit_breaker_skip(session_id, unreviewed, consecutive_count):
+    """Execute the circuit breaker: write gate-skip marker, log metrics, allow stop.
+
+    Writes a LOUD warning to stderr and exits 0 (allow stop).
+    """
+    entry_keys = sorted(e.get('file_path', '') for e in unreviewed)
+
+    # Log to metrics.jsonl
+    engine.log_metrics(
+        STATE_DIR, session_id, 'circuit-breaker-triggered',
+        len(unreviewed), 'n/a', 0,
+        extra={
+            'event': 'circuit-breaker-triggered',
+            'consecutive_blocks': consecutive_count,
+            'entries': entry_keys,
+        },
+    )
+
+    # Write gate-skip marker so reviewed ledger records the skip
+    now = time.time()
+    iso = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+    reviewed_path = os.path.join(STATE_DIR, f'{session_id}-reviewed.jsonl')
+    os.makedirs(STATE_DIR, exist_ok=True)
+    with open(reviewed_path, 'a') as f:
+        for key in entry_keys:
+            marker = {
+                'timestamp': now,
+                'iso_time': iso,
+                'file_path': key,
+                'verdict': 'SKIP',
+                'tier': 'n/a',
+                'gate_id': 'G-circuit-breaker',
+                'evidence': (f'circuit-breaker: {consecutive_count} consecutive '
+                             f'identical blocks, auto-skip'),
+                'verdict_file': None,
+                'verdict_data': None,
+                'findings': None,
+            }
+            f.write(json.dumps(marker) + '\n')
+
+    # Reset history after firing (truncate the append-only log)
+    _reset_history(session_id)
+
+    # LOUD warning
+    warning = f"""
+╔══════════════════════════════════════════════════════════════════════╗
+║  ⚠️  CIRCUIT BREAKER TRIGGERED — AUTO-SKIP (RGH-CB)                ║
+╠══════════════════════════════════════════════════════════════════════╣
+║  The stop hook blocked on the SAME {len(unreviewed)} unreviewed entry/entries     ║
+║  {consecutive_count} consecutive times with no new entries between firings.      ║
+║  This is the infinite-loop protection — the gate is being skipped.  ║
+║                                                                      ║
+║  Skipped entries:                                                    ║"""
+    for key in entry_keys:
+        warning += f'\n║    - {key[:62]:<62} ║'
+    warning += f"""
+║                                                                      ║
+║  ACTION REQUIRED: Investigate why these entries cannot be cleared.   ║
+║  Common causes:                                                      ║
+║    1. Read-only commands classified as state-changing                ║
+║    2. Gate infrastructure writes creating unclearable entries        ║
+║    3. Reviewer dispatch creating new dirty entries                   ║
+╚══════════════════════════════════════════════════════════════════════╝
+"""
+    print(warning, file=sys.stderr)
+    print(json.dumps({'continue': True}))
 
 
 def _run_independent_dispatch(session_id, tier, unreviewed):
@@ -104,11 +295,19 @@ def main():
     # Map GateResult to CC Stop hook protocol
     if result.status != 'blocked':
         # Clean / clear / exempt / auto-cleared -> approve
+        # Reset circuit breaker on successful pass (entries were cleared)
+        _reset_history(session_id)
         print(json.dumps({'continue': True}))
         return
 
-    # Blocked -> auto-run independent dispatch (RGH-5)
+    # Blocked — check circuit breaker BEFORE doing anything else (RGH-CB)
     unreviewed = result.unreviewed
+    should_skip, consecutive_count = _check_circuit_breaker(session_id, unreviewed)
+    if should_skip:
+        _circuit_breaker_skip(session_id, unreviewed, consecutive_count)
+        return
+
+    # Blocked -> auto-run independent dispatch (RGH-5)
     tier = result.tier
     count = len(unreviewed)
     auto_clear_refusal = result.auto_clear_refusal  # RGH-1b item 1

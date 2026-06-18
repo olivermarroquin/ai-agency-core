@@ -170,7 +170,12 @@ READ_ONLY_GIT_SUBCMDS = frozenset({
 READ_ONLY_PYTHON_SCRIPTS = frozenset({
     'test_conformance.py',
     'test_git_hook_conformance.py',
+    'verify-artifact.py',
 })
+
+# CR-012: Do NOT whitelist python3 commands by flag heuristic (--skip-http,
+# --dry-run, etc.). That's a full gate bypass for publish/indexing scripts.
+# Only whitelist by exact basename in READ_ONLY_PYTHON_SCRIPTS above.
 
 
 def _strip_stderr_redirects(cmd: str) -> str:
@@ -245,6 +250,7 @@ def _is_segment_read_only(segment: str) -> bool:
     if base in ('python3', 'python') and re.search(r"<<\s*['\"]?\w+['\"]?", segment):
         return True
     # RGH-1b item 4: specific test-suite scripts whitelisted by exact basename.
+    # CR-012: NO flag-based heuristic — only exact basename whitelist.
     if base in ('python3', 'python'):
         parts = segment.split()
         for p in parts[1:]:
