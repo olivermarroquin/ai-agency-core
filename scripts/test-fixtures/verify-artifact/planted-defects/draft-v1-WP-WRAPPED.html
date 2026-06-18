@@ -1,0 +1,112 @@
+<!-- Planted defects fixture for verify-artifact.py acceptance testing.
+     City: Bethesda, MD (has all ground-truth fields: dispatch_time_short, electric_utilities, county).
+     Every catch class from the DA4 handoff is planted here:
+     1. FILL in meta context (placeholder-sweep)
+     2. S&H brand leak on an EV page (identity-leak)
+     3. Wrong dispatch time: "15-min" vs ground truth "35–45 min" (value-cross-check presence)
+     4. Wrong utility: "Dominion Energy" vs ground truth "PEPCO" (value-cross-check presence)
+     5. PLACEHOLDER.png image src (image-integrity)
+     6. Missing JSON-LD Service type (schema-coverage)
+     7. Dead internal link (link-resolution)
+     8. Hardcode-scanner default: "45-minute" (hardcode-scan)
+     9. Wrong review rating: 4.9 vs 5.0 (value-cross-check structured-extract)
+    10. Wrong review count: 68 vs 148 (value-cross-check structured-extract)
+-->
+
+<div class="hero-section">
+  <img src="https://evelectric.pro/wp-content/uploads/2026/06/bethesda-md-troubleshooting-PLACEHOLDER.png" alt="Electrical troubleshooting in Bethesda, MD">
+  <h1>Electrical Troubleshooting in Bethesda, MD</h1>
+  <p>Call Ahmad Shaban at 571-500-6637 for same-day electrical diagnosis in Bethesda, MD.</p>
+</div>
+
+<div class="about-section">
+  <p>EV Electric Services has been providing expert electrical troubleshooting in Bethesda, MD
+  and Montgomery County for over 15 years. Owner Ahmad Shaban is a licensed master electrician
+  serving all of the greater DC metro area.</p>
+
+  <!-- PLANTED: S&H brand leak on an EV page (identity-leak catch) -->
+  <p>We partner with top contractors including S&H Contracting Unlimited to serve
+  the greater Northern Virginia and Maryland area.</p>
+
+  <!-- PLANTED: map iframe with S&H title leak (the map-title blind spot) -->
+  <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="450"
+    title="S&H Contracting Unlimited service area map"
+    loading="lazy"></iframe>
+
+  <!-- PLANTED: wrong dispatch time — says "15-min" but Bethesda ground truth is "35–45 min" -->
+  <p>Our typical response time to Bethesda is 15-min, ensuring you get help fast when
+  electrical issues arise.</p>
+
+  <!-- PLANTED: wrong utility — says "Dominion Energy" but Bethesda ground truth is "PEPCO" -->
+  <p>We coordinate directly with Dominion Energy for all service-entrance work in Bethesda.</p>
+
+  <!-- PLANTED: hardcode-scanner default — "45-minute" is the silent scaffolder default -->
+  <p>Even for distant service calls, we guarantee 45-minute response times.</p>
+
+  <!-- PLANTED: 404 internal link -->
+  <h3>Related Services</h3>
+  <a href="/ev-charger-installation-nonexistent-city/">EV Charger Installation in Nonexistent City</a>
+</div>
+
+<div class="faq-section">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-item">
+    <h3>How quickly can you respond?</h3>
+    <p>We typically arrive within 35–45 minutes of your call to Bethesda.</p>
+  </div>
+</div>
+
+<!-- JSON-LD: PLANTED defect — missing Service type (only LocalBusiness + FAQPage) -->
+<!-- PLANTED: wrong ratingValue (4.9 vs ground truth 5.0) and reviewCount (68 vs 148) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LocalBusiness",
+      "name": "EV Electric Services",
+      "telephone": "571-500-6637",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "9488 Fairfax Blvd",
+        "addressLocality": "Fairfax",
+        "addressRegion": "VA",
+        "postalCode": "22031"
+      },
+      "url": "https://evelectric.pro/",
+      "areaServed": [
+        {
+          "@type": "AdministrativeArea",
+          "name": "Montgomery County"
+        },
+        {
+          "@type": "City",
+          "name": "Bethesda",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Montgomery County, MD"
+          }
+        }
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "68"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How quickly can you respond?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We typically arrive within 35–45 minutes of your call to Bethesda."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>

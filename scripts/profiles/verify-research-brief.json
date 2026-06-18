@@ -1,0 +1,106 @@
+{
+  "profile_id": "research-brief",
+  "description": "Non-page proof: verification profile for research briefs (city, service, client, intersection). Demonstrates the engine is artifact-agnostic. Config-only — no engine changes needed.",
+
+  "surfaces": [
+    {
+      "id": "brief_md",
+      "glob": "*.md",
+      "type": "markdown",
+      "required": true
+    }
+  ],
+
+  "ground_truth": {
+    "base_path": "repos/ai-agency-core/scripts/data",
+    "sources": [
+      {
+        "alias": "city",
+        "pattern": "cities/{city_slug}.json"
+      },
+      {
+        "alias": "client",
+        "pattern": "client-{client_slug}.json"
+      }
+    ]
+  },
+
+  "checks": [
+    {
+      "id": "placeholder-sweep",
+      "type": "pattern-sweep",
+      "severity": "blocking",
+      "surfaces": ["brief_md"],
+      "patterns": [
+        {
+          "regex": "\\{[a-z_]+\\}",
+          "label": "unrendered {template_token}",
+          "case_insensitive": false
+        },
+        {
+          "regex": "\\bFILL[:\\s]",
+          "label": "FILL: placeholder",
+          "case_insensitive": true
+        },
+        {
+          "regex": "\\bTBD\\b",
+          "label": "TBD placeholder",
+          "case_insensitive": false
+        },
+        {
+          "regex": "PLACEHOLDER",
+          "label": "PLACEHOLDER token",
+          "case_insensitive": true
+        },
+        {
+          "regex": "<!--\\s*MISSING",
+          "label": "<!-- MISSING comment",
+          "case_insensitive": false
+        }
+      ]
+    },
+
+    {
+      "id": "source-client-leak",
+      "type": "identity-leak",
+      "severity": "blocking",
+      "surfaces": ["brief_md"],
+      "identity_source": "client",
+      "identity_fields": ["name", "alternate_name", "owner_name"],
+      "identity_file_glob": "client-*.json",
+      "current_slug_var": "client_slug"
+    },
+
+    {
+      "id": "value-cross-check",
+      "type": "value-cross-check",
+      "severity": "blocking",
+      "checkable_facts": [
+        {
+          "fact_key": "city_name",
+          "ground_truth_alias": "city",
+          "ground_truth_field": "name",
+          "required_in_sources": true,
+          "extraction_surfaces": ["brief_md"],
+          "extraction_patterns": [
+            "^#\\s+.*?([A-Z][a-z]+(?:\\s+[A-Z][a-z]+)*)"
+          ],
+          "match_mode": "contains",
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "county",
+          "ground_truth_alias": "city",
+          "ground_truth_field": "county_full",
+          "required_in_sources": false,
+          "extraction_surfaces": ["brief_md"],
+          "extraction_patterns": [
+            "([A-Z][a-z]+(?:\\s+[A-Z][a-z]+)*\\s+County)"
+          ],
+          "match_mode": "contains",
+          "severity": "advisory"
+        }
+      ]
+    }
+  ]
+}

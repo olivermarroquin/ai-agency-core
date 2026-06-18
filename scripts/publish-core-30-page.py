@@ -1248,6 +1248,8 @@ def publish(
     request_indexing: bool = False,
     bypass_quality_gate: bool = False,
     preflight_credentials: bool = False,
+    preflight_verify: bool = False,
+    verify_skip_http: bool = False,
 ) -> PublishResult:
     started = datetime.now()
 
@@ -1312,6 +1314,60 @@ def publish(
             duration_seconds=duration,
             error_message=f"output-quality-loop pre-publish gate refused: {gate_reason}",
         )
+
+    # Guard 0 — verify-artifact consolidated pre-publish sweep (DA4).
+    # Runs the full on-disk sweep (placeholder + leak + value cross-check +
+    # schema + image + link + hardcode) and blocks on blocking findings.
+    # Subsumes Guards 1+2 but they remain as a fast defense-in-depth layer.
+    if preflight_verify:
+        try:
+            script_dir = Path(__file__).resolve().parent
+            import importlib.util as _ilu
+            _spec = _ilu.spec_from_file_location(
+                "verify_artifact", script_dir / "verify-artifact.py"
+            )
+            _mod = _ilu.module_from_spec(_spec)
+            _spec.loader.exec_module(_mod)
+
+            # Derive slugs from frontmatter
+            _fm = parse_frontmatter(md_path)
+            _vars = {
+                "city_slug": _fm.get("city", ""),
+                "client_slug": _fm.get("client", config.get("client_slug", "")),
+                "service_slug": _fm.get("service", ""),
+            }
+            _profile_path = script_dir / "profiles" / "verify-core-30-page.json"
+            _ws_root = script_dir.parent.parent.parent  # repos/ai-agency-core/scripts -> workspace
+
+            _vresult = _mod.verify_from_code(
+                _profile_path, page_folder, _vars, _ws_root, verify_skip_http
+            )
+
+            _blocking = _vresult.get("blocking_findings", 0)
+            _total = _vresult.get("total_findings", 0)
+            if _blocking > 0:
+                print(f"→ Verify-artifact: ✗ BLOCKED — {_blocking} blocking / {_total} total findings")
+                for cr in _vresult.get("check_results", []):
+                    if cr.get("blocking_count", 0) > 0:
+                        for f in cr.get("findings", []):
+                            if f.get("severity") == "blocking":
+                                print(f"   ! [{cr['check_id']}] {f.get('message', '')[:120]}")
+                duration = (datetime.now() - started).total_seconds()
+                return PublishResult(
+                    success=False,
+                    page_id=None,
+                    live_url=None,
+                    schema_valid=False,
+                    schema_errors=[],
+                    duration_seconds=duration,
+                    error_message=(
+                        f"verify-artifact pre-publish sweep: {_blocking} blocking finding(s). "
+                        f"Fix before publishing."
+                    ),
+                )
+            print(f"→ Verify-artifact: ✓ clean ({_total} advisory, {_blocking} blocking)")
+        except Exception as e:
+            print(f"→ Verify-artifact: ⚠ skipped (error: {e})")
 
     # Guard 1 — Placeholder hard-block (T2-7, Issues #15/#24/#26).
     # Scans for ANY residual placeholder content: bracketed [placeholder]
@@ -1706,6 +1762,24 @@ def main() -> int:
             "orchestrated run to surface auth issues before any page work."
         ),
     )
+    p.add_argument(
+        "--preflight-verify",
+        action="store_true",
+        help=(
+            "Run verify-artifact consolidated sweep before publishing. "
+            "Blocks on any blocking finding. Requires --vars or derives "
+            "city/client/service slugs from the page folder's draft-v1.md "
+            "frontmatter. Uses the core-30-page verification profile."
+        ),
+    )
+    p.add_argument(
+        "--verify-skip-http",
+        action="store_true",
+        help=(
+            "When --preflight-verify is active, skip HTTP resolution checks "
+            "(image + link). Useful for offline or fast pre-publish runs."
+        ),
+    )
 
     args = p.parse_args()
 
@@ -1742,6 +1816,8 @@ def main() -> int:
             request_indexing=args.request_indexing,
             bypass_quality_gate=args.bypass_quality_gate,
             preflight_credentials=args.preflight_credentials,
+            preflight_verify=args.preflight_verify,
+            verify_skip_http=args.verify_skip_http,
         )
     except Exception as e:
         sys.stderr.write(f"FATAL: {e}\n")

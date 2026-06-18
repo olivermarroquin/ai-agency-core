@@ -1,0 +1,267 @@
+{
+  "profile_id": "core-30-page",
+  "description": "Pre-publish verification for Core 30 service-city page folders. Runs the full on-disk sweep: placeholder/FILL across all surfaces, cross-client leak audit, value cross-check vs ground truth, schema coverage (G3), image integrity, internal link resolution, and hardcode-scanner delegation.",
+
+  "surfaces": [
+    {
+      "id": "html",
+      "glob": "draft-v1-WP-WRAPPED.html",
+      "type": "html",
+      "required": true
+    },
+    {
+      "id": "aioseo_md",
+      "glob": "draft-v1.md",
+      "type": "markdown",
+      "required": true
+    }
+  ],
+
+  "ground_truth": {
+    "base_path": "repos/ai-agency-core/scripts/data",
+    "sources": [
+      {
+        "alias": "city",
+        "pattern": "cities/{city_slug}.json"
+      },
+      {
+        "alias": "client",
+        "pattern": "client-{client_slug}.json"
+      },
+      {
+        "alias": "service",
+        "pattern": "services/{service_slug}.json",
+        "fallback_pattern": "services/{client_slug}/{service_slug}.json"
+      }
+    ]
+  },
+
+  "checks": [
+    {
+      "id": "placeholder-sweep",
+      "type": "pattern-sweep",
+      "severity": "blocking",
+      "surfaces": ["html", "aioseo_md"],
+      "patterns": [
+        {
+          "regex": "\\[.*?placeholder.*?\\]",
+          "label": "bracketed placeholder text",
+          "case_insensitive": true
+        },
+        {
+          "regex": "<!--\\s*MISSING",
+          "label": "<!-- MISSING comment (scaffolder silent-degrade)",
+          "case_insensitive": false
+        },
+        {
+          "regex": "<!--\\s*TBD",
+          "label": "<!-- TBD comment",
+          "case_insensitive": false
+        },
+        {
+          "regex": "\\{[a-z_]+\\}",
+          "label": "unrendered {template_token}",
+          "case_insensitive": false
+        },
+        {
+          "regex": "\\bFILL[:\\s]",
+          "label": "FILL: placeholder",
+          "case_insensitive": true
+        },
+        {
+          "regex": "\\bTBD\\b",
+          "label": "TBD placeholder",
+          "case_insensitive": false
+        },
+        {
+          "regex": "<TBD[:\\s>]",
+          "label": "<TBD> placeholder",
+          "case_insensitive": true
+        },
+        {
+          "regex": "[-_./]PLACEHOLDER|PLACEHOLDER[-_./]|\\bPLACEHOLDER\\b",
+          "label": "PLACEHOLDER token (image/asset class — matches PLACEHOLDER as standalone word or in file paths/tokens)",
+          "case_insensitive": false
+        }
+      ]
+    },
+
+    {
+      "id": "source-client-leak",
+      "type": "identity-leak",
+      "severity": "blocking",
+      "surfaces": ["html", "aioseo_md"],
+      "identity_source": "client",
+      "identity_fields": ["name", "alternate_name", "owner_name"],
+      "identity_file_glob": "client-*.json",
+      "current_slug_var": "client_slug"
+    },
+
+    {
+      "id": "value-cross-check",
+      "type": "value-cross-check",
+      "severity": "blocking",
+      "checkable_facts": [
+        {
+          "fact_key": "dispatch_time",
+          "ground_truth_alias": "city",
+          "ground_truth_field": "dispatch_time_short",
+          "required_in_sources": false,
+          "check_mode": "presence",
+          "extraction_surfaces": ["html"],
+          "severity": "blocking",
+          "_comment": "Not all city JSONs have this field (8/22 missing). When present, verifies the page contains the correct dispatch time. When absent, silently skips (no false-positive blocking)."
+        },
+        {
+          "fact_key": "county",
+          "ground_truth_alias": "city",
+          "ground_truth_field": "county",
+          "required_in_sources": true,
+          "check_mode": "presence",
+          "extraction_surfaces": ["html"],
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "utility_name",
+          "ground_truth_alias": "city",
+          "ground_truth_field": "electric_utilities.0",
+          "required_in_sources": false,
+          "check_mode": "presence",
+          "extraction_surfaces": ["html"],
+          "severity": "blocking",
+          "_comment": "Not all city JSONs have electric_utilities (8/22 missing). When present, verifies the page names the correct utility. When absent, silently skips."
+        },
+        {
+          "fact_key": "owner_name",
+          "ground_truth_alias": "client",
+          "ground_truth_field": "owner_name",
+          "required_in_sources": true,
+          "check_mode": "presence",
+          "extraction_surfaces": ["html"],
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "phone",
+          "ground_truth_alias": "client",
+          "ground_truth_field": "phone_display",
+          "required_in_sources": true,
+          "check_mode": "presence",
+          "extraction_surfaces": ["html"],
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "city_name",
+          "ground_truth_alias": "city",
+          "ground_truth_field": "name_with_state",
+          "required_in_sources": true,
+          "check_mode": "presence",
+          "extraction_surfaces": ["html", "aioseo_md"],
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "review_rating",
+          "ground_truth_alias": "client",
+          "ground_truth_field": "review_rating",
+          "required_in_sources": true,
+          "check_mode": "structured-extract",
+          "extraction_surfaces": ["html"],
+          "extraction_patterns": [
+            "\"ratingValue\"\\s*:\\s*\"?([\\d.]+)\"?"
+          ],
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "review_count",
+          "ground_truth_alias": "client",
+          "ground_truth_field": "review_count",
+          "required_in_sources": true,
+          "check_mode": "structured-extract",
+          "extraction_surfaces": ["html"],
+          "extraction_patterns": [
+            "\"reviewCount\"\\s*:\\s*\"?(\\d+)\"?"
+          ],
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "jsonld_area_served_county",
+          "ground_truth_alias": "city",
+          "ground_truth_field": "county",
+          "required_in_sources": true,
+          "check_mode": "presence",
+          "extraction_surfaces": ["html"],
+          "severity": "blocking",
+          "_comment": "Verify county name appears in JSON-LD areaServed block"
+        }
+      ]
+    },
+
+    {
+      "id": "schema-coverage",
+      "type": "schema-coverage",
+      "severity": "blocking",
+      "surfaces": ["html"],
+      "_comment": "meta/og/title tags are managed by WordPress/AIOSEO, not in the WP-WRAPPED body HTML. On-disk check covers JSON-LD only. AIOSEO metadata is verified via the aioseo-meta check below.",
+      "skip_title_check": true,
+      "required_meta": [],
+      "required_og": [],
+      "required_schema_types": ["LocalBusiness", "Service", "FAQPage"],
+      "required_jsonld_fields": {
+        "LocalBusiness": [
+          "@type", "name", "telephone", "address", "url", "areaServed"
+        ],
+        "Service": [
+          "@type", "name", "provider", "areaServed"
+        ]
+      }
+    },
+
+    {
+      "id": "aioseo-meta",
+      "type": "pattern-sweep",
+      "severity": "blocking",
+      "_comment": "Verify the AIOSEO .md has the required metadata fields populated (not placeholder). These get pasted into WordPress AIOSEO plugin.",
+      "surfaces": ["aioseo_md"],
+      "patterns": [
+        {
+          "regex": "\\*\\*Meta description.*?FILL",
+          "label": "AIOSEO meta description contains FILL placeholder",
+          "case_insensitive": true
+        },
+        {
+          "regex": "\\*\\*Page title.*?FILL",
+          "label": "AIOSEO page title contains FILL placeholder",
+          "case_insensitive": true
+        }
+      ]
+    },
+
+    {
+      "id": "image-integrity",
+      "type": "image-integrity",
+      "severity": "blocking",
+      "surfaces": ["html"],
+      "placeholder_tokens": [
+        "PLACEHOLDER", "placeholder", "FILL", "TBD", "MISSING", "example.com"
+      ],
+      "check_resolution": true,
+      "timeout_seconds": 10
+    },
+
+    {
+      "id": "internal-link-resolution",
+      "type": "link-resolution",
+      "severity": "blocking",
+      "surfaces": ["html"],
+      "check_http": true,
+      "timeout_seconds": 10
+    },
+
+    {
+      "id": "hardcode-scan",
+      "type": "hardcode-scan",
+      "severity": "blocking",
+      "surfaces": ["html", "aioseo_md"],
+      "scanner_profile": "profiles/core-30-defaults.json"
+    }
+  ]
+}
