@@ -1113,7 +1113,7 @@ def has_independent_review(reviewed_entries: list, unreviewed_file_paths: list,
     independent_files = set()
     for r in reviewed_entries:
         if (r.get('reviewer_type', '').startswith('independent')
-                or r.get('gate_id') == 'G-skip'):
+                or r.get('gate_id') in ('G-skip', 'G-circuit-breaker')):
             fp = r.get('file_path', '')
             independent_files.add(fp)
 
