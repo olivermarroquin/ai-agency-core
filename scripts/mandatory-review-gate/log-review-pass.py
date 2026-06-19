@@ -50,6 +50,11 @@ def main():
                              'independent (separate adversarial reviewer). '
                              'Full-tier items require reviewer-type=independent '
                              'to clear the gate. (RGH-5)')
+    parser.add_argument('--run-id', default=None,
+                        help='Run ID (chat-slug-based) for firing-tracker verification. '
+                             'Required when --reviewer-type=independent. The script '
+                             'greps the firing tracker for this run ID and refuses to '
+                             'log PASS if no matching row exists. (OC-17 enforcement)')
     args = parser.parse_args()
 
     if args.verdict == 'BLOCKING' and not args.findings:
@@ -84,6 +89,39 @@ def main():
                   f'--reviewer-type independent is a D-09 class defect.',
                   file=sys.stderr)
             sys.exit(1)
+
+    # OC-17 enforcement: when independent reviewer closes the gate,
+    # verify firing-tracker rows exist for this run ID before allowing PASS.
+    if args.reviewer_type == 'independent':
+        if not args.run_id:
+            print('[review-gate] REJECTED: --run-id is required when '
+                  '--reviewer-type=independent. The independent reviewer must '
+                  'supply its run ID so we can verify firing-tracker rows exist.',
+                  file=sys.stderr)
+            sys.exit(1)
+
+        firing_tracker_path = os.path.expanduser(
+            '~/workspace/second-brain/_meta/handoffs/'
+            '_review-skill-firing-tracker.md'
+        )
+        if os.path.isfile(firing_tracker_path):
+            with open(firing_tracker_path, 'r') as ft:
+                tracker_content = ft.read()
+            if args.run_id not in tracker_content:
+                print(
+                    '[review-gate] REJECTED: No firing-tracker rows found '
+                    f'for run ID "{args.run_id}".\n'
+                    'ERROR: The independent reviewer must author firing-tracker '
+                    'rows before clearing the gate.\n'
+                    'See Closing Protocol Step 3b in '
+                    '_review-skill-firing-tracker.md.',
+                    file=sys.stderr)
+                sys.exit(1)
+        else:
+            print(f'[review-gate] WARNING: firing tracker not found at '
+                  f'{firing_tracker_path} — cannot verify rows. '
+                  f'Proceeding but this should be investigated.',
+                  file=sys.stderr)
 
     # Derive evidence from verdict file; allow --evidence to supplement
     derived_evidence = engine.derive_evidence(verdict_data)
