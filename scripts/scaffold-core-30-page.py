@@ -145,6 +145,42 @@ def load_template(name: str) -> str:
 # ----------------------------------------------------------------------------
 
 
+def require_variant_field(city: dict, field_name: str, service_slug: str, city_slug: str) -> Any:
+    """Get a per-service variant field from a city JSON dict, failing loud if missing.
+
+    DA2: every output variant must get equal source depth. A missing variant
+    must error, never silent-degrade to empty string or <!-- MISSING -->.
+    """
+    container = city.get(field_name, {})
+    if not isinstance(container, dict):
+        sys.stderr.write(
+            f"ERROR: city data '{city_slug}' field '{field_name}' is not a dict "
+            f"(got {type(container).__name__}). Cannot look up service key.\n"
+        )
+        sys.exit(3)
+    if service_slug not in container:
+        sys.stderr.write(
+            f"ERROR: city data '{city_slug}' is missing "
+            f"'{field_name}[\"{service_slug}\"]'.\n"
+            f"  → This is a DA2 depth-parity failure: every service in the build "
+            f"set must have localized depth in the city JSON.\n"
+            f"  → Fix: run the intersection-research skill for "
+            f"{service_slug}--{city_slug}, then scaffold-city-data.py to "
+            f"populate the field.\n"
+            f"  → Or: run facts-completeness-gate.py first (SC-2) to catch all "
+            f"missing fields before scaffolding.\n"
+        )
+        sys.exit(3)
+    value = container[service_slug]
+    if value is None or value == "" or value == []:
+        sys.stderr.write(
+            f"ERROR: city data '{city_slug}' has "
+            f"'{field_name}[\"{service_slug}\"]' but it is empty.\n"
+        )
+        sys.exit(3)
+    return value
+
+
 def build_context(client: dict, service: dict, city: dict, position: int) -> dict:
     """Combine the three data sources into a single substitution dict.
     The .format() / format_map() ready-to-render context.
@@ -205,13 +241,15 @@ def build_context(client: dict, service: dict, city: dict, position: int) -> dic
         "city_county_full": city["county_full"],
         "city_tag": city_name.lower().replace(" ", "-"),
         "county_short": city["county"].split(",")[0],
-        "city_distance_phrase": city["distance_from_hq_phrase"],
+        "city_distance_from_hq_phrase": city["distance_from_hq_phrase"],
         "geographic_anchor_paragraph": city["geographic_anchor_paragraph"],
         "audience_descriptor": city["audience_descriptor"],
         "other_areas_paragraph": city["other_areas_paragraph"],
         "city_ev_homes_phrase": city["ev_charger_homes_phrase"],
-        "city_ev_neighborhood_phrase": city["specific_problems_neighborhood_phrase"].get(service["slug"], ""),
-        "city_most_common_problem_paragraph": city["most_common_problem_paragraph"].get(service["slug"], ""),
+        "city_specific_problems_neighborhood_phrase": require_variant_field(city, "specific_problems_neighborhood_phrase", service["slug"], city_slug),
+        "city_ev_neighborhood_phrase": require_variant_field(city, "ev_neighborhood_phrase", service["slug"], city_slug),
+        "city_most_common_problem_paragraph": require_variant_field(city, "most_common_problem_paragraph", service["slug"], city_slug),
+        "city_distance_phrase": require_variant_field(city, "distance_phrase", service["slug"], city_slug),
 
         # D-11 fix: utility coordination phrase — cities with multiple utilities
         # (e.g. Stafford: Dominion/NOVEC/REC) get a city-specific phrase; single-
@@ -300,13 +338,10 @@ def render_what_it_means_paragraphs(ctx: dict) -> str:
 
 
 def render_quick_ref_items(ctx: dict) -> str:
-    items = ctx["_city"]["quick_ref_localized_items"].get(ctx["service_slug"], [])
-    if not items:
-        return (
-            "        <!-- MISSING: city data file has no quick_ref_localized_items "
-            f"for service '{ctx['service_slug']}'. Add it to "
-            f"data/cities/{ctx['city_slug']}.json. -->\n"
-        )
+    items = require_variant_field(
+        ctx["_city"], "quick_ref_localized_items",
+        ctx["service_slug"], ctx["city_slug"],
+    )
     out: list[str] = []
     for it in items:
         out.append(

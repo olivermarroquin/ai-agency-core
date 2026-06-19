@@ -15,7 +15,8 @@ The city JSON has a dual shape:
     ev_charger_homes_phrase, distance_from_hq_phrase) come from the city brief.
 
   - Service-keyed nested dicts (`quick_ref_localized_items`,
-    `most_common_problem_paragraph`, `specific_problems_neighborhood_phrase`)
+    `most_common_problem_paragraph`, `specific_problems_neighborhood_phrase`,
+    `ev_neighborhood_phrase`, `distance_phrase`)
     come from intersection briefs, one entry per service slug.
 
   - `housing_patterns[].symptoms` is a single string per pattern in the consumer.
@@ -834,6 +835,8 @@ def apply_intersection_brief(
         "quick_ref_localized_items",
         "most_common_problem_paragraph",
         "specific_problems_neighborhood_phrase",
+        "ev_neighborhood_phrase",
+        "distance_phrase",
     ):
         city_json.setdefault(field_name, {})
 
@@ -853,6 +856,16 @@ def apply_intersection_brief(
     spnp = extract_service_keyed_value(rows, "specific_problems_neighborhood_phrase", service_slug)
     if spnp:
         city_json["specific_problems_neighborhood_phrase"][service_slug] = spnp
+
+    # `ev_neighborhood_phrase[<service>]` — per-service neighborhood framing
+    evnp = extract_service_keyed_value(rows, "ev_neighborhood_phrase", service_slug)
+    if evnp:
+        city_json["ev_neighborhood_phrase"][service_slug] = evnp
+
+    # `distance_phrase[<service>]` — per-service distance/drive-time framing
+    dp = extract_service_keyed_value(rows, "distance_phrase", service_slug)
+    if dp:
+        city_json["distance_phrase"][service_slug] = dp
 
     # Shared `ev_charger_homes_phrase` (single string; intersection brief may
     # propose a refinement)
@@ -969,6 +982,8 @@ def assemble_final_json(
         "quick_ref_localized_items",
         "most_common_problem_paragraph",
         "specific_problems_neighborhood_phrase",
+        "ev_neighborhood_phrase",
+        "distance_phrase",
     ):
         merged.setdefault(field_name, dict(existing.get(field_name, {})) if not overwrite else {})
 
@@ -1020,6 +1035,8 @@ _REQUIRED_TOP_LEVEL = {
     "quick_ref_localized_items": dict,
     "most_common_problem_paragraph": dict,
     "specific_problems_neighborhood_phrase": dict,
+    "ev_neighborhood_phrase": dict,
+    "distance_phrase": dict,
     "ev_charger_homes_phrase": str,
 }
 
@@ -1288,6 +1305,8 @@ def main() -> int:
         "quick_ref_localized_items",
         "most_common_problem_paragraph",
         "specific_problems_neighborhood_phrase",
+        "ev_neighborhood_phrase",
+        "distance_phrase",
         "ev_charger_homes_phrase",
     ]
     ordered: dict[str, Any] = {}
@@ -1315,6 +1334,8 @@ def main() -> int:
         list((final.get("quick_ref_localized_items") or {}).keys())
         + list((final.get("most_common_problem_paragraph") or {}).keys())
         + list((final.get("specific_problems_neighborhood_phrase") or {}).keys())
+        + list((final.get("ev_neighborhood_phrase") or {}).keys())
+        + list((final.get("distance_phrase") or {}).keys())
     ))
     sys.stderr.write(f"\n→ City:           {city_name}\n")
     sys.stderr.write(f"→ Neighborhoods:  {len(final.get('neighborhoods', []))}\n")

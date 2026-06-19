@@ -122,6 +122,58 @@
     }
   ],
   "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How do I know if my Bethesda home needs a panel upgrade?",
+        "body": "If your home still has a 60-amp fuse box (common in Kenwood, Bradley Hills, and Battery Park colonials from the 1920s–1950s) or a 100-amp panel with no open breaker slots, you've outgrown your electrical service. Signs include frequent breaker trips when running the AC and kitchen appliances simultaneously, warm panel covers, and an inability to add circuits for a home office or EV charger."
+      },
+      {
+        "summary": "What panel size do Bethesda homes typically upgrade to?",
+        "body": "Most Bethesda homeowners upgrade to 200 amps, which handles central AC, a modern kitchen, home office, and one Level 2 EV charger. Larger teardown rebuilds in Edgemoor and Burning Tree — 5,000+ square feet with multiple HVAC zones, pool equipment, and a detached garage — sometimes need 400-amp service with a meter-main and sub-panels."
+      },
+      {
+        "summary": "Does PEPCO need to be involved in a Bethesda panel upgrade?",
+        "body": "Yes. Bethesda is served by PEPCO, and any service upgrade requires PEPCO to disconnect and reconnect the meter. We coordinate directly with PEPCO, pull the Montgomery County electrical permit, and schedule the PEPCO reconnection so you're not waiting days without power."
+      },
+      {
+        "summary": "How long does a panel upgrade take in Bethesda?",
+        "body": "A straightforward 100-to-200-amp swap takes one full day. If the PEPCO service drop from the pole also needs upgrading (common in older Bethesda neighborhoods with original overhead feeds), add a second half-day for the utility coordination."
+      },
+      {
+        "summary": "Will a panel upgrade fix my flickering lights?",
+        "body": "It depends on the cause. If the flickering is from an undersized service entrance — common in Bethesda's tree-canopy neighborhoods where the original PEPCO drop was sized for a 1950s rambler — then yes, a service upgrade resolves it. If it's a loose neutral at the meter base, that's a separate repair we'd catch during the panel assessment."
+      },
+      {
+        "summary": "What does a panel upgrade cost in Bethesda?",
+        "body": "A 200-amp panel upgrade in Bethesda typically runs $2,800–$4,200 depending on the existing wiring condition, whether the PEPCO service entrance needs upgrading, and Montgomery County permit fees. We provide a fixed-price quote after the on-site assessment — no surprises."
+      }
+    ],
+    "ev-charger-installation": [
+      {
+        "summary": "Can my Bethesda home's electrical panel support an EV charger?",
+        "body": "It depends on your current panel capacity. Many 1920s–1950s homes in Kenwood, Bradley Hills, and Somerset still have 100-amp panels that are already near capacity. A Level 2 EV charger draws 40–50 amps — about 25% of a 200-amp panel. We do a load calculation first to determine if your panel can handle it or needs an upgrade."
+      },
+      {
+        "summary": "Where should the EV charger be installed in a Bethesda home?",
+        "body": "Most Bethesda homeowners install the charger in their attached or detached garage. Homes in Burning Tree and Kenwood typically have attached two-car garages with short wire runs from the panel. Older homes in Somerset and Battery Park sometimes have detached garages or carports — longer wire runs cost more and may require a sub-panel in the garage."
+      },
+      {
+        "summary": "Do I need a permit for EV charger installation in Bethesda?",
+        "body": "Yes. Montgomery County requires an electrical permit for any new 240V circuit. We pull the permit, schedule the inspection, and handle the PEPCO coordination if a service upgrade is needed. The permit process typically adds 1–2 business days."
+      },
+      {
+        "summary": "What EV charger brands do you install in Bethesda?",
+        "body": "We install any UL-listed Level 2 charger — ChargePoint Home Flex, Tesla Wall Connector, Grizzl-E, JuiceBox, and others. We recommend hardwired installation over plug-in for Bethesda's weather conditions and for maximum charging speed."
+      },
+      {
+        "summary": "How long does EV charger installation take?",
+        "body": "A straightforward installation — panel has capacity, charger location is near the panel — takes 3–4 hours. If we need to run conduit across a finished basement or to a detached garage, allow a full day. Panel upgrades (if needed) are scheduled as a separate visit."
+      },
+      {
+        "summary": "What does EV charger installation cost in Bethesda?",
+        "body": "Installation typically runs $1,200–$2,400 for the electrical work (charger not included), depending on wire run length, panel capacity, and whether conduit is needed. Homes needing a panel upgrade first should budget an additional $2,800–$4,200. We provide a fixed-price quote after assessing your panel and charger location."
+      }
+    ],
     "troubleshooting": [
       {
         "summary": "Breaker trips repeatedly or won't reset",
@@ -150,15 +202,23 @@
     ]
   },
   "most_common_problem_paragraph": {
+    "panel-upgrade": "Outgrown 100-amp panels in homes built before 1980. Bethesda's original colonials and Cape Cods in Kenwood, Bradley Hills, and Battery Park were wired with 60-amp fuse boxes — many later upgraded to 100-amp panels that are now full. Split-levels in Woodhaven and Westbard hit their limits when homeowners add central AC, a second refrigerator, and a home office. Even the 2010s teardown rebuilds in Edgemoor occasionally have undersized PEPCO service drops that throttle the modern 200-amp panel. The common thread: the panel or service entrance was sized for a different era's electrical demand.",
+    "ev-charger-installation": "Panel capacity concerns before installation. Most Bethesda homeowners calling about EV chargers have 100-amp panels with no room for a 50-amp breaker. In Kenwood and Bradley Hills, the original 1930s–1950s wiring was designed for a fraction of today's loads — adding a Level 2 charger without upgrading the panel risks overloading the service. The second concern is wire run distance: homes in Somerset and Battery Park with detached garages need longer conduit runs, and homes in Glen Echo Heights with limited driveway access sometimes require creative charger placement.",
     "troubleshooting": "Breaker trips on overloaded circuits. Bethesda's housing stock spans a century — from 1920s colonials in Kenwood and Bradley Hills with original 60-amp fuse boxes, to 1960s split-levels in Woodhaven and Westbard with 100-amp panels, to 2010s teardown rebuilds in Edgemoor and Burning Tree. The oldest homes have electrical systems designed for a radio and a few light bulbs; even the mid-century homes weren't wired for central AC, dual ovens, home offices, and EV chargers. The second most common call is flickering lights — usually a loose neutral at the meter base or voltage drop from an aging PEPCO overhead service connection in Bethesda's heavily wooded neighborhoods."
   },
   "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "In Bethesda's pre-war neighborhoods like Kenwood, Battery Park, and Somerset,",
+    "ev-charger-installation": "In Bethesda's garage-equipped neighborhoods like Burning Tree, Kenwood, and the Bradley Hills corridor,",
     "troubleshooting": "In Bethesda's estate neighborhoods like Kenwood, Burning Tree, and along Bradley Boulevard,"
   },
   "ev_neighborhood_phrase": {
+    "panel-upgrade": "In Bethesda's century-old homes in Kenwood, Bradley Hills, and the Somerset enclave,",
+    "ev-charger-installation": "In Bethesda's two-car-garage homes in Burning Tree, Kenwood, and the Bradley Hills corridor,",
     "troubleshooting": "In Bethesda's two-car-garage homes in Burning Tree, Kenwood, and the Bradley Hills corridor,"
   },
   "distance_phrase": {
+    "panel-upgrade": "Bethesda is about 22 miles from our Fairfax Blvd office — roughly 35–45 minutes via the Capital Beltway (I-495)",
+    "ev-charger-installation": "Bethesda is about 22 miles from our Fairfax Blvd office — roughly 35–45 minutes via the Capital Beltway (I-495)",
     "troubleshooting": "Bethesda is about 22 miles from our Fairfax Blvd office — roughly 35–45 minutes via the Capital Beltway (I-495)"
   },
   "ev_charger_homes_phrase": "Bethesda's larger homes were not wired for",

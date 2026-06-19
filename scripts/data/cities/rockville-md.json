@@ -94,6 +94,58 @@
     }
   ],
   "quick_ref_localized_items": {
+    "panel-upgrade": [
+      {
+        "summary": "How do I know if my Rockville home needs a panel upgrade?",
+        "body": "If your home has a 60-amp fuse box or a full 100-amp panel with no open breaker slots — common in Twinbrook Cape Cods and East Rockville post-war homes — you've outgrown your electrical service. Signs include breakers tripping when running the AC and kitchen appliances together, warm panel covers, and no room to add circuits for a home office or EV charger."
+      },
+      {
+        "summary": "Are FPE or Zinsco panels common in Rockville?",
+        "body": "Yes. Federal Pacific Electric (FPE) and Zinsco panels are documented in Rockville's 1950s–1970s housing stock — particularly in Twinbrook, Hungerford, and East Rockville. These panels have a known failure rate where breakers don't trip on overcurrent, creating a fire hazard. If you have one, replacement is strongly recommended regardless of whether you're adding load."
+      },
+      {
+        "summary": "What panel size do Rockville homes typically upgrade to?",
+        "body": "Most Rockville homeowners upgrade to 200 amps, which covers central AC, a modern kitchen, home office, and one Level 2 EV charger. Larger homes in Luxmanor and College Gardens with multiple HVAC zones, pool equipment, or a detached workshop sometimes go to 400-amp service with a meter-main and sub-panels."
+      },
+      {
+        "summary": "Does PEPCO need to be involved in a Rockville panel upgrade?",
+        "body": "Yes. Rockville is served by PEPCO, and any service upgrade requires PEPCO to disconnect and reconnect the meter. We coordinate directly with PEPCO, pull the Montgomery County electrical permit, and schedule the reconnection so you're not left waiting."
+      },
+      {
+        "summary": "How long does a panel upgrade take in Rockville?",
+        "body": "A straightforward 100-to-200-amp swap takes one full day. If the PEPCO service drop also needs upgrading — common in Twinbrook and East Rockville where original overhead feeds serve 80-year-old homes — add a half-day for utility coordination."
+      },
+      {
+        "summary": "What does a panel upgrade cost in Rockville?",
+        "body": "A 200-amp panel upgrade in Rockville typically runs $2,800–$4,200 depending on existing wiring condition, whether the PEPCO service entrance needs upgrading, and Montgomery County permit fees. FPE/Zinsco replacement may run slightly higher due to additional code-upgrade requirements. Fixed-price quote after on-site assessment."
+      }
+    ],
+    "ev-charger-installation": [
+      {
+        "summary": "Can my Rockville home's panel support an EV charger?",
+        "body": "It depends on your current panel capacity. Post-war homes in Twinbrook and East Rockville with 100-amp panels are typically near capacity — a Level 2 EV charger draws 40–50 amps and needs dedicated breaker space. King Farm and Fallsgrove townhomes have 200-amp panels but sometimes have limited panel space due to the number of circuits serving a multi-story layout."
+      },
+      {
+        "summary": "Where should the EV charger be installed in a Rockville home?",
+        "body": "Most single-family homes in Woodley Gardens, College Gardens, and Luxmanor have attached garages with short wire runs from the panel. Twinbrook Cape Cods often have carports or external parking — we install weather-rated chargers on exterior walls with conduit runs. King Farm and Fallsgrove townhomes may need the charger in a shared or narrow garage, requiring careful placement."
+      },
+      {
+        "summary": "Do I need a permit for EV charger installation in Rockville?",
+        "body": "Yes. Montgomery County requires an electrical permit for any new 240V circuit. We pull the permit, schedule the inspection, and handle PEPCO coordination if a service upgrade is needed. The City of Rockville may have additional requirements for townhome or condo installations."
+      },
+      {
+        "summary": "What EV charger brands do you install in Rockville?",
+        "body": "We install any UL-listed Level 2 charger — ChargePoint Home Flex, Tesla Wall Connector, Grizzl-E, JuiceBox, and others. For Rockville's climate with hot summers and cold winters, we recommend hardwired installation over plug-in for reliability and maximum charging speed."
+      },
+      {
+        "summary": "How long does EV charger installation take?",
+        "body": "A straightforward installation — panel has capacity, charger location near the panel — takes 3–4 hours. Townhomes in King Farm or Fallsgrove with the panel on the opposite end from the garage may need a full day for conduit routing. Panel upgrades (if needed) are scheduled as a separate visit."
+      },
+      {
+        "summary": "What does EV charger installation cost in Rockville?",
+        "body": "Installation typically runs $1,200–$2,400 for the electrical work (charger not included), depending on wire run length, panel capacity, and whether conduit is needed. Townhome installations in King Farm or Fallsgrove may be on the higher end due to routing complexity. Fixed-price quote after panel and location assessment."
+      }
+    ],
     "troubleshooting": [
       {
         "summary": "Breaker trips repeatedly or won't reset",
@@ -148,18 +200,26 @@
     ]
   },
   "most_common_problem_paragraph": {
+    "panel-upgrade": "Outgrown panels in post-war homes. Rockville's Twinbrook, East Rockville, and Hungerford neighborhoods were built with 60-amp fuse boxes and early 100-amp panels sized for 1950s loads. Many homes still have Federal Pacific Electric (FPE) or Zinsco panels — documented fire hazards with breakers that fail to trip on overcurrent. Even the 1960s–1980s split-levels in Woodley Gardens and College Gardens hit their limits when homeowners add central AC, a second refrigerator, a home office, and an EV charger. The common call: 'I need more circuits and there are no open slots.'",
+    "ev-charger-installation": "Panel capacity concerns before installation. Rockville homeowners calling about EV chargers most often have 100-amp panels in Twinbrook or East Rockville post-war homes with no room for a 50-amp breaker. The second concern is charger placement in townhomes: King Farm and Fallsgrove units have narrow garages and the panel may be on the opposite end of the home, requiring a long conduit run that adds cost.",
     "troubleshooting": "Breaker trips on overloaded circuits. Rockville's housing stock spans 80 years, but the most common electrical calls come from the post-war neighborhoods — Twinbrook, East Rockville, Hungerford — where 60-amp or early 100-amp panels were never designed for central AC, induction ranges, home offices, and EV chargers. The second most common call is flickering lights from a loose neutral or aging PEPCO overhead service connection, especially in neighborhoods with heavy tree canopy.",
     "light-fixture-installation": "Fixture upgrades in Rockville's 1940s–1960s housing stock (Twinbrook, East Rockville, Hungerford). Original wiring and junction boxes need to be brought up to current code before a modern fixture can be safely installed. The second most common call is recessed lighting layouts in kitchens and living areas across all eras of Rockville homes."
   },
   "specific_problems_neighborhood_phrase": {
+    "panel-upgrade": "In Rockville's post-war neighborhoods like Twinbrook, East Rockville, and Hungerford,",
+    "ev-charger-installation": "In Rockville's garage-equipped neighborhoods like King Farm, Woodley Gardens, and College Gardens,",
     "troubleshooting": "In Rockville's post-war neighborhoods like Twinbrook and East Rockville,",
     "light-fixture-installation": "In Rockville's established neighborhoods like Woodley Gardens and College Gardens,"
   },
   "ev_neighborhood_phrase": {
+    "panel-upgrade": "In Rockville's older homes throughout Twinbrook, East Rockville, and the Hungerford area,",
+    "ev-charger-installation": "In Rockville's garage-equipped homes throughout King Farm, Fallsgrove, and Woodley Gardens,",
     "troubleshooting": "In Rockville's garage-equipped homes throughout King Farm, Fallsgrove, and Woodley Gardens,",
     "light-fixture-installation": "In Rockville's newer communities like King Farm and Fallsgrove,"
   },
   "distance_phrase": {
+    "panel-upgrade": "Rockville is about 22 miles from our Fairfax Blvd office — roughly 35–50 minutes via I-495 and I-270",
+    "ev-charger-installation": "Rockville is about 22 miles from our Fairfax Blvd office — roughly 35–50 minutes via I-495 and I-270",
     "troubleshooting": "Rockville is about 22 miles from our Fairfax Blvd office — roughly 35–50 minutes via I-495 and I-270",
     "light-fixture-installation": "Rockville is about 22 miles from our Fairfax Blvd office — roughly 35–50 minutes via I-495 and I-270"
   },

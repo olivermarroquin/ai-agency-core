@@ -76,6 +76,31 @@
           "rationale": "List of nearby cities for the no-trip-charge phrase. Empty list = broken sentence."
         },
         {
+          "field": "quick_ref_localized_items.{service_slug}",
+          "severity": "blocking",
+          "rationale": "DA2 depth-parity: per-service localized Q&A items for the Quick Reference accordion. Missing = silent-degrade to hand-authored or empty section. Every service in the build set must have its own localized depth."
+        },
+        {
+          "field": "most_common_problem_paragraph.{service_slug}",
+          "severity": "blocking",
+          "rationale": "DA2 depth-parity: per-service localized paragraph about the most common problem in this city. Missing = silent-degrade to generic content."
+        },
+        {
+          "field": "specific_problems_neighborhood_phrase.{service_slug}",
+          "severity": "blocking",
+          "rationale": "DA2 depth-parity: per-service localized neighborhood-specific problem framing. Missing = silent-degrade to generic content."
+        },
+        {
+          "field": "ev_neighborhood_phrase.{service_slug}",
+          "severity": "blocking",
+          "rationale": "DA2 depth-parity: per-service neighborhood framing for the city's housing stock. Missing = silent-degrade to generic phrasing."
+        },
+        {
+          "field": "distance_phrase.{service_slug}",
+          "severity": "blocking",
+          "rationale": "DA2 depth-parity: per-service distance/drive-time framing from HQ to this city. Missing = silent-degrade to generic distance info."
+        },
+        {
           "field": "audience_descriptor",
           "severity": "warning",
           "rationale": "Used in JSON-LD audience. Defaults gracefully but should be explicit."
