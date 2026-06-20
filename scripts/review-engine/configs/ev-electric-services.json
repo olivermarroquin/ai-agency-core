@@ -11,8 +11,8 @@
     "tone": "professional, warm, local-expert",
     "sign_off_style": "— Ahmad, EV Electric Services"
   },
-  "review_link": "FILL:operator-must-provide — GBP → Read Reviews → Get more reviews → copy link (g.page/r/… short URL)",
-  "review_link_source": "FILL:operator-verified-from-gbp",
+  "review_link": "https://g.page/r/CXtqnXwFLTwoEAE/review",
+  "review_link_source": "operator-verified-from-gbp 2026-06-20",
   "review_baseline": {
     "count": 75,
     "rating": 5.0,

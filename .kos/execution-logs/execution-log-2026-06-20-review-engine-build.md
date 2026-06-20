@@ -36,8 +36,8 @@ The independent reviewer (separate session) caught that `generate-review-templat
 
 The `acme-dental.json` config (Dr. Jane Smith, dentist, 804-555-0199, Richmond VA, services: teeth cleaning / dental implants / cosmetic dentistry / emergency dental care / orthodontics) generated all 8 output files from config alone — QR code, 5 templates, filled example, policy guardrails. Zero electrician-specific language leaked. The filled example correctly rendered "teeth cleaning in Richmond" with "Dr. Jane, Acme Dental Care" sign-off.
 
-### Surfaced deferral
+### Surfaced deferral — RESOLVED 2026-06-20
 
-0 of 2 real clients have generated assets. EV + S&H configs carry `FILL:` in `review_link` — operator must provide the real GBP review URLs (`g.page/r/…`). Engine + vertical-agnostic proof are done; real-client install is not.
+~~0 of 2 real clients have generated assets. EV + S&H configs carry `FILL:` in `review_link`.~~ **RESOLVED:** operator provided both live GBP review links 2026-06-20 — EV `g.page/r/CXtqnXwFLTwoEAE/review`, S&H `g.page/r/CTAr3nttUOytEAE/review`. Both configs updated, QR + templates regenerated (FILL guard now passes, GBP-bound reply copy phone-free), EV link verified to resolve to a real Google writereview surface. **2 of 2 real clients installed.** Generated assets live in (gitignored) `outputs/<slug>/` — regenerate locally to use.
 
 **Reusable for future apps?:** Yes — the engine-first + per-client config pattern applies to any tool that must work across multiple clients without hardcoded values. The FILL-guard + validate_config pattern is directly reusable. See `[[pattern-tooling-config-driven-multi-client-engine]]`.
