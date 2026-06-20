@@ -1,0 +1,36 @@
+{
+  "_comment": "THROWAWAY CONFIG — non-electrician vertical-agnostic proof. Acme Dental is a fictional dentist in Richmond, VA used to prove the engine carries zero vertical-specific assumptions.",
+  "client_slug": "acme-dental",
+  "business_name": "Acme Dental Care",
+  "owner_name": "Dr. Jane Smith",
+  "owner_first_name": "Jane",
+  "owner_phone": "804-555-0199",
+  "service_area": "Richmond, VA and surrounding areas",
+  "primary_services": ["teeth cleaning", "dental implants", "cosmetic dentistry", "emergency dental care", "orthodontics"],
+  "brand_voice": {
+    "tone": "friendly, caring, professional",
+    "sign_off_style": "— Dr. Jane, Acme Dental Care"
+  },
+  "review_link": "https://g.page/r/EXAMPLE-acme-dental/review",
+  "review_link_source": "synthetic-throwaway-for-vertical-agnostic-proof",
+  "review_baseline": {
+    "count": 42,
+    "rating": 4.8,
+    "captured_date": "2026-06-20",
+    "source": "synthetic baseline for vertical-agnostic proof"
+  },
+  "velocity_target_per_month": {
+    "min": 4,
+    "max": 8
+  },
+  "channels": {
+    "sms": true,
+    "email": true,
+    "qr": true
+  },
+  "policy": {
+    "no_incentives": true,
+    "no_review_gating": true,
+    "real_customers_only": true
+  }
+}

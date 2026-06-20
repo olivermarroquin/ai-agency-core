@@ -1,0 +1,36 @@
+{
+  "_comment": "Review-generation engine config for EV Electric Services. All client-specific values live here — the engine reads ONLY from this file.",
+  "client_slug": "ev-electric-services",
+  "business_name": "EV Electric Services",
+  "owner_name": "Ahmad Shaban",
+  "owner_first_name": "Ahmad",
+  "owner_phone": "571-500-6637",
+  "service_area": "Northern VA, DC, Montgomery County MD",
+  "primary_services": ["electrical panel upgrade", "EV charger installation", "electrical repair", "generator installation", "security system installation"],
+  "brand_voice": {
+    "tone": "professional, warm, local-expert",
+    "sign_off_style": "— Ahmad, EV Electric Services"
+  },
+  "review_link": "FILL:operator-must-provide — GBP → Read Reviews → Get more reviews → copy link (g.page/r/… short URL)",
+  "review_link_source": "FILL:operator-verified-from-gbp",
+  "review_baseline": {
+    "count": 75,
+    "rating": 5.0,
+    "captured_date": "2026-06-20",
+    "source": "operator-reported from G1 pass 2026-06-19 — verify at dry-run"
+  },
+  "velocity_target_per_month": {
+    "min": 4,
+    "max": 8
+  },
+  "channels": {
+    "sms": true,
+    "email": true,
+    "qr": true
+  },
+  "policy": {
+    "no_incentives": true,
+    "no_review_gating": true,
+    "real_customers_only": true
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "_comment": "Review-generation engine config for S&H Contracting Unlimited LLC. All client-specific values live here — the engine reads ONLY from this file.",
+  "client_slug": "s-and-h-contracting",
+  "business_name": "S&H Contracting Unlimited LLC",
+  "owner_name": "Mohammad Adam",
+  "owner_first_name": "Mohammad",
+  "owner_phone": "703-972-5571",
+  "service_area": "Alexandria to Stafford, Northern VA",
+  "primary_services": ["emergency electrical repair", "electrical panel upgrade", "EV charger installation", "lighting installation", "electrical wiring"],
+  "brand_voice": {
+    "tone": "professional, reliable, 24/7-available",
+    "sign_off_style": "— Mohammad, S&H Contracting"
+  },
+  "review_link": "FILL:operator-must-provide — GBP → Read Reviews → Get more reviews → copy link (g.page/r/… short URL)",
+  "review_link_source": "FILL:operator-verified-from-gbp",
+  "review_baseline": {
+    "count": 69,
+    "rating": 5.0,
+    "captured_date": "2026-06-20",
+    "source": "operator-reported from G1 pass 2026-06-19 — verify at dry-run"
+  },
+  "velocity_target_per_month": {
+    "min": 4,
+    "max": 8
+  },
+  "channels": {
+    "sms": true,
+    "email": true,
+    "qr": true
+  },
+  "policy": {
+    "no_incentives": true,
+    "no_review_gating": true,
+    "real_customers_only": true
+  }
+}
