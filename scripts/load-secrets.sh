@@ -27,11 +27,16 @@ _load_key() {
     fi
 }
 
-# --- Per-client WP app passwords (no collision) ---
-_wp_ev=$(_load_key "wp-app-password-ev-electric-services.key")
-_wp_sh=$(_load_key "wp-app-password-s-and-h-contracting.key")
-[[ -n "$_wp_ev" ]] && export WP_APP_PASSWORD_EV_ELECTRIC_SERVICES="$_wp_ev"
-[[ -n "$_wp_sh" ]] && export WP_APP_PASSWORD_S_AND_H_CONTRACTING="$_wp_sh"
+# --- Per-client WP app passwords (auto-discovered from key files) ---
+for _wp_key_file in "$SECRETS_DIR"/wp-app-password-*.key; do
+    [[ -f "$_wp_key_file" ]] || continue
+    _slug=$(basename "$_wp_key_file" .key | sed 's/^wp-app-password-//')
+    _env_name="WP_APP_PASSWORD_$(echo "$_slug" | tr '[:lower:]-' '[:upper:]_')"
+    _val=$(cat "$_wp_key_file")
+    [[ -n "$_val" ]] && export "$_env_name=$_val"
+    unset _slug _env_name _val
+done
+unset _wp_key_file
 
 # --- API keys ---
 _anthropic=$(_load_key "anthropic-claude.key")
@@ -50,14 +55,18 @@ _maps=$(_load_key "google-maps-embed.key")
 [[ -n "$_gemini" ]]         && export GEMINI_API_KEY="$_gemini"
 [[ -n "$_maps" ]]           && export GOOGLE_MAPS_EMBED_API_KEY="$_maps"
 
-# --- GSC: service account JSON paths (not values — just paths for tools that check env) ---
-_gsc_ev="$SECRETS_DIR/gsc-sa-ev-electric-services.json"
-_gsc_sh="$SECRETS_DIR/gsc-sa-s-and-h-contracting.json"
-[[ -f "$_gsc_ev" ]] && export GSC_SA_EV_ELECTRIC="$_gsc_ev"
-[[ -f "$_gsc_sh" ]] && export GSC_SA_S_AND_H="$_gsc_sh"
+# --- GSC: service account JSON paths (auto-discovered) ---
+for _gsc_file in "$SECRETS_DIR"/gsc-sa-*.json; do
+    [[ -f "$_gsc_file" ]] || continue
+    _slug=$(basename "$_gsc_file" .json | sed 's/^gsc-sa-//')
+    _env_name="GSC_SA_$(echo "$_slug" | tr '[:lower:]-' '[:upper:]_')"
+    export "$_env_name=$_gsc_file"
+    unset _slug _env_name
+done
+unset _gsc_file
 
 # Clean up temp vars
-unset _wp_ev _wp_sh _anthropic _perplexity _dataforseo_user _dataforseo_pass
-unset _openai _gemini _maps _gsc_ev _gsc_sh
+unset _anthropic _perplexity _dataforseo_user _dataforseo_pass
+unset _openai _gemini _maps
 
 echo "✓ Secrets loaded from tier-3 (values not printed)"

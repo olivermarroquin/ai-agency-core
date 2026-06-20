@@ -10,17 +10,17 @@
   "lowercase_phrase": "troubleshooting",
   "tag_short": "troubleshooting",
 
-  "aioseo_page_title_template": "Electrical Troubleshooting in {city_name_with_state} | EV Electric",
+  "aioseo_page_title_template": "Electrical Troubleshooting in {city_name_with_state} | {client_alt_name}",
   "aioseo_meta_description_template": "Master electrician in {city_name_with_state} for residential electrical troubleshooting. Same-day diagnosis with a written on-site estimate. Call {phone_display}.",
-  "aioseo_focus_keyword_template": "electrical troubleshooting {city_slug}",
-  "aioseo_additional_keywords_template": ["electrician {city_slug}", "electrical diagnostics {city_name}", "circuit breaker tripping {city_slug}", "flickering lights {city_name}", "dead outlet {city_slug}"],
+  "aioseo_focus_keyword_template": "electrical troubleshooting {city_name}",
+  "aioseo_additional_keywords_template": ["electrician {city_name}", "electrical diagnostics {city_name}", "circuit breaker tripping {city_name}", "flickering lights {city_name}", "dead outlet {city_name}"],
   "wordpress_page_title_template": "Electrical Troubleshooting in {city_name_with_state}",
 
   "hero_eyebrow_template": "Electrical Troubleshooting in {city_name_with_state}",
   "hero_heading": "Same-Day Diagnosis from a Master Electrician",
   "hero_subheading_template": "Lights flickering? Breaker tripping? Outlets gone dead? {owner_name} — {license_state}-licensed Master Electrician — finds the cause and fixes it. Residential service across {city_name} and surrounding areas.",
   "hero_image_alt_template": "{owner_name}, master electrician, troubleshooting an open residential electrical panel in {city_name_with_state}",
-  "hero_image_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-troubleshooting-hero-PLACEHOLDER.png",
+  "hero_image_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/{city_slug}-troubleshooting-hero-PLACEHOLDER.png",
 
   "what_it_means_heading": "What \"electrical troubleshooting\" actually means",
   "what_it_means_paragraphs": [
@@ -78,7 +78,7 @@
     "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
   ],
   "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
-  "about_portrait_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-troubleshooting-about-PLACEHOLDER.png",
+  "about_portrait_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/{city_slug}-troubleshooting-about-PLACEHOLDER.png",
 
   "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
   "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",

@@ -1,0 +1,927 @@
+<!-- wp:html -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   Acme Electrical Solutions — Core 30 service page styles v2 (auto-generated from template)
+   Page: electrical-troubleshooting-bethesda-md
+   Generated: 2026-06-20T14:55:55+00:00
+   ========================================================================== */
+
+/* Hide the duplicate WordPress page title (the page-header / entry-title) so
+   the hero H1 in our HTML is the only top-of-page heading. Theme classes vary;
+   this list covers the common patterns. If the page title still shows after
+   publish, inspect the page and add the specific class your theme uses. */
+.single-page .page-header,
+.page .entry-header,
+.page-header,
+.entry-header h1.entry-title,
+h1.entry-title,
+.elementor-page-title,
+.page-title-bar,
+.page-title-banner,
+.dtr-page-title-main,
+.dtr-page-title-section,
+.breadcrumb-area + .page-header { display: none !important; }
+
+/* Theme wrapper padding override — our hero is designed to start at the viewport edge.
+   The Ambery theme adds 150px top/bottom padding to #dtr-main-wrapper which creates
+   white space above/below our hero. Kill it on pages that include this stylesheet. */
+#dtr-main-wrapper,
+.dtr-main-wrapper,
+.dtr-content-area,
+main.dtr-content-area,
+.dtr-primary-section {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Break out of WordPress theme container — page uses full viewport width.
+   No padding/margin overrides on theme wrappers (those caused header layout
+   regressions). The remaining gap between header and hero is a theme-level
+   setting and gets fixed in Theme Customizer, not here. */
+.evp-corepage {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #1f2937;
+  line-height: 1.8;
+  font-size: 18px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.evp-corepage * { box-sizing: border-box; }
+.evp-corepage h1, .evp-corepage h2, .evp-corepage h3 { color: #1a1a2e; line-height: 1.25; font-family: inherit; }
+.evp-corepage h1 { font-size: 2.75rem; margin: 0 0 1.25rem; font-weight: 800; letter-spacing: -0.025em; }
+.evp-corepage h2 { font-size: 2.15rem; margin: 0 0 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+.evp-corepage h3 { font-size: 1.3rem; margin: 0 0 0.6rem; font-weight: 700; letter-spacing: -0.01em; }
+.evp-corepage p { margin: 0 0 1.4rem; }
+.evp-corepage strong { color: #1a1a2e; font-weight: 700; }
+.evp-corepage a { color: #cc3300; text-decoration: none; font-weight: 500; }
+.evp-corepage a:hover { text-decoration: underline; }
+.evp-corepage ul { padding-left: 1.5rem; margin: 0 0 1.4rem; }
+.evp-corepage ul li { margin-bottom: 0.65rem; }
+.evp-corepage em { color: #475569; font-style: italic; }
+
+.evp-section { padding: 5rem 1.5rem; }
+.evp-section-inner { max-width: 1200px; margin: 0 auto; }
+/* Centered section heading with yellow accent bar underneath (modern flourish) */
+.evp-section-inner > h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.evp-section-inner > h2::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 4px;
+  background: #e6b800;
+  margin: 0.85rem auto 0;
+  border-radius: 2px;
+}
+/* Centered intro paragraph below the section heading */
+.evp-section-inner > h2 + p {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #475569;
+  margin-bottom: 2.5rem;
+}
+.evp-section-inner > p { max-width: 820px; font-size: 1.05rem; }
+
+/* Section-specific overrides ============================================ */
+/* Left-aligned heading + intro (e.g. Section 2 "What troubleshooting means") */
+.evp-section-inner > h2.evp-heading-left {
+  text-align: left;
+}
+.evp-section-inner > h2.evp-heading-left::after {
+  margin-left: 0;
+  margin-right: auto;
+}
+.evp-section-inner > h2.evp-heading-left + p {
+  text-align: left;
+  max-width: 820px;
+  margin-left: 0;
+  margin-right: 0;
+  font-size: 1.05rem;
+  color: #1f2937;
+}
+
+/* Closing note — full-width centered paragraph at the bottom of a section
+   (e.g. Section 3's "If your home falls...", Section 6's "If pricing this...") */
+.evp-closing-note {
+  text-align: center;
+  max-width: 820px !important;
+  margin: 2.5rem auto 0 !important;
+  font-size: 1.1rem;
+  color: #475569;
+  font-style: italic;
+}
+
+/* Two-column section layout — text left, sidebar widget right (used in Section 2) */
+.evp-section-2col { display: grid; grid-template-columns: 1.5fr 1fr; gap: 3rem; align-items: start; }
+.evp-section-2col .evp-section-text > h2 { margin-bottom: 1rem; }
+
+/* Quick-reference accordion sidebar — modern boxy element for Section 2 */
+.evp-quick-ref { background: #f5f7fa; border-radius: 16px; padding: 1.85rem; border: 1px solid #e6e9f0; }
+.evp-quick-ref-label { display: inline-block; background: #fef6dc; color: #b58400; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; padding: 0.35rem 0.65rem; border-radius: 6px; margin-bottom: 0.85rem; text-transform: uppercase; }
+.evp-quick-ref h3 { font-size: 1.2rem; color: #1a1a2e; margin: 0 0 0.5rem; line-height: 1.3; }
+.evp-quick-ref-intro { font-size: 0.95rem; color: #475569; margin-bottom: 1.25rem; }
+.evp-quick-ref details { background: #fff; border-radius: 10px; padding: 0.9rem 1.1rem; margin-bottom: 0.65rem; border: 1px solid #e6e9f0; transition: border-color 0.15s, box-shadow 0.15s; }
+.evp-quick-ref details:hover { border-color: #cc3300; box-shadow: 0 2px 8px rgba(10,37,64,0.06); }
+.evp-quick-ref details[open] { border-color: #cc3300; background: #fafcff; }
+.evp-quick-ref summary { cursor: pointer; font-weight: 700; color: #1a1a2e; font-size: 0.98rem; line-height: 1.4; padding-right: 0.5rem; list-style: none; display: flex; align-items: flex-start; gap: 0.55rem; }
+.evp-quick-ref summary::-webkit-details-marker { display: none; }
+.evp-quick-ref summary::before { content: "\25B6"; color: #e6b800; font-size: 0.7rem; flex-shrink: 0; margin-top: 0.35rem; transition: transform 0.15s; }
+.evp-quick-ref details[open] summary::before { transform: rotate(90deg); }
+.evp-quick-ref details[open] summary { margin-bottom: 0.6rem; }
+.evp-quick-ref details p { margin: 0; font-size: 0.92rem; line-height: 1.65; color: #475569; }
+.evp-quick-ref-footer { margin-top: 1rem; font-size: 0.88rem; color: #475569; text-align: center; }
+.evp-quick-ref-footer a { font-weight: 600; }
+@media (max-width: 900px) {
+  .evp-section-2col { grid-template-columns: 1fr; gap: 2rem; }
+  .evp-quick-ref { padding: 1.5rem; }
+}
+.evp-section--white { background: #fff; }
+.evp-section--gray { background: #f5f7fa; }
+
+/* Hero — 3-stop gradient (dark→mid→bright) + radial highlight overlay for shine */
+.evp-hero {
+  background: linear-gradient(135deg, #0d0d1a 0%, #cc3300 65%, #e64d00 100%);
+  color: #fff;
+  padding: 5rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.evp-hero::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 55%;
+  height: 180%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+.evp-hero h1 { color: #fff; font-size: 3rem; position: relative; z-index: 1; }
+/* H1 eyebrow — small yellow uppercase keyword line above the main hero H2.
+   Gives the page a proper SEO H1 while keeping the H2 as the visual focus. */
+.evp-hero h1.evp-hero-eyebrow {
+  color: #e6b800;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 0.85rem;
+  line-height: 1.3;
+  position: relative;
+  z-index: 1;
+}
+.evp-hero h2.evp-hero-heading { color: #fff; font-size: 2.75rem; line-height: 1.15; margin: 0 0 1rem; font-weight: 800; letter-spacing: -0.025em; position: relative; z-index: 1; }
+@media (max-width: 768px) { .evp-hero h2.evp-hero-heading { font-size: 2rem; } }
+.evp-hero .evp-subheading { font-size: 1.25rem; color: #e7eefe; margin-bottom: 1.75rem; max-width: 720px; line-height: 1.5; position: relative; z-index: 1; }
+.evp-hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr; gap: 2.5rem; align-items: center; position: relative; z-index: 1; }
+.evp-hero-image { background: rgba(255,255,255,0.08); border-radius: 12px; min-height: 320px; display: flex; align-items: center; justify-content: center; color: #e6b800; font-weight: 600; padding: 1.5rem; text-align: center; border: 2px dashed rgba(255,255,255,0.3); }
+/* Belt-and-suspenders: keep rounded corners on the hero image even after
+   Imagify converts PNGs to WebP and wraps the <img> in a <picture> element
+   (the inline border-radius on the img doesn't always survive that wrap). */
+.evp-corepage .evp-hero-image img,
+.evp-corepage .evp-hero-image picture,
+.evp-corepage .evp-hero-image picture img {
+  border-radius: 20px !important;
+  -webkit-border-radius: 20px !important;
+}
+/* Same picture-wrapper fix for the About portrait. Without this, the
+   bottom corners of the about image go square after Imagify wraps the img
+   in a picture element, because the picture wrapper itself isn't rounded.
+   Mirror of the hero rule above. */
+.evp-corepage .evp-about-image img,
+.evp-corepage .evp-about-image picture,
+.evp-corepage .evp-about-image picture img {
+  border-radius: 20px !important;
+  -webkit-border-radius: 20px !important;
+  display: block !important;
+}
+
+.evp-cta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+.evp-btn { display: inline-block; padding: 1rem 2rem; border-radius: 8px; font-weight: 700; font-size: 1.05rem; text-decoration: none !important; transition: transform 0.1s, box-shadow 0.1s, background 0.15s; }
+.evp-btn-primary { background: #e6b800; color: #1a1a2e !important; }
+.evp-btn-primary:hover { background: #ffc107; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(245,180,0,0.3); }
+.evp-btn-secondary { background: rgba(255,255,255,0.1); color: #fff !important; border: 2px solid #fff; }
+.evp-btn-secondary:hover { background: #fff; color: #1a1a2e !important; }
+.evp-btn-large { padding: 1.2rem 2.5rem; font-size: 1.15rem; }
+
+/* Three-column pattern grid — equal heights via stretch */
+.evp-pattern-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 1.75rem; align-items: stretch; }
+.evp-pattern-card { background: #fff; padding: 1.85rem; border-radius: 14px; border-top: 3px solid #e6b800; box-shadow: 0 1px 3px rgba(10,37,64,0.05), 0 1px 2px rgba(10,37,64,0.03); display: flex; flex-direction: column; transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.evp-pattern-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(10,37,64,0.1), 0 2px 6px rgba(10,37,64,0.05); }
+/* House icon at top of each pattern card */
+.evp-pattern-card::before {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background-color: #fef6dc;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f5b400'><path d='M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 26px 26px;
+  margin-bottom: 1rem;
+}
+.evp-pattern-card h3 { color: #1a1a2e; font-size: 1.15rem; margin-bottom: 0.6rem; }
+.evp-pattern-card em { display: block; margin-bottom: 0.85rem; color: #cc3300; font-style: normal; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.01em; }
+.evp-pattern-card p { font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+.evp-pattern-card p:last-child { margin-bottom: 0; }
+
+/* Specific problems grid — 3-column on desktop, tighter cards */
+.evp-problems { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 1.75rem; align-items: stretch; }
+.evp-problem { background: #fff; padding: 1.65rem; border-radius: 14px; border-top: 3px solid #cc3300; box-shadow: 0 1px 3px rgba(10,37,64,0.05), 0 1px 2px rgba(10,37,64,0.03); display: flex; flex-direction: column; transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.evp-problem:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(10,37,64,0.1), 0 2px 6px rgba(10,37,64,0.05); }
+/* Lightning bolt icon at top of each problem card (electrical theme) */
+.evp-problem::before {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #e6f1fb;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230871bc'><path d='M13 2L4.09 12.97 11 12 11 22l8.91-10.97L13 12V2z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 22px 22px;
+  margin-bottom: 0.85rem;
+}
+.evp-problem h3 { color: #1a1a2e; font-size: 1.15rem; }
+.evp-problem p { font-size: 1rem; line-height: 1.7; }
+.evp-problem h3 { color: #1a1a2e; }
+
+/* Process steps with badges */
+.evp-process-list { display: grid; gap: 1.5rem; margin-top: 1.25rem; }
+.evp-process-step { display: grid; grid-template-columns: 72px 1fr; gap: 1.5rem; align-items: start; }
+.evp-step-badge { background: #cc3300; color: #fff; font-size: 1.5rem; font-weight: 800; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(37,117,252,0.3); }
+.evp-step-body h3 { margin-bottom: 0.4rem; }
+
+/* Pricing block */
+.evp-pricing { background: #fff; padding: 2.25rem; border-radius: 12px; border-left: 6px solid #e6b800; box-shadow: 0 4px 16px rgba(18,48,117,0.08); margin-top: 1.5rem; }
+.evp-pricing ul { list-style: none; padding: 0; margin: 0; }
+.evp-pricing ul li { padding: 1rem 0; border-bottom: 1px solid #eef0f4; }
+.evp-pricing ul li:last-child { border-bottom: none; }
+.evp-pricing-note { background: #f5f7fa; padding: 1rem 1.25rem; border-radius: 6px; margin-top: 1rem; font-style: italic; color: #555; }
+
+/* About — equal heights so image fills text-side */
+.evp-about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 2.5rem; align-items: stretch; }
+.evp-about-image { background: linear-gradient(135deg, #0d0d1a 0%, #cc3300 100%); border-radius: 14px; min-height: 380px; display: flex; align-items: center; justify-content: center; color: #e6b800; font-weight: 600; padding: 1.5rem; text-align: center; border: 2px dashed rgba(245,180,0,0.4); }
+/* Narrow the About text block so lines wrap into more lines per paragraph.
+   Paragraphs grow naturally taller with the original tight 1.4rem gaps
+   between them; the block fills the image height without paragraph-gap
+   spreading. Image stays the same size. */
+.evp-about-text { max-width: 640px; }
+.evp-about-text > *:last-child { margin-bottom: 0; }
+
+/* Neighborhoods + map — equal heights so the map fills the list-side */
+.evp-neighborhoods-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: stretch; }
+.evp-neighborhoods ul { padding-left: 0; list-style: none; margin-bottom: 1.4rem; }
+.evp-neighborhoods ul li { padding: 0.7rem 0; border-bottom: 1px dashed #d8dce5; }
+.evp-neighborhoods ul li:last-child { border-bottom: none; }
+.evp-map { background: #f5f7fa; border-radius: 14px; min-height: 380px; display: flex; align-items: center; justify-content: center; color: #777; text-align: center; padding: 1rem; border: 1px solid #e6e9f0; }
+
+/* Related services grid */
+.evp-related-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-top: 1.75rem; }
+.evp-related-card { background: #fff; padding: 1.5rem 1.25rem; border-radius: 12px; text-align: center; border: 1px solid #e6e9f0; transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s; }
+.evp-related-card:hover { border-color: #e6b800; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(10,37,64,0.1); }
+.evp-related-card a { display: block; color: #1a1a2e !important; font-weight: 700; text-decoration: none !important; }
+
+/* FAQ accordion */
+.evp-faq { margin-top: 1.75rem; }
+.evp-faq details { background: #fff; padding: 1.6rem 1.75rem; border-radius: 12px; margin-bottom: 1rem; border: 1px solid #e6e9f0; transition: border-color 0.15s; }
+.evp-faq details:hover { border-color: #cc3300; }
+.evp-faq summary { cursor: pointer; font-weight: 700; color: #1a1a2e; font-size: 1.1rem; padding-right: 1rem; }
+.evp-faq summary::marker { color: #e6b800; }
+.evp-faq details[open] summary { margin-bottom: 0.85rem; }
+.evp-faq details[open] { border-color: #cc3300; }
+.evp-faq p { margin: 0.5rem 0 0; }
+
+/* Final CTA — same 3-stop gradient + radial highlight as hero, for visual bookending */
+.evp-final-cta {
+  text-align: center;
+  padding: 5rem 1.5rem;
+  background: linear-gradient(135deg, #0d0d1a 0%, #cc3300 65%, #e64d00 100%);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.evp-final-cta::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 55%;
+  height: 180%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+.evp-final-cta > * { position: relative; z-index: 1; }
+.evp-final-cta h2 { color: #fff; margin-bottom: 1rem; font-size: 2.4rem; }
+.evp-final-cta p { color: #e7eefe; font-size: 1.2rem; max-width: 720px; margin: 0 auto 2rem; }
+.evp-final-cta .evp-cta-row { justify-content: center; }
+.evp-phone-large { display: block; font-size: 2.5rem; font-weight: 800; color: #e6b800 !important; margin: 1rem 0 1.5rem; text-decoration: none !important; letter-spacing: -0.02em; }
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+  .evp-corepage { font-size: 16px; }
+  .evp-corepage h1 { font-size: 2rem; }
+  .evp-corepage h2 { font-size: 1.6rem; }
+  .evp-section { padding: 3rem 1.25rem; }
+  .evp-hero { padding: 3rem 1.25rem; }
+  .evp-hero h1 { font-size: 2.1rem; }
+  .evp-hero-inner { grid-template-columns: 1fr; gap: 1.5rem; }
+  .evp-hero-image { min-height: 200px; order: -1; }
+  .evp-pattern-grid { grid-template-columns: 1fr; }
+  .evp-problems { grid-template-columns: 1fr; }
+  /* v16 mobile-breakpoint fixes: collapse the 3 grids that were missing here */
+  .evp-about-grid { grid-template-columns: 1fr; }
+  .evp-neighborhoods-grid { grid-template-columns: 1fr; }
+  .evp-related-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 1100px) and (min-width: 769px) {
+  .evp-problems { grid-template-columns: 1fr 1fr; }
+  .evp-about-grid { grid-template-columns: 1fr; }
+  .evp-neighborhoods-grid { grid-template-columns: 1fr; }
+  .evp-related-grid { grid-template-columns: 1fr 1fr; }
+  .evp-process-step { grid-template-columns: 52px 1fr; gap: 1rem; }
+  .evp-step-badge { width: 48px; height: 48px; font-size: 1.2rem; }
+  .evp-phone-large { font-size: 1.8rem; }
+  .evp-final-cta h2 { font-size: 1.8rem; }
+  .evp-cta-row { flex-direction: column; }
+  .evp-btn { text-align: center; }
+}
+</style>
+
+<div class="evp-corepage">
+
+  <!-- =================== SECTION 1: Hero =================== -->
+  <section class="evp-hero">
+    <div class="evp-hero-inner">
+      <div class="evp-hero-text">
+        <h1 class="evp-hero-eyebrow">Electrical Troubleshooting in Bethesda, MD</h1>
+        <h2 class="evp-hero-heading">Same-Day Diagnosis from a Master Electrician</h2>
+        <p class="evp-subheading">Lights flickering? Breaker tripping? Outlets gone dead? Jane Doe — Virginia-licensed Master Electrician — finds the cause and fixes it. Residential service across Bethesda and surrounding areas.</p>
+        <div class="evp-cta-row">
+          <a href="tel:5551234567" class="evp-btn evp-btn-primary">Call 555-123-4567</a>
+          <a href="/contact/" class="evp-btn evp-btn-secondary">Get a Free Estimate</a>
+        </div>
+      </div>
+      <div class="evp-hero-image" style="background: none; border: none; padding: 0; overflow: hidden; border-radius: 20px;">
+        <img src="https://acmeelectrical.example.com/wp-content/uploads/2026/05/bethesda-md-troubleshooting-hero-PLACEHOLDER.png"
+             alt="Jane Doe, master electrician, troubleshooting an open residential electrical panel in Bethesda, MD"
+             loading="eager"
+             width="1200" height="896"
+             style="width: 100%; height: auto; display: block; border-radius: 20px; -webkit-border-radius: 20px;">
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SECTION 2: What X means =================== -->
+  <section class="evp-section evp-section--white">
+    <div class="evp-section-inner evp-section-2col">
+      <div class="evp-section-text">
+        <h2 class="evp-heading-left">What "electrical troubleshooting" actually means</h2>
+        <p>Most homeowners call an electrician when something stops working — a row of outlets goes dead, a breaker keeps tripping, lights flicker every time the AC kicks on. "Troubleshooting" is what we do before we fix it. It's the diagnostic step where we find the root cause, not just the symptom.</p>
+        <p>A blown breaker is the symptom. The cause could be a loose neutral wire behind a 1960s outlet box, an overloaded circuit because a new microwave shares a line with the toaster, or a damaged conductor inside a wall the previous owner finished without a permit. Each cause has a different fix. Pinpointing the right one is the work that saves you from paying twice — once for a wrong guess, and again for the real repair.</p>
+        <p>Jane Doe is a Virginia-licensed Master Electrician with a maintenance team behind him. He runs diagnostics on residential electrical systems across Bethesda and the rest of Northern Montgomery County. The work isn't "swap and pray." It's read the panel, test the circuits, trace the fault, then explain what's happening in plain English before any repair starts.</p>
+      </div>
+      <aside class="evp-quick-ref">
+        <span class="evp-quick-ref-label">Quick Reference</span>
+        <h3>Common signs you need to call a Bethesda electrician</h3>
+        <p class="evp-quick-ref-intro">Six symptoms we see every week. Tap any to learn what it might mean.</p>
+
+        <details>
+          <summary>Breaker trips repeatedly or won't reset</summary>
+          <p>A breaker that pops daily — or the moment you reset it — points to a short, an overloaded circuit, or a failed breaker. In Bethesda's 1920s–1950s homes (Kenwood, Bradley Hills, Battery Park), the original 60-amp fuse box or early 100-amp panel is overwhelmed by modern loads.</p>
+        </details>
+
+        <details>
+          <summary>Outlets dead in one room but not others</summary>
+          <p>Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. We trace the circuit map and find the break in 15–30 minutes.</p>
+        </details>
+
+        <details>
+          <summary>Lights flicker when the AC or heat pump kicks on</summary>
+          <p>Voltage drop from a loose neutral at the meter base or an aging overhead PEPCO service connection. Bethesda's older tree-canopy neighborhoods are especially prone to weather-related service-entrance damage.</p>
+        </details>
+
+        <details>
+          <summary>Burning smell or warm switch plates</summary>
+          <p>Stop using the circuit and call us. Almost always heat at a loose connection — and loose connections in walls cause fires. We find the heat source with an IR thermal camera and repair it before damage spreads.</p>
+        </details>
+
+        <details>
+          <summary>Half the house has power, half doesn't</summary>
+          <p>An open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point. Common after storms in Bethesda's tree-heavy neighborhoods.</p>
+        </details>
+
+        <details>
+          <summary>AFCI breaker trips on normal appliances</summary>
+          <p>AFCI breakers in Bethesda's 2010s+ teardown rebuilds are sensitive by design and trip on noisy loads like vacuums and treadmills. We confirm whether the trip is nuisance or a real arc fault, and adjust the circuit accordingly.</p>
+        </details>
+
+        <p class="evp-quick-ref-footer">Don't see your issue?<br><a href="tel:5551234567">Call 555-123-4567</a> — we'll diagnose it.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- =================== SECTION 3: Why <city> homeowners =================== -->
+  <section class="evp-section evp-section--gray">
+    <div class="evp-section-inner">
+      <h2>Why Bethesda homeowners call us for diagnostics</h2>
+      <p>Bethesda, MD sits in southern Montgomery County, directly northwest of Washington, DC — separated from the District by Western Avenue. The Capital Beltway (I-495) defines Bethesda's northern edge, while the Potomac River borders it to the west. Wisconsin Avenue and Old Georgetown Road are the main commercial corridors running through the community. Bethesda is about 8 miles from downtown DC, 10 minutes from Chevy Chase and Potomac, 15 minutes from Rockville, and 35–45 minutes from Fairfax, VA via the Beltway.</p>
+      <div class="evp-pattern-grid">
+        <div class="evp-pattern-card">
+          <h3>1920s–1950s colonials, Cape Cods & bungalows</h3>
+          <em>Kenwood, Bradley Hills, Battery Park, Somerset, Sumner (original homes)</em>
+          <p>Bethesda's earliest residential subdivisions — Bradley Hills, Battery Park, and Kenwood — filled in during the 1920s through 1950s with English cottages, Cape Cods, colonials, and Craftsman bungalows. These homes were built with 60-amp fuse boxes (sometimes upgraded to 100-amp panels decades later) and cloth-insulated copper wiring rated for a refrigerator, a radio, and a few ceiling lights. Knob-and-tube wiring persists in some unfinished attics and basements. Original galvanized steel plumbing and minimal insulation (R-7 walls or less) are typical. These homes have survived 70–100 years, but their electrical systems were never designed for central AC, multiple kitchen appliances, home offices, or EV chargers.</p>
+          <p><strong>Symptoms:</strong> Original 60-amp fuse boxes or early 100-amp panels with no room for additional circuits. Cloth-insulated wiring with brittle insulation that cracks when disturbed — a fire hazard behind walls. Two-prong ungrounded outlets throughout the home (no equipment ground). Fuses blowing repeatedly because the homeowner replaced a 15-amp fuse with a 20-amp to stop the nuisance — masking an overload rather than fixing it. Knob-and-tube remnants in attics covered by blown-in insulation, creating a heat-trapping fire risk.</p>
+        </div>
+        <div class="evp-pattern-card">
+          <h3>1950s–1970s split-levels, ramblers & expanded colonials</h3>
+          <em>Woodhaven, Westbard, Glen Echo Heights, Burning Tree (original homes), Bradley Hills (expanded homes)</em>
+          <p>The post-war boom brought split-levels, ramblers, and larger colonials to Bethesda's western and northern neighborhoods. These homes typically have 100-amp or early 200-amp panels with thermoplastic (TW/THW) copper wiring — a major upgrade over cloth-insulated wire but still sized for 1960s loads. Some mid-1970s construction in Bethesda used aluminum branch wiring before the practice was curtailed. GFCI protection is absent or minimal — pre-1975 homes have none; 1975–1980 homes may have a single GFCI in the bathroom. Many of these homes have been expanded over the decades with additions, finished basements, and updated kitchens, creating a patchwork of wiring vintages behind the walls.</p>
+          <p><strong>Symptoms:</strong> Breakers tripping under modern loads — the original 100-amp panel is overwhelmed by central AC, multiple refrigerators, and home office equipment. Aluminum branch wiring (1970s homes) with oxidized connections causing warm outlets and flickering lights. No GFCI protection in kitchens, bathrooms, or exterior outlets — a shock hazard that fails any home inspection. Patchwork wiring from decades of additions — a 1965 original circuit spliced to a 1985 kitchen remodel spliced to a 2005 basement finish, with different wire gauges and connection methods at each junction.</p>
+        </div>
+        <div class="evp-pattern-card">
+          <h3>2000s–2020s teardown rebuilds & luxury new construction</h3>
+          <em>Edgemoor (new builds), Burning Tree (new builds), Bradley Hills (new builds), Kenwood (selective rebuilds), Woodhaven (new builds)</em>
+          <p>Bethesda's teardown-rebuild trend began in the 1990s and accelerated through the 2010s — original 1,500-square-foot ramblers replaced by 5,000–8,000-square-foot luxury homes on the same lots. These homes are built to modern code with 200-amp (occasionally 400-amp) panels, AFCI protection on bedroom and living-area circuits (NEC 2008+), and tamper-resistant receptacles throughout. But new construction is not problem-free. The PEPCO service drop was often sized for the original small home and not upgraded when the replacement went up — leaving a modern 200-amp panel fed by an undersized utility connection. Smart-home systems installed by the builder's low-voltage contractor sometimes have incorrect neutral bonds or improperly shared neutrals on multi-wire branch circuits.</p>
+          <p><strong>Symptoms:</strong> Nuisance AFCI breaker trips on vacuum cleaners, treadmills, and other motor-driven loads — the breaker is working correctly but the homeowner perceives a fault. Undersized PEPCO service drops — the panel is modern but the utility feed was sized for the 1950s rambler that previously stood on the lot, throttling actual capacity during peak loads. Smart-home wiring with incorrect neutral bonds causing phantom loads, intermittent switch failures, and compatibility issues with aftermarket dimmers. Voltage drop to detached garages and accessory dwelling units fed by undersized sub-panel conductors run at the time of construction.</p>
+        </div>
+      </div>
+      <p class="evp-closing-note">If your home falls in any of these patterns, the diagnostic step is what tells you whether you need a quick fix, a bigger repair, or a panel upgrade. Guessing costs more than knowing. That's why people call.</p>
+    </div>
+  </section>
+
+  <!-- =================== SECTION 4: Specific problems =================== -->
+  <section class="evp-section evp-section--white">
+    <div class="evp-section-inner">
+      <h2>Specific problems we diagnose every week in Bethesda</h2>
+      <p>Here are the calls Jane gets most often from Bethesda homeowners. If your situation matches one of these, you're in the right place.</p>
+      <div class="evp-problems">
+        <div class="evp-problem">
+          <h3>Breaker trips and won't reset</h3>
+          <p>A breaker that trips once is doing its job. A breaker that trips daily, or that pops the moment you reset it, points to a short, an overloaded circuit, or a failed breaker itself. We trace the circuit, isolate the load, and find which of the three it is.</p>
+        </div>
+        <div class="evp-problem">
+          <h3>Outlets dead in one room, fine in another</h3>
+          <p>Usually a tripped GFCI you don't know about, a backstabbed connection that worked loose, or a wire nut that came apart in a junction box behind drywall. Diagnostic time matters — we trace the circuit map and find the break in 15-30 minutes instead of opening every box in the house.</p>
+        </div>
+        <div class="evp-problem">
+          <h3>Flickering lights when the AC or fridge cycles</h3>
+          <p>This points to a voltage drop, often from a loose neutral at the meter base or a damaged feeder. Persistent voltage drops shorten the life of every motor in your house and are a real fire-risk signal. We pull the meter cover, test the service entrance, and identify the source.</p>
+        </div>
+        <div class="evp-problem">
+          <h3>Burning smell or warm switch plates</h3>
+          <p>Stop using the circuit and call us today. We treat this as an urgent diagnostic, not a routine appointment. The cause is almost always heat at a loose connection — and loose connections in walls cause house fires. We find the heat source and repair it before damage spreads.</p>
+        </div>
+        <div class="evp-problem">
+          <h3>EV charger circuit issues</h3>
+          <p>In Bethesda's two-car-garage homes in Burning Tree, Kenwood, and the Bradley Hills corridor, EV charging puts continuous high-amp draw on circuits that may not be sized for it. If your charger throttles itself, trips a breaker, or warms the outlet, the cause is upstream of the charger and worth diagnosing before you blame the car. See our <a href="/ev-charger-bethesda-md/">EV charger installation in Bethesda page</a> for permanent solutions.</p>
+        </div>
+        <div class="evp-problem">
+          <h3>Whole-house or partial outages</h3>
+          <p>If half your house has power and half doesn't, you may have an open neutral at the service entrance — a serious condition that damages electronics. We test the voltage on each leg of the panel and identify the failure point.</p>
+        </div>
+        <div class="evp-problem">
+          <h3>Three-way switch that doesn't work right</h3>
+          <p>Switches at two ends of a hallway or staircase use a different wiring topology than single switches. When a previous repair scrambled the travelers, you get switches that work sometimes, or only in one combination, or that buzz. Diagnostic and repair is a 1-2 hour job.</p>
+        </div>
+        <div class="evp-problem">
+          <h3>Sub-panel that's been added and is unreliable</h3>
+          <p>Garage and basement sub-panels added during renovations are a frequent source of intermittent problems. We verify the feeder size, check the grounding and bonding, and confirm the panel is wired to current code.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SECTION 5: Our process =================== -->
+  <section class="evp-section evp-section--gray">
+    <div class="evp-section-inner">
+      <h2>Our troubleshooting process — what happens when you call</h2>
+      <p>When you call 555-123-4567 or request a quote online, here's what happens.</p>
+      <div class="evp-process-list">
+        <div class="evp-process-step">
+          <div class="evp-step-badge">1</div>
+          <div class="evp-step-body">
+            <h3>A real conversation, not a script</h3>
+            <p>Jane or someone from his team picks up. We ask about the symptom, when it started, what you've already tried, and whether there's any safety concern (burning smell, sparking, warm walls). If anything you describe is urgent, we'll tell you to shut off the breaker until we can be there.</p>
+          </div>
+        </div>
+        <div class="evp-process-step">
+          <div class="evp-step-badge">2</div>
+          <div class="evp-step-body">
+            <h3>Same-day or next-day appointment in most cases</h3>
+            <p>Bethesda is about 22 miles from our Fairfax Blvd office — roughly 35–45 minutes via the Capital Beltway (I-495). We don't promise 24/7 service — but for residential troubleshooting during weekday business hours, same-day or next-day is the norm. We confirm the appointment time and give you a one-hour window.</p>
+          </div>
+        </div>
+        <div class="evp-process-step">
+          <div class="evp-step-badge">3</div>
+          <div class="evp-step-body">
+            <h3>On-site diagnostic with the homeowner present</h3>
+            <p>We arrive, walk to the affected area with you, and ask you to demonstrate the problem. Then we set up the diagnostic. Tools: multimeter, circuit tracer, AFCI/GFCI tester, IR thermal camera if heat is suspected. We open panels, test circuits at rest and under load, and trace the fault to its origin.</p>
+          </div>
+        </div>
+        <div class="evp-process-step">
+          <div class="evp-step-badge">4</div>
+          <div class="evp-step-body">
+            <h3>A plain-English explanation before any repair</h3>
+            <p>Before we do a single repair, we sit down with you and show you what we found. We tell you the cause, the fix, the cost, and what happens if you defer the fix. You decide whether to proceed today or schedule a return visit.</p>
+          </div>
+        </div>
+        <div class="evp-process-step">
+          <div class="evp-step-badge">5</div>
+          <div class="evp-step-body">
+            <h3>The repair, if you authorize it</h3>
+            <p>Most diagnostic visits include the repair on the same call. We carry common parts — breakers, GFCIs, outlets, switches, wire nuts, and standard sizes of wire. Larger jobs (panel replacement, sub-panel install, full circuit re-run) get a written estimate and a separate appointment.</p>
+          </div>
+        </div>
+        <div class="evp-process-step">
+          <div class="evp-step-badge">6</div>
+          <div class="evp-step-body">
+            <h3>A clean exit, with documentation</h3>
+            <p>When we leave, you get a written record of what was diagnosed, what was repaired, and what (if anything) we recommend you address next.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SECTION 6: Transparent pricing =================== -->
+  <section class="evp-section evp-section--white">
+    <div class="evp-section-inner">
+      <h2>How estimates work</h2>
+      <p>We come to the house, look at the actual work, and give a written estimate before any job is scheduled. The estimate is firm — no surprise charges at the end. No charge for the diagnostic visit in our primary service area.</p>
+      <div class="evp-pricing">
+        <ul>
+          <li><strong>Residential troubleshooting visit.</strong> A diagnostic visit (typically 1-2 hours) plus most minor repairs that can be done on the same call — replacement GFCI outlet, replacement breaker, tightened lug, re-pulled neutral. The written estimate covers parts plus labor and is given before any repair starts.</li>
+          <li><strong>Diagnostic-only visit.</strong> If you want a written estimate and a separate visit for the repair, we'll diagnose the problem on the first visit and leave you with the estimate. You decide whether to schedule the repair.</li>
+          <li><strong>Major repairs — separate written estimate.</strong> Panel upgrades, sub-panel installs, full circuit re-runs, EV charger installs, whole-house rewires get a written estimate before we start. We don't begin major work without your written authorization.</li>
+          <li><strong>After-hours service available on request.</strong> Most troubleshooting calls don't need it. We mention it for visibility — if you need it, ask when you call.</li>
+        </ul>
+        <div class="evp-pricing-note">No trip charge for Bethesda, Chevy Chase, Potomac, Rockville, or Kensington. We don't charge to drive to your house for the estimate.</div>
+      </div>
+      <p class="evp-closing-note"></p>
+    </div>
+  </section>
+
+  <!-- =================== SECTION 7: About =================== -->
+  <section class="evp-section evp-section--gray">
+    <div class="evp-section-inner">
+      <h2>About Jane Doe, Licensed Electrical Contractor</h2>
+      <div class="evp-about-grid">
+        <div class="evp-about-image" style="background:none; border:none; padding:0; min-height:0; overflow:hidden; border-radius:20px;">
+          <img src="https://acmeelectrical.example.com/wp-content/uploads/2026/05/bethesda-md-troubleshooting-about-PLACEHOLDER.png"
+               alt="Jane Doe, master electrician at Acme Electrical Solutions serving Bethesda, MD"
+               loading="lazy"
+               width="896"
+               height="1200"
+               style="width:100%; height:auto; display:block;">
+        </div>
+        <div class="evp-about-text">
+          <p>Jane Doe is a Master Electrician licensed in Virginia. The Master tier is the highest electrician license the state issues — it requires several years of journeyman work, a passed state exam, and a clean record. Jane waited roughly four years for his Master license before opening Acme Electrical Solutions. He's fully insured and runs a maintenance team, so when you call us you're not waiting on one person's calendar.</p>
+          <p>Jane is the person who shows up at most residential troubleshooting calls. He's the diagnostician — the one who reads the panel, runs the tests, and explains what's happening. His preference is to find the root cause and repair it once, rather than patch the symptom and come back next month.</p>
+          <p>Acme Electrical Solutions holds a <strong>4.9-star average across 42 customer reviews</strong>. Real reviews from real customers across the Springfield area.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SECTION 8: Neighborhoods =================== -->
+  <section class="evp-section evp-section--white">
+    <div class="evp-section-inner">
+      <h2>Bethesda neighborhoods we serve</h2>
+      <div class="evp-neighborhoods-grid">
+        <div class="evp-neighborhoods">
+          <p>We cover all of Bethesda, MD, including:</p>
+          <ul>
+            <li><strong>Kenwood</strong> — stately colonials and renowned cherry blossom-lined streets south of River Road</li>
+            <li><strong>Burning Tree</strong> — heavily wooded estate lots averaging half an acre in western Bethesda (20817)</li>
+            <li><strong>Bradley Hills</strong> — rolling lots with mature trees and a top-rated elementary school near Bradley Boulevard</li>
+            <li><strong>Edgemoor</strong> — walkable to downtown Bethesda with a mix of original colonials and teardown rebuilds</li>
+            <li><strong>Somerset</strong> — incorporated town of tree-lined streets between Wisconsin Avenue and Little Falls Parkway</li>
+            <li><strong>Battery Park</strong> — established neighborhood adjacent to Edgemoor with easy access to the Capital Crescent Trail</li>
+            <li><strong>Glen Echo Heights</strong> — exclusive enclave near the Potomac with architecturally diverse homes and limited inventory</li>
+            <li><strong>Westbard</strong> — revitalizing corridor west of downtown with new amenities and proximity to the Capital Crescent Trail</li>
+            <li><strong>Woodhaven</strong> — English-village character with Tudor-style homes near the Capital Beltway</li>
+            <li><strong>Sumner</strong> — colonial homes with large yards and Little Falls Stream Valley Park access near the DC line</li>
+          </ul>
+          <p>Outside Bethesda, we serve Vienna, Fairfax, McLean, Chevy Chase, Potomac, Rockville, Kensington, Silver Spring, and the rest of Montgomery County. We also cover Northern Virginia (Fairfax County, Arlington) and Washington, DC.</p>
+        </div>
+        <div class="evp-map" style="background:none; padding:0; overflow:hidden; border-radius:20px; border:none; display:block;">
+          <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAGrQvKKlKGAmnWposs3xPlVriZlDI2MqQ&q=Bethesda%2C+MD&zoom=12"
+                  width="600"
+                  height="450"
+                  style="width:100%; height:100%; min-height:380px; border:0; display:block;"
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  title="Map of Bethesda, MD — Acme Electrical Solutions service area"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SECTION 9: Related services =================== -->
+  <section class="evp-section evp-section--gray">
+    <div class="evp-section-inner">
+      <h2>Related electrical services in Bethesda</h2>
+      <p>Troubleshooting is the front door. If your diagnosis leads to a larger repair, these are the next steps we handle:</p>
+      <div class="evp-related-grid">
+        <div class="evp-related-card">Electrical Panel Upgrades</div>
+        <div class="evp-related-card">EV Charger Installation</div>
+        <div class="evp-related-card">Light Fixtures & Chandeliers</div>
+        <div class="evp-related-card">Smoke Alarm Installation</div>
+        <div class="evp-related-card">Outlet & Switch Installation</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SECTION 10: FAQ =================== -->
+  <section class="evp-section evp-section--white">
+    <div class="evp-section-inner">
+      <h2>Frequently asked questions</h2>
+      <div class="evp-faq">
+        <details>
+          <summary>How does pricing work for electrical troubleshooting in Bethesda, MD?</summary>
+          <p>We come to the house, look at the actual work, and give a written estimate before any repair starts. Diagnostic visits include most minor on-the-spot repairs. Major repairs (panels, sub-panels, full circuit re-runs) get a separate written estimate. No charge for the diagnostic visit in our primary service area.</p>
+        </details>
+        <details>
+          <summary>How quickly can you come out for a troubleshooting call in Bethesda?</summary>
+          <p>Same-day or next-day in most cases during weekday business hours. Bethesda is about 22 miles from our Fairfax Blvd office — roughly 35–45 minutes via the Capital Beltway (I-495). If your situation is urgent (burning smell, sparking, warm walls), we'll triage you to the earliest available slot and tell you what to shut off in the meantime.</p>
+        </details>
+        <details>
+          <summary>What's included in a troubleshooting visit?</summary>
+          <p>A real diagnostic — not a guess. We use a multimeter, circuit tracer, AFCI/GFCI tester, and IR thermal camera if heat is suspected. We open panels, test circuits at rest and under load, trace the fault to its source, then explain what we found in plain English before any repair starts.</p>
+        </details>
+        <details>
+          <summary>When should I call an electrician vs. trying to fix it myself?</summary>
+          <p>Call an electrician if you smell burning, see sparking, feel warm walls or warm switch plates, have a breaker that trips daily, or have lost power to part of the house without a clear cause. Resetting a tripped breaker once is fine. Resetting it three times in a row is a fire risk. We'd rather you call us and have us tell you it's a small fix than not call and have a real problem grow.</p>
+        </details>
+        <details>
+          <summary>What's the most common electrical problem in Bethesda homes?</summary>
+          <p>Breaker trips on overloaded circuits. Bethesda's housing stock spans a century — from 1920s colonials in Kenwood and Bradley Hills with original 60-amp fuse boxes, to 1960s split-levels in Woodhaven and Westbard with 100-amp panels, to 2010s teardown rebuilds in Edgemoor and Burning Tree. The oldest homes have electrical systems designed for a radio and a few light bulbs; even the mid-century homes weren't wired for central AC, dual ovens, home offices, and EV chargers. The second most common call is flickering lights — usually a loose neutral at the meter base or voltage drop from an aging PEPCO overhead service connection in Bethesda's heavily wooded neighborhoods.</p>
+        </details>
+        <details>
+          <summary>Do you handle EV charger problems?</summary>
+          <p>Yes. EV charging puts continuous high-amp draw on circuits that Bethesda's larger homes were not wired for. If your charger throttles, trips a breaker, or warms the outlet, the cause is almost always upstream — a feeder, a breaker, or a connection that can't sustain the load. We diagnose the cause and either repair it or quote you for the right circuit. See our <a href="/ev-charger-bethesda-md/">EV charger installation page</a> for full installs.</p>
+        </details>
+        <details>
+          <summary>Are you licensed and insured?</summary>
+          <p>Yes. Jane holds a Master Electrician license issued by the Commonwealth of Virginia — the state's highest electrician credential. Acme Electrical Solutions is fully insured. We're happy to provide proof of license and insurance on request before any work begins.</p>
+        </details>
+        <details>
+          <summary>Do you offer 24/7 emergency service?</summary>
+          <p>We offer after-hours service when needed, but we don't market ourselves as a 24/7 emergency company. Most residential troubleshooting is handled fastest by booking the earliest weekday or weekend appointment. If you have a genuine emergency — sparks, burning smell, fire risk — call us at 555-123-4567 and we'll triage immediately.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== SECTION 11: Final CTA =================== -->
+  <section class="evp-final-cta">
+    <h2>Ready to get your problem diagnosed?</h2>
+    <p>Same-day or next-day electrical troubleshooting in Bethesda, MD.<br>We respond within 24 hours.</p>
+    <a href="tel:5551234567" class="evp-phone-large">555-123-4567</a>
+    <div class="evp-cta-row">
+      <a href="tel:5551234567" class="evp-btn evp-btn-primary evp-btn-large">Call Now</a>
+      <a href="/contact/" class="evp-btn evp-btn-secondary evp-btn-large">Get a Free Estimate</a>
+    </div>
+  </section>
+
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://acmeelectrical.example.com/#business",
+      "name": "Acme Electrical Solutions",
+      "alternateName": "Acme Electric",
+      "description": "Residential and commercial electrical contractor serving Springfield, VA and surrounding areas. Licensed, insured, specializing in panel upgrades and EV charger installations.",
+      "url": "https://acmeelectrical.example.com/",
+      "telephone": "+1-555-123-4567",
+      "email": "info@acmeelectrical.example.com",
+      "image": "https://acmeelectrical.example.com/images/jane-doe-electrician.jpg",
+      "logo": "https://acmeelectrical.example.com/images/acme-logo.png",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "100 Test Street",
+        "addressLocality": "Springfield",
+        "addressRegion": "VA",
+        "postalCode": "22150",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 38.7893,
+        "longitude": -77.1872
+      },
+      "areaServed": [
+        {
+          "@type": "AdministrativeArea",
+          "name": "Montgomery County, MD"
+        },
+        {
+          "@type": "City",
+          "name": "Bethesda",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Montgomery County, MD"
+          }
+        },
+        {
+          "@type": "City",
+          "name": "Chevy Chase",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Montgomery County, MD"
+          }
+        },
+        {
+          "@type": "City",
+          "name": "Potomac",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Montgomery County, MD"
+          }
+        }
+      ],
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "07:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Saturday"
+          ],
+          "opens": "08:00",
+          "closes": "14:00"
+        }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "Journeyman Electrician License",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "Commonwealth of Virginia, Department of Professional and Occupational Regulation"
+        }
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "Jane Doe",
+        "jobTitle": "Licensed Electrical Contractor",
+        "worksFor": {
+          "@id": "https://acmeelectrical.example.com/#business"
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "42",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://acmeelectrical.example.com/electrical-troubleshooting-bethesda-md/#service",
+      "name": "Electrical Troubleshooting in Bethesda, MD",
+      "description": "Residential electrical troubleshooting and diagnostics in Bethesda, MD. Master electrician runs full diagnostic on circuits, panels, outlets, switches, and EV-charger circuits. Same-day or next-day appointments in most cases. Written on-site estimate before any repair begins.",
+      "serviceType": "Electrical troubleshooting and diagnostics",
+      "provider": {
+        "@id": "https://acmeelectrical.example.com/#business"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Bethesda",
+        "containedInPlace": {
+          "@type": "AdministrativeArea",
+          "name": "Montgomery County, Maryland"
+        }
+      },
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Residential homeowners in Bethesda, MD and surrounding Montgomery County neighborhoods including Kenwood, Burning Tree, Bradley Hills, Edgemoor, Somerset, Glen Echo Heights, and the Westbard corridor."
+      },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "USD",
+        "price": "",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": "",
+          "priceCurrency": "USD",
+          "description": ""
+        },
+        "availability": "https://schema.org/InStock",
+        "url": "https://acmeelectrical.example.com/electrical-troubleshooting-bethesda-md/"
+      },
+      "termsOfService": "We come to the house, look at the actual work, and give a written estimate before any job is scheduled. The estimate is firm. Diagnostic visits include most minor on-the-spot repairs; major repairs (panel upgrades, sub-panel installs, full circuit re-runs) get a separate written estimate before work begins."
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://acmeelectrical.example.com/electrical-troubleshooting-bethesda-md/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does pricing work for electrical troubleshooting in Bethesda, MD?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We come to the house, look at the actual work, and give a written estimate before any repair starts. Diagnostic visits include most minor on-the-spot repairs. Major repairs get a separate written estimate. No charge for the diagnostic visit in our primary service area."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How quickly can you come out for a troubleshooting call in Bethesda?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Same-day or next-day in most cases during weekday business hours. Bethesda is about 22 miles from our Fairfax Blvd office — roughly 35–45 minutes via the Capital Beltway (I-495). If your situation is urgent — burning smell, sparking, warm walls — we will triage you to the earliest available slot and tell you what to shut off in the meantime."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is included in a troubleshooting visit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A real diagnostic — not a guess. We use a multimeter, circuit tracer, AFCI/GFCI tester, and IR thermal camera if heat is suspected. We open panels, test circuits at rest and under load, trace the fault to its source, then explain what we found in plain English before any repair starts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When should I call an electrician versus trying to fix it myself?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Call an electrician if you smell burning, see sparking, feel warm walls or warm switch plates, have a breaker that trips daily, or have lost power to part of the house without a clear cause. Resetting a tripped breaker once is fine. Resetting it three times in a row is a fire risk."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the most common electrical problem in Bethesda homes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Breaker trips on overloaded circuits. Bethesda's housing stock spans a century — from 1920s colonials in Kenwood and Bradley Hills with original 60-amp fuse boxes, to 1960s split-levels in Woodhaven and Westbard with 100-amp panels, to 2010s teardown rebuilds in Edgemoor and Burning Tree. The oldest homes have electrical systems designed for a radio and a few light bulbs; even the mid-century homes weren't wired for central AC, dual ovens, home offices, and EV chargers. The second most common call is flickering lights — usually a loose neutral at the meter base or voltage drop from an aging PEPCO overhead service connection in Bethesda's heavily wooded neighborhoods."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you handle EV charger problems?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EV charging puts continuous high-amp draw on circuits that Bethesda's larger homes were not wired for. If your charger throttles, trips a breaker, or warms the outlet, the cause is almost always upstream — a feeder, a breaker, or a connection that cannot sustain the load. We diagnose the cause and either repair it or quote you for the right circuit."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are you licensed and insured?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Jane holds a Master Electrician license issued by the Commonwealth of Virginia — the state's highest electrician credential. Acme Electrical Solutions is fully insured. We are happy to provide proof of license and insurance on request before any work begins."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you offer 24/7 emergency service?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We offer after-hours service when needed, but we don't market ourselves as a 24/7 emergency company. Most residential troubleshooting is handled fastest by booking the earliest weekday or weekend appointment. If you have a genuine emergency — sparks, burning smell, fire risk — call 555-123-4567 and we will triage immediately."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- /wp:html -->

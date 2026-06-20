@@ -23,7 +23,7 @@ Basic:
         --city    vienna-va \\
         --position 6
 
-Override the client (default: ev-electric-services):
+Specify the client:
 
     python scaffold-core-30-page.py \\
         --service troubleshooting \\
@@ -925,7 +925,7 @@ def main() -> int:
     )
     p.add_argument("--service", required=True, help='Service slug (e.g. "troubleshooting")')
     p.add_argument("--city", required=True, help='City slug (e.g. "vienna-va")')
-    p.add_argument("--client", default="ev-electric-services", help='Client slug (default: ev-electric-services)')
+    p.add_argument("--client", required=True, help='Client slug (e.g. ev-electric-services). Required.')
     p.add_argument("--position", type=int, required=True, help="Core 30 build-order position (e.g. 6)")
     p.add_argument("--dry-run", action="store_true", help="Render but don't write files.")
     p.add_argument(

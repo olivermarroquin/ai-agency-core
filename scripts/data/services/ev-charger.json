@@ -45,22 +45,22 @@
 
   "aioseo_page_title_template": "EV Charger Installation in {city_name_with_state} | {client_name}",
   "aioseo_meta_description_template": "FILL: Meta description (≤155 chars). Pattern: '<value prop> in {city_name_with_state}. <proof / differentiator>. Call {phone_display}.'",
-  "aioseo_focus_keyword_template": "ev charger installation {city_slug}",
+  "aioseo_focus_keyword_template": "ev charger installation {city_name}",
   "aioseo_additional_keywords_template": [
-    "tesla charger installation {city_slug}",
-    "tesla wall connector installation {city_slug}",
-    "home ev charger installation {city_slug}",
-    "level 2 charger installation {city_slug}",
-    "electric car charger installation {city_slug}",
-    "ev charger installation cost {city_slug}",
-    "240v ev charger installation {city_slug}",
+    "tesla charger installation {city_name}",
+    "tesla wall connector installation {city_name}",
+    "home ev charger installation {city_name}",
+    "level 2 charger installation {city_name}",
+    "electric car charger installation {city_name}",
+    "ev charger installation cost {city_name}",
+    "240v ev charger installation {city_name}",
     "ev charger installation near me",
-    "nema 14-50 outlet installation for ev {city_slug}",
-    "ev charger permit {city_slug}",
-    "best electrician for ev charger {city_slug}",
-    "ev charger installation with panel upgrade {city_slug}",
+    "nema 14-50 outlet installation for ev {city_name}",
+    "ev charger permit {city_name}",
+    "best electrician for ev charger {city_name}",
+    "ev charger installation with panel upgrade {city_name}",
     "ev charger installation in garage",
-    "outdoor ev charger installation {city_slug}"
+    "outdoor ev charger installation {city_name}"
   ],
   "wordpress_page_title_template": "EV Charger Installation in {city_name_with_state}",
 
@@ -68,7 +68,7 @@
   "hero_heading": "FILL: Hero heading — value-prop sentence (≤8 words). See §6 voice anchor.",
   "hero_subheading_template": "FILL: Hero subheading — 2-3 sentences, contractor-folksy per §6. Should mention {owner_name}, {license_state}, and the city.",
   "hero_image_alt_template": "{owner_name}, master electrician, installing an EV charger in a residential garage in {city_name_with_state}",
-  "hero_image_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-ev-charger-hero-PLACEHOLDER.png",
+  "hero_image_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/{city_slug}-ev-charger-hero-PLACEHOLDER.png",
 
   "what_it_means_heading": "What \"EV charger installation\" actually means",
   "what_it_means_paragraphs": [
@@ -160,7 +160,7 @@
     "FILL: About paragraph 3 — AggregateRating + review pitch."
   ],
   "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
-  "about_portrait_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-ev-charger-about-PLACEHOLDER.png",
+  "about_portrait_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/{city_slug}-ev-charger-about-PLACEHOLDER.png",
 
   "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
   "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",

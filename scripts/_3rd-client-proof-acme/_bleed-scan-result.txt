@@ -1,0 +1,19 @@
+=== 3rd-client reuse proof — bleed scan ===
+Date: 2026-06-20T14:56:15Z
+Chat: f3-page-factory-reusability-hardening-202606190000
+
+--- EV Electric bleed ---
+/tmp/acme-test-output/draft-v1.md:0
+/tmp/acme-test-output/draft-v1-WP-WRAPPED.html:0
+
+--- S&H bleed ---
+/tmp/acme-test-output/draft-v1.md:0
+/tmp/acme-test-output/draft-v1-WP-WRAPPED.html:0
+
+--- Acme identity count ---
+32
+
+--- Any foreign-client strings (should be empty) ---
+(none)
+
+VERDICT: PASS — zero foreign-client bleed, correct Acme identity throughout

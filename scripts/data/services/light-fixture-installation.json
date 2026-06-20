@@ -44,19 +44,19 @@
 
   "aioseo_page_title_template": "Light Fixture & Chandelier Installation in {city_name_with_state} | {client_name}",
   "aioseo_meta_description_template": "FILL: Meta description (≤155 chars). Pattern: '<value prop> in {city_name_with_state}. <proof / differentiator>. Call {phone_display}.'",
-  "aioseo_focus_keyword_template": "light fixture installation {city_slug}",
+  "aioseo_focus_keyword_template": "light fixture installation {city_name}",
   "aioseo_additional_keywords_template": [
-    "chandelier installation {city_slug}",
-    "ceiling light installation {city_slug}",
-    "light fixture replacement {city_slug}",
-    "pendant light installation {city_slug}",
-    "recessed lighting installation {city_slug}",
-    "electrician to install light fixture {city_slug}",
+    "chandelier installation {city_name}",
+    "ceiling light installation {city_name}",
+    "light fixture replacement {city_name}",
+    "pendant light installation {city_name}",
+    "recessed lighting installation {city_name}",
+    "electrician to install light fixture {city_name}",
     "light fixture installation near me",
-    "outdoor light fixture installation {city_slug}",
-    "bathroom light fixture installation {city_slug}",
-    "kitchen light fixture installation {city_slug}",
-    "ceiling fan to light fixture swap {city_slug}",
+    "outdoor light fixture installation {city_name}",
+    "bathroom light fixture installation {city_name}",
+    "kitchen light fixture installation {city_name}",
+    "ceiling fan to light fixture swap {city_name}",
     "light fixture installation cost",
     "how much to install a light fixture"
   ],
@@ -66,7 +66,7 @@
   "hero_heading": "FILL: Hero heading — value-prop sentence (≤8 words).",
   "hero_subheading_template": "FILL: Hero subheading — 2-3 sentences. Mention {owner_name}, {license_state}, chandeliers as specialty, {city_name}.",
   "hero_image_alt_template": "{owner_name}, master electrician, installing a chandelier in a residential home in {city_name_with_state}",
-  "hero_image_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-light-fixture-hero-PLACEHOLDER.png",
+  "hero_image_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/{city_slug}-light-fixture-hero-PLACEHOLDER.png",
 
   "what_it_means_heading": "What light fixture installation involves",
   "what_it_means_paragraphs": [
@@ -154,7 +154,7 @@
     "FILL: About paragraph 3 — AggregateRating + review pitch."
   ],
   "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
-  "about_portrait_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-light-fixture-about-PLACEHOLDER.png",
+  "about_portrait_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/{city_slug}-light-fixture-about-PLACEHOLDER.png",
 
   "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
   "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",

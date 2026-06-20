@@ -49,19 +49,19 @@
 
   "aioseo_page_title_template": "Outlet & Switch Installation in {city_name_with_state} | {client_name}",
   "aioseo_meta_description_template": "Licensed Master Electrician serving {city_name_with_state}. Outlet replacements, GFCI upgrades, dedicated circuits, 220V outlets, switches. Same-day service, written estimates.",
-  "aioseo_focus_keyword_template": "outlet installation {city_slug}",
+  "aioseo_focus_keyword_template": "outlet installation {city_name}",
   "aioseo_additional_keywords_template": [
-    "electrical outlet installation {city_slug}",
-    "gfci outlet installation {city_slug}",
+    "electrical outlet installation {city_name}",
+    "gfci outlet installation {city_name}",
     "outlet installation near me",
-    "switch installation {city_slug}",
-    "outlet replacement {city_slug}",
-    "usb outlet installation {city_slug}",
-    "outdoor outlet installation {city_slug}",
-    "dedicated circuit installation {city_slug}",
-    "220v outlet installation {city_slug}",
-    "dimmer switch installation {city_slug}",
-    "three-way switch installation {city_slug}",
+    "switch installation {city_name}",
+    "outlet replacement {city_name}",
+    "usb outlet installation {city_name}",
+    "outdoor outlet installation {city_name}",
+    "dedicated circuit installation {city_name}",
+    "220v outlet installation {city_name}",
+    "dimmer switch installation {city_name}",
+    "three-way switch installation {city_name}",
     "how much to install an electrical outlet",
     "gfci outlet replacement cost"
   ],
@@ -71,7 +71,7 @@
   "hero_heading": "Outlets and switches done right, same day.",
   "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician who handles outlet replacements, GFCI upgrades, dedicated circuits, 220V outlets, and switch installations across {city_name}. Simple swaps quoted over the phone. New circuits get a written estimate after a free on-site assessment.",
   "hero_image_alt_template": "{owner_name}, master electrician, installing a GFCI outlet in a residential home in {city_name_with_state}",
-  "hero_image_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-outlet-installation-hero-PLACEHOLDER.png",
+  "hero_image_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/{city_slug}-outlet-installation-hero-PLACEHOLDER.png",
 
   "what_it_means_heading": "What outlet and switch installation involves",
   "what_it_means_paragraphs": [
@@ -164,7 +164,7 @@
     "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
   ],
   "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
-  "about_portrait_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-outlet-installation-about-PLACEHOLDER.png",
+  "about_portrait_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/{city_slug}-outlet-installation-about-PLACEHOLDER.png",
 
   "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
   "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",

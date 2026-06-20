@@ -304,9 +304,9 @@ def write_corpus_report(
 # ----------------------------------------------------------------------------
 
 
-# Sensible default allowlist for EV Electric — standard utility pages the
-# Core 30 corpus links to that aren't themselves Core 30 pages. Operator can
-# extend via --allowlist on the command line.
+# Default allowlist — standard utility pages the Core 30 corpus links to
+# that aren't themselves Core 30 pages. Operator can extend via --allowlist
+# on the command line.
 DEFAULT_ALLOWLIST = {
     "/",
     "/contact/",

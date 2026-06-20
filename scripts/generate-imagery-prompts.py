@@ -79,7 +79,9 @@ from typing import Any
 # Defaults
 # ----------------------------------------------------------------------------
 
-DEFAULT_CLIENT = "ev-electric-services"
+# No default client — must be specified explicitly via --client to prevent
+# source-client-leak (see pattern-source-client-leak-audit).
+DEFAULT_CLIENT = None
 DEFAULT_BRIEFS_ROOT = Path.home() / "workspace/second-brain/05_shared-intelligence/research-briefs"
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
@@ -1178,8 +1180,8 @@ def main() -> int:
     )
     ap.add_argument("--page-folder", required=True, type=Path,
                     help="Path to the page folder (contains draft-v1.md).")
-    ap.add_argument("--client", default=DEFAULT_CLIENT,
-                    help=f"Client slug (default: {DEFAULT_CLIENT})")
+    ap.add_argument("--client", required=True,
+                    help="Client slug (e.g. ev-electric-services). Required.")
     ap.add_argument("--hero-style", choices=["owner-centric", "service-scene", "hands-only"],
                     default="owner-centric",
                     help="Hero prompt style: 'owner-centric' (owner performing task, default), "

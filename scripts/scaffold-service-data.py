@@ -846,7 +846,7 @@ def build_service_data(
     # Hero image URL — placeholder per troubleshooting pattern. The wire-image
     # script substitutes the real CDN URL later.
     hero_image_url_template = (
-        "https://evelectric.pro/wp-content/uploads/2026/05/"
+        "{website_url_no_slash}/wp-content/uploads/2026/05/"
         f"{{city_slug}}-{slug}-hero-PLACEHOLDER.png"
     )
     mark_authoring("hero_image_url_template")
@@ -1013,7 +1013,7 @@ def build_service_data(
         "{city_name_with_state}"
     )
     about_portrait_url_template = (
-        "https://evelectric.pro/wp-content/uploads/2026/05/"
+        "{website_url_no_slash}/wp-content/uploads/2026/05/"
         f"{{city_slug}}-{slug}-about-PLACEHOLDER.png"
     )
     mark_authoring("about_portrait_url_template")

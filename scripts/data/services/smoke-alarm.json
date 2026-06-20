@@ -47,17 +47,17 @@
 
   "aioseo_page_title_template": "Smoke Alarm Installation & Replacement in {city_name_with_state} | {client_name}",
   "aioseo_meta_description_template": "FILL: Meta description (≤155 chars).",
-  "aioseo_focus_keyword_template": "smoke alarm installation {city_slug}",
+  "aioseo_focus_keyword_template": "smoke alarm installation {city_name}",
   "aioseo_additional_keywords_template": [
-    "smoke detector installation {city_slug}",
-    "smoke alarm replacement {city_slug}",
-    "hardwired smoke detector installation {city_slug}",
-    "interconnected smoke alarm installation {city_slug}",
+    "smoke detector installation {city_name}",
+    "smoke alarm replacement {city_name}",
+    "hardwired smoke detector installation {city_name}",
+    "interconnected smoke alarm installation {city_name}",
     "smoke alarm installation near me",
-    "smoke detector replacement {city_slug}",
-    "carbon monoxide detector installation {city_slug}",
-    "smoke alarm code compliance {city_slug}",
-    "electrician smoke alarm {city_slug}",
+    "smoke detector replacement {city_name}",
+    "carbon monoxide detector installation {city_name}",
+    "smoke alarm code compliance {city_name}",
+    "electrician smoke alarm {city_name}",
     "how much to install smoke detectors",
     "smoke alarm installation cost",
     "10 year smoke alarm replacement"
@@ -68,7 +68,7 @@
   "hero_heading": "FILL: Hero heading — value-prop sentence (≤8 words).",
   "hero_subheading_template": "FILL: Hero subheading — 2-3 sentences. Mention {owner_name}, {license_state}, code compliance, {city_name}.",
   "hero_image_alt_template": "{owner_name}, master electrician, installing a hardwired smoke alarm in a residential home in {city_name_with_state}",
-  "hero_image_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-smoke-alarm-hero-PLACEHOLDER.png",
+  "hero_image_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/{city_slug}-smoke-alarm-hero-PLACEHOLDER.png",
 
   "what_it_means_heading": "What smoke alarm installation involves",
   "what_it_means_paragraphs": [
@@ -152,7 +152,7 @@
     "FILL: About paragraph 3 — AggregateRating + review pitch."
   ],
   "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
-  "about_portrait_url_template": "https://evelectric.pro/wp-content/uploads/2026/05/{city_slug}-smoke-alarm-about-PLACEHOLDER.png",
+  "about_portrait_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/{city_slug}-smoke-alarm-about-PLACEHOLDER.png",
 
   "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
   "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",

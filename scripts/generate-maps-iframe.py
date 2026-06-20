@@ -195,7 +195,16 @@ def generate_for_city(
         sys.exit(2)
 
     if not force_refresh and key in cache:
-        return key, cache[key]["wrapped_html"], True
+        # Cache hit — but check client_name matches. A cached entry from a
+        # different client would leak the wrong brand into the iframe title
+        # (source-client-leak class, PR-35).
+        cached_client = cache[key].get("client", "")
+        if cached_client == config["client_name"]:
+            return key, cache[key]["wrapped_html"], True
+        # Client mismatch — regenerate for this client
+        sys.stderr.write(
+            f"[maps:client-mismatch] cached '{cached_client}' != '{config['client_name']}'; regenerating\n"
+        )
 
     # Resolve API key — env var first, tier-3 markdown fallback (see _load_secrets.py)
     try:
