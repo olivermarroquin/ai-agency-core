@@ -354,32 +354,32 @@ def main():
 Unreviewed:
 {file_list}
 
-REQUIRED ACTION — INDEPENDENT REVIEW (RGH-5):
+REQUIRED ACTION — INDEPENDENT REVIEW (RGH-5 + RGH-8):
 
 The gate requires an INDEPENDENT reviewer for full-tier items. You (the producer)
-cannot clear your own gate. Spawn a separate adversarial reviewer agent:
+cannot clear your own gate.
 
-1. Use the Agent tool to spawn a general-purpose agent with this prompt:
+⚠️  AN IN-SESSION SUB-AGENT DOES NOT SATISFY INDEPENDENCE (CR-045 / RGH-8).
+Sub-agents inherit the producer's session_id, so the gate will REJECT any
+--reviewer-session that equals this session. Only a SEPARATE-SESSION reviewer
+(an operator-dispatched chat with its own distinct session ID) qualifies.
 
-   Read and execute the independent reviewer mandate at:
+To clear this gate:
+1. Signal "ready for review" via an event-log row.
+2. The operator dispatches a SEPARATE Claude Code session as the independent
+   reviewer. That reviewer reads and executes the mandate at:
    {MANDATE_PATH}
-
-   Session: {session_id}
-   Tier: {tier}
-   Files to review: {files_argv}
-
-   Run the full review protocol (Phases A-E) per the mandate.
-   Write the verdict file and log the review-pass marker with:
-   python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-independent --verdict-file <verdict-path> --reviewer-type independent
-
-2. The agent reads the mandate FROM DISK (fixed, you cannot edit it),
-   does its own disk verification, and writes its own verdict.
-
-3. Once the independent reviewer logs PASS with --reviewer-type independent,
-   try stopping again.
+3. The separate-session reviewer runs the full review protocol (Phases A-E),
+   writes its verdict file, and logs the review-pass marker with:
+   python3 {log_script} --session {session_id} --files {files_argv} \\
+     --verdict PASS --tier {tier} --gate-id G-independent \\
+     --verdict-file <verdict-path> --reviewer-type independent \\
+     --reviewer-session <REVIEWER_OWN_SESSION_ID> --run-id <chat-slug>
+4. Once the independent reviewer logs PASS, try stopping again.
 
 DO NOT attempt to self-clear (log --reviewer-type independent yourself).
-That is a D-09 class defect. Only the independent reviewer agent does this."""
+DO NOT spawn an in-session sub-agent as "independent reviewer" — it shares
+your session_id and will be rejected. Both are D-09 class defects."""
     else:
         # Fast-path — deterministic dispatch should have handled it,
         # but if it didn't (e.g., dispatch failed), fall back to self-review

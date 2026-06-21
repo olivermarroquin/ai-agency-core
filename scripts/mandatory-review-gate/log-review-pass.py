@@ -21,7 +21,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from _paths import STATE_DIR
+from _paths import STATE_DIR, WORKSPACE_ROOT
 import engine
 
 
@@ -55,6 +55,12 @@ def main():
                              'Required when --reviewer-type=independent. The script '
                              'greps the firing tracker for this run ID and refuses to '
                              'log PASS if no matching row exists. (OC-17 enforcement)')
+    parser.add_argument('--reviewer-session', default=None,
+                        help='Session ID of the reviewer. Required when '
+                             '--reviewer-type=independent. REJECTED if equal to '
+                             '--session (the producer session), because sub-agents '
+                             'inherit the parent session_id and cannot provide '
+                             'independent review. (CR-045 / RGH-8)')
     args = parser.parse_args()
 
     if args.verdict == 'BLOCKING' and not args.findings:
@@ -90,6 +96,29 @@ def main():
                   file=sys.stderr)
             sys.exit(1)
 
+    # CR-045 / RGH-8: reviewer-independence enforcement.
+    # Sub-agents inherit the parent session_id (confirmed real-runner 2026-06-12,
+    # CC v2.1.85). If reviewer_session == producer session, the "independent"
+    # reviewer is actually an in-session sub-agent — reject.
+    if args.reviewer_type == 'independent':
+        if not args.reviewer_session:
+            print('[review-gate] REJECTED: --reviewer-session is required when '
+                  '--reviewer-type=independent. The independent reviewer must '
+                  'supply its own session ID so we can verify it differs from '
+                  'the producer session. (CR-045 / RGH-8)',
+                  file=sys.stderr)
+            sys.exit(1)
+
+        if args.reviewer_session == args.session:
+            print('[review-gate] REJECTED: --reviewer-session equals --session '
+                  f'("{args.session}"). An in-session sub-agent inherits the '
+                  f'producer\'s session_id and cannot provide independent review. '
+                  f'Only a SEPARATE-SESSION reviewer (distinct session ID) '
+                  f'satisfies the independent-review mandate. '
+                  f'(CR-045 / RGH-8)',
+                  file=sys.stderr)
+            sys.exit(1)
+
     # OC-17 enforcement: when independent reviewer closes the gate,
     # verify firing-tracker rows exist for this run ID before allowing PASS.
     if args.reviewer_type == 'independent':
@@ -100,28 +129,34 @@ def main():
                   file=sys.stderr)
             sys.exit(1)
 
-        firing_tracker_path = os.path.expanduser(
-            '~/workspace/second-brain/_meta/handoffs/'
+        # CR-049 / RGH-8: workspace-root-anchored path, independent of cwd.
+        # Uses WORKSPACE_ROOT from _paths.py (derived from this script's
+        # location on disk, not cwd). Fail-CLOSED: if the tracker can't be
+        # found or has no matching rows, REJECT — never proceed.
+        firing_tracker_path = os.path.join(
+            WORKSPACE_ROOT, 'second-brain', '_meta', 'handoffs',
             '_review-skill-firing-tracker.md'
         )
-        if os.path.isfile(firing_tracker_path):
-            with open(firing_tracker_path, 'r') as ft:
-                tracker_content = ft.read()
-            if args.run_id not in tracker_content:
-                print(
-                    '[review-gate] REJECTED: No firing-tracker rows found '
-                    f'for run ID "{args.run_id}".\n'
-                    'ERROR: The independent reviewer must author firing-tracker '
-                    'rows before clearing the gate.\n'
-                    'See Closing Protocol Step 3b in '
-                    '_review-skill-firing-tracker.md.',
-                    file=sys.stderr)
-                sys.exit(1)
-        else:
-            print(f'[review-gate] WARNING: firing tracker not found at '
-                  f'{firing_tracker_path} — cannot verify rows. '
-                  f'Proceeding but this should be investigated.',
+        if not os.path.isfile(firing_tracker_path):
+            print(f'[review-gate] REJECTED: firing tracker not found at '
+                  f'{firing_tracker_path}. Cannot verify reviewer-authored '
+                  f'rows exist. A verification step that cannot run must '
+                  f'block, not proceed. (CR-049 / RGH-8, fail-closed)',
                   file=sys.stderr)
+            sys.exit(1)
+
+        with open(firing_tracker_path, 'r') as ft:
+            tracker_content = ft.read()
+        if args.run_id not in tracker_content:
+            print(
+                '[review-gate] REJECTED: No firing-tracker rows found '
+                f'for run ID "{args.run_id}".\n'
+                'ERROR: The independent reviewer must author firing-tracker '
+                'rows before clearing the gate.\n'
+                'See Closing Protocol Step 3b in '
+                '_review-skill-firing-tracker.md.',
+                file=sys.stderr)
+            sys.exit(1)
 
     # Derive evidence from verdict file; allow --evidence to supplement
     derived_evidence = engine.derive_evidence(verdict_data)
@@ -142,9 +177,11 @@ def main():
         findings=args.findings if args.findings else None,
     )
 
-    # Stamp reviewer_type on each marker (RGH-5: producer-isolation)
+    # Stamp reviewer_type + reviewer_session on each marker (RGH-5 + RGH-8)
     for m in markers:
         m['reviewer_type'] = args.reviewer_type
+        if args.reviewer_session:
+            m['reviewer_session'] = args.reviewer_session
 
     engine.append_reviewed_entries(STATE_DIR, args.session, markers)
 
