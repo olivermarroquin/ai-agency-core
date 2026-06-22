@@ -149,7 +149,7 @@ def bash_entry_id(command: str) -> str:
 # --- Read-only Bash classifier ---
 
 READ_ONLY_CMDS = frozenset({
-    'grep', 'rg', 'find', 'ls', 'cat', 'head', 'tail', 'wc', 'sort', 'uniq',
+    'grep', 'rg', 'ls', 'cat', 'head', 'tail', 'wc', 'sort', 'uniq',
     'diff', 'comm', 'test', 'true', 'false', 'echo', 'printf', 'which', 'type',
     'file', 'stat', 'du', 'df', 'jq', 'date', 'uname', 'whoami', 'pwd',
     'basename', 'dirname', 'realpath', 'readlink', 'env', 'printenv', 'id',
@@ -271,6 +271,30 @@ def _is_segment_read_only(segment: str) -> bool:
         if subcmd and subcmd in READ_ONLY_GIT_SUBCMDS:
             return True
         return False
+
+    # sed -n (print-only mode) is read-only; sed -i or bare sed can modify files
+    if base == 'sed':
+        parts = segment.split()
+        for p in parts[1:]:
+            if p == '-n' or p == '--quiet' or p == '--silent':
+                return True
+            if p.startswith('-') and 'n' in p and not p.startswith('--'):
+                return True  # e.g. -nE, -En
+            if not p.startswith('-'):
+                break  # reached the script/pattern arg, no -n found
+        return False
+
+    # find is read-only UNLESS it has destructive actions (-delete, -exec rm/mv/cp)
+    if base == 'find':
+        if '-delete' in segment:
+            return False
+        # -exec with a destructive command
+        exec_match = re.findall(r'-exec\s+(\S+)', segment)
+        for cmd_name in exec_match:
+            cmd_base = os.path.basename(cmd_name)
+            if cmd_base in ('rm', 'mv', 'cp', 'rmdir', 'shred', 'unlink'):
+                return False
+        return True
 
     if base in ('curl', 'wget'):
         curl_write_flags = {'-X', '--request', '-d', '--data', '--data-raw',
@@ -532,6 +556,158 @@ def determine_review_tier(unreviewed: list) -> str:
         if entry.get('tier') == 'full':
             return 'full'
     return 'fast-path'
+
+
+# ============================================================================
+# Source classification (RGH-10)
+# ============================================================================
+#
+# Tags dirty-ledger entries by source: producer, reviewer, or gate-clearing.
+# Source is inferred STRUCTURALLY from the artifact path or Bash command —
+# never from a self-declared flag the model controls.
+#
+# The goal: reviewer working-doc artifacts (execution logs, verdict files,
+# firing-tracker/catch-register rows) and gate-clearing calls should NOT
+# re-trigger the gate, because requiring a reviewer for the reviewer's own
+# outputs is an infinite regress (CR-010/044/054).
+#
+# SAFETY: A producer cannot get its deliverables exempted by writing to a
+# "reviewer-looking" path, because reviewer-artifact classes are structurally
+# disjoint from deliverables (they live in _meta/handoffs/, .review-gate/,
+# execution-logs/ with *-reviewer* names — not in src/, scripts/, etc.).
+
+# Patterns that identify reviewer working-doc artifacts by file path.
+# These are the known classes of files a reviewer writes as part of its
+# review process — NOT the deliverables being reviewed.
+#
+# SECURITY (BLOCKING-1 fix, Round 1): execution-log patterns use EXACT
+# suffixes (-reviewer-session, -independent-review, -peer-review) anchored
+# with $ — NOT open-ended .*-reviewer which a producer could match by naming
+# its log execution-log-2026-06-22-reviewer-hack.md.
+#
+# SECURITY (BLOCKING-4 fix, Round 1): patterns match execution-log filenames
+# ANYWHERE in the path (not just under execution-logs/ directory), because
+# reviewers may write logs directly in handoff folders.
+REVIEWER_ARTIFACT_PATH_PATTERNS = [
+    r'_meta/handoffs/_review-skill-firing-tracker\.md$',
+    r'_meta/handoffs/_review-gate-catch-register\.md$',
+    # Execution logs: match exact reviewer suffixes anywhere in path
+    r'execution-log-\d{4}-\d{2}-\d{2}-reviewer-session[^/]*\.md$',
+    r'execution-log-\d{4}-\d{2}-\d{2}-independent-review[^/]*\.md$',
+    r'execution-log-\d{4}-\d{2}-\d{2}-peer-review[^/]*\.md$',
+    # Also match the shorthand (e.g., execution-log-2026-06-22-rgh3-independent-review.md)
+    r'execution-log-\d{4}-\d{2}-\d{2}-[a-z0-9]+-(?:reviewer-session|independent-review|peer-review)[^/]*\.md$',
+    r'/\.review-gate/state/verdict-',
+    r'/\.review-gate/state/.*-reviewed\.jsonl$',
+]
+
+_REVIEWER_ARTIFACT_RE = re.compile('|'.join(REVIEWER_ARTIFACT_PATH_PATTERNS))
+
+# Gate-clearing script basenames — matched per-segment after splitting on
+# compound operators (BLOCKING-2 fix, Round 1). Only the actual invoked
+# script qualifies, not a substring mention like 'echo log-review-pass'.
+GATE_CLEARING_SCRIPT_BASENAMES = frozenset({
+    'log-review-pass.py',
+    'gate-skip.py',
+})
+
+
+def _is_segment_gate_clearing(segment: str) -> bool:
+    """Check if a single command segment invokes a gate-clearing script."""
+    segment = segment.strip()
+    if not segment:
+        return False
+    parts = segment.split()
+    for i, part in enumerate(parts):
+        if '=' in part and not part.startswith('-'):
+            continue  # env assignment
+        base = os.path.basename(part)
+        if base in ('python3', 'python'):
+            for p in parts[i + 1:]:
+                if p.startswith('-'):
+                    continue
+                return os.path.basename(p) in GATE_CLEARING_SCRIPT_BASENAMES
+        return base in GATE_CLEARING_SCRIPT_BASENAMES
+    return False
+
+
+def _is_gate_clearing_bash(bash_cmd: str) -> bool:
+    """Check if a Bash command is a gate-clearing operation.
+
+    Returns True ONLY if EVERY segment is either a gate-clearing script
+    invocation OR a read-only command. If ANY segment is state-changing
+    and not gate-clearing, returns False (the whole entry is producer).
+
+    SECURITY (BLOCKING-7 fix, Round 2): a compound command like
+    'python3 log-review-pass.py && npm run deploy' returns False because
+    the deploy segment is state-changing. A producer cannot chain a
+    gate-clearing call with a state-changing command to get the entry
+    exempted.
+    """
+    if not bash_cmd:
+        return False
+    segments = split_compound(bash_cmd.strip())
+    if not segments:
+        return False
+    has_gate_clearing = False
+    for seg in segments:
+        seg = seg.strip()
+        if not seg:
+            continue
+        if _is_segment_gate_clearing(seg):
+            has_gate_clearing = True
+        elif _is_segment_read_only(seg):
+            continue  # read-only is OK alongside gate-clearing
+        else:
+            return False  # state-changing non-gate-clearing → producer
+    return has_gate_clearing
+
+
+def classify_entry_source(file_path: str, tool_name: str,
+                          bash_cmd: str = '') -> str:
+    """Classify a dirty-ledger entry's source as producer/reviewer/gate-clearing.
+
+    Inference is structural (path-based + command-based), not self-declared.
+    A producer writing a normal deliverable always gets 'producer' regardless
+    of any env var or flag it might set.
+
+    SECURITY NOTES (Round 1 fixes):
+    - BLOCKING-1: Execution-log patterns use exact suffixes, not open-ended.
+    - BLOCKING-2: Gate-clearing uses segment-split script-invocation check.
+    - BLOCKING-3: Bash commands ONLY get gate-clearing or producer — the
+      reviewer-artifact regex is NOT applied to bash_cmd (too broad).
+    - BLOCKING-4: Execution-log patterns match anywhere in path, not just
+      under execution-logs/ directory.
+
+    HONEST LIMIT (MAJOR-5, deferred): Reviewer Bash commands (test runs,
+    greps, probes) are classified as 'producer' unless they match the
+    gate-clearing check. Full reviewer-session inference requires session-
+    level tagging (not yet implemented). Until then, reviewer sessions that
+    run non-write Bash commands may still need manual gate-skip for those
+    entries. Tracked as a named deferral.
+
+    Args:
+        file_path: The normalized file path or BASH:<hash> key.
+        tool_name: The tool that produced the entry (Write, Edit, Bash, etc.).
+        bash_cmd: The raw Bash command (only for Bash tool entries).
+
+    Returns:
+        'reviewer', 'gate-clearing', or 'producer'.
+    """
+    # Gate-clearing: Bash commands that INVOKE gate-clearing scripts
+    # (segment-split check, not substring — BLOCKING-2 fix)
+    if tool_name == 'Bash' and bash_cmd:
+        if _is_gate_clearing_bash(bash_cmd):
+            return 'gate-clearing'
+
+    # Reviewer artifact: file path matches known reviewer working-doc classes
+    # Only applies to Write/Edit/NotebookEdit file paths — NOT Bash commands
+    # (BLOCKING-3 fix: removed the bash_cmd regex search)
+    if file_path and not file_path.startswith('BASH:'):
+        if _REVIEWER_ARTIFACT_RE.search(file_path):
+            return 'reviewer'
+
+    return 'producer'
 
 
 # ============================================================================
@@ -883,20 +1059,44 @@ def check_gate(
 
     unreviewed = get_unreviewed(dirty_entries, reviewed_entries)
 
+    # Source-tagged exemption (RGH-10): reviewer and gate-clearing entries
+    # do NOT require independent review. Only producer entries gate the stop.
+    # This kills the infinite regress (CR-010/044/054) where a reviewer's
+    # own working docs re-trigger the gate demanding another reviewer.
+    _EXEMPT_ENTRY_SOURCES = frozenset({'reviewer', 'gate-clearing'})
+    unreviewed_producer = [
+        e for e in unreviewed
+        if e.get('entry_source', 'producer') not in _EXEMPT_ENTRY_SOURCES
+    ]
+    exempt_count = len(unreviewed) - len(unreviewed_producer)
+    if exempt_count > 0:
+        log_metrics(state_dir, session_id, 'source-exempt',
+                    exempt_count, 'n/a', 0,
+                    extra={'exempt_sources': [
+                        e.get('entry_source') for e in unreviewed
+                        if e.get('entry_source', 'producer') in _EXEMPT_ENTRY_SOURCES
+                    ]})
+    unreviewed = unreviewed_producer
+
     if not unreviewed:
-        # All files have review markers — but full-tier items require
-        # independent review (RGH-5). Check reviewer_type before clearing.
-        tier = determine_review_tier(dirty_entries)
-        if tier == 'full' and not has_independent_review(
-                reviewed_entries,
-                [e.get('file_path', '') for e in dirty_entries],
-                tier):
-            wall_ms = (time.monotonic() - t_start) * 1000
-            log_metrics(state_dir, session_id, 'block-needs-independent',
-                        len(dirty_entries), tier, wall_ms)
-            # Re-surface the dirty entries so the adapter can list them
-            return GateResult(status='blocked', unreviewed=dirty_entries,
-                              tier=tier, wall_ms=wall_ms)
+        # All files have review markers OR are source-exempt — but full-tier
+        # producer items require independent review (RGH-5). Check only
+        # producer entries for the independent-review requirement.
+        producer_dirty = [
+            e for e in dirty_entries
+            if e.get('entry_source', 'producer') not in _EXEMPT_ENTRY_SOURCES
+        ]
+        if producer_dirty:
+            tier = determine_review_tier(producer_dirty)
+            if tier == 'full' and not has_independent_review(
+                    reviewed_entries,
+                    [e.get('file_path', '') for e in producer_dirty],
+                    tier):
+                wall_ms = (time.monotonic() - t_start) * 1000
+                log_metrics(state_dir, session_id, 'block-needs-independent',
+                            len(producer_dirty), tier, wall_ms)
+                return GateResult(status='blocked', unreviewed=producer_dirty,
+                                  tier=tier, wall_ms=wall_ms)
 
         wall_ms = (time.monotonic() - t_start) * 1000
         log_metrics(state_dir, session_id, 'approve', 0, 'n/a', wall_ms)

@@ -104,6 +104,12 @@ def main():
     # only fires in Claude Code; other substrates set REVIEW_GATE_SOURCE)
     source = os.environ.get('REVIEW_GATE_SOURCE', 'claude-code')
 
+    # Entry-level source classification (RGH-10): structurally infer whether
+    # this entry is a reviewer working-doc, gate-clearing call, or producer
+    # deliverable. This is path/command-based, not a self-declared flag.
+    bash_cmd = tool_input.get('command', '') if tool_name == 'Bash' else ''
+    entry_source = engine.classify_entry_source(file_path, tool_name, bash_cmd)
+
     entry = {
         'timestamp': time.time(),
         'iso_time': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
@@ -111,6 +117,7 @@ def main():
         'file_path': file_path,
         'tier': tier,
         'source': source,
+        'entry_source': entry_source,
     }
     if display is not None:
         entry['display'] = display
