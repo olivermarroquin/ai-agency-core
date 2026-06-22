@@ -1,0 +1,106 @@
+{
+  "business_type": "restaurant",
+  "primary_type": "Restaurant",
+  "additional_types": [],
+
+  "business_node": {
+    "@type": "Restaurant",
+    "required_fields": [
+      "name", "url", "telephone", "email", "address", "geo",
+      "openingHoursSpecification", "servesCuisine", "priceRange",
+      "acceptsReservations", "aggregateRating"
+    ],
+    "optional_fields": [
+      "hasMenu", "menu", "image", "logo", "founder",
+      "paymentAccepted", "currenciesAccepted"
+    ],
+    "field_mappings": {
+      "name": "root.name",
+      "alternateName": "root.alternate_name",
+      "description": "root.business_description_schema",
+      "url": "root.website_url",
+      "telephone": "root.phone_e164",
+      "email": "root.email",
+      "image": "root.brand_image_url",
+      "logo": "root.brand_logo_url",
+      "priceRange": "restaurant.food_price_range",
+      "servesCuisine": "restaurant.cuisine_types",
+      "acceptsReservations": "restaurant.accepts_reservations",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "root.address.street",
+        "addressLocality": "root.address.locality",
+        "addressRegion": "root.address.region",
+        "postalCode": "root.address.postal_code",
+        "addressCountry": "root.address.country"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "root.geo.latitude",
+        "longitude": "root.geo.longitude"
+      },
+      "openingHoursSpecification": "_from_hours_array",
+      "founder": {
+        "@type": "Person",
+        "name": "root.owner_name",
+        "jobTitle": "root.owner_title"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "root.review_rating",
+        "reviewCount": "root.review_count",
+        "bestRating": "literal:5",
+        "worstRating": "literal:1"
+      }
+    }
+  },
+
+  "conditional_blocks": {
+    "hasMenu": {
+      "condition": "restaurant.menu_url",
+      "block": {
+        "@type": "Menu",
+        "url": "restaurant.menu_url",
+        "hasMenuSection": "_from_menu_sections"
+      },
+      "note": "Only emitted when menu_url is present in config"
+    },
+    "hasCredential": {
+      "condition": null,
+      "note": "Restaurants do not emit hasCredential — no trade license. Health permits are not schema.org credentials."
+    },
+    "potentialAction_reserve": {
+      "condition": "restaurant.accepts_reservations",
+      "block": {
+        "@type": "ReserveAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "restaurant.reservation_url"
+        },
+        "result": {
+          "@type": "Reservation",
+          "name": "literal:Table Reservation"
+        }
+      },
+      "note": "Emitted on reserve-order page when accepts_reservations is true"
+    },
+    "potentialAction_order": {
+      "condition": "restaurant.accepts_online_orders",
+      "block": {
+        "@type": "OrderAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "restaurant.order_url"
+        }
+      },
+      "note": "Emitted on reserve-order page when accepts_online_orders is true"
+    }
+  },
+
+  "page_conditional_blocks": {
+    "menu": ["hasMenu"],
+    "reserve-order": ["potentialAction_reserve", "potentialAction_order"]
+  },
+
+  "page_graph_nodes": {}
+}

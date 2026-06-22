@@ -75,7 +75,7 @@ PRECONDITIONS
 - Python 3.8+
 - Pillow installed: pip install Pillow --break-system-packages
 - requests installed: pip install requests
-- The page folder must have been produced by scaffold-core-30-page.py
+- The page folder must have been produced by scaffold-page.py
   (or follow its conventions: draft-v*-WP-WRAPPED.html + draft-v1.md +
   images/ subfolder).
 

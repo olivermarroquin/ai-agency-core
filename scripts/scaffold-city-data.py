@@ -4,7 +4,7 @@ scaffold-city-data.py — Phase 3b city scaffolder.
 
 Reads a Phase 2b city brief (markdown) plus zero or more Phase 2c
 service-x-city intersection briefs and produces a populated
-`data/cities/<slug>.json` data file that `scaffold-core-30-page.py`
+`data/cities/<slug>.json` data file that `scaffold-page.py`
 consumes.
 
 The city JSON has a dual shape:
@@ -101,7 +101,7 @@ REFERENCES
 - Reference JSON shape:
     repos/ai-agency-core/scripts/data/cities/vienna-va.json
 - Consumer:
-    repos/ai-agency-core/scripts/scaffold-core-30-page.py (see build_context,
+    repos/ai-agency-core/scripts/scaffold-page.py (see build_context,
     render_quick_ref_items, render_pattern_cards)
 - Sibling scaffolder (style/pattern source):
     repos/ai-agency-core/scripts/scaffold-client-data.py
@@ -769,7 +769,7 @@ def build_city_block(brief: Brief) -> dict[str, Any]:
     """Top-level city-only fields from the city brief."""
     out: dict[str, Any] = {
         "_comment": (
-            "Per-city data for {name_full}. Used by scaffold-core-30-page.py for "
+            "Per-city data for {name_full}. Used by scaffold-page.py for "
             "Section 2 quick-reference Q&As, Section 3 housing-stock pattern cards, "
             "Section 7 neighborhood list, Section 8 service-area paragraphs, JSON-LD "
             "audience.audienceType. One file per city across the Core 30."

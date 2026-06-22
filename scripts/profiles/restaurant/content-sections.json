@@ -1,0 +1,153 @@
+{
+  "business_type": "restaurant",
+
+  "token_bindings": {
+    "client_slug":          "root.client_slug",
+    "client_name":          "root.name",
+    "client_alt_name":      "root.alternate_name",
+    "owner_name":           "root.owner_name",
+    "owner_first_name":     "root.owner_first_name",
+    "owner_title":          "root.owner_title",
+    "phone_display":        "root.phone_display",
+    "phone_tel":            "root.phone_tel",
+    "phone_e164":           "root.phone_e164",
+    "email":                "root.email",
+    "website_url":          "root.website_url",
+    "website_url_no_slash": "root.website_url_no_slash",
+    "contact_page_path":    "root.contact_page_path",
+    "secondary_cta_label":  "root.secondary_cta_label",
+    "response_promise":     "root.final_cta_response_promise",
+    "review_count":         "root.review_count",
+    "review_count_phrase":  "root.review_count_phrase",
+    "review_pitch":         "root.review_pitch",
+    "review_rating":        "root.review_rating",
+    "brand_image_url":      "root.brand_image_url",
+    "brand_logo_url":       "root.brand_logo_url",
+    "primary_color":        "root.primary_color",
+    "navy":                 "root.navy",
+    "accent_yellow":        "root.accent_yellow",
+    "heading_color":        "root.heading_color",
+    "hero_gradient_dark":   "root.hero_gradient_dark",
+    "hero_gradient_mid":    "root.hero_gradient_mid",
+    "hero_gradient_bright": "root.hero_gradient_bright",
+    "city_name":            "root.address.locality",
+    "city_state":           "root.address.region",
+
+    "primary_cuisine":      "restaurant.primary_cuisine",
+    "cuisine_types":        "restaurant.cuisine_types",
+    "food_price_range":     "restaurant.food_price_range",
+    "menu_url":             "default:restaurant.menu_url:",
+    "reservation_url":      "default:restaurant.reservation_url:",
+    "order_url":            "default:restaurant.order_url:",
+    "ambiance":             "default:restaurant.ambiance:",
+    "parking":              "default:restaurant.parking:",
+    "accepts_reservations": "restaurant.accepts_reservations",
+
+    "todays_closing_time":  "computed.todays_closing_time",
+    "css_prefix":           "literal:rst"
+  },
+
+  "template_renders": [
+    { "token": "home_title",         "source": "literal:{client_name} — {primary_cuisine} Restaurant in {city_name}" },
+    { "token": "menu_title",         "source": "literal:Menu — {client_name}" },
+    { "token": "about_title",        "source": "literal:About {client_name} — Our Story" },
+    { "token": "location_title",     "source": "literal:Location & Hours — {client_name}" },
+    { "token": "cuisine_title",      "source": "literal:{primary_cuisine} Cuisine in {city_name} — {client_name}" },
+    { "token": "conversion_title",   "source": "literal:Reserve a Table or Order Online — {client_name}" },
+    { "token": "hero_heading",       "source": "literal:Authentic {primary_cuisine} Cuisine in {city_name}" },
+    { "token": "hero_subheading",    "source": "literal:Family recipes, fresh ingredients, served daily at {client_name}" },
+    { "token": "cuisine_heading",    "source": "literal:A Taste of {primary_cuisine} Tradition" },
+    { "token": "menu_heading",       "source": "literal:Our Menu" },
+    { "token": "about_heading",      "source": "literal:The Story Behind {client_name}" },
+    { "token": "location_heading",   "source": "literal:Find Us in {city_name}" },
+    { "token": "reviews_heading",    "source": "literal:What Our Guests Say" },
+    { "token": "reserve_heading",    "source": "literal:Reserve a Table" },
+    { "token": "order_heading",      "source": "literal:Order Online" },
+    { "token": "meta_description",   "source": "literal:{primary_cuisine} restaurant in {city_name}, {city_state}. Authentic dishes, welcoming atmosphere. Reserve a table or order online from {client_name}." }
+  ],
+
+  "sections": {
+    "hero": {
+      "heading_template": "Authentic {primary_cuisine} Cuisine in {city_name}",
+      "subheading_template": "Family recipes, fresh ingredients, served daily at {client_name}",
+      "cta_primary": { "label": "Reserve a Table", "action": "link", "target": "restaurant.reservation_url" },
+      "cta_secondary": { "label": "Order Online", "action": "link", "target": "restaurant.order_url" },
+      "note": "sections block is declarative metadata for tooling — template_renders is authoritative for build_context()"
+    },
+    "cuisine-overview": {
+      "heading_template": "A Taste of {primary_cuisine} Tradition",
+      "body": "content-block",
+      "note": "Authored content about the cuisine tradition — written per client, not templated"
+    },
+    "featured-dishes": {
+      "heading_template": "Signature Dishes",
+      "layout": "card-grid",
+      "data_source": "restaurant.menu_sections[*].items (flagged as featured) OR restaurant.signature_dishes"
+    },
+    "menu-sections": {
+      "heading_template": "Our Menu",
+      "layout": "accordion-or-table",
+      "data_source": "restaurant.menu_sections"
+    },
+    "reservation-block": {
+      "heading_template": "Reserve a Table",
+      "cta": { "label": "Make a Reservation", "action": "link", "target": "restaurant.reservation_url" }
+    },
+    "order-block": {
+      "heading_template": "Order Online",
+      "cta": { "label": "Order for Pickup or Delivery", "action": "link", "target": "restaurant.order_url" },
+      "delivery_partners_display": true
+    },
+    "hours-table": {
+      "data_source": "hours",
+      "layout": "day-by-day-table"
+    },
+    "reviews": {
+      "heading_template": "What Our Guests Say",
+      "data_source": "aggregateRating + review snippets"
+    },
+    "location-cta": {
+      "heading_template": "Visit Us",
+      "includes": ["address", "map-embed", "hours-summary"]
+    },
+    "about-teaser": {
+      "heading_template": "Our Story",
+      "body": "content-block",
+      "note": "Short owner/restaurant story teaser on homepage — links to full about page"
+    },
+    "owner-story": {
+      "body": "content-block",
+      "data_source": "root.owner_bio_paragraphs",
+      "note": "Full owner story on the about page"
+    },
+    "cuisine-history": {
+      "body": "content-block",
+      "note": "Deep-dive on cuisine tradition/history — authored per client"
+    },
+    "signature-techniques": {
+      "body": "content-block",
+      "note": "Cooking techniques, ingredient sourcing — authored per client"
+    },
+    "dietary-info": {
+      "heading_template": "Dietary Accommodations",
+      "data_source": "restaurant.dietary_options",
+      "note": "Lists available dietary options (vegetarian, vegan, gluten-free, etc.)"
+    },
+    "parking-transit": {
+      "body": "content-block",
+      "data_source": "restaurant.parking",
+      "note": "Parking and transit directions to the restaurant"
+    },
+    "contact-info": {
+      "includes": ["phone", "email", "address"],
+      "note": "Contact details block for conversion page"
+    }
+  },
+
+  "cta_patterns": {
+    "primary_verb": "Reserve",
+    "secondary_verb": "Order",
+    "phone_cta": "Call {phone_display}",
+    "urgency_pattern": "Open until {todays_closing_time} today"
+  }
+}

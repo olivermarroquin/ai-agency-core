@@ -1,0 +1,56 @@
+{
+  "business_type": "restaurant",
+
+  "primary_patterns": [
+    "{primary_cuisine} restaurant {city_name}",
+    "{primary_cuisine} food near me",
+    "best {primary_cuisine} food {city_name}",
+    "{primary_cuisine} restaurant near me",
+    "{primary_cuisine} restaurant {city_state}"
+  ],
+
+  "dish_patterns": [
+    "{dish_name} near me",
+    "best {dish_name} {city_name}",
+    "where to get {dish_name} {city_name}"
+  ],
+
+  "cuisine_patterns": [
+    "{cuisine_type} restaurant {city_name}",
+    "{cuisine_type} food {city_name}",
+    "authentic {cuisine_type} food near me",
+    "best {cuisine_type} restaurant near me"
+  ],
+
+  "intent_patterns": [
+    "{primary_cuisine} delivery {city_name}",
+    "{primary_cuisine} takeout near me",
+    "{primary_cuisine} restaurant open now",
+    "restaurants with {dietary_option} options {city_name}",
+    "{city_name} restaurant reservations",
+    "{primary_cuisine} catering {city_name}"
+  ],
+
+  "modifiers": [
+    "best", "authentic", "cheap", "affordable", "near me",
+    "delivery", "takeout", "dine in", "open now", "open late",
+    "family friendly", "BYOB", "outdoor seating"
+  ],
+
+  "competitor_patterns": [
+    "{primary_cuisine} restaurant {city_name}",
+    "Asian restaurant {city_name}",
+    "best restaurants {city_name}",
+    "restaurants near {neighborhood}"
+  ],
+
+  "local_seo_patterns": [
+    "{client_name} menu",
+    "{client_name} hours",
+    "{client_name} reservations",
+    "{client_name} {city_name}",
+    "{primary_cuisine} food {neighborhood}"
+  ],
+
+  "notes": "Tokens in braces are resolved from client config at research time. {dish_name} iterates over restaurant.menu_sections[*].items[*].name. {cuisine_type} iterates over restaurant.cuisine_types. {dietary_option} iterates over restaurant.dietary_options. {neighborhood} comes from address context."
+}

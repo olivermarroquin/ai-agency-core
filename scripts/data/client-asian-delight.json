@@ -1,0 +1,141 @@
+{
+  "_comment": "Client-level facts for Asian Delight. CONTENT STATUS: researched/placeholder — NOT confirmed by client. Built from GBP listing + public reviews for the BTF-1 dry-run. DO NOT present as real client data. DO NOT publish.",
+  "_content_status": "placeholder",
+  "_source": "GBP listing (Place ID known), public reviews, operator brief at second-brain/04_projects/clients/_prospects/asian-delight/analysis/brief.md",
+
+  "business_type": "restaurant",
+
+  "client_slug": "asian-delight",
+  "name": "Asian Delight",
+  "alternate_name": "Asian Delight Restaurant",
+  "owner_name": "Siang",
+  "owner_first_name": "Siang",
+  "owner_title": "Owner",
+  "website_url": "https://asiandelightbaltimore.com/",
+  "website_url_no_slash": "https://asiandelightbaltimore.com",
+  "phone_display": "(410) 555-0000",
+  "phone_tel": "4105550000",
+  "phone_e164": "+1-410-555-0000",
+  "email": "contact@asiandelightbaltimore.com",
+
+  "_phone_note": "PLACEHOLDER — real phone number needed from Siang",
+  "_email_note": "PLACEHOLDER — real email needed from Siang",
+  "_website_note": "PLACEHOLDER — domain not yet registered. Siang to confirm domain preference.",
+
+  "primary_color": "#d4a017",
+  "navy": "#2c1810",
+  "accent_yellow": "#f5b400",
+  "heading_color": "#2c1810",
+  "hero_gradient_dark": "#2c1810",
+  "hero_gradient_mid": "#d4a017",
+  "hero_gradient_bright": "#e8b52a",
+  "_color_note": "PLACEHOLDER — warm gold/brown palette chosen to evoke Burmese cuisine warmth. Finalize with client.",
+
+  "address": {
+    "street": "1015 Leeds Ave",
+    "locality": "Baltimore",
+    "region": "MD",
+    "postal_code": "21229",
+    "country": "US"
+  },
+  "geo": {
+    "latitude": 39.2802,
+    "longitude": -76.6685
+  },
+  "_geo_note": "Approximate coordinates for 1015 Leeds Ave, Baltimore — verify with precise GBP coordinates.",
+
+  "hours": [
+    { "days": ["Monday", "Tuesday", "Wednesday", "Thursday"], "opens": "11:00", "closes": "21:00" },
+    { "days": ["Friday", "Saturday"], "opens": "11:00", "closes": "22:00" },
+    { "days": ["Sunday"], "opens": "12:00", "closes": "21:00" }
+  ],
+  "_hours_note": "PLACEHOLDER — estimated from typical restaurant hours. Real hours needed from Siang.",
+
+  "business_description_schema": "Burmese and Asian restaurant in Baltimore, MD. Authentic Myanmar cuisine including tea leaf salad, traditional soups, curries, and Thai-influenced dishes. Dine-in and takeout.",
+  "brand_image_url": "",
+  "brand_logo_url": "",
+  "_image_note": "PLACEHOLDER — no logo or brand image available yet. Needs real food/interior photography from Siang. ACCESS-GATED.",
+
+  "price_range_token": "$$",
+  "review_count": 85,
+  "review_rating": "4.3",
+  "review_count_phrase": "4.3-star average across 85 customer reviews",
+  "review_pitch": "Real reviews from Baltimore diners on Google. Guests highlight the authentic flavors, generous portions, and welcoming service.",
+  "_review_note": "Review count and rating from GBP as of 2026-06-20. Verify before any live use.",
+
+  "brand_areas_served": ["Baltimore"],
+  "brand_area_county": "Baltimore City, MD",
+  "brand_extended_coverage_phrase": "",
+
+  "owner_bio_paragraphs": [
+    "Siang brings the flavors of Myanmar to Baltimore's west side. Asian Delight is a family-run restaurant serving authentic Burmese and Southeast Asian cuisine — dishes passed down through generations and prepared fresh daily.",
+    "The restaurant has built a loyal neighborhood following, with guests returning for the tea leaf salad, traditional soups, and generous portions that have earned a 4.3-star rating across 85 Google reviews."
+  ],
+  "_bio_note": "PLACEHOLDER — synthesized from GBP reviews and brief. Real owner story needed from Siang.",
+
+  "contact_page_path": "/contact/",
+  "secondary_cta_label": "Order Online",
+  "primary_cta_label_template": "Call {phone_display}",
+  "final_cta_response_promise": "We look forward to serving you.",
+
+  "restaurant": {
+    "cuisine_types": ["Burmese", "Myanmar", "Thai", "Southeast Asian"],
+    "primary_cuisine": "Burmese",
+    "food_price_range": "$$",
+    "dietary_options": ["vegetarian", "vegan-friendly", "gluten-free options available"],
+
+    "accepts_reservations": false,
+    "reservation_url": "",
+    "_reservation_note": "Small neighborhood restaurant — likely walk-in only. Confirm with Siang.",
+
+    "accepts_online_orders": false,
+    "order_url": "",
+    "_order_note": "PLACEHOLDER — check if Siang uses DoorDash/UberEats or wants direct online ordering. ACCESS-GATED.",
+
+    "delivery_partners": [],
+    "_delivery_note": "PLACEHOLDER — check if listed on any delivery platforms.",
+
+    "menu_url": "",
+    "_menu_note": "PLACEHOLDER — Siang is redesigning the menu. Final menu (items, descriptions, prices, dietary notes) is a build input needed before go-live. ACCESS-GATED.",
+
+    "menu_sections": [
+      {
+        "name": "Appetizers",
+        "_section_status": "placeholder",
+        "items": [
+          { "name": "Tea Leaf Salad", "description": "Traditional Burmese salad with fermented tea leaves, crispy beans, tomatoes, and sesame", "price": "$12" },
+          { "name": "Samosa Soup", "description": "Burmese-style soup with samosa pieces in a rich, spiced broth", "price": "$8" },
+          { "name": "Spring Rolls", "description": "Crispy vegetable spring rolls with sweet chili dipping sauce", "price": "$7" }
+        ]
+      },
+      {
+        "name": "Entrees",
+        "_section_status": "placeholder",
+        "items": [
+          { "name": "Burmese Chicken Curry", "description": "Slow-cooked chicken in aromatic Burmese curry with potatoes", "price": "$14" },
+          { "name": "Thai Fried Rice with Shrimp", "description": "Wok-fried rice with shrimp, egg, and vegetables in Thai seasoning", "price": "$13" },
+          { "name": "Pad Thai", "description": "Rice noodles stir-fried with shrimp, bean sprouts, peanuts, and tamarind sauce", "price": "$13" },
+          { "name": "Mohinga", "description": "Traditional Burmese fish noodle soup — the national dish of Myanmar", "price": "$12" }
+        ]
+      },
+      {
+        "name": "Soups",
+        "_section_status": "placeholder",
+        "items": [
+          { "name": "Tom Yum", "description": "Hot and sour Thai soup with shrimp, mushrooms, and lemongrass", "price": "$10" },
+          { "name": "Coconut Chicken Soup", "description": "Creamy coconut soup with chicken, galangal, and lime leaves", "price": "$10" }
+        ]
+      }
+    ],
+    "_menu_sections_note": "PLACEHOLDER — menu items synthesized from GBP reviews mentioning specific dishes. Prices are estimated from $$  price range. Real menu needed from Siang before any live use.",
+
+    "signature_dishes": ["Tea Leaf Salad", "Mohinga", "Burmese Chicken Curry"],
+
+    "ambiance": "Casual neighborhood restaurant",
+    "seating_capacity": 40,
+    "_seating_note": "PLACEHOLDER — estimated. Verify with Siang.",
+    "alcohol_served": false,
+    "_alcohol_note": "PLACEHOLDER — unknown. Verify with Siang.",
+    "parking": "Street parking on Leeds Ave"
+  }
+}

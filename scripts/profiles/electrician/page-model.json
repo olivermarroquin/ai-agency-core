@@ -1,0 +1,19 @@
+{
+  "business_type": "electrician",
+  "page_model_name": "Core 30 — Service × City",
+  "description": "30 pages from service slugs × city slugs matrix. Each page targets one service in one city for local SEO.",
+
+  "page_generation": "matrix",
+  "matrix": {
+    "axis_a": "services",
+    "axis_a_source": "electrician.services",
+    "axis_a_data_dir": "data/services",
+    "axis_b": "cities",
+    "axis_b_source": "electrician.service_area_cities",
+    "axis_b_data_dir": "data/cities",
+    "slug_template": "{service_slug}-{city_slug}",
+    "title_template": "{service_name} in {city_name}, {city_state} — {client_name}"
+  },
+
+  "pages": []
+}

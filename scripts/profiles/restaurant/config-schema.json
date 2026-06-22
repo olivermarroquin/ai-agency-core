@@ -1,0 +1,40 @@
+{
+  "business_type": "restaurant",
+
+  "required_universal_fields": [
+    "client_slug", "name", "business_type", "owner_name", "owner_title",
+    "website_url", "phone_display", "phone_tel", "phone_e164", "email",
+    "address", "geo", "hours", "primary_color",
+    "business_description_schema", "review_count", "review_rating"
+  ],
+
+  "required_type_fields": {
+    "restaurant.cuisine_types":          { "type": "array[string]", "min_items": 1, "description": "List of cuisine types served" },
+    "restaurant.primary_cuisine":        { "type": "string", "description": "Primary cuisine for SEO and headings" },
+    "restaurant.food_price_range":       { "type": "string", "enum": ["$", "$$", "$$$", "$$$$"], "description": "Price range indicator" },
+    "restaurant.accepts_reservations":   { "type": "boolean", "description": "Whether the restaurant takes reservations" }
+  },
+
+  "optional_type_fields": {
+    "restaurant.menu_url":               { "type": "url", "description": "URL to the menu page (for schema hasMenu)" },
+    "restaurant.menu_sections":          { "type": "array[MenuSection]", "description": "Structured menu data: [{name, items: [{name, description, price}]}]" },
+    "restaurant.reservation_url":        { "type": "url", "condition": "accepts_reservations == true", "description": "Direct link to reservation system" },
+    "restaurant.accepts_online_orders":  { "type": "boolean", "description": "Whether online ordering is available" },
+    "restaurant.order_url":              { "type": "url", "condition": "accepts_online_orders == true", "description": "Direct link to online ordering" },
+    "restaurant.delivery_partners":      { "type": "array[string]", "description": "Third-party delivery services (DoorDash, UberEats, etc.)" },
+    "restaurant.dietary_options":        { "type": "array[string]", "description": "Dietary accommodations (vegetarian, vegan, gluten-free, halal, etc.)" },
+    "restaurant.ambiance":               { "type": "string", "description": "Dining atmosphere descriptor" },
+    "restaurant.seating_capacity":       { "type": "integer", "description": "Total seated capacity" },
+    "restaurant.alcohol_served":         { "type": "boolean", "description": "Whether alcohol is served" },
+    "restaurant.parking":                { "type": "string", "description": "Parking situation description" },
+    "restaurant.signature_dishes":       { "type": "array[string]", "description": "Names of signature/featured dishes for the cuisine page" }
+  },
+
+  "fields_not_used": {
+    "license": "Restaurants typically don't have trade licenses in client config. Health permits are handled differently (not a schema.org credential).",
+    "services": "No service × city matrix for restaurants. Page model uses fixed page list.",
+    "service_area_cities": "Restaurant serves from a single location — no city matrix.",
+    "utility_providers": "Electrician-only concept.",
+    "dispatch_time_default": "Electrician-only concept (emergency service dispatch)."
+  }
+}

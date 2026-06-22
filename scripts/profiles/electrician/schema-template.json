@@ -1,0 +1,114 @@
+{
+  "business_type": "electrician",
+  "primary_type": "LocalBusiness",
+  "additional_types": [],
+
+  "business_node": {
+    "@type": "LocalBusiness",
+    "required_fields": [
+      "name", "alternateName", "description", "url", "telephone", "email",
+      "image", "logo", "priceRange", "address", "geo", "areaServed",
+      "openingHoursSpecification", "hasCredential", "founder", "aggregateRating"
+    ],
+    "optional_fields": [],
+    "field_mappings": {
+      "name": "root.name",
+      "alternateName": "root.alternate_name",
+      "description": "root.business_description_schema",
+      "url": "root.website_url",
+      "telephone": "root.phone_e164",
+      "email": "root.email",
+      "image": "root.brand_image_url",
+      "logo": "root.brand_logo_url",
+      "priceRange": "root.price_range_token",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "root.address.street",
+        "addressLocality": "root.address.locality",
+        "addressRegion": "root.address.region",
+        "postalCode": "root.address.postal_code",
+        "addressCountry": "root.address.country"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "root.geo.latitude",
+        "longitude": "root.geo.longitude"
+      },
+      "areaServed": "_from_area_served",
+      "openingHoursSpecification": "_from_hours_array",
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "electrician.license.category",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "electrician.license.issuer"
+        }
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "root.owner_name",
+        "jobTitle": "root.owner_title",
+        "worksFor": { "@id": "_business_id_ref" }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "root.review_rating",
+        "reviewCount": "root.review_count",
+        "bestRating": "literal:5",
+        "worstRating": "literal:1"
+      }
+    }
+  },
+
+  "conditional_blocks": {},
+
+  "page_conditional_blocks": {},
+
+  "page_graph_nodes": {
+    "_matrix_page": [
+      {
+        "@type": "Service",
+        "@id_suffix": "#service",
+        "field_mappings": {
+          "name": "service.name_with_city",
+          "description": "service.schema_service_description_template",
+          "serviceType": "service.service_type_phrase",
+          "provider": { "@id": "_business_id_ref" },
+          "areaServed": {
+            "@type": "City",
+            "name": "city.name",
+            "containedInPlace": {
+              "@type": "AdministrativeArea",
+              "name": "city.county_full"
+            }
+          },
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "city.audience_descriptor"
+          },
+          "offers": {
+            "@type": "Offer",
+            "priceCurrency": "literal:USD",
+            "price": "service.schema_service_price",
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "price": "service.schema_service_price",
+              "priceCurrency": "literal:USD",
+              "description": "service.schema_service_price_description"
+            },
+            "availability": "literal:https://schema.org/InStock",
+            "url": "computed.page_url"
+          },
+          "termsOfService": "service.schema_service_terms"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id_suffix": "#faq",
+        "field_mappings": {
+          "mainEntity": "_from_faq_items"
+        }
+      }
+    ]
+  }
+}

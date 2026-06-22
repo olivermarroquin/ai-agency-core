@@ -68,7 +68,7 @@ bump the version number.
 DESIGN
 ------
 - Pure stdlib. No third-party HTML parser. Regex + targeted string operations on
-  the WP-WRAPPED HTML. Why: the existing scaffold-core-30-page.py is stdlib-only,
+  the WP-WRAPPED HTML. Why: the existing scaffold-page.py is stdlib-only,
   and the Core 30 page structure is stable and class-named (`evp-related-grid`,
   `evp-section`, etc.) — surgical edits are safer than a full DOM rewrite.
 - Modes:

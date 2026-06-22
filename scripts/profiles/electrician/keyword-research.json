@@ -1,0 +1,47 @@
+{
+  "business_type": "electrician",
+
+  "primary_patterns": [
+    "{service_name} {city_name}",
+    "{service_name} {city_name} {city_state}",
+    "{service_name} near me",
+    "electrician {city_name}",
+    "electrician near me"
+  ],
+
+  "service_patterns": [
+    "{service_lowercase} {city_name}",
+    "residential {service_lowercase} {city_name}",
+    "emergency {service_lowercase} near me",
+    "{service_lowercase} cost {city_name}",
+    "{service_lowercase} repair {city_name}"
+  ],
+
+  "intent_patterns": [
+    "licensed electrician {city_name}",
+    "24 hour electrician {city_name}",
+    "electrician {city_name} reviews",
+    "best electrician {city_name}",
+    "affordable electrician near me"
+  ],
+
+  "modifiers": [
+    "licensed", "certified", "master", "residential", "commercial",
+    "emergency", "24 hour", "same day", "affordable", "near me",
+    "best", "top rated", "reviews"
+  ],
+
+  "competitor_patterns": [
+    "electrician {city_name}",
+    "electrical contractor {city_name}",
+    "electrical services {county_short}"
+  ],
+
+  "local_seo_patterns": [
+    "{client_name} reviews",
+    "{client_name} {city_name}",
+    "electrician {brand_area_county}"
+  ],
+
+  "notes": "Tokens in braces are resolved from client config at research time. {service_name} and {service_lowercase} iterate over the service data files. {city_name}/{city_state} iterate over the city data files."
+}

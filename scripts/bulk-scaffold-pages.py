@@ -2,7 +2,7 @@
 """
 bulk-scaffold-pages.py — scaffold many Core 30 pages in one run.
 
-Reads a client's `_build-order.md` and loops `scaffold-core-30-page.py`
+Reads a client's `_build-order.md` and loops `scaffold-page.py`
 for every row in the selected range. Skips publish, skips imagery — just
 produces HTML + markdown drafts so the operator can do a batch authoring
 session and then move on to per-page imagery + publish.
@@ -54,7 +54,7 @@ WHAT THE SCRIPT DOES
    - With `--skip-existing` — flags existing folders as "will skip".
    - Without it — aborts the whole batch and lists the conflicts so the
      operator can decide what to do.
-6. Invokes `scaffold-core-30-page.py` for each remaining page as a
+6. Invokes `scaffold-page.py` for each remaining page as a
    subprocess. A failure on one page doesn't stop the batch — it gets
    recorded with its reason and the batch continues.
 7. Prints a summary at the end: scaffolded successfully, skipped (already
@@ -82,11 +82,11 @@ from typing import Iterable
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 DATA_DIR = SCRIPTS_DIR / "data"
-SCAFFOLD_SCRIPT = SCRIPTS_DIR / "scaffold-core-30-page.py"
+SCAFFOLD_SCRIPT = SCRIPTS_DIR / "scaffold-page.py"
 
 
 # ----------------------------------------------------------------------------
-# Workspace discovery (mirror scaffold-core-30-page.py)
+# Workspace discovery (mirror scaffold-page.py)
 # ----------------------------------------------------------------------------
 
 
@@ -307,7 +307,7 @@ def invoke_scaffold(
 ) -> tuple[bool, str]:
     """Returns (ok, stderr_tail). On failure, stderr_tail is the last ~15 lines for the summary."""
     if not SCAFFOLD_SCRIPT.is_file():
-        return False, f"scaffold-core-30-page.py not found at {SCAFFOLD_SCRIPT}"
+        return False, f"scaffold-page.py not found at {SCAFFOLD_SCRIPT}"
 
     cmd = [
         sys.executable,

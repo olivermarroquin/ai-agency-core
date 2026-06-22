@@ -5,7 +5,7 @@ scaffold-client-data.py — Phase 3c client scaffolder.
 Reads a Phase 2d client-fact brief (markdown) plus optional meeting notes and
 produces every per-client artifact the Core 30 pipeline needs:
 
-1. `data/client-<slug>.json` — the data file `scaffold-core-30-page.py` consumes
+1. `data/client-<slug>.json` — the data file `scaffold-page.py` consumes
    for brand, owner, address, contact, review, area, and license fields.
 
 2. `<client-slug>.config.example.json` — the WP-publish config skeleton with
@@ -860,7 +860,7 @@ def build_client_data(brief: Brief, client_slug: str) -> tuple[dict[str, Any], l
     data: dict[str, Any] = {
         "_comment": (
             f"Client-level facts for {name or client_slug}. Used by "
-            "scaffold-core-30-page.py to fill the LocalBusiness JSON-LD block, "
+            "scaffold-page.py to fill the LocalBusiness JSON-LD block, "
             "About section, hero phone CTA, and final CTA across all Core 30 "
             "pages. One file per client."
         ),

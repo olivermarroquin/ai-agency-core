@@ -1,0 +1,51 @@
+{
+  "business_type": "restaurant",
+  "page_model_name": "Restaurant Multi-Page",
+  "description": "Tailored page set for a restaurant — NOT service × city. Fixed list of 6 pages covering the core conversion funnel for a restaurant: discover → browse menu → learn story → find location → explore cuisine → convert (reserve/order).",
+
+  "pages": [
+    {
+      "slug": "home",
+      "role": "homepage",
+      "title_template": "{client_name} — {primary_cuisine} Restaurant in {city_name}",
+      "description": "Main landing page. Hero + cuisine overview + featured dishes + reviews + location/hours CTA.",
+      "sections": ["hero", "cuisine-overview", "featured-dishes", "reviews", "location-cta", "about-teaser"],
+      "is_index": true
+    },
+    {
+      "slug": "menu",
+      "role": "menu",
+      "title_template": "Menu — {client_name}",
+      "description": "Full menu with sections, items, prices, dietary flags. Structured data: hasMenu.",
+      "sections": ["menu-hero", "menu-sections", "dietary-info", "order-cta"]
+    },
+    {
+      "slug": "about",
+      "role": "about",
+      "title_template": "About {client_name} — Our Story",
+      "description": "Owner story, restaurant history, cuisine philosophy, team.",
+      "sections": ["about-hero", "owner-story", "cuisine-philosophy", "team"]
+    },
+    {
+      "slug": "location-hours",
+      "role": "location",
+      "title_template": "Location & Hours — {client_name}",
+      "description": "Address, map embed, hours by day, parking, transit directions.",
+      "sections": ["location-hero", "map-embed", "hours-table", "parking-transit", "reservation-cta"]
+    },
+    {
+      "slug": "cuisine",
+      "role": "cuisine-spotlight",
+      "title_template": "{primary_cuisine} Cuisine in {city_name} — {client_name}",
+      "description": "Deep dive on the cuisine tradition. Keyword play: '{primary_cuisine} food near me.'",
+      "sections": ["cuisine-hero", "cuisine-history", "signature-techniques", "featured-dishes", "order-cta"]
+    },
+    {
+      "slug": "reserve-order",
+      "role": "conversion",
+      "title_template": "Reserve a Table or Order Online — {client_name}",
+      "description": "Dual-CTA page: reservation form/link + online ordering links.",
+      "sections": ["conversion-hero", "reservation-block", "order-block", "hours-summary", "contact-info"]
+    }
+  ]
+}

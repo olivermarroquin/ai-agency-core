@@ -4,7 +4,7 @@ scaffold-service-data.py — Phase 3a service scaffolder.
 
 Reads a Phase 2a Tier-1 service brief (markdown, in the
 `_template-service-brief.md` shape) and produces a populated
-`data/services/<slug>.json` that `scaffold-core-30-page.py` consumes when
+`data/services/<slug>.json` that `scaffold-page.py` consumes when
 rendering Core 30 pages.
 
 The script is mechanical. It does not invent facts. If the brief lacks a
@@ -13,7 +13,7 @@ field and records the JSON path in `_scaffolded.needs_authoring` so the
 operator knows which strings still need a human pass.
 
 Template strings like `{city_name}`, `{city_slug}`, `{owner_name}`,
-`{phone_display}` are left intact. `scaffold-core-30-page.py` substitutes
+`{phone_display}` are left intact. `scaffold-page.py` substitutes
 them at render time from the city + client data files.
 
 USAGE
@@ -97,7 +97,7 @@ REFERENCES
 - Example brief: second-brain/05_shared-intelligence/research-briefs/services/panel-upgrade.md
 - Blueprint:     second-brain/05_shared-intelligence/blueprints/client-seo-onboarding-automation.md (Phase 3a)
 - Reference JSON shape: repos/ai-agency-core/scripts/data/services/troubleshooting.json
-- Downstream consumer: repos/ai-agency-core/scripts/scaffold-core-30-page.py (build_context)
+- Downstream consumer: repos/ai-agency-core/scripts/scaffold-page.py (build_context)
 - Sibling scaffolder:  repos/ai-agency-core/scripts/scaffold-client-data.py (Phase 3c)
 """
 
@@ -1133,7 +1133,7 @@ def build_service_data(
     data: dict[str, Any] = {
         "_comment": (
             f"Per-service data for {name or slug}. Used by "
-            "scaffold-core-30-page.py for every Core 30 page of this service "
+            "scaffold-page.py for every Core 30 page of this service "
             "across cities. One file per service. {city} and {client} "
             "placeholders inside text strings are substituted at render time. "
             f"Scaffolded by scaffold-service-data.py from brief: "
@@ -1302,9 +1302,9 @@ def print_summary(
     print("  3. Add a per-service entry for this service to each city file's")
     print("     `quick_ref_localized_items`, `most_common_problem_paragraph`, and")
     print("     `specific_problems_neighborhood_phrase` dicts (per "
-          "scaffold-core-30-page.py's README).")
+          "scaffold-page.py's README).")
     print("  4. Test with:")
-    print(f"       python3 scaffold-core-30-page.py --service {output_slug} "
+    print(f"       python3 scaffold-page.py --service {output_slug} "
           "--city <city-slug> --position <N> --dry-run")
     print()
 
@@ -1427,7 +1427,7 @@ def main() -> int:
             sys.stderr.write(f"  • {k}\n")
         sys.stderr.write(
             "\nFix the brief or pass --force to write anyway. Mandatory keys "
-            "are the ones scaffold-core-30-page.py uses for naming + schema; "
+            "are the ones scaffold-page.py uses for naming + schema; "
             "without them the rendered page won't be valid.\n"
         )
         # Still print the summary so the operator can see what was extracted.

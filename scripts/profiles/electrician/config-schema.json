@@ -1,0 +1,38 @@
+{
+  "business_type": "electrician",
+
+  "required_universal_fields": [
+    "client_slug", "name", "business_type", "owner_name", "owner_title",
+    "website_url", "website_url_no_slash", "phone_display", "phone_tel", "phone_e164", "email",
+    "address", "geo", "hours", "primary_color", "navy", "accent_yellow", "heading_color",
+    "hero_gradient_dark", "hero_gradient_mid", "hero_gradient_bright",
+    "business_description_schema", "brand_image_url", "brand_logo_url",
+    "price_range_token", "review_count", "review_rating", "review_count_phrase", "review_pitch",
+    "brand_areas_served", "brand_area_county", "brand_extended_coverage_phrase",
+    "owner_bio_paragraphs", "contact_page_path", "secondary_cta_label",
+    "primary_cta_label_template", "final_cta_response_promise"
+  ],
+
+  "required_type_fields": {
+    "electrician.license.category":   { "type": "string", "description": "Trade license category (e.g., Master Electrician License)" },
+    "electrician.license.issuer":     { "type": "string", "description": "Licensing authority name" },
+    "electrician.license.state":      { "type": "string", "description": "State name for license display" },
+    "electrician.license.state_full": { "type": "string", "description": "Full state name (e.g., Commonwealth of Virginia)" },
+    "electrician.services":           { "type": "array[string]", "min_items": 1, "description": "Service slugs matching data/services/*.json files" },
+    "electrician.service_area_cities": { "type": "array[string]", "min_items": 1, "description": "City slugs matching data/cities/*.json files" }
+  },
+
+  "optional_type_fields": {
+    "electrician.utility_providers":     { "type": "array[string]", "description": "Local utility companies for coordination phrasing" },
+    "electrician.emergency_dispatch":    { "type": "boolean", "description": "Whether emergency dispatch is offered" },
+    "electrician.dispatch_time_default": { "type": "string", "description": "Default dispatch time phrase (e.g., 45-minute)" }
+  },
+
+  "fields_not_used": {
+    "cuisine_types": "Restaurant-only concept.",
+    "menu_sections": "Restaurant-only concept.",
+    "accepts_reservations": "Restaurant-only concept.",
+    "reservation_url": "Restaurant-only concept.",
+    "order_url": "Restaurant-only concept."
+  }
+}

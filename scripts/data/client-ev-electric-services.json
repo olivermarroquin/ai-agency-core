@@ -1,5 +1,7 @@
 {
-  "_comment": "Client-level facts for EV Electric Services. Used by scaffold-core-30-page.py to fill the LocalBusiness JSON-LD block, About section, hero phone CTA, and final CTA across all Core 30 pages. One file per client. Future Keelworks clients get their own client-<slug>.json.",
+  "_comment": "Client-level facts for EV Electric Services. Used by scaffold-page.py to fill the LocalBusiness JSON-LD block, About section, hero phone CTA, and final CTA across all Core 30 pages. One file per client. Future Keelworks clients get their own client-<slug>.json.",
+
+  "business_type": "electrician",
 
   "client_slug": "ev-electric-services",
   "name": "EV Electric Services",
@@ -40,6 +42,20 @@
     "issuer": "Commonwealth of Virginia, Department of Professional and Occupational Regulation",
     "state": "Virginia",
     "state_full": "Commonwealth of Virginia"
+  },
+
+  "electrician": {
+    "license": {
+      "category": "Master Electrician License",
+      "issuer": "Commonwealth of Virginia, Department of Professional and Occupational Regulation",
+      "state": "Virginia",
+      "state_full": "Commonwealth of Virginia"
+    },
+    "services": ["troubleshooting", "panel-upgrade", "ev-charger", "light-fixture-installation", "smoke-alarm", "outlet-installation", "emergency-electrician"],
+    "service_area_cities": ["vienna-va", "fairfax-va", "mclean-va", "oakton-va", "tysons-va", "falls-church-va", "burke-va", "annandale-va"],
+    "utility_providers": ["Dominion Energy"],
+    "emergency_dispatch": true,
+    "dispatch_time_default": "45-minute"
   },
 
   "business_description_schema": "Residential electrical contractor serving Fairfax County, VA and the Northern Virginia / DC / Montgomery County MD region. Master electrician, fully insured, troubleshooting-led.",

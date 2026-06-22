@@ -17,6 +17,8 @@
       "owner_bio_paragraphs (synthesized from operator: 16+ years, full electrical spectrum incl panel heavy-ups + installs + about page voice + brief facts)"
     ]
   },
+  "business_type": "electrician",
+
   "client_slug": "s-and-h-contracting",
   "name": "S&H Contracting Unlimited",
   "alternate_name": "S&H Contracting",
@@ -59,6 +61,20 @@
     "issuer": "Virginia DPOR",
     "state": "Virginia",
     "state_full": "Commonwealth of Virginia"
+  },
+
+  "electrician": {
+    "license": {
+      "category": "Master Electrician",
+      "issuer": "Virginia DPOR",
+      "state": "Virginia",
+      "state_full": "Commonwealth of Virginia"
+    },
+    "services": ["troubleshooting", "panel-upgrade", "ev-charger", "light-fixture-installation", "smoke-alarm", "outlet-installation", "emergency-electrician"],
+    "service_area_cities": ["oakton-va", "fairfax-station-va", "alexandria-va", "mclean-va"],
+    "utility_providers": ["Dominion Energy"],
+    "emergency_dispatch": true,
+    "dispatch_time_default": "45-minute"
   },
   "business_description_schema": "Licensed and insured electrical contractor serving Northern Virginia, Washington DC, and Maryland. Residential and commercial work — installations, repairs, panel upgrades, and 24/7 emergency electrical service.",
   "brand_image_url": "https://shcontractingunlimited.com/wp-content/uploads/2025/03/sh-image-2.jpg",

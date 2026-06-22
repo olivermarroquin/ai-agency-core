@@ -1,0 +1,157 @@
+{
+  "business_type": "electrician",
+  "_wave_status": "Wave 1: token_bindings + template_renders are used for JSON-LD resolution only. Electrician HTML is still rendered by the imported legacy engine (scaffold-core-30-page.py). These bindings go live for HTML when Wave 2 moves electrician onto the generic renderer.",
+
+  "token_bindings": {
+    "client_slug":          "root.client_slug",
+    "client_name":          "root.name",
+    "client_alt_name":      "root.alternate_name",
+    "owner_name":           "root.owner_name",
+    "owner_first_name":     "root.owner_first_name",
+    "owner_title":          "root.owner_title",
+    "phone_display":        "root.phone_display",
+    "phone_tel":            "root.phone_tel",
+    "phone_e164":           "root.phone_e164",
+    "email":                "root.email",
+    "website_url":          "root.website_url",
+    "website_url_no_slash": "root.website_url_no_slash",
+    "contact_page_path":    "root.contact_page_path",
+    "secondary_cta_label":  "root.secondary_cta_label",
+    "response_promise":     "root.final_cta_response_promise",
+    "review_count":         "root.review_count",
+    "review_count_phrase":  "root.review_count_phrase",
+    "review_pitch":         "root.review_pitch",
+    "review_rating":        "root.review_rating",
+    "brand_image_url":      "root.brand_image_url",
+    "brand_logo_url":       "root.brand_logo_url",
+    "primary_color":        "root.primary_color",
+    "navy":                 "root.navy",
+    "accent_yellow":        "root.accent_yellow",
+    "heading_color":        "root.heading_color",
+    "hero_gradient_dark":   "root.hero_gradient_dark",
+    "hero_gradient_mid":    "root.hero_gradient_mid",
+    "hero_gradient_bright": "root.hero_gradient_bright",
+
+    "license_state":        "electrician.license.state",
+    "license_state_full":   "electrician.license.state_full",
+
+    "service_slug":         "service.slug",
+    "service_name":         "service.name",
+    "service_tag":          "service.tag_short",
+    "service_lowercase":    "service.lowercase_phrase",
+
+    "city_slug":            "city.slug",
+    "city_name":            "city.name",
+    "city_state":           "city.state",
+    "city_name_with_state": "city.name_with_state",
+    "city_county":          "city.county",
+    "city_county_full":     "city.county_full",
+    "city_distance_from_hq_phrase":         "city.distance_from_hq_phrase",
+    "geographic_anchor_paragraph":          "city.geographic_anchor_paragraph",
+    "audience_descriptor":                  "city.audience_descriptor",
+    "other_areas_paragraph":                "city.other_areas_paragraph",
+    "city_ev_homes_phrase":                 "city.ev_charger_homes_phrase",
+    "city_specific_problems_neighborhood_phrase": "city.specific_problems_neighborhood_phrase._variant",
+    "city_ev_neighborhood_phrase":          "city.ev_neighborhood_phrase._variant",
+    "city_most_common_problem_paragraph":   "city.most_common_problem_paragraph._variant",
+    "city_distance_phrase":                 "city.distance_phrase._variant",
+    "utility_coordination_phrase":          "default:city.utility_coordination_phrase:Dominion Energy coordination",
+    "dispatch_time_phrase":                 "default:city.dispatch_time_phrase:45-minute",
+    "dispatch_time_short":                  "default:city.dispatch_time_short:45-min",
+
+    "county_short":                         "computed.county_short",
+    "city_tag":                             "computed.city_tag",
+    "no_trip_charge_cities_phrase":          "computed.no_trip_charge_cities_phrase",
+    "page_slug":                            "computed.page_slug",
+    "page_url":                             "computed.page_url",
+    "core_30_position":                     "computed.core_30_position",
+
+    "css_prefix":           "literal:evp"
+  },
+
+  "template_renders": [
+    { "token": "hero_eyebrow",          "source": "service.hero_eyebrow_template" },
+    { "token": "hero_heading",          "source": "service.hero_heading",                    "is_template": false },
+    { "token": "hero_subheading",       "source": "service.hero_subheading_template" },
+    { "token": "hero_image_alt",        "source": "service.hero_image_alt_template" },
+    { "token": "hero_image_url",        "source": "service.hero_image_url_template" },
+    { "token": "what_it_means_heading", "source": "service.what_it_means_heading",           "is_template": false },
+    { "token": "quick_ref_heading",     "source": "service.quick_ref_heading_template" },
+    { "token": "quick_ref_intro",       "source": "service.quick_ref_intro",                 "is_template": false },
+    { "token": "quick_ref_footer_html", "source": "service.quick_ref_footer_html_template" },
+    { "token": "why_city_heading",      "source": "service.why_city_heading_template" },
+    { "token": "why_city_closing_note", "source": "service.why_city_closing_note_template" },
+    { "token": "problems_heading",      "source": "service.problems_heading_template" },
+    { "token": "problems_intro",        "source": "service.problems_intro_template" },
+    { "token": "process_heading",       "source": "service.process_heading_template" },
+    { "token": "process_intro",         "source": "service.process_intro_template" },
+    { "token": "pricing_heading",       "source": "service.pricing_heading",                 "is_template": false },
+    { "token": "pricing_intro",         "source": "service.pricing_intro_template" },
+    { "token": "pricing_note",          "source": "service.pricing_note_template" },
+    { "token": "pricing_closing_note",  "source": "service.pricing_closing_note",            "is_template": false },
+    { "token": "about_heading",         "source": "service.about_heading_template" },
+    { "token": "about_portrait_url",    "source": "service.about_portrait_url_template" },
+    { "token": "about_portrait_alt",    "source": "service.about_portrait_alt_template" },
+    { "token": "neighborhoods_heading", "source": "service.neighborhoods_heading_template" },
+    { "token": "neighborhoods_intro",   "source": "service.neighborhoods_intro_template" },
+    { "token": "related_heading",       "source": "service.related_heading_template" },
+    { "token": "related_intro",         "source": "service.related_intro_template" },
+    { "token": "final_cta_heading",     "source": "service.final_cta_heading",               "is_template": false },
+    { "token": "final_cta_paragraph",   "source": "service.final_cta_paragraph_template" },
+    { "token": "faq_heading",           "source": "service.faq_heading",                     "is_template": false },
+    { "token": "aioseo_page_title",           "source": "service.aioseo_page_title_template" },
+    { "token": "aioseo_meta_description",     "source": "service.aioseo_meta_description_template" },
+    { "token": "wordpress_page_title",        "source": "service.wordpress_page_title_template" },
+    { "token": "focus_keyword",               "source": "service.aioseo_focus_keyword_template" },
+    { "token": "aioseo_additional_keywords",  "source": "service.aioseo_additional_keywords_template" }
+  ],
+
+  "sections": {
+    "hero": {
+      "note": "Hero section with eyebrow, heading, subheading, phone CTA, image. All tokens from template_renders."
+    },
+    "what-it-means": {
+      "note": "Educational section explaining what the service involves. Heading + multi-paragraph body from service data."
+    },
+    "quick-ref": {
+      "note": "Quick reference sidebar/callout with heading, intro, items list, footer CTA."
+    },
+    "why-city": {
+      "note": "City-specific section explaining why this service matters here. Geographic anchor + closing note."
+    },
+    "problems": {
+      "note": "Common problems section with card grid. 4 problem cards from service data."
+    },
+    "process": {
+      "note": "Service process steps. Numbered steps from service data."
+    },
+    "pricing": {
+      "note": "Pricing section with items, intro, note, closing. All from service data."
+    },
+    "about": {
+      "note": "About the owner/company. Portrait + bio paragraphs from client data."
+    },
+    "neighborhoods": {
+      "note": "Neighborhoods served section. List from city data."
+    },
+    "related": {
+      "note": "Related services section. Cards linking to other service×city pages."
+    },
+    "faq": {
+      "note": "FAQ section. Items from service data, rendered as Question+Answer structured data."
+    },
+    "map": {
+      "note": "Embedded Google Maps iframe. Generated by generate-maps-iframe.py."
+    },
+    "final-cta": {
+      "note": "Final call-to-action section. Phone CTA + response promise."
+    }
+  },
+
+  "cta_patterns": {
+    "primary_verb": "Call",
+    "secondary_verb": "Request a Quote",
+    "phone_cta": "Call {phone_display}",
+    "urgency_pattern": "{dispatch_time_phrase} response"
+  }
+}

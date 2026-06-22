@@ -190,7 +190,7 @@ def generate_for_city(
         sys.stderr.write(
             "ERROR: client_name is required in maps config but was not set.\n"
             "Pass --config with a JSON containing client_name, or set it in the\n"
-            "caller (scaffold-core-30-page.py passes it from the client data file).\n"
+            "caller (scaffold-page.py passes it from the client data file).\n"
         )
         sys.exit(2)
 

@@ -311,7 +311,7 @@ def check_from_code(
     """Run the completeness gate programmatically. Returns structured results dict.
 
     Use this when composing the gate into another script
-    (e.g., scaffold-core-30-page.py pre-scaffold validation,
+    (e.g., scaffold-page.py pre-scaffold validation,
     or bulk-scaffold-pages.py batch pre-flight).
     """
     profile = load_profile(Path(profile_path))
