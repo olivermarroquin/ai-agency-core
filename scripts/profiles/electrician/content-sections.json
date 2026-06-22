@@ -1,6 +1,7 @@
 {
   "business_type": "electrician",
-  "_wave_status": "Wave 1: token_bindings + template_renders are used for JSON-LD resolution only. Electrician HTML is still rendered by the imported legacy engine (scaffold-core-30-page.py). These bindings go live for HTML when Wave 2 moves electrician onto the generic renderer.",
+
+  "page_template": "core-30-page.html.tmpl",
 
   "token_bindings": {
     "client_slug":          "root.client_slug",
@@ -66,7 +67,12 @@
     "page_url":                             "computed.page_url",
     "core_30_position":                     "computed.core_30_position",
 
-    "css_prefix":           "literal:evp"
+    "css_prefix":           "literal:evp",
+
+    "pattern_card_icon_bg":  "literal:#fef6dc",
+    "pattern_card_icon_svg": "literal:data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f5b400'><path d='M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z'/></svg>",
+    "problem_card_icon_bg":  "literal:#e6f1fb",
+    "problem_card_icon_svg": "literal:data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230871bc'><path d='M13 2L4.09 12.97 11 12 11 22l8.91-10.97L13 12V2z'/></svg>"
   },
 
   "template_renders": [

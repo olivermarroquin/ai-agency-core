@@ -114,6 +114,11 @@
 ### Wave 2 — Electrician HTML Generalization
 **Goal:** Retire the legacy import. Move electrician HTML rendering onto the profile-driven generic renderer + composable section templates. After Wave 2, `scaffold-core-30-page.py` can be deleted.
 
+> **STATUS 2026-06-22 — engine half DONE + independently reviewed (run `btf2-electrician-html-202206221900`, PASS [3,0]); restaurant-tooling half STILL OPEN.**
+> **Done:** 13 composable section templates, electrician HTML on the generic renderer (zero legacy import, §7.4 clean), `_import_legacy_engine()`/`_render_legacy_html()` removed, `scaffold-core-30-page.py` **deleted**, env-robust regression (5 city pairs vs stored fixtures w/ controlled stubs). See `[[lesson-btf-wave2-retro]]`.
+> **Still OPEN (were NOT in the executed handoff — schedule Wave-2b):** `draft-v1-restaurant.md.tmpl`; restaurant profiles for `facts-completeness-gate.py`, `hardcode-scanner.py`, `verify-artifact.py`; `publish-core-30-page.py` Restaurant schema validation. (`scaffold-client-data.py` parameterization partially present.)
+> **Deferred to Wave 3:** matrix-page **section sequence** is still hardcoded electrician order (fixed data keys) — drive it from a profile-declared `sections[]` so a new matrix-type needs no engine edit (`[[CR-072]]`).
+
 | Task | Effort | Depends On |
 |---|---|---|
 | Build composable HTML section templates (`templates/sections/`) | Medium | Wave 1 engine |

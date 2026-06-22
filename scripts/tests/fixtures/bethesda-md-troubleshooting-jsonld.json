@@ -1,0 +1,212 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://evelectric.pro/#business",
+      "name": "EV Electric Services",
+      "alternateName": "EV Electric",
+      "description": "Residential electrical contractor serving Fairfax County, VA and the Northern Virginia / DC / Montgomery County MD region. Master electrician, fully insured, troubleshooting-led.",
+      "url": "https://evelectric.pro/",
+      "telephone": "+1-571-500-6637",
+      "email": "Contact@evelectric.pro",
+      "image": "https://evelectric.pro/wp-content/uploads/2026/05/ahmad-shaban-master-electrician.jpg",
+      "logo": "https://evelectric.pro/wp-content/uploads/2026/05/ev-electric-logo.png",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "9488 Fairfax Blvd",
+        "addressLocality": "Fairfax",
+        "addressRegion": "VA",
+        "postalCode": "22031",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 38.8462,
+        "longitude": -77.3064
+      },
+      "areaServed": [
+        {
+          "@type": "AdministrativeArea",
+          "name": "Montgomery County, MD"
+        },
+        {
+          "@type": "City",
+          "name": "Bethesda",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Montgomery County, MD"
+          }
+        },
+        {
+          "@type": "City",
+          "name": "Chevy Chase",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Montgomery County, MD"
+          }
+        },
+        {
+          "@type": "City",
+          "name": "Potomac",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Montgomery County, MD"
+          }
+        }
+      ],
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "08:00",
+          "closes": "18:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Saturday"
+          ],
+          "opens": "09:00",
+          "closes": "16:00"
+        }
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "Master Electrician License",
+        "recognizedBy": {
+          "@type": "Organization",
+          "name": "Commonwealth of Virginia, Department of Professional and Occupational Regulation"
+        }
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "Ahmad Shaban",
+        "jobTitle": "Master Electrician",
+        "worksFor": {
+          "@id": "https://evelectric.pro/#business"
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "87",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://evelectric.pro/electrical-troubleshooting-bethesda-md/#service",
+      "name": "Electrical Troubleshooting in Bethesda, MD",
+      "description": "Residential electrical troubleshooting and diagnostics in Bethesda, MD. Master electrician runs full diagnostic on circuits, panels, outlets, switches, and EV-charger circuits. Same-day or next-day appointments in most cases. Written on-site estimate before any repair begins.",
+      "serviceType": "Electrical troubleshooting and diagnostics",
+      "provider": {
+        "@id": "https://evelectric.pro/#business"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Bethesda",
+        "containedInPlace": {
+          "@type": "AdministrativeArea",
+          "name": "Montgomery County, Maryland"
+        }
+      },
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Residential homeowners in Bethesda, MD and surrounding Montgomery County neighborhoods including Kenwood, Burning Tree, Bradley Hills, Edgemoor, Somerset, Glen Echo Heights, and the Westbard corridor."
+      },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "USD",
+        "price": "",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": "",
+          "priceCurrency": "USD",
+          "description": ""
+        },
+        "availability": "https://schema.org/InStock",
+        "url": "https://evelectric.pro/electrical-troubleshooting-bethesda-md/"
+      },
+      "termsOfService": "We come to the house, look at the actual work, and give a written estimate before any job is scheduled. The estimate is firm. Diagnostic visits include most minor on-the-spot repairs; major repairs (panel upgrades, sub-panel installs, full circuit re-runs) get a separate written estimate before work begins."
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://evelectric.pro/electrical-troubleshooting-bethesda-md/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does pricing work for electrical troubleshooting in Bethesda, MD?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We come to the house, look at the actual work, and give a written estimate before any repair starts. Diagnostic visits include most minor on-the-spot repairs. Major repairs get a separate written estimate. No charge for the diagnostic visit in our primary service area."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How quickly can you come out for a troubleshooting call in Bethesda?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Same-day or next-day in most cases during weekday business hours. Bethesda is about 22 miles from our Fairfax Blvd office — roughly 35–45 minutes via the Capital Beltway (I-495). If your situation is urgent — burning smell, sparking, warm walls — we will triage you to the earliest available slot and tell you what to shut off in the meantime."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is included in a troubleshooting visit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A real diagnostic — not a guess. We use a multimeter, circuit tracer, AFCI/GFCI tester, and IR thermal camera if heat is suspected. We open panels, test circuits at rest and under load, trace the fault to its source, then explain what we found in plain English before any repair starts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When should I call an electrician versus trying to fix it myself?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Call an electrician if you smell burning, see sparking, feel warm walls or warm switch plates, have a breaker that trips daily, or have lost power to part of the house without a clear cause. Resetting a tripped breaker once is fine. Resetting it three times in a row is a fire risk."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the most common electrical problem in Bethesda homes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Breaker trips on overloaded circuits. Bethesda's housing stock spans a century — from 1920s colonials in Kenwood and Bradley Hills with original 60-amp fuse boxes, to 1960s split-levels in Woodhaven and Westbard with 100-amp panels, to 2010s teardown rebuilds in Edgemoor and Burning Tree. The oldest homes have electrical systems designed for a radio and a few light bulbs; even the mid-century homes weren't wired for central AC, dual ovens, home offices, and EV chargers. The second most common call is flickering lights — usually a loose neutral at the meter base or voltage drop from an aging PEPCO overhead service connection in Bethesda's heavily wooded neighborhoods."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you handle EV charger problems?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EV charging puts continuous high-amp draw on circuits that Bethesda's larger homes were not wired for. If your charger throttles, trips a breaker, or warms the outlet, the cause is almost always upstream — a feeder, a breaker, or a connection that cannot sustain the load. We diagnose the cause and either repair it or quote you for the right circuit."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are you licensed and insured?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Ahmad holds a Master Electrician license issued by the Commonwealth of Virginia — the state's highest electrician credential. EV Electric Services is fully insured. We are happy to provide proof of license and insurance on request before any work begins."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you offer 24/7 emergency service?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We offer after-hours service when needed, but we don't market ourselves as a 24/7 emergency company. Most residential troubleshooting is handled fastest by booking the earliest weekday or weekend appointment. If you have a genuine emergency — sparks, burning smell, fire risk — call 571-500-6637 and we will triage immediately."
+          }
+        }
+      ]
+    }
+  ]
+}

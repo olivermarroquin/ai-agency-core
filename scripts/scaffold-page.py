@@ -36,6 +36,7 @@ import argparse
 import calendar
 import importlib.util
 import json
+import os
 import re
 import sys
 from datetime import datetime, timezone
@@ -495,71 +496,337 @@ def build_jsonld(client: dict, profile: dict, ctx: dict,
 
 
 # ============================================================================
-# Electrician legacy HTML renderer — delegates to existing section renderers
+# Generic section renderers — template-driven, no type-specific literals
 # ============================================================================
 
-def _import_legacy_engine():
-    """Import scaffold-core-30-page.py as a module for its section renderers."""
-    legacy_path = SCRIPTS_DIR / "scaffold-core-30-page.py"
-    if not legacy_path.is_file():
-        return None
-    spec = importlib.util.spec_from_file_location("legacy_engine", legacy_path)
+def _load_section_template(name: str) -> str:
+    """Load a section template from templates/sections/."""
+    path = TEMPLATES_DIR / "sections" / name
+    if not path.is_file():
+        sys.stderr.write(f"ERROR: section template not found: {path}\n")
+        sys.exit(2)
+    return path.read_text(encoding="utf-8")
+
+
+def _render_template_items(template_name: str, items: list, ctx: dict,
+                           separator: str = "\n",
+                           enumerate_key: str | None = None) -> str:
+    """Render a list of items using a section template. Generic — no type literals."""
+    tmpl = _load_section_template(template_name)
+    out: list[str] = []
+    for i, item in enumerate(items, start=1):
+        item_ctx = dict(ctx)
+        if enumerate_key:
+            item_ctx[enumerate_key] = i
+        if isinstance(item, str):
+            try:
+                item_ctx["text"] = item.format_map(ctx)
+            except KeyError:
+                item_ctx["text"] = item
+        elif isinstance(item, dict):
+            for k, v in item.items():
+                if isinstance(v, str):
+                    try:
+                        item_ctx[k] = v.format_map(ctx)
+                    except KeyError:
+                        item_ctx[k] = v
+                else:
+                    item_ctx[k] = v
+        out.append(tmpl.format_map(item_ctx))
+    return separator.join(out) + "\n" if out else ""
+
+
+def _detect_hero_orientation(image_path: Path) -> str:
+    """Return 'portrait' if height > width, else 'landscape'."""
+    try:
+        from PIL import Image  # type: ignore
+    except ImportError:
+        sys.stderr.write(
+            "WARN: Pillow not installed; can't detect hero orientation. "
+            "Defaulting to landscape (Pattern A). "
+            "Install with: pip install Pillow --break-system-packages\n"
+        )
+        return "landscape"
+    try:
+        with Image.open(image_path) as im:
+            w, h = im.size
+    except Exception as e:
+        sys.stderr.write(
+            f"WARN: couldn't read hero image at {image_path}: {e}. "
+            "Defaulting to landscape (Pattern A).\n"
+        )
+        return "landscape"
+    return "portrait" if h > w else "landscape"
+
+
+def _render_hero_image_block(ctx: dict, hero_image_path: Path | None) -> str:
+    """Render hero image block using section templates (landscape or portrait)."""
+    orientation = "landscape"
+    if hero_image_path is not None:
+        if not hero_image_path.is_file():
+            sys.stderr.write(
+                f"WARN: --hero-image-path file not found: {hero_image_path}. "
+                "Defaulting to landscape (Pattern A).\n"
+            )
+        else:
+            orientation = _detect_hero_orientation(hero_image_path)
+            sys.stderr.write(
+                f"→ Hero image orientation: {orientation} "
+                f"({'Pattern B' if orientation == 'portrait' else 'Pattern A'})\n"
+            )
+    tmpl = _load_section_template(f"hero-image-{orientation}.html.tmpl")
+    return tmpl.format_map(ctx)
+
+
+def _render_quick_ref_items(ctx: dict) -> str:
+    """Render quick-reference accordion items from city variant data."""
+    items = require_variant_field(
+        ctx["_city"], "quick_ref_localized_items",
+        ctx["service_slug"], ctx["city_slug"],
+    )
+    return _render_template_items("quick-ref-item.html.tmpl", items, ctx,
+                                  separator="\n\n")
+
+
+def _page_exists_on_disk(slug: str, client_slug: str) -> bool:
+    """Check if a page folder exists for this slug (any position number).
+
+    Respects SCAFFOLD_CORE30_BASE env var for deterministic testing — when set,
+    the base is <env_value>/<client_slug>/core-30/ instead of the workspace path.
+    """
+    override = os.environ.get("SCAFFOLD_CORE30_BASE")
+    if override:
+        core30_dir = Path(override) / client_slug / "core-30"
+    else:
+        core30_dir = (
+            Path.home() / "workspace" / "second-brain" / "04_projects" / "clients"
+            / "_active" / client_slug / "website-archive" / "new" / "core-30"
+        )
+    if not core30_dir.is_dir():
+        return False
+    for d in core30_dir.iterdir():
+        if d.is_dir() and d.name.split("-", 1)[-1:] == [slug]:
+            return True
+    return False
+
+
+def _render_related_cards(ctx: dict) -> str:
+    """Render related-service cards. Only links to pages that exist on disk."""
+    EXCLUDED_SERVICES = {"whole-house-rewire", "generator-installation"}
+    cards = ctx["_service"]["related_cards"]
+    client_slug = ctx.get("client_slug", "")
+    linked_tmpl = _load_section_template("related-card-linked.html.tmpl")
+    plain_tmpl = _load_section_template("related-card-plain.html.tmpl")
+    out: list[str] = []
+    for c in cards:
+        href_slug = c["href_slug"].format_map(ctx)
+        if any(excl in href_slug for excl in EXCLUDED_SERVICES):
+            continue
+        item_ctx = {**ctx, "href_slug": href_slug, "label": c["label"]}
+        if _page_exists_on_disk(href_slug, client_slug):
+            out.append(linked_tmpl.format_map(item_ctx))
+        else:
+            out.append(plain_tmpl.format_map(item_ctx))
+    return "\n".join(out) + "\n" if out else ""
+
+
+def _render_faq_items(ctx: dict) -> str:
+    """Render FAQ accordion items from service data."""
+    items = ctx["_service"]["faq_items"]
+    tmpl = _load_section_template("faq-item.html.tmpl")
+    out: list[str] = []
+    for it in items:
+        q = it["question"].format_map(ctx)
+        a = it["answer_html"].format_map(ctx)
+        item_ctx = {**ctx, "question": q, "answer": a}
+        out.append(tmpl.format_map(item_ctx))
+    return "\n".join(out) + "\n" if out else ""
+
+
+def _get_map_iframe_html(ctx: dict) -> str:
+    """Load generate-maps-iframe.py and call it for the page's city."""
+    map_script_path = SCRIPTS_DIR / "generate-maps-iframe.py"
+    if not map_script_path.is_file():
+        sys.stderr.write(f"ERROR: generate-maps-iframe.py not found at {map_script_path}\n")
+        sys.exit(2)
+    spec = importlib.util.spec_from_file_location("maps_iframe", map_script_path)
     if spec is None or spec.loader is None:
-        return None
+        sys.stderr.write("ERROR: failed to load generate-maps-iframe.py as a module.\n")
+        sys.exit(2)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    return mod
+    cfg = mod.load_config(None)
+    cfg["client_name"] = ctx["client_name"]
+    cache_path = mod.resolve_cache_path(cfg["cache_path"])
+    cache = mod.load_cache(cache_path)
+    key, wrapped, hit = mod.generate_for_city(
+        ctx["city_name"], ctx["city_state"], cfg, cache, force_refresh=False
+    )
+    if not hit:
+        mod.save_cache(cache_path, cache)
+        sys.stderr.write(f"[maps:fresh] {key} (added to cache)\n")
+    else:
+        sys.stderr.write(f"[maps:cache] {key}\n")
+    indented = "\n".join("        " + line if line.strip() else line
+                         for line in wrapped.splitlines())
+    return indented + "\n"
 
 
-def render_matrix_page(client: dict, service: dict, city: dict,
-                       profile: dict, position: int,
-                       hero_image_path: Path | None = None) -> tuple[str, str, str]:
-    """Render an electrician-style matrix page using the legacy template + renderers.
+def _validate_internal_links(html: str, client_slug: str,
+                             service_keywords: list[str] | None = None) -> None:
+    """Scan rendered HTML for internal links to non-existent pages.
 
-    This preserves byte-for-byte HTML output for regression. The JSON-LD is
-    built by the profile-driven builder (not the legacy one).
+    service_keywords: list of service slug substrings to identify service pages.
+    Derived from the client config's type-specific services list by the caller.
+    If None, all internal links are checked.
     """
-    legacy = _import_legacy_engine()
-    if legacy is None:
-        sys.stderr.write("ERROR: scaffold-core-30-page.py not found for legacy rendering.\n")
-        sys.exit(2)
+    internal_hrefs = re.findall(r'href="/([a-z0-9][a-z0-9\-]*)/"', html)
+    dead: list[str] = []
+    checked: set[str] = set()
+    for slug in internal_hrefs:
+        if slug in checked:
+            continue
+        checked.add(slug)
+        if service_keywords is not None and not any(kw in slug for kw in service_keywords):
+            continue
+        if not _page_exists_on_disk(slug, client_slug):
+            dead.append(slug)
+    if dead:
+        sys.stderr.write(
+            f"\n⚠ INTERNAL LINK WARNING: {len(dead)} href(s) point to "
+            f"pages that don't exist on disk for client '{client_slug}':\n"
+        )
+        for slug in dead:
+            sys.stderr.write(f"    → /{slug}/\n")
+        sys.stderr.write(
+            "  These will 404 if published. Fix the source (city JSON "
+            "other_areas_paragraph or service JSON related_cards) or "
+            "unlink before publishing.\n\n"
+        )
 
-    # Use legacy build_context for the HTML substitution dict (regression)
-    ctx = legacy.build_context(client, service, city, position)
 
-    # OVERRIDE: use the profile-driven JSON-LD builder
-    profile_ctx = build_context(client, profile, service=service, city=city,
-                                page_slug=ctx["page_slug"], position=position)
-    ctx["jsonld"] = build_jsonld(client, profile, profile_ctx,
-                                 page_slug="_matrix_page",
-                                 service=service, city=city)
+def _render_matrix_html(ctx: dict, profile: dict,
+                        hero_image_path: Path | None) -> str:
+    """Render a matrix page using the page template + generic section renderers.
 
-    # Render HTML using legacy renderers
-    html = legacy.render_html.__wrapped__(ctx, hero_image_path) if hasattr(legacy.render_html, '__wrapped__') else _render_legacy_html(legacy, ctx, hero_image_path)
-    md = legacy.render_markdown(ctx)
-    version_log = legacy.render_version_log(ctx)
-    return html, md, version_log
+    The profile declares the page_template; the section templates are loaded
+    from templates/sections/. Zero type-specific literals.
+    """
+    template_name = profile["content_sections"].get(
+        "page_template", "core-30-page.html.tmpl")
+    template = load_template(template_name)
 
+    ctx["hero_image_block"] = _render_hero_image_block(ctx, hero_image_path)
+    ctx["what_it_means_paragraphs_html"] = _render_template_items(
+        "paragraph-indented-8.html.tmpl",
+        ctx["_service"]["what_it_means_paragraphs"], ctx)
+    ctx["quick_ref_items_html"] = _render_quick_ref_items(ctx)
+    ctx["pattern_cards_html"] = _render_template_items(
+        "pattern-card.html.tmpl", ctx["_city"]["housing_patterns"], ctx)
+    ctx["problem_cards_html"] = _render_template_items(
+        "problem-card.html.tmpl", ctx["_service"]["problem_cards"], ctx)
+    ctx["process_steps_html"] = _render_template_items(
+        "process-step.html.tmpl", ctx["_service"]["process_steps"], ctx,
+        enumerate_key="step_number")
+    ctx["pricing_items_html"] = _render_template_items(
+        "pricing-item.html.tmpl", ctx["_service"]["pricing_items"], ctx)
+    ctx["about_text_paragraphs_html"] = _render_template_items(
+        "paragraph-indented-10.html.tmpl",
+        ctx["_service"]["about_text_paragraphs"], ctx)
+    ctx["neighborhoods_list_html"] = _render_template_items(
+        "neighborhood-item.html.tmpl", ctx["_city"]["neighborhoods"], ctx)
+    ctx["related_cards_html"] = _render_related_cards(ctx)
+    ctx["faq_items_html"] = _render_faq_items(ctx)
+    ctx["map_iframe_html"] = _get_map_iframe_html(ctx)
 
-def _render_legacy_html(legacy, ctx: dict, hero_image_path: Path | None) -> str:
-    """Call the legacy render pipeline, but inject our profile-driven JSON-LD."""
-    template = load_template("core-30-page.html.tmpl")
-    ctx["hero_image_block"] = legacy.render_hero_image_block(ctx, hero_image_path)
-    ctx["what_it_means_paragraphs_html"] = legacy.render_what_it_means_paragraphs(ctx)
-    ctx["quick_ref_items_html"] = legacy.render_quick_ref_items(ctx)
-    ctx["pattern_cards_html"] = legacy.render_pattern_cards(ctx)
-    ctx["problem_cards_html"] = legacy.render_problem_cards(ctx)
-    ctx["process_steps_html"] = legacy.render_process_steps(ctx)
-    ctx["pricing_items_html"] = legacy.render_pricing_items(ctx)
-    ctx["about_text_paragraphs_html"] = legacy.render_about_paragraphs(ctx)
-    ctx["neighborhoods_list_html"] = legacy.render_neighborhoods_list(ctx)
-    ctx["related_cards_html"] = legacy.render_related_cards(ctx)
-    ctx["faq_items_html"] = legacy.render_faq_items(ctx)
-    ctx["map_iframe_html"] = legacy.get_map_iframe_html(ctx)
-    # jsonld already set by caller from profile-driven builder
     html = template.format_map(ctx)
-    legacy._validate_internal_links(html, ctx.get("client_slug", ""))
+
+    # Derive service keywords from client config for link validation
+    client = ctx["_client"]
+    btype = client.get("business_type", "")
+    type_section = client.get(btype, {})
+    svc_keywords = type_section.get("services", [])
+    _validate_internal_links(html, ctx.get("client_slug", ""), svc_keywords or None)
     return html
+
+
+def _render_matrix_markdown(ctx: dict) -> str:
+    """Render the markdown frontmatter/checklist for a matrix page."""
+    template = load_template("draft-v1.md.tmpl")
+    EXCLUDED_SERVICES = {"whole-house-rewire", "generator-installation"}
+    additional_kw_md = ", ".join(f"`{kw}`" for kw in ctx["aioseo_additional_keywords"])
+    related_pages = [
+        card["href_slug"].format_map(ctx)
+        for card in ctx["_service"]["related_cards"]
+        if not any(excl in card["href_slug"] for excl in EXCLUDED_SERVICES)
+    ]
+    ctx["aioseo_additional_keywords_md"] = additional_kw_md
+    ctx["related_pages_csv"] = ", ".join(related_pages)
+    ctx["page_title_h1"] = ctx["wordpress_page_title"]
+    return template.format_map(ctx)
+
+
+def _render_version_log(ctx: dict) -> str:
+    """Render the version log for a matrix page."""
+    return (
+        f"# Version log — {ctx['page_slug']}\n\n"
+        f"Auto-generated by `scaffold-page.py` on {ctx['generated_at']}.\n\n"
+        "| Version | Date | Notes |\n"
+        "|---|---|---|\n"
+        f"| draft-v1 | {ctx['today']} | Initial scaffold from "
+        f"`data/services/{ctx['service_slug']}.json` + "
+        f"`data/cities/{ctx['city_slug']}.json` + "
+        f"`data/client-{ctx['client_slug']}.json`. Map iframe sourced from "
+        f"`generate-maps-iframe.py` cache for {ctx['city_name_with_state']}. |\n"
+    )
+
+
+def _find_page_folder(client_slug: str, page_slug: str, position: int) -> Path:
+    """Compute the target folder for the new page."""
+    for parent in SCRIPTS_DIR.parents:
+        if (parent / "second-brain").is_dir() and (parent / "repos").is_dir():
+            workspace_root = parent
+            break
+    else:
+        sys.stderr.write("ERROR: couldn't locate workspace root.\n")
+        sys.exit(2)
+    nn = f"{position:02d}"
+    return (
+        workspace_root / "second-brain" / "04_projects" / "clients"
+        / "_active" / client_slug / "website-archive" / "new" / "core-30"
+        / f"{nn}-{page_slug}"
+    )
+
+
+def _write_outputs(folder: Path, html: str, md: str, version_log: str) -> None:
+    """Write the three output files to the page folder."""
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "draft-v1-WP-WRAPPED.html").write_text(html, encoding="utf-8")
+    (folder / "draft-v1.md").write_text(md, encoding="utf-8")
+    (folder / "_VERSION-LOG.md").write_text(version_log, encoding="utf-8")
+
+
+def _emit_quality_loop_invoke_block(folder: Path) -> None:
+    """Emit the output-quality-loop auto-invoke recommendation to stderr."""
+    md_path = folder / "draft-v1.md"
+    html_path = folder / "draft-v1-WP-WRAPPED.html"
+    version_log_path = folder / "_VERSION-LOG.md"
+    block = (
+        "\n"
+        "## Auto-invoke output-quality-loop\n"
+        "\n"
+        "This skill produced the following artifact(s):\n"
+        f"- `{md_path}`\n"
+        f"- `{html_path}`\n"
+        f"- `{version_log_path}`\n"
+        "\n"
+        "[output-quality-loop:eval] — for each artifact, run output-quality-loop in "
+        "EVALUATE mode. If PASS, declare the chat done. If NEEDS REVISION or FAIL, "
+        "ingest the revision prompt as if it were operator input and regenerate the "
+        "artifact, then re-invoke output-quality-loop. Cap at 3 iterations; on the 3rd "
+        "FAIL, escalate to the operator with the evaluation report.\n"
+    )
+    sys.stderr.write(block)
 
 
 # ============================================================================
@@ -915,7 +1182,12 @@ def main() -> int:
 
 
 def _run_matrix_mode(args, client: dict, profile: dict, page_model: dict) -> int:
-    """Matrix mode: requires --service, --city, --position. Renders one page."""
+    """Matrix mode: requires --service, --city, --position. Renders one page.
+
+    Fully profile-driven — no legacy engine import. Section renderers use
+    composable templates from templates/sections/. The page template comes
+    from the profile's page_template declaration.
+    """
     if not args.service or not args.city:
         sys.stderr.write("ERROR: matrix mode requires --service and --city.\n")
         sys.exit(2)
@@ -923,31 +1195,28 @@ def _run_matrix_mode(args, client: dict, profile: dict, page_model: dict) -> int
     service = load_service(args.service, client_slug=args.client)
     city = load_city(args.city, client_slug=args.client)
 
+    # Compute page_slug from service data (same formula as legacy engine)
+    page_slug = service["page_slug_template"].format(city_slug=city["slug"])
+
     sys.stderr.write(f"-> Service:  {args.service} ({service['name']})\n")
     sys.stderr.write(f"-> City:     {args.city} ({city['name_with_state']})\n")
     sys.stderr.write(f"-> Position: {args.position}\n")
 
-    # Build context using legacy build_context for HTML regression
-    legacy = _import_legacy_engine()
-    if legacy is None:
-        sys.stderr.write("ERROR: legacy engine (scaffold-core-30-page.py) required for matrix mode.\n")
-        sys.exit(2)
+    # Build context using profile-driven path
+    ctx = build_context(client, profile, service=service, city=city,
+                        page_slug=page_slug, position=args.position)
 
-    ctx = legacy.build_context(client, service, city, args.position)
-
-    # Build JSON-LD from profile (the unified path)
-    profile_ctx = build_context(client, profile, service=service, city=city,
-                                page_slug=ctx["page_slug"], position=args.position)
-    ctx["jsonld"] = build_jsonld(client, profile, profile_ctx,
+    # Build JSON-LD from profile
+    ctx["jsonld"] = build_jsonld(client, profile, ctx,
                                  page_slug="_matrix_page",
                                  service=service, city=city)
 
     sys.stderr.write(f"-> Page URL: {ctx['page_url']}\n")
 
-    # Render HTML using legacy renderers (regression)
-    html = _render_legacy_html(legacy, ctx, args.hero_image_path)
-    md = legacy.render_markdown(ctx)
-    version_log = legacy.render_version_log(ctx)
+    # Render HTML using generic section renderers + page template
+    html = _render_matrix_html(ctx, profile, args.hero_image_path)
+    md = _render_matrix_markdown(ctx)
+    version_log = _render_version_log(ctx)
 
     if args.dry_run:
         sys.stderr.write(f"\nDRY RUN — no files written.\n")
@@ -955,14 +1224,15 @@ def _run_matrix_mode(args, client: dict, profile: dict, page_model: dict) -> int
         sys.stderr.write(f"  MD size:   {len(md):,} chars\n")
         return 0
 
-    folder = args.output_folder or legacy.find_page_folder(client["client_slug"], ctx["page_slug"], args.position)
+    folder = args.output_folder or _find_page_folder(
+        client["client_slug"], ctx["page_slug"], args.position)
     if folder.exists() and any(folder.iterdir()):
         sys.stderr.write(f"\nWARNING: folder already has contents: {folder}\nRefusing to overwrite.\n")
         return 3
 
-    legacy.write_outputs(folder, html, md, version_log)
+    _write_outputs(folder, html, md, version_log)
     sys.stderr.write(f"\n-> Wrote: {folder}\n")
-    legacy.emit_quality_loop_invoke_block(folder)
+    _emit_quality_loop_invoke_block(folder)
     return 0
 
 
