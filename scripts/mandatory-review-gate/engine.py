@@ -234,6 +234,14 @@ _CONTROL_FLOW_PREFIX = frozenset({
     'do', 'then', 'else', 'elif',         # introduce a body command
 })
 
+# Inline-code invocation: `python -c`, `bash -c`, etc. The argument is a CODE
+# STRING that may contain newlines — those newlines are DATA, not shell command
+# separators. Anchored to the start of the (first real) line so a trailing
+# inline-code can't mask an earlier write. Used to suppress newline-splitting,
+# same as a heredoc ('<<').
+_INLINE_CODE_RE = re.compile(
+    r'^(?:\S*/)?(?:python3?|bash|sh|zsh|node|ruby|perl)\b[^\n]*\s-c\b')
+
 
 def _is_segment_read_only(segment: str) -> bool:
     """Check if a single command segment is read-only."""
@@ -249,16 +257,17 @@ def _is_segment_read_only(segment: str) -> bool:
     # Comments and blank lines do nothing — drop them and require every remaining
     # real line to be read-only. Fixes reviewer verification blobs like
     # "# check\necho ...\nfind ..." being mis-flagged as state-changing.
-    # SKIP when a heredoc is present: its body newlines are DATA, not separate
-    # commands (e.g. `python3 << EOF\n...\nEOF`) — the heredoc-aware checks below
-    # handle those.
-    if '<<' not in segment:
-        lines = [ln.strip() for ln in segment.split('\n')]
-        real_lines = [ln for ln in lines if ln and not ln.startswith('#')]
-        if not real_lines:
-            return True  # only comments / blank lines — no command runs
-        if real_lines != [segment]:
-            return all(_is_segment_read_only(ln) for ln in real_lines)
+    # SKIP when the newlines are DATA, not command separators: a heredoc
+    # (`python3 << EOF\n...\nEOF`) or an inline-code invocation
+    # (`python3 -c "...\n..."`, `bash -c "..."`). In those cases the body lines
+    # are a code argument; the heredoc/-c handling below classifies them.
+    lines = [ln.strip() for ln in segment.split('\n')]
+    real_lines = [ln for ln in lines if ln and not ln.startswith('#')]
+    if not real_lines:
+        return True  # only comments / blank lines — no command runs
+    _data_newlines = '<<' in segment or bool(_INLINE_CODE_RE.match(real_lines[0]))
+    if not _data_newlines and real_lines != [segment]:
+        return all(_is_segment_read_only(ln) for ln in real_lines)
 
     first = _first_word(segment)
 
@@ -474,14 +483,15 @@ def _is_segment_write_safe(segment: str) -> bool:
 
     # Multi-line / comment handling (same as _is_segment_read_only): drop
     # comment + blank lines, require every remaining real line to be write-safe.
-    # SKIP when a heredoc is present (body newlines are data, not commands).
-    if '<<' not in segment:
-        lines = [ln.strip() for ln in segment.split('\n')]
-        real_lines = [ln for ln in lines if ln and not ln.startswith('#')]
-        if not real_lines:
-            return True  # only comments / blank lines — no command runs
-        if real_lines != [segment]:
-            return all(_is_segment_write_safe(ln) for ln in real_lines)
+    # SKIP when newlines are data, not separators: heredoc ('<<') or inline-code
+    # ('python -c'/'bash -c') — the body is a code-string argument.
+    lines = [ln.strip() for ln in segment.split('\n')]
+    real_lines = [ln for ln in lines if ln and not ln.startswith('#')]
+    if not real_lines:
+        return True  # only comments / blank lines — no command runs
+    _data_newlines = '<<' in segment or bool(_INLINE_CODE_RE.match(real_lines[0]))
+    if not _data_newlines and real_lines != [segment]:
+        return all(_is_segment_write_safe(ln) for ln in real_lines)
 
     first = _first_word(segment)
 
