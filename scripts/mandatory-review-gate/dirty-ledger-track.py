@@ -36,6 +36,7 @@ SELF_PATTERNS = [
     'dirty-ledger-track',
     'gate-status',
     'gate-skip',
+    'register-reviewer-session',
     '_paths.py',
     'from _paths import',
 ]
@@ -121,6 +122,11 @@ def main():
     }
     if display is not None:
         entry['display'] = display
+    # RGH-11: store full Bash command for reliable write-indicator detection
+    # in session-level reviewer exemption (is_bash_entry_write_safe needs
+    # the full command, not the 80-char truncated display).
+    if tool_name == 'Bash' and bash_cmd:
+        entry['bash_cmd'] = bash_cmd
 
     engine.append_dirty_entry(STATE_DIR, session_id, entry)
 

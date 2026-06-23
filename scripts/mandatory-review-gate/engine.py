@@ -379,6 +379,165 @@ def is_read_only_bash(command: str) -> bool:
 
 
 # ============================================================================
+# Bash write-indicator detection (RGH-11)
+# ============================================================================
+#
+# is_bash_entry_write_safe() is MORE PERMISSIVE than is_read_only_bash().
+# It returns True for commands that lack POSITIVE write indicators — e.g.,
+# 'python3 engine.py run-fast-path-checks' passes (no redirects, no file-
+# mutating commands) even though is_read_only_bash() rejects it (unknown
+# script). Used ONLY for session-level reviewer Bash exemption.
+#
+# HONEST LIMIT: A command like 'python3 existing_script.py' where the script
+# itself writes files but has no command-line write indicators will pass this
+# check. Exploiting this requires (1) forging a reviewer marker AND (2)
+# having a pre-existing deliverable-generating script — multi-step,
+# impractical, acknowledged as an honest limit of command-line-only heuristics.
+
+# Commands that positively mutate the filesystem.
+_FILE_MUTATING_CMDS = frozenset({
+    'tee', 'mkdir', 'mktemp', 'rm', 'rmdir', 'mv', 'cp', 'touch',
+    'chmod', 'chown', 'ln', 'shred', 'unlink', 'install',
+    'truncate', 'dd', 'patch',
+})
+
+# Patterns in python3 -c inline code that indicate file writes.
+_PYTHON_INLINE_WRITE_RE = re.compile(
+    r"""open\s*\(.*['"][wa]"""   # open(..., 'w') or open(..., 'a')
+    r"""|\.write\s*\("""         # .write(
+    r"""|\.writelines\s*\("""    # .writelines(
+    r"""|os\.rename\s*\("""      # os.rename(
+    r"""|os\.remove\s*\("""      # os.remove(
+    r"""|shutil\.""",            # shutil.copy/move/rmtree/etc.
+    re.IGNORECASE,
+)
+
+
+def _is_segment_write_safe(segment: str) -> bool:
+    """Check if a single command segment has NO positive write indicators.
+
+    Returns True if the segment appears to be non-writing (safe for
+    reviewer-session exemption). Returns False if the segment has
+    positive write signals (redirects, file-mutating commands, etc.).
+    """
+    segment = segment.strip()
+    if not segment:
+        return True
+
+    # Stdout file redirect → writing
+    if _has_stdout_file_redirect(segment):
+        return False
+
+    first = _first_word(segment)
+
+    # Control-flow keywords — structural, check body
+    if first in _CONTROL_FLOW_STANDALONE:
+        return True
+    if first in _CONTROL_FLOW_PREFIX:
+        remainder = segment[len(first):].strip()
+        if not remainder:
+            return True
+        return _is_segment_write_safe(remainder)
+
+    base = os.path.basename(first)
+
+    # File-mutating commands
+    if base in _FILE_MUTATING_CMDS:
+        return False
+
+    # Python inline code with write indicators
+    if base in ('python3', 'python'):
+        if re.match(r'^python3?\s+-c\s+', segment):
+            # Check the ENTIRE segment for write patterns — extracting
+            # the -c argument is unreliable with nested quotes. Checking
+            # the whole segment is safe: write-indicator patterns (open(,'w'),
+            # .write(, shutil.) don't appear in normal -c flag syntax.
+            if _PYTHON_INLINE_WRITE_RE.search(segment):
+                return False
+
+    # find with -delete or destructive -exec
+    if base == 'find':
+        if '-delete' in segment:
+            return False
+        exec_match = re.findall(r'-exec\s+(\S+)', segment)
+        for cmd_name in exec_match:
+            cmd_base = os.path.basename(cmd_name)
+            if cmd_base in _FILE_MUTATING_CMDS or cmd_base in ('rm', 'mv', 'cp'):
+                return False
+
+    return True
+
+
+def is_bash_entry_write_safe(command: str) -> bool:
+    """Return True if a Bash command has NO positive write indicators.
+
+    More permissive than is_read_only_bash() — passes unknown scripts
+    (python3 foo.py) that lack write signals. Used for session-level
+    reviewer Bash exemption (RGH-11).
+
+    Returns False (NOT write-safe) for empty/missing commands — fail-closed
+    on missing bash_cmd field in pre-RGH-11 ledger entries (minor-2).
+    """
+    if not command or not command.strip():
+        return False  # fail-closed: missing command → not exempt
+    segments = split_compound(command.strip())
+    for segment in segments:
+        if not _is_segment_write_safe(segment):
+            return False
+    return True
+
+
+# ============================================================================
+# Session-level reviewer detection (RGH-11)
+# ============================================================================
+#
+# Classifies a session's role as 'reviewer' or 'producer' based on a
+# structural marker file written by the dispatch mechanism
+# (register-reviewer-session.py), not a self-declared flag.
+#
+# SAFETY: The marker does NOT grant blanket exemption. Only Bash entries
+# without positive write indicators and known reviewer working-doc entries
+# are exempt. Deliverable-class Write/Edit ALWAYS gates regardless of
+# session role. See check_gate() for the scoped exemption logic.
+
+
+def classify_session_role(state_dir: str, session_id: str) -> str:
+    """Classify a session's role as 'reviewer' or 'producer'.
+
+    Returns 'reviewer' only if ALL of:
+    1. Marker file exists at <state_dir>/<session>-role.json
+    2. Marker has role='reviewer'
+    3. reviewing_session is present and != session_id (no self-review)
+
+    Returns 'producer' in all other cases (fail-closed).
+    """
+    marker_path = os.path.join(state_dir, f'{session_id}-role.json')
+    if not os.path.isfile(marker_path):
+        return 'producer'
+
+    try:
+        with open(marker_path, 'r') as f:
+            marker = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return 'producer'
+
+    if not isinstance(marker, dict):
+        return 'producer'
+
+    if marker.get('role') != 'reviewer':
+        return 'producer'
+
+    reviewing = marker.get('reviewing_session')
+    if not isinstance(reviewing, str):
+        return 'producer'
+    reviewing = reviewing.strip()
+    if not reviewing or reviewing == session_id:
+        return 'producer'
+
+    return 'reviewer'
+
+
+# ============================================================================
 # Per-project configuration (RGH-4)
 # ============================================================================
 
@@ -609,6 +768,7 @@ _REVIEWER_ARTIFACT_RE = re.compile('|'.join(REVIEWER_ARTIFACT_PATH_PATTERNS))
 GATE_CLEARING_SCRIPT_BASENAMES = frozenset({
     'log-review-pass.py',
     'gate-skip.py',
+    'register-reviewer-session.py',
 })
 
 
@@ -679,12 +839,11 @@ def classify_entry_source(file_path: str, tool_name: str,
     - BLOCKING-4: Execution-log patterns match anywhere in path, not just
       under execution-logs/ directory.
 
-    HONEST LIMIT (MAJOR-5, deferred): Reviewer Bash commands (test runs,
-    greps, probes) are classified as 'producer' unless they match the
-    gate-clearing check. Full reviewer-session inference requires session-
-    level tagging (not yet implemented). Until then, reviewer sessions that
-    run non-write Bash commands may still need manual gate-skip for those
-    entries. Tracked as a named deferral.
+    RESOLVED (RGH-11): Session-level reviewer tagging implemented via
+    classify_session_role() + is_bash_entry_write_safe(). Reviewer sessions
+    registered via register-reviewer-session.py have their write-safe Bash
+    automatically exempted in check_gate(). Deliverable Write/Edit still
+    gates regardless of session role (no producer bypass).
 
     Args:
         file_path: The normalized file path or BASH:<hash> key.
@@ -1076,6 +1235,33 @@ def check_gate(
                         e.get('entry_source') for e in unreviewed
                         if e.get('entry_source', 'producer') in _EXEMPT_ENTRY_SOURCES
                     ]})
+    # Session-level reviewer exemption (RGH-11): for confirmed reviewer
+    # sessions, exempt Bash entries WITHOUT positive write indicators.
+    # Deliverable-class Write/Edit still gates regardless of session role.
+    # This closes the MAJOR-5 honest limit from RGH-10 where a separate-
+    # session reviewer's inspection Bash (engine.py, test runs, greps)
+    # was classified as producer and re-triggered the gate.
+    session_role = classify_session_role(state_dir, session_id)
+    session_exempt_keys = set()  # track exempted file_paths for RGH-5 filter
+    if session_role == 'reviewer' and unreviewed_producer:
+        still_gated = []
+        session_exempt = 0
+        for e in unreviewed_producer:
+            fp = e.get('file_path', '')
+            if fp.startswith('BASH:'):
+                # Only exempt Bash entries without positive write indicators
+                raw_cmd = e.get('bash_cmd', e.get('display', ''))
+                if is_bash_entry_write_safe(raw_cmd):
+                    session_exempt += 1
+                    session_exempt_keys.add(fp)
+                    continue  # exempt: reviewer inspection command
+            still_gated.append(e)
+        if session_exempt > 0:
+            log_metrics(state_dir, session_id, 'session-reviewer-exempt',
+                        session_exempt, 'n/a', 0,
+                        extra={'session_role': 'reviewer'})
+        unreviewed_producer = still_gated
+
     unreviewed = unreviewed_producer
 
     if not unreviewed:
@@ -1085,6 +1271,7 @@ def check_gate(
         producer_dirty = [
             e for e in dirty_entries
             if e.get('entry_source', 'producer') not in _EXEMPT_ENTRY_SOURCES
+            and e.get('file_path', '') not in session_exempt_keys
         ]
         if producer_dirty:
             tier = determine_review_tier(producer_dirty)
