@@ -22,19 +22,20 @@
 │  - Verdict-file validation                           │
 │  - Metrics logging                                   │
 │  - Block-message formatting                          │
-└────────────┬─────────────────────┬────────────────────┘
-             │                     │
-    ┌────────▼────────┐  ┌────────▼─────────────┐
-    │  CC Adapter      │  │  Git Hook Adapter     │
-    │  (Tier A)        │  │  (Tier B)             │
-    │                  │  │                       │
-    │  Discovers via:  │  │  Discovers via:       │
-    │  PostToolUse     │  │  git diff --cached    │
-    │  hook stdin      │  │                       │
-    │                  │  │  Blocks via:          │
-    │  Blocks via:     │  │  exit 1 (pre-commit)  │
-    │  exit 2 (Stop)   │  │                       │
-    └──────────────────┘  └───────────────────────┘
+└────────────┬──────────────┬──────────────┬───────────┘
+             │              │              │
+    ┌────────▼──────┐ ┌────▼────────┐ ┌───▼──────────────┐
+    │ CC Adapter    │ │ Git Hook    │ │ Hermes Daemon    │
+    │ (Tier A)      │ │ (Tier B)    │ │ (Tier C)         │
+    │               │ │             │ │                  │
+    │ Discovers via:│ │ Discovers:  │ │ Discovers via:   │
+    │ PostToolUse   │ │ git diff    │ │ filesystem diff  │
+    │ hook stdin    │ │ --cached    │ │ (before/after)   │
+    │               │ │             │ │                  │
+    │ Blocks via:   │ │ Blocks via: │ │ Blocks via:      │
+    │ exit 2 (Stop) │ │ exit 1      │ │ halt run +       │
+    │               │ │ (pre-commit)│ │ escalation file  │
+    └───────────────┘ └─────────────┘ └──────────────────┘
 ```
 
 ## Two Questions Every Adapter Answers
@@ -48,7 +49,7 @@ then delegates all logic to `engine.py`:
 |---|---|
 | **Claude Code (Tier A)** | `PostToolUse` hook stdin → JSON with `tool_name`, `tool_input` → extract `file_path` |
 | **Git hook (Tier B)** | `git diff --cached --name-only` → staged file list cross-referenced against dirty ledger |
-| **Hermes daemon (Tier C, future)** | Supervisor polls work dir or reads agent output log |
+| **Hermes daemon (Tier C)** | Filesystem diff: snapshot workspace before agent run, snapshot after, diff content hashes → new/modified files become dirty entries. No PostToolUse hook exists on the VPS — the adapter wraps the agent invocation and discovers artifacts structurally. |
 | **Codex (future)** | Inherits Tier B for free (commits go through git hook) |
 
 ### (b) How do I block "done"?
@@ -57,7 +58,7 @@ then delegates all logic to `engine.py`:
 |---|---|---|
 | **Claude Code** | `sys.exit(2)` on Stop hook → CC blocks the turn | 2 |
 | **Git hook** | `sys.exit(1)` on pre-commit → git refuses the commit | 1 |
-| **Hermes daemon (future)** | Supervisor marks run as failed / holds deployment | TBD |
+| **Hermes daemon** | Supervisor halts the run + writes escalation file to `_meta/escalations/` + logs `peer-reviewer-skipped` event if reviewer unavailable. Run does NOT advance. | 1 (halted), 2 (error) |
 
 ## Engine API (public surface)
 
@@ -140,7 +141,7 @@ State files:
 Session IDs are substrate-scoped:
 - CC sessions: UUID (assigned by Claude Code)
 - Git hook: `git-<branch>-<YYYY-MM-DD>` (deterministic)
-- Hermes (future): `hermes-<run-id>`
+- Hermes daemon: `hermes-<run-id>` (run_id passed by caller or auto-generated)
 
 ## Source tagging
 
@@ -148,6 +149,7 @@ Every dirty entry carries a `source` field:
 - `'claude-code'` — CC PostToolUse adapter (default)
 - `'git-hook'` — reserved for future git hook writes (currently read-only — no entries produced)
 - `'cowork'` — Cowork sessions (env override)
+- `'hermes'` — Hermes daemon adapter (Tier C). Written by the daemon's filesystem-diff discovery.
 - `''` — legacy entries (treated as claude-code by CC adapter)
 
 The CC Stop adapter filters on `included_sources={'claude-code', ''}`.
@@ -172,6 +174,7 @@ against its **real surface** (not a simulated harness):
 |---|---|---|
 | Claude Code (Tier A) | `test_conformance.py` | 79 tests |
 | Git hook (Tier B) | `test_git_hook_conformance.py` | 24 tests (incl. real `git commit` + OC-16 integration) |
+| Hermes daemon (Tier C) | `test_hermes_daemon_conformance.py` | 28 tests (local-logic: real filesystem + subprocess). Operator-run VPS acceptance tests documented in `DEPLOYMENT.md`. |
 
 ### Adding a new adapter
 
@@ -189,6 +192,10 @@ against its **real surface** (not a simulated harness):
 - **`--no-verify` bypasses the git hook.** This is standard git behavior and
   cannot be prevented. The bypass is documented but not audited at the git
   level (unlike `gate-skip.py` which writes event-log rows).
-- **The verdict file is model-authored.** Until the reviewer runs as an
-  isolated process (Phase 5), the producing model can author the verdict.
-  The operator remains the integrity backstop.
+- **The verdict file is model-authored (Tiers A/B).** For Claude Code and
+  git-hook adapters, the producing model can author the verdict until Phase 5
+  auto-dispatch lands. The operator remains the integrity backstop.
+- **Tier C closes this gap.** The Hermes daemon adapter spawns the reviewer as
+  a separate OS process (different PID, no shared memory). The producing agent
+  never sees or writes the verdict file — the daemon captures it and writes
+  the review-pass marker. This is the strongest independence form.
