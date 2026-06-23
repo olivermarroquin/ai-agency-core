@@ -935,6 +935,118 @@ def apply_proposals(ctx: PageContext, proposals: list[Proposal]) -> Path:
 
 
 # ----------------------------------------------------------------------------
+# Fixed-list model — cross-page navigation (Axis N)
+# ----------------------------------------------------------------------------
+
+
+def load_page_model(business_type: str) -> dict:
+    """Load the page-model.json for a business type from the profiles dir."""
+    profile_path = SCRIPTS_DIR / "profiles" / business_type / "page-model.json"
+    if not profile_path.is_file():
+        return {}
+    return json.loads(profile_path.read_text(encoding="utf-8"))
+
+
+def detect_fixed_list_context(
+    folder: Path,
+    page_model: dict,
+) -> Optional[PageContext]:
+    """Derive page identity for a fixed-list page from its folder + HTML.
+
+    Fixed-list pages use the convention `<slug>.html` or `<NN>-<slug>/`
+    with a draft-vN-WP-WRAPPED.html inside. The slug matches a page in
+    the page_model's pages[] list.
+    """
+    # Try folder convention first (NN-slug/)
+    m = re.match(r"^\d{2}-(.+)$", folder.name)
+    page_slug = m.group(1) if m else folder.name
+
+    # Verify it's in the page model
+    known_slugs = {p["slug"] for p in page_model.get("pages", [])}
+    if page_slug not in known_slugs:
+        # Try matching just the slug without position prefix
+        for p in page_model.get("pages", []):
+            if folder.name == p["slug"] or folder.name.endswith(f"-{p['slug']}"):
+                page_slug = p["slug"]
+                break
+        else:
+            return None
+
+    # Find the HTML file
+    def _ver(p: Path) -> int:
+        vm = re.match(r"draft-v(\d+)-WP-WRAPPED\.html$", p.name)
+        return int(vm.group(1)) if vm else -1
+
+    drafts = sorted(folder.glob("draft-v*-WP-WRAPPED.html"), key=_ver)
+    if not drafts:
+        # Try bare <slug>.html in the folder or parent
+        bare = folder / f"{page_slug}.html"
+        if not bare.is_file():
+            bare = folder.parent / f"{page_slug}.html"
+        if not bare.is_file():
+            return None
+        html_path = bare
+    else:
+        html_path = drafts[-1]
+
+    html = html_path.read_text(encoding="utf-8")
+    return PageContext(
+        folder=folder,
+        page_slug=page_slug,
+        service_slug="",  # No service concept in fixed-list
+        city_slug="",     # No city concept in fixed-list
+        html_path=html_path,
+        html_content=html,
+    )
+
+
+def check_axis_n(
+    ctx: PageContext,
+    page_model: dict,
+    corpus_destinations: set[str],
+) -> list[Proposal]:
+    """Axis N — fixed-list cross-page navigation.
+
+    For each page in the page model, propose a link from the current page
+    to every other page that isn't already linked. This is the restaurant
+    equivalent of Axis A+B: instead of service×city cross-linking, it's
+    page-to-page navigation within a flat site.
+    """
+    proposals: list[Proposal] = []
+    pages = page_model.get("pages", [])
+
+    for page in pages:
+        target_slug = page["slug"]
+        if target_slug == ctx.page_slug:
+            continue  # Skip self-link
+
+        href = f"/{target_slug}/"
+        if href in ctx.html_content:
+            continue  # Already linked
+
+        title = page.get("title_template", target_slug)
+        role = page.get("role", "")
+
+        # Determine status based on whether the page exists
+        status = "actionable" if target_slug in corpus_destinations else "future-page"
+
+        proposals.append(
+            Proposal(
+                axis="N",
+                type="insert-block",
+                page_slug=ctx.page_slug,
+                rationale=f"Axis N (cross-page navigation): {role} page '{target_slug}' not linked from {ctx.page_slug}",
+                anchor_text=title,
+                destination_href=href,
+                location_hint="navigation section or footer",
+                after=f'<a href="{href}">{title}</a>',
+                status=status,
+            )
+        )
+    return proposals
+
+
+# ----------------------------------------------------------------------------
 # Main
 # ----------------------------------------------------------------------------
 
@@ -1000,6 +1112,12 @@ def main() -> int:
         help="Disable geographic-adjacency sorting on Axis A (default: ON when "
              "data/cities-coordinates.json exists). Falls back to build-order order.",
     )
+    parser.add_argument(
+        "--business-type",
+        default="electrician",
+        help="Business type. 'electrician' uses the matrix model (Axes A/B/C/D). "
+             "Any other type uses the fixed-list model (Axis N cross-page + D semantic).",
+    )
     args = parser.parse_args()
 
     if not args.page_folder and not args.corpus_root:
@@ -1007,16 +1125,28 @@ def main() -> int:
     if args.apply and not args.page_folder:
         parser.error("--apply requires --page-folder (operator confirms per page).")
 
-    if not args.reference_architecture.is_file():
+    is_matrix = args.business_type == "electrician"
+
+    if is_matrix and not args.reference_architecture.is_file():
         sys.stderr.write(f"ERROR: reference architecture not found: {args.reference_architecture}\n")
         return 2
 
-    # Build-order drives Axis A
+    # Build-order drives Axis A (matrix only)
     build_order_pairs: list[tuple[str, str]] = []
-    if args.build_order and args.build_order.is_file():
+    if is_matrix and args.build_order and args.build_order.is_file():
         build_order_pairs = parse_build_order(args.build_order)
 
     category_hubs_live = set(args.category_hubs_live)
+
+    # Fixed-list page model (non-matrix types)
+    page_model: dict = {}
+    if not is_matrix:
+        page_model = load_page_model(args.business_type)
+        if not page_model:
+            sys.stderr.write(
+                f"ERROR: no page-model.json found for business_type={args.business_type!r}\n"
+            )
+            return 2
 
     targets: list[Path] = []
     if args.page_folder:
@@ -1032,6 +1162,10 @@ def main() -> int:
     # the future-page-candidates section instead.
     corpus_root = args.corpus_root or (args.page_folder.parent if args.page_folder else None)
     corpus_destinations = discover_corpus_destinations(corpus_root) if corpus_root else set()
+    # For fixed-list mode, also add page slugs from the page model
+    if not is_matrix and page_model:
+        for pg in page_model.get("pages", []):
+            corpus_destinations.add(pg["slug"])
 
     # Anchor-usage pre-scan — drives anchor-text rotation across the corpus.
     rotate_anchors = not args.no_anchor_rotation
@@ -1039,9 +1173,9 @@ def main() -> int:
     if rotate_anchors and corpus_root:
         anchor_usage = scan_corpus_anchor_usage(corpus_root)
 
-    # Geographic-adjacency map for Axis A.
+    # Geographic-adjacency map for Axis A (matrix only).
     city_coords: dict[str, tuple[float, float]] = {}
-    if not args.no_geo_adjacency:
+    if is_matrix and not args.no_geo_adjacency:
         city_coords = load_city_coordinates()
 
     overall = {"pages": 0, "actionable_total": 0, "future_page_total": 0}
@@ -1050,27 +1184,39 @@ def main() -> int:
     future_page_refs: dict[str, list[str]] = {}
 
     for folder in targets:
-        ctx = detect_page_context(folder)
+        # Detect page context based on the link model
+        if is_matrix:
+            ctx = detect_page_context(folder)
+        else:
+            ctx = detect_fixed_list_context(folder, page_model)
         if not ctx:
-            print(f"[skip] {folder.name}: could not detect (service, city) from folder + drafts")
+            print(f"[skip] {folder.name}: could not detect page identity from folder + drafts")
             continue
         overall["pages"] += 1
 
         proposals: list[Proposal] = []
-        if args.mode in ("data-driven", "both"):
-            proposals.extend(check_axis_b(
-                ctx, corpus_destinations,
-                anchor_usage=anchor_usage, rotate_anchors=rotate_anchors,
-            ))
-            if build_order_pairs:
-                proposals.extend(check_axis_a(
-                    ctx, build_order_pairs, corpus_destinations,
+        if is_matrix:
+            # Matrix model: Axes A/B/C (data-driven) + D (semantic)
+            if args.mode in ("data-driven", "both"):
+                proposals.extend(check_axis_b(
+                    ctx, corpus_destinations,
                     anchor_usage=anchor_usage, rotate_anchors=rotate_anchors,
-                    city_coords=city_coords,
                 ))
-            proposals.extend(check_axis_c(ctx, category_hubs_live))
-        if args.mode in ("semantic", "both"):
-            proposals.extend(check_axis_d(ctx, corpus_destinations))
+                if build_order_pairs:
+                    proposals.extend(check_axis_a(
+                        ctx, build_order_pairs, corpus_destinations,
+                        anchor_usage=anchor_usage, rotate_anchors=rotate_anchors,
+                        city_coords=city_coords,
+                    ))
+                proposals.extend(check_axis_c(ctx, category_hubs_live))
+            if args.mode in ("semantic", "both"):
+                proposals.extend(check_axis_d(ctx, corpus_destinations))
+        else:
+            # Fixed-list model: Axis N (cross-page) + D (semantic)
+            if args.mode in ("data-driven", "both"):
+                proposals.extend(check_axis_n(ctx, page_model, corpus_destinations))
+            if args.mode in ("semantic", "both"):
+                proposals.extend(check_axis_d(ctx, corpus_destinations))
 
         actionable = [p for p in proposals if p.status == "actionable"]
         future_page = [p for p in proposals if p.status == "future-page"]
@@ -1092,12 +1238,21 @@ def main() -> int:
         else:
             json_path, md_path = write_diff(ctx, proposals)
             future_note = f" + {len(future_page)} future-page" if future_page else ""
+            if is_matrix:
+                axis_counts = (
+                    f"A={sum(1 for p in actionable if p.axis=='A')}, "
+                    f"B={sum(1 for p in actionable if p.axis=='B')}, "
+                    f"C={sum(1 for p in actionable if p.axis=='C')}, "
+                    f"D={sum(1 for p in actionable if p.axis=='D')}"
+                )
+            else:
+                axis_counts = (
+                    f"N={sum(1 for p in actionable if p.axis=='N')}, "
+                    f"D={sum(1 for p in actionable if p.axis=='D')}"
+                )
             print(
                 f"[propose] {ctx.page_slug}: {len(actionable)} actionable "
-                f"(A={sum(1 for p in actionable if p.axis=='A')}, "
-                f"B={sum(1 for p in actionable if p.axis=='B')}, "
-                f"C={sum(1 for p in actionable if p.axis=='C')}, "
-                f"D={sum(1 for p in actionable if p.axis=='D')})"
+                f"({axis_counts})"
                 f"{future_note}  → {md_path.name}"
             )
 

@@ -498,17 +498,13 @@ def extract_no_trip_charge_cities(brief: Brief) -> list[str]:
     return []
 
 
-def extract_other_areas_paragraph(brief: Brief) -> Optional[str]:
+def extract_other_areas_paragraph(brief: Brief, href_prefix: str = "") -> Optional[str]:
     """§9 — the prose paragraph with bracket-links. Convert [[slug|Text]] and
     [[slug]] wikilinks to HTML <a href="/...path.../">Text</a>.
 
-    The existing vienna-va.json uses paths like
-    `/electrical-troubleshooting-fairfax-va/`. That's service-specific —
-    converting wikilinks to those exact paths requires knowing the page-slug
-    template for each service. For Phase 3b we keep the bracket-link form
-    in the JSON (operator can swap to HTML when authoring page-specific
-    overrides) but also emit a heuristic HTML form when the wikilink target
-    looks like a city slug.
+    `href_prefix` is passed through to `convert_wikilinks_to_html` to control
+    the generated href paths. When empty, produces neutral `/{slug}/` hrefs.
+    When set (e.g. "electrical-troubleshooting"), produces `/{prefix}-{slug}/`.
     """
     body = brief.sections.get("9", "")
     for label in (
@@ -518,40 +514,31 @@ def extract_other_areas_paragraph(brief: Brief) -> Optional[str]:
     ):
         v = extract_blockquote_after(label, body)
         if v:
-            return convert_wikilinks_to_html(v)
+            return convert_wikilinks_to_html(v, href_prefix=href_prefix)
     return None
 
 
-def convert_wikilinks_to_html(text: str) -> str:
+def convert_wikilinks_to_html(text: str, href_prefix: str = "") -> str:
     """Convert `[[slug|Display]]` and `[[slug]]` to <a href="..."> tags.
 
-    The existing JSON uses service-templated hrefs like
-    `/electrical-troubleshooting-fairfax-va/`. The brief itself doesn't know
-    which service the page will be — so we emit a city-slug-relative href
-    placeholder of the form `/CITY-PAGE-{slug}/` that the operator can
-    search-and-replace per service, OR we keep the wikilink form as a
-    fallback. The current pragmatic choice is to leave wikilinks in place
-    when the target slug isn't a clearly-resolvable city slug.
+    `href_prefix` is the service-slug prefix for the generated hrefs.
+    When empty (default), produces neutral `/{slug}/` hrefs the operator
+    overrides per page. When set (e.g. "electrical-troubleshooting"),
+    produces `/{prefix}-{slug}/`.
 
-    For the Vienna brief's specific phrasing
-    (`[[fairfax-va|Fairfax]]`, `[[mclean-va|McLean]]`), we produce
-    `<a href="/electrical-troubleshooting-<slug>/">Display</a>` IF the
-    service is known. Phase 3b doesn't know the service — so we emit a
-    neutral href the operator overrides per page. The downstream consumer
-    template will substitute the service prefix at render time when this
-    JSON gets wired into the per-page templates.
+    The downstream consumer template can substitute the service prefix at
+    render time when this JSON gets wired into the per-page templates.
     """
-    def repl(m: re.Match[str]) -> str:
-        target = m.group(1)
-        display = m.group(2) if m.group(2) else target
-        # Emit a city-slug placeholder href the operator can swap per service
-        return f'<a href="/electrical-troubleshooting-{target}/">{display}</a>'
+    def _make_href(target: str) -> str:
+        if href_prefix:
+            return f"/{href_prefix}-{target}/"
+        return f"/{target}/"
 
     return re.sub(r"\[\[([^|\]]+)\|([^\]]+)\]\]|\[\[([^\]]+)\]\]",
                   lambda m: (
-                      f'<a href="/electrical-troubleshooting-{m.group(1)}/">{m.group(2)}</a>'
+                      f'<a href="{_make_href(m.group(1))}">{m.group(2)}</a>'
                       if m.group(1) and m.group(2)
-                      else f'<a href="/electrical-troubleshooting-{m.group(3)}/">{m.group(3)}</a>'
+                      else f'<a href="{_make_href(m.group(3))}">{m.group(3)}</a>'
                   ),
                   text)
 
@@ -765,7 +752,7 @@ def extract_distilled_questions(brief: Brief) -> list[dict[str, str]]:
 # ----------------------------------------------------------------------------
 
 
-def build_city_block(brief: Brief) -> dict[str, Any]:
+def build_city_block(brief: Brief, href_prefix: str = "") -> dict[str, Any]:
     """Top-level city-only fields from the city brief."""
     out: dict[str, Any] = {
         "_comment": (
@@ -801,7 +788,7 @@ def build_city_block(brief: Brief) -> dict[str, Any]:
     if neighborhoods:
         out["neighborhoods"] = neighborhoods
 
-    other_areas = extract_other_areas_paragraph(brief)
+    other_areas = extract_other_areas_paragraph(brief, href_prefix=href_prefix)
     if other_areas:
         out["other_areas_paragraph"] = other_areas
 
@@ -1017,7 +1004,7 @@ def assemble_final_json(
 # ----------------------------------------------------------------------------
 
 
-_REQUIRED_TOP_LEVEL = {
+_REQUIRED_TOP_LEVEL_UNIVERSAL = {
     "slug": str,
     "name": str,
     "name_with_state": str,
@@ -1031,6 +1018,10 @@ _REQUIRED_TOP_LEVEL = {
     "no_trip_charge_cities": list,
     "neighborhoods": list,
     "other_areas_paragraph": str,
+}
+
+# Fields required only for matrix/electrician-type city data
+_REQUIRED_TOP_LEVEL_MATRIX = {
     "housing_patterns": list,
     "quick_ref_localized_items": dict,
     "most_common_problem_paragraph": dict,
@@ -1041,12 +1032,25 @@ _REQUIRED_TOP_LEVEL = {
 }
 
 
-def validate_shape(city_json: dict[str, Any]) -> tuple[list[str], list[str]]:
-    """Return (errors, warnings). Errors block; warnings just notify."""
+def validate_shape(city_json: dict[str, Any], business_type: str = "electrician") -> tuple[list[str], list[str]]:
+    """Return (errors, warnings). Errors block; warnings just notify.
+
+    business_type controls which fields are required:
+      - Universal fields are always required.
+      - Matrix-specific fields (housing_patterns, ev_*, service-keyed dicts)
+        are required only for matrix-type business types (e.g. electrician).
+        Non-matrix types (e.g. restaurant) skip them.
+    """
     errors: list[str] = []
     warnings: list[str] = []
 
-    for field_name, expected_type in _REQUIRED_TOP_LEVEL.items():
+    # Always validate universal fields
+    required = dict(_REQUIRED_TOP_LEVEL_UNIVERSAL)
+    # Matrix-type business types also require the service-keyed fields
+    if business_type == "electrician":
+        required.update(_REQUIRED_TOP_LEVEL_MATRIX)
+
+    for field_name, expected_type in required.items():
         if field_name not in city_json:
             errors.append(f"missing field: {field_name}")
             continue
@@ -1061,13 +1065,13 @@ def validate_shape(city_json: dict[str, Any]) -> tuple[list[str], list[str]]:
         if not isinstance(n, dict) or "name" not in n or "blurb" not in n:
             errors.append(f"neighborhoods[{i}] missing 'name' or 'blurb'")
 
-    # Housing patterns shape check
+    # Housing patterns shape check (only if present — non-matrix types may omit)
     for i, p in enumerate(city_json.get("housing_patterns", []) or []):
         for k in ("title", "neighborhood_examples", "context_paragraph", "symptoms"):
             if k not in p:
                 errors.append(f"housing_patterns[{i}] missing '{k}'")
 
-    # Service-keyed quick_ref shape check
+    # Service-keyed quick_ref shape check (only if present)
     for svc, items in (city_json.get("quick_ref_localized_items") or {}).items():
         if not isinstance(items, list):
             errors.append(f"quick_ref_localized_items[{svc}] is not a list")
@@ -1220,6 +1224,22 @@ def main() -> int:
         "--dry-run", action="store_true",
         help="Render and validate but don't write the file.",
     )
+    p.add_argument(
+        "--href-prefix", default="",
+        help=(
+            "Service-slug prefix for wikilink-to-HTML conversion in "
+            "other_areas_paragraph. E.g. 'electrical-troubleshooting' produces "
+            "hrefs like /electrical-troubleshooting-fairfax-va/. "
+            "Default: empty (neutral /{slug}/ hrefs)."
+        ),
+    )
+    p.add_argument(
+        "--business-type", default="electrician",
+        help=(
+            "Business type for validation. Controls which fields are required. "
+            "Default: electrician (requires EV fields, housing_patterns, etc.)."
+        ),
+    )
 
     args = p.parse_args()
 
@@ -1232,7 +1252,7 @@ def main() -> int:
     city_brief = parse_brief(city_brief_path)
 
     # --- Build the city-only top-level block
-    city_block = build_city_block(city_brief)
+    city_block = build_city_block(city_brief, href_prefix=args.href_prefix)
     city_name = city_block.get("name_with_state") or city_block.get("name") or args.output_slug
 
     # --- Resolve intersection brief paths and parse them
@@ -1320,7 +1340,7 @@ def main() -> int:
     final = ordered
 
     # --- Validate
-    errors, warnings = validate_shape(final)
+    errors, warnings = validate_shape(final, business_type=args.business_type)
     for w in warnings:
         sys.stderr.write(f"WARN: {w}\n")
     if errors:

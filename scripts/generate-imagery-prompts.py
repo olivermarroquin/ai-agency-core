@@ -513,7 +513,11 @@ def _normalize_service_slug(slug: str) -> str:
     return s
 
 
-SERVICE_FALLBACK_ACTIONS: dict[str, dict[str, str]] = {
+# Default service → action mapping for electrician business type.
+# Override by passing --service-prompts-file with a JSON of the same shape.
+# Restaurant (or any non-electrician) type profiles should ship their own
+# prompts file at profiles/<type>/assets/service-prompts.json.
+_ELECTRICIAN_SERVICE_ACTIONS: dict[str, dict[str, str]] = {
     "troubleshooting": {
         "hero_action": "mid-action at an open residential electrical panel, holding a digital "
                        "multimeter probe to a circuit breaker, examining a reading",
@@ -556,6 +560,17 @@ SERVICE_FALLBACK_ACTIONS: dict[str, dict[str, str]] = {
                          "ceiling, indicator light visible",
     },
 }
+
+# Active lookup table — replaced at runtime when --service-prompts-file is given.
+SERVICE_FALLBACK_ACTIONS: dict[str, dict[str, str]] = dict(_ELECTRICIAN_SERVICE_ACTIONS)
+
+
+def load_service_prompts_file(path: Path) -> dict[str, dict[str, str]]:
+    """Load an external service-prompts JSON and replace SERVICE_FALLBACK_ACTIONS."""
+    global SERVICE_FALLBACK_ACTIONS
+    data = json.loads(path.read_text(encoding="utf-8"))
+    SERVICE_FALLBACK_ACTIONS = data
+    return data
 
 
 # Embroidered-no-patch wardrobe clause (Issue #20). Any prompt that may show
@@ -1197,7 +1212,19 @@ def main() -> int:
                     help=f"Research-briefs root (default: {DEFAULT_BRIEFS_ROOT})")
     ap.add_argument("--core-30-root", type=Path, default=None,
                     help="Core-30 root to scan for prior logs (default: derived from page-folder).")
+    ap.add_argument("--service-prompts-file", type=Path, default=None,
+                    help="JSON file with service→action prompt mappings (same shape as "
+                         "SERVICE_FALLBACK_ACTIONS). Overrides the built-in electrician defaults. "
+                         "Use profiles/<type>/assets/service-prompts.json for non-electrician types.")
     args = ap.parse_args()
+
+    # Load external service prompts if provided
+    if args.service_prompts_file:
+        if not args.service_prompts_file.is_file():
+            fatal(f"--service-prompts-file not found: {args.service_prompts_file}")
+        load_service_prompts_file(args.service_prompts_file)
+        info(f"loaded service prompts from {args.service_prompts_file} "
+             f"({len(SERVICE_FALLBACK_ACTIONS)} services)")
 
     page_folder = args.page_folder.expanduser().resolve()
     if not page_folder.is_dir():

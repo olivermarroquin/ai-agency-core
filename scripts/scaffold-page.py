@@ -705,39 +705,78 @@ def _validate_internal_links(html: str, client_slug: str,
         )
 
 
+def _render_matrix_section(section_key: str, ctx: dict,
+                            hero_image_path: Path | None) -> None:
+    """Render a single matrix section into ctx by key. Generic dispatch — no
+    type-specific logic. The section key names the ctx slot to populate."""
+    if section_key == "hero_image_block":
+        ctx["hero_image_block"] = _render_hero_image_block(ctx, hero_image_path)
+    elif section_key == "what_it_means_paragraphs_html":
+        ctx["what_it_means_paragraphs_html"] = _render_template_items(
+            "paragraph-indented-8.html.tmpl",
+            ctx["_service"]["what_it_means_paragraphs"], ctx)
+    elif section_key == "quick_ref_items_html":
+        ctx["quick_ref_items_html"] = _render_quick_ref_items(ctx)
+    elif section_key == "pattern_cards_html":
+        ctx["pattern_cards_html"] = _render_template_items(
+            "pattern-card.html.tmpl", ctx["_city"]["housing_patterns"], ctx)
+    elif section_key == "problem_cards_html":
+        ctx["problem_cards_html"] = _render_template_items(
+            "problem-card.html.tmpl", ctx["_service"]["problem_cards"], ctx)
+    elif section_key == "process_steps_html":
+        ctx["process_steps_html"] = _render_template_items(
+            "process-step.html.tmpl", ctx["_service"]["process_steps"], ctx,
+            enumerate_key="step_number")
+    elif section_key == "pricing_items_html":
+        ctx["pricing_items_html"] = _render_template_items(
+            "pricing-item.html.tmpl", ctx["_service"]["pricing_items"], ctx)
+    elif section_key == "about_text_paragraphs_html":
+        ctx["about_text_paragraphs_html"] = _render_template_items(
+            "paragraph-indented-10.html.tmpl",
+            ctx["_service"]["about_text_paragraphs"], ctx)
+    elif section_key == "neighborhoods_list_html":
+        ctx["neighborhoods_list_html"] = _render_template_items(
+            "neighborhood-item.html.tmpl", ctx["_city"]["neighborhoods"], ctx)
+    elif section_key == "related_cards_html":
+        ctx["related_cards_html"] = _render_related_cards(ctx)
+    elif section_key == "faq_items_html":
+        ctx["faq_items_html"] = _render_faq_items(ctx)
+    elif section_key == "map_iframe_html":
+        ctx["map_iframe_html"] = _get_map_iframe_html(ctx)
+    else:
+        sys.stderr.write(f"WARN: unknown matrix section key '{section_key}' — skipped\n")
+
+
 def _render_matrix_html(ctx: dict, profile: dict,
                         hero_image_path: Path | None) -> str:
     """Render a matrix page using the page template + generic section renderers.
 
-    The profile declares the page_template; the section templates are loaded
-    from templates/sections/. Zero type-specific literals.
+    The profile declares the page_template and matrix_section_sequence.
+    The section sequence is driven by the profile — a new matrix-type can
+    reorder, add, or omit sections by editing its content-sections.json
+    without any engine changes.
     """
     template_name = profile["content_sections"].get(
         "page_template", "core-30-page.html.tmpl")
     template = load_template(template_name)
 
-    ctx["hero_image_block"] = _render_hero_image_block(ctx, hero_image_path)
-    ctx["what_it_means_paragraphs_html"] = _render_template_items(
-        "paragraph-indented-8.html.tmpl",
-        ctx["_service"]["what_it_means_paragraphs"], ctx)
-    ctx["quick_ref_items_html"] = _render_quick_ref_items(ctx)
-    ctx["pattern_cards_html"] = _render_template_items(
-        "pattern-card.html.tmpl", ctx["_city"]["housing_patterns"], ctx)
-    ctx["problem_cards_html"] = _render_template_items(
-        "problem-card.html.tmpl", ctx["_service"]["problem_cards"], ctx)
-    ctx["process_steps_html"] = _render_template_items(
-        "process-step.html.tmpl", ctx["_service"]["process_steps"], ctx,
-        enumerate_key="step_number")
-    ctx["pricing_items_html"] = _render_template_items(
-        "pricing-item.html.tmpl", ctx["_service"]["pricing_items"], ctx)
-    ctx["about_text_paragraphs_html"] = _render_template_items(
-        "paragraph-indented-10.html.tmpl",
-        ctx["_service"]["about_text_paragraphs"], ctx)
-    ctx["neighborhoods_list_html"] = _render_template_items(
-        "neighborhood-item.html.tmpl", ctx["_city"]["neighborhoods"], ctx)
-    ctx["related_cards_html"] = _render_related_cards(ctx)
-    ctx["faq_items_html"] = _render_faq_items(ctx)
-    ctx["map_iframe_html"] = _get_map_iframe_html(ctx)
+    # Read section sequence from profile (CR-072: profile-declared, not hardcoded)
+    section_sequence = profile["content_sections"].get(
+        "matrix_section_sequence",
+        # Fallback: the original electrician order (backward compat for
+        # profiles that predate the matrix_section_sequence field)
+        [
+            "hero_image_block", "what_it_means_paragraphs_html",
+            "quick_ref_items_html", "pattern_cards_html",
+            "problem_cards_html", "process_steps_html",
+            "pricing_items_html", "about_text_paragraphs_html",
+            "neighborhoods_list_html", "related_cards_html",
+            "faq_items_html", "map_iframe_html",
+        ]
+    )
+
+    for section_key in section_sequence:
+        _render_matrix_section(section_key, ctx, hero_image_path)
 
     html = template.format_map(ctx)
 

@@ -112,6 +112,21 @@
     { "token": "aioseo_additional_keywords",  "source": "service.aioseo_additional_keywords_template" }
   ],
 
+  "matrix_section_sequence": [
+    "hero_image_block",
+    "what_it_means_paragraphs_html",
+    "quick_ref_items_html",
+    "pattern_cards_html",
+    "problem_cards_html",
+    "process_steps_html",
+    "pricing_items_html",
+    "about_text_paragraphs_html",
+    "neighborhoods_list_html",
+    "related_cards_html",
+    "faq_items_html",
+    "map_iframe_html"
+  ],
+
   "sections": {
     "hero": {
       "note": "Hero section with eyebrow, heading, subheading, phone CTA, image. All tokens from template_renders."

@@ -53,9 +53,11 @@ from typing import Any, Optional
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 
-# Service → prompt template. Faceless/topic-class, no owner, no face.
-# Each prompt produces a single hero-slot image for that service.
-SERVICE_PROMPTS = {
+# Default service → prompt template for electrician business type.
+# Faceless/topic-class, no owner, no face.
+# Override by passing --service-prompts-file with a JSON of the same shape
+# (keys = service slugs, values = prompt strings).
+_ELECTRICIAN_HERO_PROMPTS: dict[str, str] = {
     "panel-upgrade": (
         "A freshly installed 200-amp residential electrical panel with the "
         "cover open, showing neatly dressed wires, labeled circuit breakers "
@@ -101,6 +103,9 @@ SERVICE_PROMPTS = {
         "cartoon style, construction mess."
     ),
 }
+
+# Active lookup table — replaced at runtime when --service-prompts-file is given.
+SERVICE_PROMPTS: dict[str, str] = dict(_ELECTRICIAN_HERO_PROMPTS)
 
 
 def parse_build_order(build_order_path: Path) -> dict[int, str]:
@@ -409,8 +414,26 @@ def main() -> int:
     )
     p.add_argument("--variants", type=int, default=4, help="Variants per service (default: 4).")
     p.add_argument("--dry-run", action="store_true")
+    p.add_argument(
+        "--service-prompts-file", type=Path, default=None,
+        help="JSON file with service→prompt mappings (keys = service slugs, "
+             "values = prompt strings). Overrides the built-in electrician "
+             "defaults. Use profiles/<type>/assets/hero-prompts.json for "
+             "non-electrician types.",
+    )
 
     args = p.parse_args()
+
+    # Load external service prompts if provided
+    if args.service_prompts_file:
+        global SERVICE_PROMPTS
+        if not args.service_prompts_file.is_file():
+            sys.stderr.write(f"ERROR: --service-prompts-file not found: {args.service_prompts_file}\n")
+            return 2
+        SERVICE_PROMPTS.clear()
+        SERVICE_PROMPTS.update(json.loads(args.service_prompts_file.read_text(encoding="utf-8")))
+        sys.stderr.write(f"→ Loaded service prompts from {args.service_prompts_file} "
+                         f"({len(SERVICE_PROMPTS)} services)\n")
 
     projects_base = (
         Path.home() / "workspace" / "second-brain" / "04_projects"

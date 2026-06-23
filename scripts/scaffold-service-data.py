@@ -833,12 +833,12 @@ def build_service_data(
     # Hero image alt — derivable from §8 + identity
     if quoted_phrase and name:
         hero_image_alt_template = (
-            f"{{owner_name}}, master electrician, performing a {quoted_phrase} "
+            f"{{owner_name}}, {{owner_title}}, performing a {quoted_phrase} "
             f"in {{city_name_with_state}}"
         )
     else:
         hero_image_alt_template = fill(
-            "Hero image alt — '<{owner_name}>, master electrician, "
+            "Hero image alt — '<{owner_name}>, {owner_title}, "
             "performing a <service> in {city_name_with_state}'."
         )
         mark_authoring("hero_image_alt_template")
@@ -881,7 +881,7 @@ def build_service_data(
 
     # ---------- Quick reference (Section 2 on the page) ----------
     quick_ref_heading_template = (
-        f"Common signs you need a {{city_name}} {lowercase_phrase or 'electrician'}"
+        f"Common signs you need a {{city_name}} {lowercase_phrase or 'professional'}"
     )
     quick_ref_intro = fill(
         "Quick-ref intro — short pitch like 'Six symptoms we see every week. "
@@ -1009,7 +1009,7 @@ def build_service_data(
     mark_authoring("about_text_paragraphs")
 
     about_portrait_alt_template = (
-        "{owner_name}, master electrician at {client_name} serving "
+        "{owner_name}, {owner_title} at {client_name} serving "
         "{city_name_with_state}"
     )
     about_portrait_url_template = (
@@ -1035,7 +1035,7 @@ def build_service_data(
         ]
         mark_authoring("related_cards")
 
-    related_heading_template = "Related electrical services in {city_name}"
+    related_heading_template = "Related services in {city_name}"
     related_intro_template = fill(
         "Related intro — 1-2 sentences connecting this service to the related "
         "cards. See §9 anchor-text patterns and the troubleshooting reference."

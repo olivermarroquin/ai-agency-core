@@ -971,95 +971,123 @@ def build_config_example(client_slug: str, website_url_no_slash: Optional[str]) 
 # The canonical list of credentials the Core 30 pipeline + day-to-day SEO work
 # needs from any client. Each entry produces a checkbox in the stdout checklist
 # AND a section in the tier-3 markdown template.
+#
+# `applies_to`: list of business types this credential applies to.
+#   - ["*"] means universal (all business types).
+#   - ["electrician"] means electrician-only (trade-specific).
+#   Omitted = universal (backward compat).
 CREDENTIALS_CHECKLIST = [
     {
         "key": "wp-admin",
         "label": "WordPress admin login",
         "why": "Create a Keelworks-owned admin user (oliver / oliver@keelworks.ai). Avoids lockout when the client rotates their own password.",
         "fields": ["WP login URL (or /wp-login.php)", "Username", "Password"],
+        "applies_to": ["*"],
     },
     {
         "key": "wp-app-password",
         "label": "WordPress Application Password",
         "why": "Generated at wp-admin → Users → Profile → Application Passwords. Used by publish-core-30-page.py via the WP_APP_PASSWORD env var.",
         "fields": ["Application password value", "Generated date", "WP user it belongs to"],
+        "applies_to": ["*"],
     },
     {
         "key": "hosting-panel",
         "label": "Hosting control panel (Hostinger / WP Engine / etc.)",
         "why": "Needed for stack-level changes — SSL renewal, PHP version, server-side caching, file restore.",
         "fields": ["Provider", "Login URL", "Username", "Password"],
+        "applies_to": ["*"],
     },
     {
         "key": "domain-registrar",
         "label": "Domain registrar",
         "why": "Needed for DNS edits (verification records, MX changes, redirects). Often inside the hosting account but sometimes separate.",
         "fields": ["Registrar", "Login URL", "Username", "Password"],
+        "applies_to": ["*"],
     },
     {
         "key": "dns-provider",
         "label": "DNS provider",
         "why": "Where the nameservers point. Sometimes the registrar, sometimes Cloudflare or hosting-bundled.",
         "fields": ["Provider", "Login URL", "Username", "Password"],
+        "applies_to": ["*"],
     },
     {
         "key": "gbp-manager",
         "label": "Google Business Profile manager access",
         "why": "Manager-level access to the client's GBP via oliver@keelworks.ai. Owner stays the client. See sop-gbp-add-manager.md.",
         "fields": ["GBP owner gmail", "Whether Manager invite was accepted", "GBP profile URL"],
+        "applies_to": ["*"],
     },
     {
         "key": "gsc-owner",
         "label": "Google Search Console Owner access",
         "why": "Owner role (not Full user) on the GSC property for oliver@keelworks.ai. Required for sitemap submission, indexing API setup, structured-data monitoring.",
         "fields": ["GSC property URL", "Current Owner gmail", "Whether oliver@keelworks.ai was added as Owner"],
+        "applies_to": ["*"],
     },
     {
         "key": "ga4-admin",
         "label": "GA4 (Analytics) Administrator access",
         "why": "Admin role on the GA4 property. Required for goal/event setup, audience definitions, integration with Site Kit + GSC.",
         "fields": ["GA4 property ID", "Current Admin gmail", "Whether oliver@keelworks.ai was added as Admin"],
+        "applies_to": ["*"],
     },
     {
         "key": "imagify-license",
         "label": "Imagify license key (or alternative image-optimization plugin)",
         "why": "Used by optimize-image.py / wire-page-images.py to compress hero + section images before upload. Per-site license, paid yearly.",
         "fields": ["License key", "Account email", "Renewal date"],
+        "applies_to": ["*"],
     },
     {
         "key": "email-hosting",
         "label": "Business email account (Contact@<domain>)",
         "why": "Account where customer enquiries land. Needed if Keelworks is replying to leads on the client's behalf during the engagement.",
         "fields": ["Email address", "Login URL", "Password"],
+        "applies_to": ["*"],
     },
     {
         "key": "hirenimbus",
         "label": "HireNimbus / review-platform login (if used)",
         "why": "Some clients use HireNimbus / Birdeye / Podium for review collection. Needed to embed reviews on the client's domain instead of off-site.",
         "fields": ["Platform name", "Login URL", "Username", "Password"],
+        "applies_to": ["electrician"],
     },
     {
         "key": "bing-webmaster",
         "label": "Bing Webmaster Tools owner access",
         "why": "Often missed in initial SEO setup. ~5-10% of search traffic. Same verification model as GSC.",
         "fields": ["Whether property is verified", "Owner gmail / Microsoft account"],
+        "applies_to": ["*"],
     },
     {
         "key": "thumbtack",
         "label": "Thumbtack / lead-aggregator platform logins (if applicable)",
         "why": "Some engagements involve consolidating or retiring aggregator profiles. Need login to manage or close them.",
         "fields": ["Platform name(s)", "Login URLs", "Credentials"],
+        "applies_to": ["electrician"],
     },
     {
         "key": "social",
         "label": "Facebook / Instagram / LinkedIn business accounts",
         "why": "Citation consistency (NAP across social profiles is a local-pack ranking signal). Needed to fix bad links, claim unclaimed profiles, replace stale info.",
         "fields": ["Profile URLs", "Admin gmail / login"],
+        "applies_to": ["*"],
     },
 ]
 
 
-def render_tier3_template(client_slug: str, client_name: Optional[str]) -> str:
+def get_credentials_for_type(business_type: str) -> list[dict[str, Any]]:
+    """Return the subset of CREDENTIALS_CHECKLIST applicable to a business type."""
+    return [
+        item for item in CREDENTIALS_CHECKLIST
+        if "*" in item.get("applies_to", ["*"]) or business_type in item.get("applies_to", ["*"])
+    ]
+
+
+def render_tier3_template(client_slug: str, client_name: Optional[str],
+                          business_type: str = "electrician") -> str:
     """Markdown body for the per-client tier-3 credentials file.
 
     Per the standing convention (auto-memory `reference_tier3_vault.md`), this
@@ -1087,7 +1115,7 @@ def render_tier3_template(client_slug: str, client_name: Optional[str]) -> str:
         "main-vault note refers to a specific bullet below.",
         "",
     ]
-    for item in CREDENTIALS_CHECKLIST:
+    for item in get_credentials_for_type(business_type):
         lines.append(f"### {item['label']}")
         lines.append("")
         lines.append(f"_{item['why']}_")
@@ -1121,7 +1149,8 @@ def render_tier3_template(client_slug: str, client_name: Optional[str]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def render_stdout_checklist(client_slug: str, needs_confirmation: list[str]) -> str:
+def render_stdout_checklist(client_slug: str, needs_confirmation: list[str],
+                            business_type: str = "electrician") -> str:
     """The paste-into-email checklist. One copyable section per credential
     plus a heads-up about the JSON fields that still need client confirmation.
     """
@@ -1134,7 +1163,7 @@ def render_stdout_checklist(client_slug: str, needs_confirmation: list[str]) -> 
     out.append("kickoff call). Each item maps to a section in the tier-3")
     out.append("credentials template.")
     out.append("")
-    for i, item in enumerate(CREDENTIALS_CHECKLIST, start=1):
+    for i, item in enumerate(get_credentials_for_type(business_type), start=1):
         out.append(f"[ ] {i:>2}. {item['label']}")
         out.append(f"        Why: {item['why']}")
     out.append("")
@@ -1348,7 +1377,8 @@ def scaffold(
         )
         print(f"→ Wrote config example:       {config_path}")
 
-    tier3_body = render_tier3_template(client_slug, data.get("name"))
+    tier3_body = render_tier3_template(client_slug, data.get("name"),
+                                       business_type=business_type)
     if tier3_template_out:
         # ALWAYS prompt before writing to tier-3, regardless of --overwrite.
         # The script cannot read the tier-3 vault back, so we cannot tell
@@ -1394,7 +1424,8 @@ def scaffold(
 
     # Stdout checklist
     print()
-    print(render_stdout_checklist(client_slug, needs_confirmation))
+    print(render_stdout_checklist(client_slug, needs_confirmation,
+                                  business_type=business_type))
 
     return actual_data_path, config_path, data
 
