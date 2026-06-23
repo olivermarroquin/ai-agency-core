@@ -910,5 +910,607 @@ class TestTrackerBashCmdField(unittest.TestCase):
                              'Write entries should not have bash_cmd field')
 
 
+# ============================================================================
+# RGH-12: auto-infer reviewer role from gate-clearing records
+# ============================================================================
+
+def _write_reviewed_entry(state_dir, producer_session_id, reviewer_session_id):
+    """Write a reviewed-ledger entry to the PRODUCER's ledger with
+    reviewer_session set to the reviewer's session ID.
+    This is what log-review-pass.py produces."""
+    os.makedirs(state_dir, exist_ok=True)
+    path = os.path.join(state_dir, f'{producer_session_id}-reviewed.jsonl')
+    entry = {
+        'timestamp': time.time(),
+        'iso_time': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+        'file_path': '/workspace/repos/some-file.py',
+        'verdict': 'PASS',
+        'tier': 'full',
+        'gate_id': 'G-independent',
+        'evidence': 'test evidence',
+        'reviewer_type': 'independent',
+        'reviewer_session': reviewer_session_id,
+    }
+    with open(path, 'a') as f:
+        f.write(json.dumps(entry) + '\n')
+
+
+class TestClassifySessionRoleAutoInference(unittest.TestCase):
+    """RGH12-1: classify_session_role() returns 'reviewer' when gate-clearing
+    records show this session cleared a different producer's gate."""
+
+    def setUp(self):
+        sys.path.insert(0, SCRIPTS)
+        import engine
+        self.engine = engine
+        # Clear the cache between tests
+        self.engine._gate_clearing_signal_cache.clear()
+
+    def test_auto_infer_reviewer_from_gate_clearing(self):
+        """Session that cleared another session's gate → reviewer (no marker)."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            reviewer_sid = 'reviewer-auto-abc'
+            producer_sid = 'producer-xyz'
+            _write_reviewed_entry(state_dir, producer_sid, reviewer_sid)
+            result = self.engine.classify_session_role(state_dir, reviewer_sid)
+            self.assertEqual(result, 'reviewer',
+                             'Session that cleared another session\'s gate '
+                             'must be classified as reviewer')
+
+    def test_auto_infer_no_reviewed_files_returns_producer(self):
+        """No reviewed files at all → producer."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            result = self.engine.classify_session_role(state_dir, 'lonely-sid')
+            self.assertEqual(result, 'producer')
+
+    def test_auto_infer_only_own_ledger_returns_producer(self):
+        """Session only has entries in its OWN reviewed ledger → producer.
+        A session cannot auto-infer reviewer from its own ledger."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'self-only-sid'
+            # Write to own ledger (not another session's)
+            path = os.path.join(state_dir, f'{sid}-reviewed.jsonl')
+            entry = {
+                'timestamp': time.time(),
+                'file_path': '/workspace/file.py',
+                'verdict': 'PASS',
+                'reviewer_session': sid,
+            }
+            with open(path, 'w') as f:
+                f.write(json.dumps(entry) + '\n')
+            result = self.engine.classify_session_role(state_dir, sid)
+            self.assertEqual(result, 'producer',
+                             'Own ledger entries must NOT trigger auto-inference')
+
+    def test_auto_infer_reviewer_session_mismatch_returns_producer(self):
+        """Reviewed entry has a DIFFERENT reviewer_session → producer for us."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            our_sid = 'our-session'
+            producer_sid = 'producer-session'
+            other_reviewer = 'other-reviewer-session'
+            _write_reviewed_entry(state_dir, producer_sid, other_reviewer)
+            result = self.engine.classify_session_role(state_dir, our_sid)
+            self.assertEqual(result, 'producer',
+                             'Entry with different reviewer_session must not '
+                             'match our session')
+
+    def test_auto_infer_caching(self):
+        """Once confirmed, result is cached — no re-glob."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            reviewer_sid = 'cached-reviewer'
+            producer_sid = 'cached-producer'
+            _write_reviewed_entry(state_dir, producer_sid, reviewer_sid)
+            r1 = self.engine.classify_session_role(state_dir, reviewer_sid)
+            self.assertEqual(r1, 'reviewer')
+            # Remove the file — cached result should still return reviewer
+            os.remove(os.path.join(state_dir, f'{producer_sid}-reviewed.jsonl'))
+            r2 = self.engine.classify_session_role(state_dir, reviewer_sid)
+            self.assertEqual(r2, 'reviewer',
+                             'Cached positive result must persist')
+
+    def test_marker_takes_precedence_over_auto_infer(self):
+        """If marker exists, it should return reviewer without needing
+        auto-inference (marker is checked first, faster)."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'marker-plus-auto'
+            _write_session_marker(state_dir, sid, reviewing_session='prod-sid')
+            result = self.engine.classify_session_role(state_dir, sid)
+            self.assertEqual(result, 'reviewer')
+
+
+# ============================================================================
+# RGH12-3: ADVERSARIAL — no producer bypass via forged gate-clearing records
+# ============================================================================
+
+class TestNoProducerBypassAutoInference(unittest.TestCase):
+    """ADVERSARIAL: a producer cannot bypass the gate by forging
+    gate-clearing evidence for auto-inference."""
+
+    def setUp(self):
+        sys.path.insert(0, SCRIPTS)
+        import engine
+        self.engine = engine
+        self.engine._gate_clearing_signal_cache.clear()
+
+    def test_producer_self_clear_no_auto_inference(self):
+        """Producer writes reviewed entry in its OWN ledger with
+        reviewer_session == self. classify_session_role skips own ledger
+        → still producer."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'self-clear-forger'
+            path = os.path.join(state_dir, f'{sid}-reviewed.jsonl')
+            entry = {
+                'timestamp': time.time(),
+                'file_path': '/workspace/file.py',
+                'verdict': 'PASS',
+                'reviewer_session': sid,
+            }
+            with open(path, 'w') as f:
+                f.write(json.dumps(entry) + '\n')
+            result = self.engine.classify_session_role(state_dir, sid)
+            self.assertEqual(result, 'producer',
+                             'Self-clear in own ledger must NOT grant reviewer')
+
+    def test_producer_forges_entry_in_another_sessions_ledger(self):
+        """Producer writes a forged entry into another session's reviewed
+        ledger claiming reviewer_session == self. This DOES match signal (b).
+
+        HONEST LIMIT: if a producer can write arbitrary files into state_dir,
+        it could forge this. But:
+        1. The producer's dirty-ledger-track would record the Write/Bash that
+           created the forged file → that write would itself be gated.
+        2. The scoped exemption only covers write-safe Bash — deliverable
+           Write/Edit still gates regardless of session role.
+        3. In practice, .review-gate/state/ writes are tracked by the
+           dirty-ledger-track PostToolUse hook.
+
+        This test documents the honest limit — the forged entry DOES match.
+        The safety comes from the scoped exemption + dirty-ledger tracking,
+        not from preventing the forge itself."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            forger_sid = 'forger-producer'
+            victim_sid = 'innocent-producer'
+            # Forger writes into victim's ledger
+            _write_reviewed_entry(state_dir, victim_sid, forger_sid)
+            result = self.engine.classify_session_role(state_dir, forger_sid)
+            # The forge DOES match — honest limit documented
+            self.assertEqual(result, 'reviewer',
+                             'Forged entry matches (honest limit) — safety '
+                             'comes from scoped exemption + dirty-ledger tracking')
+
+    def test_forged_reviewer_deliverable_write_still_blocked(self):
+        """Even if a producer forges auto-inference, deliverable Write
+        still blocks (RGH12-2). The scoped exemption is the real guard."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            forger_sid = 'forger-deliverable'
+            victim_sid = 'victim-producer'
+            # Forge auto-inference
+            _write_reviewed_entry(state_dir, victim_sid, forger_sid)
+            # Write a deliverable
+            _write_dirty_entries(state_dir, forger_sid, [{
+                'timestamp': time.time(),
+                'iso_time': '2026-06-23T00:00:00Z',
+                'tool': 'Write',
+                'file_path': '/workspace/repos/resume-saas/src/app.tsx',
+                'tier': 'full',
+                'source': 'claude-code',
+                'entry_source': 'producer',
+            }])
+            r = _run_gate(forger_sid, state_dir)
+            self.assertEqual(r.returncode, 2,
+                             'Deliverable Write MUST block even with forged '
+                             'auto-inference (scoped exemption is the guard)')
+
+    def test_forged_reviewer_state_changing_bash_still_blocked(self):
+        """Even with forged auto-inference, state-changing Bash blocks."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            forger_sid = 'forger-bash-write'
+            victim_sid = 'victim-producer2'
+            _write_reviewed_entry(state_dir, victim_sid, forger_sid)
+            _write_dirty_entries(state_dir, forger_sid, [{
+                'timestamp': time.time(),
+                'iso_time': '2026-06-23T00:00:00Z',
+                'tool': 'Bash',
+                'file_path': 'BASH:forged1234',
+                'display': 'echo "malicious" > src/app.py',
+                'bash_cmd': 'echo "malicious" > src/app.py',
+                'tier': 'full',
+                'source': 'claude-code',
+                'entry_source': 'producer',
+            }])
+            r = _run_gate(forger_sid, state_dir)
+            self.assertEqual(r.returncode, 2,
+                             'State-changing Bash MUST block even with forged '
+                             'auto-inference')
+
+    def test_corrupt_reviewed_ledger_no_auto_inference(self):
+        """Corrupt JSONL in another session's ledger → skip, not crash."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'safe-from-corrupt'
+            os.makedirs(state_dir, exist_ok=True)
+            path = os.path.join(state_dir, 'other-session-reviewed.jsonl')
+            with open(path, 'w') as f:
+                f.write('not valid json {{{\n')
+                f.write('also broken\n')
+            result = self.engine.classify_session_role(state_dir, sid)
+            self.assertEqual(result, 'producer',
+                             'Corrupt ledger must not crash or grant reviewer')
+
+    def test_reviewed_entry_missing_reviewer_session_no_match(self):
+        """Entry without reviewer_session field → no match."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'no-field-sid'
+            os.makedirs(state_dir, exist_ok=True)
+            path = os.path.join(state_dir, 'other-reviewed.jsonl')
+            entry = {
+                'timestamp': time.time(),
+                'file_path': '/workspace/file.py',
+                'verdict': 'PASS',
+                # no reviewer_session field
+            }
+            with open(path, 'w') as f:
+                f.write(json.dumps(entry) + '\n')
+            result = self.engine.classify_session_role(state_dir, sid)
+            self.assertEqual(result, 'producer')
+
+
+# ============================================================================
+# RGH12-5: Real-runner replay — hand-spawned reviewer, no marker
+# ============================================================================
+
+class TestAutoInferRealRunnerReplay(unittest.TestCase):
+    """Replay the 2026-06-23 BTF-W3 / MCD CR-075 scenarios.
+
+    A hand-spawned reviewer with NO marker logs the producer's PASS, then
+    runs read-only Bash — must stop cleanly (exit 0), zero registration,
+    zero gate-skip."""
+
+    def setUp(self):
+        sys.path.insert(0, SCRIPTS)
+        import engine
+        self.engine = engine
+        self.engine._gate_clearing_signal_cache.clear()
+
+    def test_replay_btf_w3_reviewer_no_marker(self):
+        """Full replay: reviewer (no marker) clears producer + runs
+        read-only Bash (shasum, find, ls) → stops exit 0."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            reviewer_sid = 'replay-9e7973a8'
+            producer_sid = 'replay-btf-producer'
+
+            # Step 1: reviewer clears producer's gate (creates the evidence)
+            _write_reviewed_entry(state_dir, producer_sid, reviewer_sid)
+
+            # Step 2: reviewer's dirty ledger has read-only Bash
+            now = time.time()
+            _write_dirty_entries(state_dir, reviewer_sid, [
+                {
+                    'timestamp': now,
+                    'iso_time': '2026-06-23T00:00:00Z',
+                    'tool': 'Bash',
+                    'file_path': 'BASH:shasum1',
+                    'display': 'shasum -a 256 /workspace/repos/file.py',
+                    'bash_cmd': 'shasum -a 256 /workspace/repos/file.py',
+                    'tier': 'full',
+                    'source': 'claude-code',
+                    'entry_source': 'producer',
+                },
+                {
+                    'timestamp': now + 1,
+                    'iso_time': '2026-06-23T00:00:01Z',
+                    'tool': 'Bash',
+                    'file_path': 'BASH:find1',
+                    'display': 'find /workspace/repos -name "*.py" -type f',
+                    'bash_cmd': 'find /workspace/repos -name "*.py" -type f',
+                    'tier': 'full',
+                    'source': 'claude-code',
+                    'entry_source': 'producer',
+                },
+                {
+                    'timestamp': now + 2,
+                    'iso_time': '2026-06-23T00:00:02Z',
+                    'tool': 'Bash',
+                    'file_path': 'BASH:ls1',
+                    'display': 'ls -la /workspace/repos/',
+                    'bash_cmd': 'ls -la /workspace/repos/',
+                    'tier': 'full',
+                    'source': 'claude-code',
+                    'entry_source': 'producer',
+                },
+                # Gate-clearing entry (already exempt by RGH-10)
+                {
+                    'timestamp': now + 3,
+                    'iso_time': '2026-06-23T00:00:03Z',
+                    'tool': 'Bash',
+                    'file_path': 'BASH:gateclear',
+                    'display': 'python3 log-review-pass.py --session prod',
+                    'bash_cmd': (f'python3 log-review-pass.py --session '
+                                 f'{producer_sid} --files f --verdict PASS '
+                                 f'--tier full --gate-id G-independent '
+                                 f'--verdict-file v.json --reviewer-type '
+                                 f'independent --reviewer-session {reviewer_sid}'),
+                    'tier': 'full',
+                    'source': 'claude-code',
+                    'entry_source': 'gate-clearing',
+                },
+            ])
+            r = _run_gate(reviewer_sid, state_dir)
+            self.assertEqual(r.returncode, 0,
+                             f'BTF-W3 replay: reviewer with NO marker that '
+                             f'cleared producer MUST stop clean (exit 0). '
+                             f'Got exit {r.returncode}. stderr: {r.stderr}')
+
+    def test_replay_mcd_cr075_reviewer_no_marker(self):
+        """MCD CR-075 reviewer replay: python3 -c + grep Bash → exit 0."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            reviewer_sid = 'replay-b8a83829'
+            producer_sid = 'replay-mcd-producer'
+
+            _write_reviewed_entry(state_dir, producer_sid, reviewer_sid)
+
+            now = time.time()
+            _write_dirty_entries(state_dir, reviewer_sid, [
+                {
+                    'timestamp': now,
+                    'iso_time': '2026-06-23T00:00:00Z',
+                    'tool': 'Bash',
+                    'file_path': 'BASH:python3c',
+                    'display': 'python3 -c "import json; print(json.dumps({}))"',
+                    'bash_cmd': 'python3 -c "import json; print(json.dumps({}))"',
+                    'tier': 'full',
+                    'source': 'claude-code',
+                    'entry_source': 'producer',
+                },
+                {
+                    'timestamp': now + 1,
+                    'iso_time': '2026-06-23T00:00:01Z',
+                    'tool': 'Bash',
+                    'file_path': 'BASH:grep1',
+                    'display': 'grep -r "reviewer_session" /workspace/.review-gate/',
+                    'bash_cmd': 'grep -r "reviewer_session" /workspace/.review-gate/',
+                    'tier': 'full',
+                    'source': 'claude-code',
+                    'entry_source': 'producer',
+                },
+                # Reviewer working-doc write (exempt by RGH-10 source tag)
+                {
+                    'timestamp': now + 2,
+                    'iso_time': '2026-06-23T00:00:02Z',
+                    'tool': 'Edit',
+                    'file_path': '/workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md',
+                    'tier': 'full',
+                    'source': 'claude-code',
+                    'entry_source': 'reviewer',
+                },
+            ])
+            r = _run_gate(reviewer_sid, state_dir)
+            self.assertEqual(r.returncode, 0,
+                             f'MCD CR-075 replay: reviewer with NO marker '
+                             f'MUST stop clean. Got exit {r.returncode}. '
+                             f'stderr: {r.stderr}')
+
+    def test_replay_no_gate_clearing_evidence_blocks(self):
+        """Same Bash entries but WITHOUT the gate-clearing evidence
+        → session is producer → blocks (exit 2)."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'replay-no-evidence'
+            _write_dirty_entries(state_dir, sid, [{
+                'timestamp': time.time(),
+                'iso_time': '2026-06-23T00:00:00Z',
+                'tool': 'Bash',
+                'file_path': 'BASH:shasum1',
+                'display': 'shasum -a 256 /workspace/repos/file.py',
+                'bash_cmd': 'shasum -a 256 /workspace/repos/file.py',
+                'tier': 'full',
+                'source': 'claude-code',
+                'entry_source': 'producer',
+            }])
+            r = _run_gate(sid, state_dir)
+            self.assertEqual(r.returncode, 2,
+                             f'Without gate-clearing evidence MUST block. '
+                             f'Got exit {r.returncode}')
+
+
+# ============================================================================
+# RGH12-6: Reviewer-doc Bash write exemption
+# ============================================================================
+
+class TestIsBashReviewerDocWrite(unittest.TestCase):
+    """Unit tests for engine.is_bash_reviewer_doc_write()."""
+
+    def setUp(self):
+        sys.path.insert(0, SCRIPTS)
+        import engine
+        self.engine = engine
+
+    # --- Should return True (reviewer-doc writes only) ---
+
+    def test_cat_append_firing_tracker(self):
+        self.assertTrue(self.engine.is_bash_reviewer_doc_write(
+            'cat >> /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md'))
+
+    def test_echo_append_catch_register(self):
+        self.assertTrue(self.engine.is_bash_reviewer_doc_write(
+            'echo "| CR-099 |" >> /workspace/second-brain/_meta/handoffs/_review-gate-catch-register.md'))
+
+    def test_redirect_to_verdict_file(self):
+        self.assertTrue(self.engine.is_bash_reviewer_doc_write(
+            'echo "{}" > /workspace/.review-gate/state/verdict-test-123.json'))
+
+    def test_redirect_to_reviewed_jsonl(self):
+        self.assertTrue(self.engine.is_bash_reviewer_doc_write(
+            'echo "{}" >> /workspace/.review-gate/state/abc-reviewed.jsonl'))
+
+    def test_redirect_to_reviewer_execution_log(self):
+        self.assertTrue(self.engine.is_bash_reviewer_doc_write(
+            'cat >> /workspace/repos/ai-agency-core/.kos/execution-logs/execution-log-2026-06-23-independent-review.md'))
+
+    def test_redirect_to_peer_review_log(self):
+        self.assertTrue(self.engine.is_bash_reviewer_doc_write(
+            'echo "done" >> /workspace/execution-log-2026-06-23-peer-review.md'))
+
+    def test_compound_read_plus_doc_write(self):
+        """Compound: read-only + doc write → True."""
+        self.assertTrue(self.engine.is_bash_reviewer_doc_write(
+            'echo "row" >> /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md && echo "done"'))
+
+    # --- Should return False (NOT exempt) ---
+
+    def test_redirect_to_deliverable(self):
+        self.assertFalse(self.engine.is_bash_reviewer_doc_write(
+            'echo "code" > /workspace/repos/resume-saas/src/app.tsx'))
+
+    def test_compound_doc_write_plus_deploy(self):
+        """B3 guard: doc write + non-doc action → NOT exempt."""
+        self.assertFalse(self.engine.is_bash_reviewer_doc_write(
+            'echo "row" >> /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md && npm run deploy'))
+
+    def test_compound_doc_write_plus_rm(self):
+        """B3 guard: doc write + rm → NOT exempt."""
+        self.assertFalse(self.engine.is_bash_reviewer_doc_write(
+            'echo "row" >> /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md; rm -rf /tmp/x'))
+
+    def test_compound_doc_write_plus_non_doc_write(self):
+        """B3 guard: doc write + non-doc file write → NOT exempt."""
+        self.assertFalse(self.engine.is_bash_reviewer_doc_write(
+            'echo "row" >> /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md && echo "x" > /tmp/hack.py'))
+
+    def test_tee_to_doc_not_exempt(self):
+        """tee writes are NOT covered (tee is in _FILE_MUTATING_CMDS)."""
+        self.assertFalse(self.engine.is_bash_reviewer_doc_write(
+            'echo "row" | tee -a /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md'))
+
+    def test_empty_command(self):
+        self.assertFalse(self.engine.is_bash_reviewer_doc_write(''))
+
+    def test_none_command(self):
+        self.assertFalse(self.engine.is_bash_reviewer_doc_write(None))
+
+    def test_read_only_command_not_doc_write(self):
+        """Pure read-only is NOT a doc write (returns False — has_doc_write
+        flag is never set). Use is_bash_entry_write_safe for read-only."""
+        self.assertFalse(self.engine.is_bash_reviewer_doc_write(
+            'grep -r "pattern" /workspace/'))
+
+    def test_redirect_to_non_reviewer_execution_log(self):
+        """Execution log without reviewer/independent-review suffix → NOT exempt."""
+        self.assertFalse(self.engine.is_bash_reviewer_doc_write(
+            'echo "x" >> /workspace/execution-log-2026-06-23-normal-build.md'))
+
+
+class TestReviewerDocWriteIntegration(unittest.TestCase):
+    """Integration tests: verified reviewer session with doc-write Bash
+    entries stops clean; compound bypass still gates."""
+
+    def setUp(self):
+        sys.path.insert(0, SCRIPTS)
+        import engine
+        self.engine = engine
+        self.engine._gate_clearing_signal_cache.clear()
+
+    def test_reviewer_cat_append_firing_tracker_stops_clean(self):
+        """Verified reviewer appends to firing tracker via cat >> → exit 0."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            reviewer_sid = 'reviewer-doc-write'
+            producer_sid = 'producer-for-doc'
+            _write_reviewed_entry(state_dir, producer_sid, reviewer_sid)
+            _write_dirty_entries(state_dir, reviewer_sid, [
+                {
+                    'timestamp': time.time(),
+                    'iso_time': '2026-06-23T00:00:00Z',
+                    'tool': 'Bash',
+                    'file_path': 'BASH:catappend1',
+                    'display': 'cat >> _review-skill-firing-tracker.md',
+                    'bash_cmd': 'cat >> /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md',
+                    'tier': 'full',
+                    'source': 'claude-code',
+                    'entry_source': 'producer',
+                },
+            ])
+            r = _run_gate(reviewer_sid, state_dir)
+            self.assertEqual(r.returncode, 0,
+                             f'Reviewer cat >> firing-tracker MUST stop clean. '
+                             f'Got exit {r.returncode}. stderr: {r.stderr}')
+
+    def test_reviewer_doc_write_plus_read_only_stops_clean(self):
+        """Reviewer: doc write + read-only Bash → exit 0."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            reviewer_sid = 'reviewer-mixed-doc'
+            producer_sid = 'producer-mixed-doc'
+            _write_reviewed_entry(state_dir, producer_sid, reviewer_sid)
+            now = time.time()
+            _write_dirty_entries(state_dir, reviewer_sid, [
+                {
+                    'timestamp': now,
+                    'iso_time': '2026-06-23T00:00:00Z',
+                    'tool': 'Bash',
+                    'file_path': 'BASH:grep1',
+                    'display': 'grep -r "pattern" /workspace/',
+                    'bash_cmd': 'grep -r "pattern" /workspace/',
+                    'tier': 'full',
+                    'source': 'claude-code',
+                    'entry_source': 'producer',
+                },
+                {
+                    'timestamp': now + 1,
+                    'iso_time': '2026-06-23T00:00:01Z',
+                    'tool': 'Bash',
+                    'file_path': 'BASH:catappend2',
+                    'display': 'cat >> _review-gate-catch-register.md',
+                    'bash_cmd': 'cat >> /workspace/second-brain/_meta/handoffs/_review-gate-catch-register.md',
+                    'tier': 'full',
+                    'source': 'claude-code',
+                    'entry_source': 'producer',
+                },
+            ])
+            r = _run_gate(reviewer_sid, state_dir)
+            self.assertEqual(r.returncode, 0,
+                             f'Reviewer doc-write + read-only MUST stop clean. '
+                             f'Got exit {r.returncode}. stderr: {r.stderr}')
+
+    def test_reviewer_compound_bypass_still_blocks(self):
+        """B3 guard: reviewer with compound doc-write + deploy → blocks."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            reviewer_sid = 'reviewer-compound-bypass'
+            producer_sid = 'producer-compound'
+            _write_reviewed_entry(state_dir, producer_sid, reviewer_sid)
+            _write_dirty_entries(state_dir, reviewer_sid, [{
+                'timestamp': time.time(),
+                'iso_time': '2026-06-23T00:00:00Z',
+                'tool': 'Bash',
+                'file_path': 'BASH:compound1',
+                'display': 'cat >> tracker.md && npm deploy',
+                'bash_cmd': 'cat >> /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md && npm run deploy',
+                'tier': 'full',
+                'source': 'claude-code',
+                'entry_source': 'producer',
+            }])
+            r = _run_gate(reviewer_sid, state_dir)
+            self.assertEqual(r.returncode, 2,
+                             f'Compound doc-write + deploy MUST block even '
+                             f'for verified reviewer. Got exit {r.returncode}')
+
+    def test_unverified_session_doc_write_still_blocks(self):
+        """Unverified session writing to reviewer-doc path → blocks.
+        B3 guard: session role must be confirmed first."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'unverified-doc-writer'
+            _write_dirty_entries(state_dir, sid, [{
+                'timestamp': time.time(),
+                'iso_time': '2026-06-23T00:00:00Z',
+                'tool': 'Bash',
+                'file_path': 'BASH:unverified1',
+                'display': 'cat >> _review-skill-firing-tracker.md',
+                'bash_cmd': 'cat >> /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md',
+                'tier': 'full',
+                'source': 'claude-code',
+                'entry_source': 'producer',
+            }])
+            r = _run_gate(sid, state_dir)
+            self.assertEqual(r.returncode, 2,
+                             f'Unverified session doc-write MUST block. '
+                             f'Got exit {r.returncode}')
+
+
 if __name__ == '__main__':
     unittest.main()

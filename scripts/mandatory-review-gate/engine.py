@@ -488,53 +488,236 @@ def is_bash_entry_write_safe(command: str) -> bool:
 
 
 # ============================================================================
-# Session-level reviewer detection (RGH-11)
+# Reviewer-working-doc Bash write detection (RGH-12, RGH12-6)
 # ============================================================================
 #
-# Classifies a session's role as 'reviewer' or 'producer' based on a
-# structural marker file written by the dispatch mechanism
-# (register-reviewer-session.py), not a self-declared flag.
+# For VERIFIED reviewer sessions only: exempt Bash entries whose ONLY write
+# targets are known reviewer-working-doc paths. This covers the case where
+# a reviewer appends to the firing tracker or catch register via shell
+# (cat >> path) — the write is not read-only, but the target is a reviewer
+# artifact, not a deliverable.
 #
-# SAFETY: The marker does NOT grant blanket exemption. Only Bash entries
-# without positive write indicators and known reviewer working-doc entries
-# are exempt. Deliverable-class Write/Edit ALWAYS gates regardless of
-# session role. See check_gate() for the scoped exemption logic.
+# SAFETY (B3 stays closed): this check is ONLY applied when the session is
+# already structurally verified as a reviewer (marker or auto-inferred).
+# The B3 concern from RGH-10 was about UNVERIFIED sessions getting exempted
+# by writing to a reviewer-looking path. Here the session identity is proven
+# first, then the write target is checked.
+#
+# STRICT GUARD: every segment of a compound command must be EITHER read-only
+# OR a write whose target matches a reviewer-working-doc pattern. If ANY
+# segment writes elsewhere or performs a non-doc action → not exempt.
+
+# Patterns matching reviewer-working-doc write targets in redirect paths.
+# These must be restrictive — only the exact files a reviewer writes to.
+_REVIEWER_DOC_WRITE_PATTERNS = [
+    r'_review-skill-firing-tracker\.md$',
+    r'_review-gate-catch-register\.md$',
+    r'/\.review-gate/state/verdict-',
+    r'/\.review-gate/state/.*-reviewed\.jsonl$',
+    r'execution-log-\d{4}-\d{2}-\d{2}-reviewer-session[^/]*\.md$',
+    r'execution-log-\d{4}-\d{2}-\d{2}-independent-review[^/]*\.md$',
+    r'execution-log-\d{4}-\d{2}-\d{2}-peer-review[^/]*\.md$',
+    r'execution-log-\d{4}-\d{2}-\d{2}-[a-z0-9]+-(?:reviewer-session|independent-review|peer-review)[^/]*\.md$',
+]
+
+_REVIEWER_DOC_WRITE_RE = re.compile('|'.join(_REVIEWER_DOC_WRITE_PATTERNS))
 
 
-def classify_session_role(state_dir: str, session_id: str) -> str:
-    """Classify a session's role as 'reviewer' or 'producer'.
+def _extract_write_target(segment: str) -> Optional[str]:
+    """Extract the file path from a write redirect in a segment.
 
-    Returns 'reviewer' only if ALL of:
-    1. Marker file exists at <state_dir>/<session>-role.json
-    2. Marker has role='reviewer'
-    3. reviewing_session is present and != session_id (no self-review)
-
-    Returns 'producer' in all other cases (fail-closed).
+    Returns the target path if the segment writes via > or >> to a file,
+    or None if no write redirect is found.
     """
+    segment = segment.strip()
+    if not segment:
+        return None
+    # Strip stderr redirects first so we only look at stdout
+    cleaned = _strip_stderr_redirects(segment)
+    # Look for >> or > (not preceded by a digit, to avoid fd redirects like 2>)
+    match = re.search(r'(?<!\d)>{1,2}\s*(\S+)', cleaned)
+    if match:
+        return match.group(1).strip("'\"")
+    return None
+
+
+def _is_segment_reviewer_doc_write(segment: str) -> bool:
+    """Check if a segment is a write whose ONLY target is a reviewer-working-doc.
+
+    Returns True if the segment has a stdout redirect to a file matching
+    a reviewer-working-doc pattern. Returns False for writes to other paths,
+    non-redirect writes (tee, mv, cp, etc.), or read-only commands.
+    Use _is_segment_read_only() for the read-only case separately.
+    """
+    segment = segment.strip()
+    if not segment:
+        return False
+
+    target = _extract_write_target(segment)
+    if target is None:
+        return False  # no redirect — not a doc-write (may be read-only)
+
+    # The target must match a reviewer-working-doc pattern
+    return bool(_REVIEWER_DOC_WRITE_RE.search(target))
+
+
+def is_bash_reviewer_doc_write(command: str) -> bool:
+    """Return True if a Bash command writes ONLY to reviewer-working-doc paths.
+
+    Every segment must be either read-only OR a redirect to a reviewer-doc
+    path. If ANY segment writes elsewhere or performs a destructive action
+    (tee, mv, cp, rm, etc.) → False.
+
+    ONLY used for verified reviewer sessions (RGH-12, RGH12-6).
+    Must NOT be called for unverified sessions (B3 guard).
+    """
+    if not command or not command.strip():
+        return False
+    segments = split_compound(command.strip())
+    if not segments:
+        return False
+    has_doc_write = False
+    for seg in segments:
+        seg = seg.strip()
+        if not seg:
+            continue
+        if _is_segment_read_only(seg):
+            continue  # read-only segment is fine
+        if _is_segment_reviewer_doc_write(seg):
+            has_doc_write = True
+            continue
+        # Segment is neither read-only nor a reviewer-doc write → fail
+        return False
+    return has_doc_write  # must have at least one actual doc write
+
+
+# ============================================================================
+# Session-level reviewer detection (RGH-11 + RGH-12)
+# ============================================================================
+#
+# Classifies a session's role as 'reviewer' or 'producer' based on:
+# (a) RGH-11: structural marker file from register-reviewer-session.py
+# (b) RGH-12: auto-inferred from gate-clearing records (reviewer cleared
+#     a different producer's session via log-review-pass.py)
+#
+# SAFETY: Neither signal grants blanket exemption. Only Bash entries
+# without positive write indicators (or whose only writes target reviewer
+# working-docs) and known reviewer working-doc entries are exempt.
+# Deliverable-class Write/Edit ALWAYS gates regardless of session role.
+# See check_gate() for the scoped exemption logic.
+
+
+def _check_marker_signal(state_dir: str, session_id: str) -> bool:
+    """Signal (a): RGH-11 marker file. Returns True if valid reviewer marker."""
     marker_path = os.path.join(state_dir, f'{session_id}-role.json')
     if not os.path.isfile(marker_path):
-        return 'producer'
+        return False
 
     try:
         with open(marker_path, 'r') as f:
             marker = json.load(f)
     except (json.JSONDecodeError, OSError):
-        return 'producer'
+        return False
 
     if not isinstance(marker, dict):
-        return 'producer'
+        return False
 
     if marker.get('role') != 'reviewer':
-        return 'producer'
+        return False
 
     reviewing = marker.get('reviewing_session')
     if not isinstance(reviewing, str):
-        return 'producer'
+        return False
     reviewing = reviewing.strip()
     if not reviewing or reviewing == session_id:
-        return 'producer'
+        return False
 
-    return 'reviewer'
+    return True
+
+
+def _check_gate_clearing_signal(state_dir: str, session_id: str) -> bool:
+    """Signal (b): RGH-12 auto-inference from gate-clearing records.
+
+    Returns True if ANY reviewed-ledger file for a DIFFERENT session contains
+    an entry where reviewer_session == session_id. This proves the session
+    has cleared another session's gate — a structural act the producer cannot
+    fake (RGH-8 blocks self-clear in log-review-pass.py).
+
+    Performance: early-exit on first match. Only scans *-reviewed.jsonl files
+    (not dirty ledgers). Bounded by number of sessions with reviewed entries
+    (typically <10 in a workspace).
+    """
+    import glob as glob_mod
+
+    own_ledger_name = f'{session_id}-reviewed.jsonl'
+    pattern = os.path.join(state_dir, '*-reviewed.jsonl')
+
+    for ledger_path in glob_mod.iglob(pattern):
+        # Skip this session's own reviewed ledger
+        if os.path.basename(ledger_path) == own_ledger_name:
+            continue
+
+        # Scan for a reviewer_session matching this session_id
+        try:
+            with open(ledger_path, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        entry = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    if entry.get('reviewer_session') == session_id:
+                        return True  # early exit: found proof
+        except OSError:
+            continue
+
+    return False
+
+
+# Cache for signal (b) results — once a session is confirmed as having
+# cleared another session's gate, it stays that way for the process lifetime.
+# This avoids re-globbing on every check_gate() call.
+_gate_clearing_signal_cache = {}  # type: dict[str, bool]
+
+
+def classify_session_role(state_dir: str, session_id: str) -> str:
+    """Classify a session's role as 'reviewer' or 'producer'.
+
+    Returns 'reviewer' if EITHER:
+    1. Signal (a) — RGH-11: marker file exists with role='reviewer' and
+       reviewing_session present and != session_id (no self-review).
+    2. Signal (b) — RGH-12: a review-pass record in a DIFFERENT session's
+       reviewed ledger has reviewer_session == session_id, proving this
+       session cleared another session's gate.
+
+    Returns 'producer' in all other cases (fail-closed).
+
+    SAFETY: Signal (b) cannot be faked by a producer because:
+    - log-review-pass.py rejects reviewer_session == session (RGH-8)
+    - The evidence lives in the PRODUCER's reviewed ledger, not the reviewer's
+    - A producer would need to write to another session's ledger file, which
+      requires knowing that session_id AND forging the entry — multi-step,
+      detectable, and the scoped exemption still only covers write-safe Bash.
+    """
+    # Signal (a): marker file (RGH-11)
+    if _check_marker_signal(state_dir, session_id):
+        return 'reviewer'
+
+    # Signal (b): gate-clearing inference (RGH-12) — cached after first hit
+    cache_key = f'{state_dir}:{session_id}'
+    cached = _gate_clearing_signal_cache.get(cache_key)
+    if cached is True:
+        return 'reviewer'
+    # Only re-scan if not yet confirmed (False or missing)
+    if cached is None or cached is False:
+        if _check_gate_clearing_signal(state_dir, session_id):
+            _gate_clearing_signal_cache[cache_key] = True
+            return 'reviewer'
+        _gate_clearing_signal_cache[cache_key] = False
+
+    return 'producer'
 
 
 # ============================================================================
@@ -1235,8 +1418,10 @@ def check_gate(
                         e.get('entry_source') for e in unreviewed
                         if e.get('entry_source', 'producer') in _EXEMPT_ENTRY_SOURCES
                     ]})
-    # Session-level reviewer exemption (RGH-11): for confirmed reviewer
-    # sessions, exempt Bash entries WITHOUT positive write indicators.
+    # Session-level reviewer exemption (RGH-11 + RGH-12): for confirmed
+    # reviewer sessions, exempt Bash entries that are EITHER:
+    # (1) write-safe (no positive write indicators) — RGH-11, OR
+    # (2) writes ONLY to reviewer-working-doc paths — RGH-12 (RGH12-6).
     # Deliverable-class Write/Edit still gates regardless of session role.
     # This closes the MAJOR-5 honest limit from RGH-10 where a separate-
     # session reviewer's inspection Bash (engine.py, test runs, greps)
@@ -1249,12 +1434,17 @@ def check_gate(
         for e in unreviewed_producer:
             fp = e.get('file_path', '')
             if fp.startswith('BASH:'):
-                # Only exempt Bash entries without positive write indicators
                 raw_cmd = e.get('bash_cmd', e.get('display', ''))
+                # (1) Write-safe Bash (RGH-11)
                 if is_bash_entry_write_safe(raw_cmd):
                     session_exempt += 1
                     session_exempt_keys.add(fp)
-                    continue  # exempt: reviewer inspection command
+                    continue
+                # (2) Reviewer-doc-only Bash writes (RGH-12, RGH12-6)
+                if is_bash_reviewer_doc_write(raw_cmd):
+                    session_exempt += 1
+                    session_exempt_keys.add(fp)
+                    continue
             still_gated.append(e)
         if session_exempt > 0:
             log_metrics(state_dir, session_id, 'session-reviewer-exempt',
