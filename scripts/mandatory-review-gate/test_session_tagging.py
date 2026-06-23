@@ -911,6 +911,168 @@ class TestTrackerBashCmdField(unittest.TestCase):
 
 
 # ============================================================================
+# RGH12-8: Git plumbing is non-dirty (chats can commit)
+# ============================================================================
+
+class TestGitPlumbingNonDirty(unittest.TestCase):
+    """RGH12-8: git add/commit/push/stash/fetch/pull and rm -f .git/index.lock
+    are classified as read-only (no dirty-ledger entry). Destructive git
+    mutations (reset --hard, clean, checkout --, restore) still create entries.
+
+    Safety: whitelisting git plumbing does NOT let unreviewed deliverables
+    escape — a producer's deliverable is its Write/Edit (still dirty), and
+    the Tier-B pre-commit hook independently guards commit content."""
+
+    def setUp(self):
+        sys.path.insert(0, SCRIPTS)
+        import engine
+        self.engine = engine
+
+    # --- Non-dirty (should return True from is_read_only_bash) ---
+
+    def test_git_add_is_read_only(self):
+        self.assertTrue(self.engine.is_read_only_bash('git add engine.py test.py'))
+
+    def test_git_commit_is_read_only(self):
+        self.assertTrue(self.engine.is_read_only_bash(
+            'git commit -m "feat: add feature"'))
+
+    def test_git_push_is_read_only(self):
+        self.assertTrue(self.engine.is_read_only_bash('git push'))
+
+    def test_git_push_with_remote(self):
+        self.assertTrue(self.engine.is_read_only_bash('git push origin main'))
+
+    def test_git_stash_is_read_only(self):
+        self.assertTrue(self.engine.is_read_only_bash('git stash'))
+
+    def test_git_fetch_is_read_only(self):
+        self.assertTrue(self.engine.is_read_only_bash('git fetch origin'))
+
+    def test_git_pull_is_read_only(self):
+        self.assertTrue(self.engine.is_read_only_bash('git pull'))
+
+    def test_git_status_still_read_only(self):
+        """Regression: existing READ_ONLY_GIT_SUBCMDS unchanged."""
+        self.assertTrue(self.engine.is_read_only_bash('git status'))
+
+    def test_git_diff_still_read_only(self):
+        self.assertTrue(self.engine.is_read_only_bash('git diff'))
+
+    def test_git_log_still_read_only(self):
+        self.assertTrue(self.engine.is_read_only_bash('git log --oneline -5'))
+
+    def test_git_show_still_read_only(self):
+        self.assertTrue(self.engine.is_read_only_bash('git show HEAD'))
+
+    def test_compound_git_add_commit_push(self):
+        """The exact commit pattern from CLAUDE.md."""
+        self.assertTrue(self.engine.is_read_only_bash(
+            'git add engine.py test.py && git commit -m "fix" && git push'))
+
+    def test_rm_f_git_index_lock(self):
+        self.assertTrue(self.engine.is_read_only_bash(
+            'rm -f /workspace/repos/ai-agency-core/.git/index.lock'))
+
+    def test_rm_f_git_lock_then_git_add_commit_push(self):
+        """The exact pattern from CLAUDE.md commit blocks."""
+        self.assertTrue(self.engine.is_read_only_bash(
+            'rm -f .git/index.lock && git add file.py && '
+            'git commit -m "msg" && git push'))
+
+    def test_cd_then_git_commit(self):
+        """cd + git commit compound."""
+        self.assertTrue(self.engine.is_read_only_bash(
+            'cd ~/workspace/repos/ai-agency-core && git add f && git commit -m "x"'))
+
+    # --- STILL dirty (destructive — should return False) ---
+
+    def test_git_reset_hard_still_dirty(self):
+        self.assertFalse(self.engine.is_read_only_bash('git reset --hard'))
+
+    def test_git_reset_hard_origin(self):
+        self.assertFalse(self.engine.is_read_only_bash(
+            'git reset --hard origin/main'))
+
+    def test_git_clean_still_dirty(self):
+        self.assertFalse(self.engine.is_read_only_bash('git clean -fd'))
+
+    def test_git_checkout_path_still_dirty(self):
+        self.assertFalse(self.engine.is_read_only_bash(
+            'git checkout -- src/app.py'))
+
+    def test_git_restore_still_dirty(self):
+        self.assertFalse(self.engine.is_read_only_bash(
+            'git restore src/app.py'))
+
+    def test_rm_without_f_flag_still_dirty(self):
+        """rm without -f is still dirty (general rm)."""
+        self.assertFalse(self.engine.is_read_only_bash(
+            'rm /workspace/.git/index.lock'))
+
+    def test_rm_f_non_lock_file_still_dirty(self):
+        """rm -f of a non-.git/index.lock file is still dirty."""
+        self.assertFalse(self.engine.is_read_only_bash(
+            'rm -f /workspace/src/app.py'))
+
+    def test_rm_f_git_lock_plus_other_file_still_dirty(self):
+        """rm -f targeting lock + another file → still dirty."""
+        self.assertFalse(self.engine.is_read_only_bash(
+            'rm -f .git/index.lock src/app.py'))
+
+
+class TestGitPlumbingIntegration(unittest.TestCase):
+    """Integration: git add && commit && push creates NO dirty entry,
+    session stops clean. git reset --hard creates a dirty entry."""
+
+    def test_git_commit_push_no_dirty_entry(self):
+        """git add && git commit && git push → no dirty-ledger entry."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'git-commit-session'
+            cmd = 'cd ~/workspace/repos/ai-agency-core && rm -f .git/index.lock && git add engine.py && git commit -m "msg" && git push'
+            r = _run_track(sid, 'Bash', {'command': cmd}, state_dir)
+            self.assertEqual(r.returncode, 0)
+            entries = _read_dirty_ledger(state_dir, sid)
+            self.assertEqual(len(entries), 0,
+                             f'Git commit+push should create NO dirty entry. '
+                             f'Got {len(entries)}: {entries}')
+
+    def test_git_commit_push_session_stops_clean(self):
+        """Session that ONLY ran git add/commit/push → exit 0 (no block)."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'git-only-session'
+            # Track git plumbing — should create no entries
+            cmd = 'git add engine.py && git commit -m "feat" && git push'
+            _run_track(sid, 'Bash', {'command': cmd}, state_dir)
+            entries = _read_dirty_ledger(state_dir, sid)
+            self.assertEqual(len(entries), 0, 'Git plumbing should be non-dirty')
+            r = _run_gate(sid, state_dir)
+            self.assertEqual(r.returncode, 0,
+                             f'Git-only session MUST stop clean. '
+                             f'Got exit {r.returncode}. stderr: {r.stderr}')
+
+    def test_git_reset_hard_creates_dirty_entry(self):
+        """git reset --hard → dirty-ledger entry created."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'git-reset-session'
+            cmd = 'git reset --hard origin/main'
+            _run_track(sid, 'Bash', {'command': cmd}, state_dir)
+            entries = _read_dirty_ledger(state_dir, sid)
+            self.assertEqual(len(entries), 1,
+                             f'git reset --hard MUST create a dirty entry. '
+                             f'Got {len(entries)}')
+
+    def test_git_clean_creates_dirty_entry(self):
+        """git clean -fd → dirty-ledger entry created."""
+        with tempfile.TemporaryDirectory() as state_dir:
+            sid = 'git-clean-session'
+            _run_track(sid, 'Bash', {'command': 'git clean -fd'}, state_dir)
+            entries = _read_dirty_ledger(state_dir, sid)
+            self.assertEqual(len(entries), 1,
+                             'git clean MUST create a dirty entry')
+
+
+# ============================================================================
 # RGH-12: auto-infer reviewer role from gate-clearing records
 # ============================================================================
 

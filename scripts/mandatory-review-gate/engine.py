@@ -164,6 +164,19 @@ READ_ONLY_GIT_SUBCMDS = frozenset({
     'cat-file', 'name-rev', 'for-each-ref',
 })
 
+# Git plumbing subcommands that are non-dirty (RGH-12, RGH12-8).
+# These are version-control operations, not deliverable production.
+# A producer's actual deliverable is its Write/Edit, which remains a dirty
+# entry that blocks its stop — so whitelisting git plumbing does NOT let
+# unreviewed deliverables escape. The Tier-B pre-commit hook (where
+# installed) independently guards commit content.
+#
+# SECURITY: destructive working-tree mutations (reset, clean, checkout,
+# restore) are NOT whitelisted — they can discard uncommitted work.
+GIT_PLUMBING_SUBCMDS = frozenset({
+    'add', 'commit', 'push', 'stash', 'fetch', 'pull',
+})
+
 # Read-only Python test scripts — exact basenames only (RGH-1b item 4).
 # SECURITY: Never whitelist 'python3' as an interpreter generically.
 # Only specific test-suite scripts that are known read-only belong here.
@@ -270,6 +283,21 @@ def _is_segment_read_only(segment: str) -> bool:
                 break
         if subcmd and subcmd in READ_ONLY_GIT_SUBCMDS:
             return True
+        # RGH12-8: git plumbing (add/commit/push/stash/fetch/pull) is
+        # non-dirty — version-control operations, not deliverable production.
+        if subcmd and subcmd in GIT_PLUMBING_SUBCMDS:
+            return True
+        return False
+
+    # RGH12-8: rm -f <path>/.git/index.lock — stale lock cleanup, not
+    # deliverable production. Only matches rm with -f flag targeting a
+    # .git/index.lock path specifically.
+    if base == 'rm':
+        parts = segment.split()
+        if len(parts) >= 2 and '-f' in parts:
+            targets = [p for p in parts[1:] if not p.startswith('-')]
+            if targets and all(t.endswith('.git/index.lock') for t in targets):
+                return True
         return False
 
     # sed -n (print-only mode) is read-only; sed -i or bare sed can modify files
