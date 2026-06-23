@@ -328,6 +328,7 @@ def main():
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     log_script = os.path.join(script_dir, 'log-review-pass.py')
+    skip_script = os.path.join(script_dir, 'gate-skip.py')
 
     # Include dispatch findings if any
     dispatch_findings = ''
@@ -376,6 +377,12 @@ To clear this gate:
      --verdict-file <verdict-path> --reviewer-type independent \\
      --reviewer-session <REVIEWER_OWN_SESSION_ID> --run-id <chat-slug>
 4. Once the independent reviewer logs PASS, try stopping again.
+
+OPERATOR ONLY — if these unreviewed entries are a REVIEWER session's own
+read-only checks or working-doc writes (NOT producer deliverables), clear them
+with this ONE-LINE command. Copy the whole line. gate-skip takes ONLY --session
+and --reason — it does NOT accept --files, and must not be split across lines:
+   python3 {skip_script} --session {session_id} --reason "reviewer plumbing"
 
 DO NOT attempt to self-clear (log --reviewer-type independent yourself).
 DO NOT spawn an in-session sub-agent as "independent reviewer" — it shares
