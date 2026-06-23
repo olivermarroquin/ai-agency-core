@@ -244,6 +244,22 @@ def _is_segment_read_only(segment: str) -> bool:
     if _has_stdout_file_redirect(segment):
         return False
 
+    # Multi-line / comment handling: a segment may contain newlines (the command
+    # spanned several lines) and/or shell comment lines (starting with '#').
+    # Comments and blank lines do nothing — drop them and require every remaining
+    # real line to be read-only. Fixes reviewer verification blobs like
+    # "# check\necho ...\nfind ..." being mis-flagged as state-changing.
+    # SKIP when a heredoc is present: its body newlines are DATA, not separate
+    # commands (e.g. `python3 << EOF\n...\nEOF`) — the heredoc-aware checks below
+    # handle those.
+    if '<<' not in segment:
+        lines = [ln.strip() for ln in segment.split('\n')]
+        real_lines = [ln for ln in lines if ln and not ln.startswith('#')]
+        if not real_lines:
+            return True  # only comments / blank lines — no command runs
+        if real_lines != [segment]:
+            return all(_is_segment_read_only(ln) for ln in real_lines)
+
     first = _first_word(segment)
 
     # Standalone control-flow keywords — the segment is structural, not a command
@@ -455,6 +471,17 @@ def _is_segment_write_safe(segment: str) -> bool:
     # Stdout file redirect → writing
     if _has_stdout_file_redirect(segment):
         return False
+
+    # Multi-line / comment handling (same as _is_segment_read_only): drop
+    # comment + blank lines, require every remaining real line to be write-safe.
+    # SKIP when a heredoc is present (body newlines are data, not commands).
+    if '<<' not in segment:
+        lines = [ln.strip() for ln in segment.split('\n')]
+        real_lines = [ln for ln in lines if ln and not ln.startswith('#')]
+        if not real_lines:
+            return True  # only comments / blank lines — no command runs
+        if real_lines != [segment]:
+            return all(_is_segment_write_safe(ln) for ln in real_lines)
 
     first = _first_word(segment)
 
