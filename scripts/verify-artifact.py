@@ -252,27 +252,34 @@ def extract_jsonld(html: str) -> list[dict[str, Any]]:
 
 
 def extract_jsonld_types(blocks: list[dict[str, Any]]) -> set[str]:
-    """Get all @type values from parsed JSON-LD blocks."""
+    """Get all @type values from parsed JSON-LD blocks, recursively.
+
+    Walks the entire JSON-LD structure (including nested objects like
+    hasMenu, potentialAction, founder, aggregateRating, etc.) to collect
+    every @type value at any depth. This is essential for restaurant pages
+    where Menu, ReserveAction, and OrderAction are nested properties of
+    the Restaurant node, not separate @graph entries.
+    """
     types: set[str] = set()
-    for block in blocks:
-        if "_parse_error" in block:
-            continue
-        items: list[dict[str, Any]] = []
-        if isinstance(block, dict):
-            if "@graph" in block and isinstance(block["@graph"], list):
-                items = block["@graph"]
-            else:
-                items = [block]
-        elif isinstance(block, list):
-            items = block
-        for item in items:
-            if not isinstance(item, dict):
-                continue
-            t = item.get("@type")
+
+    def _collect_types(obj: Any) -> None:
+        if isinstance(obj, dict):
+            if "_parse_error" in obj:
+                return
+            t = obj.get("@type")
             if isinstance(t, str):
                 types.add(t)
             elif isinstance(t, list):
                 types.update(tt for tt in t if isinstance(tt, str))
+            for v in obj.values():
+                _collect_types(v)
+        elif isinstance(obj, list):
+            for item in obj:
+                _collect_types(item)
+
+    for block in blocks:
+        _collect_types(block)
+
     return types
 
 
@@ -1077,6 +1084,34 @@ def run_verification(
                 "blocking_count": 0,
             })
             continue
+
+        # Evaluate condition against ground truth — skip check if condition
+        # is not met (e.g., Menu check skipped when menu_url is absent).
+        # condition format: {"ground_truth_alias": "client", "field": "restaurant.menu_url"}
+        # The check runs only when the field is truthy in the ground truth data.
+        condition = check_config.get("condition")
+        if condition and isinstance(condition, dict):
+            gt_alias = condition.get("ground_truth_alias", "")
+            gt_field = condition.get("field", "")
+            gt_data = gt.get(gt_alias, {})
+            if "_error" not in gt_data and gt_field:
+                cond_value = gt_data
+                for part in gt_field.split("."):
+                    if isinstance(cond_value, dict):
+                        cond_value = cond_value.get(part)
+                    else:
+                        cond_value = None
+                        break
+                if not cond_value:
+                    check_results.append({
+                        "check_id": check_id,
+                        "check_type": check_type,
+                        "verdict": "SKIPPED",
+                        "findings_count": 0,
+                        "blocking_count": 0,
+                        "skip_reason": f"condition not met: {gt_alias}.{gt_field} is falsy",
+                    })
+                    continue
 
         # Override HTTP checks if skip_http
         effective_config = dict(check_config)

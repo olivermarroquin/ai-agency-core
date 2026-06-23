@@ -1,0 +1,317 @@
+{
+  "profile_id": "restaurant-page",
+  "description": "Pre-publish verification for restaurant page folders. Enumerates all 6 restaurant pages as separate surfaces so every page gets checked — including the gated-schema pages (menu for hasMenu/Menu, reserve-order for ReserveAction/OrderAction). CR-A fix: no more matches[0] single-page-only verification.",
+
+  "surfaces": [
+    {
+      "id": "page_home",
+      "glob": "home.html",
+      "type": "html",
+      "required": true
+    },
+    {
+      "id": "page_menu",
+      "glob": "menu.html",
+      "type": "html",
+      "required": true
+    },
+    {
+      "id": "page_about",
+      "glob": "about.html",
+      "type": "html",
+      "required": true
+    },
+    {
+      "id": "page_location",
+      "glob": "location-hours.html",
+      "type": "html",
+      "required": true
+    },
+    {
+      "id": "page_cuisine",
+      "glob": "cuisine.html",
+      "type": "html",
+      "required": true
+    },
+    {
+      "id": "page_reserve",
+      "glob": "reserve-order.html",
+      "type": "html",
+      "required": true
+    }
+  ],
+
+  "ground_truth": {
+    "base_path": "repos/ai-agency-core/scripts/data",
+    "sources": [
+      {
+        "alias": "client",
+        "pattern": "client-{client_slug}.json"
+      }
+    ]
+  },
+
+  "checks": [
+    {
+      "id": "placeholder-sweep",
+      "type": "pattern-sweep",
+      "severity": "blocking",
+      "surfaces": ["page_home", "page_menu", "page_about", "page_location", "page_cuisine", "page_reserve"],
+      "patterns": [
+        {
+          "regex": "\\[.*?placeholder.*?\\]",
+          "label": "bracketed placeholder text",
+          "case_insensitive": true
+        },
+        {
+          "regex": "<!--\\s*MISSING",
+          "label": "<!-- MISSING comment (scaffolder silent-degrade)",
+          "case_insensitive": false
+        },
+        {
+          "regex": "<!--\\s*TBD",
+          "label": "<!-- TBD comment",
+          "case_insensitive": false
+        },
+        {
+          "regex": "\\{[a-z_]+\\}",
+          "label": "unrendered {template_token}",
+          "case_insensitive": false
+        },
+        {
+          "regex": "\\bFILL[:\\s]",
+          "label": "FILL: placeholder",
+          "case_insensitive": true
+        },
+        {
+          "regex": "\\bTBD\\b",
+          "label": "TBD placeholder",
+          "case_insensitive": false
+        },
+        {
+          "regex": "<TBD[:\\s>]",
+          "label": "<TBD> placeholder",
+          "case_insensitive": true
+        },
+        {
+          "regex": "[-_./]PLACEHOLDER|PLACEHOLDER[-_./]|\\bPLACEHOLDER\\b",
+          "label": "PLACEHOLDER token",
+          "case_insensitive": false
+        }
+      ]
+    },
+
+    {
+      "id": "source-client-leak",
+      "type": "identity-leak",
+      "severity": "blocking",
+      "surfaces": ["page_home", "page_menu", "page_about", "page_location", "page_cuisine", "page_reserve"],
+      "identity_source": "client",
+      "identity_fields": ["name", "alternate_name", "owner_name"],
+      "identity_file_glob": "client-*.json",
+      "current_slug_var": "client_slug"
+    },
+
+    {
+      "id": "value-cross-check",
+      "type": "value-cross-check",
+      "severity": "blocking",
+      "checkable_facts": [
+        {
+          "fact_key": "owner_name",
+          "ground_truth_alias": "client",
+          "ground_truth_field": "owner_name",
+          "required_in_sources": true,
+          "check_mode": "presence",
+          "extraction_surfaces": ["page_home", "page_about"],
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "phone",
+          "ground_truth_alias": "client",
+          "ground_truth_field": "phone_display",
+          "required_in_sources": true,
+          "check_mode": "presence",
+          "extraction_surfaces": ["page_home", "page_reserve"],
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "business_name",
+          "ground_truth_alias": "client",
+          "ground_truth_field": "name",
+          "required_in_sources": true,
+          "check_mode": "presence",
+          "extraction_surfaces": ["page_home", "page_menu", "page_about", "page_location", "page_cuisine", "page_reserve"],
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "review_rating",
+          "ground_truth_alias": "client",
+          "ground_truth_field": "review_rating",
+          "required_in_sources": true,
+          "check_mode": "structured-extract",
+          "extraction_surfaces": ["page_home"],
+          "severity": "blocking",
+          "_comment": "AggregateRating ratingValue appears in home page JSON-LD."
+        },
+        {
+          "fact_key": "review_count",
+          "ground_truth_alias": "client",
+          "ground_truth_field": "review_count",
+          "required_in_sources": true,
+          "check_mode": "structured-extract",
+          "extraction_surfaces": ["page_home"],
+          "extraction_patterns": [
+            "\"reviewCount\"\\s*:\\s*\"?(\\d+)\"?"
+          ],
+          "severity": "blocking"
+        },
+        {
+          "fact_key": "primary_cuisine",
+          "ground_truth_alias": "client",
+          "ground_truth_field": "restaurant.primary_cuisine",
+          "required_in_sources": true,
+          "check_mode": "presence",
+          "extraction_surfaces": ["page_home", "page_cuisine"],
+          "severity": "blocking",
+          "_comment": "Primary cuisine must appear in home and cuisine pages — drives headings, hero, and meta."
+        }
+      ]
+    },
+
+    {
+      "id": "schema-base-restaurant",
+      "type": "schema-coverage",
+      "severity": "blocking",
+      "surfaces": ["page_home", "page_menu", "page_about", "page_location", "page_cuisine", "page_reserve"],
+      "skip_title_check": true,
+      "required_meta": [],
+      "required_og": [],
+      "required_schema_types": ["Restaurant"],
+      "required_jsonld_fields": {
+        "Restaurant": [
+          "@type", "name", "telephone", "address", "url",
+          "servesCuisine", "priceRange", "acceptsReservations",
+          "aggregateRating"
+        ]
+      },
+      "_comment": "Base Restaurant schema required on ALL 6 pages."
+    },
+
+    {
+      "id": "schema-menu-page-gated",
+      "type": "schema-coverage",
+      "severity": "blocking",
+      "condition": {
+        "ground_truth_alias": "client",
+        "field": "restaurant.menu_url"
+      },
+      "surfaces": ["page_menu"],
+      "skip_title_check": true,
+      "required_meta": [],
+      "required_og": [],
+      "required_schema_types": ["Menu"],
+      "required_jsonld_fields": {
+        "Menu": ["@type", "url"]
+      },
+      "_comment": "Menu type required on menu page ONLY when config has menu_url populated. Condition-gated: skipped for configs without menu_url (legitimate — takeout-only restaurants may have no online menu)."
+    },
+
+    {
+      "id": "schema-reserve-page-gated",
+      "type": "schema-coverage",
+      "severity": "blocking",
+      "condition": {
+        "ground_truth_alias": "client",
+        "field": "restaurant.accepts_reservations"
+      },
+      "surfaces": ["page_reserve"],
+      "skip_title_check": true,
+      "required_meta": [],
+      "required_og": [],
+      "required_schema_types": ["ReserveAction"],
+      "required_jsonld_fields": {},
+      "_comment": "ReserveAction required on reserve-order page ONLY when config has accepts_reservations=true. Condition-gated: skipped for walk-in-only restaurants."
+    },
+
+    {
+      "id": "schema-order-page-gated",
+      "type": "schema-coverage",
+      "severity": "blocking",
+      "condition": {
+        "ground_truth_alias": "client",
+        "field": "restaurant.accepts_online_orders"
+      },
+      "surfaces": ["page_reserve"],
+      "skip_title_check": true,
+      "required_meta": [],
+      "required_og": [],
+      "required_schema_types": ["OrderAction"],
+      "required_jsonld_fields": {},
+      "_comment": "OrderAction required on reserve-order page ONLY when config has accepts_online_orders=true. Condition-gated: skipped for dine-in-only restaurants."
+    },
+
+    {
+      "id": "electrician-leak-check",
+      "type": "pattern-sweep",
+      "severity": "blocking",
+      "surfaces": ["page_home", "page_menu", "page_about", "page_location", "page_cuisine", "page_reserve"],
+      "patterns": [
+        {
+          "regex": "\\bmaster electrician\\b",
+          "label": "electrician-only terminology leak",
+          "case_insensitive": true
+        },
+        {
+          "regex": "\\belectrical contractor\\b",
+          "label": "electrician-only terminology leak",
+          "case_insensitive": true
+        },
+        {
+          "regex": "\\bDominion Energy\\b",
+          "label": "electrician-only utility reference leak",
+          "case_insensitive": true
+        },
+        {
+          "regex": "\"@type\"\\s*:\\s*\"LocalBusiness\"",
+          "label": "wrong schema type — restaurant must use Restaurant, not LocalBusiness",
+          "case_insensitive": false
+        },
+        {
+          "regex": "\\bevp-",
+          "label": "electrician CSS prefix leak (should be rst-)",
+          "case_insensitive": false
+        }
+      ]
+    },
+
+    {
+      "id": "image-integrity",
+      "type": "image-integrity",
+      "severity": "blocking",
+      "surfaces": ["page_home", "page_menu", "page_about", "page_location", "page_cuisine", "page_reserve"],
+      "placeholder_tokens": [
+        "PLACEHOLDER", "placeholder", "FILL", "TBD", "MISSING", "example.com"
+      ],
+      "check_resolution": true,
+      "timeout_seconds": 10
+    },
+
+    {
+      "id": "internal-link-resolution",
+      "type": "link-resolution",
+      "severity": "blocking",
+      "surfaces": ["page_home", "page_menu", "page_about", "page_location", "page_cuisine", "page_reserve"],
+      "check_http": true,
+      "timeout_seconds": 10
+    },
+
+    {
+      "id": "hardcode-scan",
+      "type": "hardcode-scan",
+      "severity": "blocking",
+      "surfaces": ["page_home", "page_menu", "page_about", "page_location", "page_cuisine", "page_reserve"],
+      "scanner_profile": "profiles/restaurant-defaults.json"
+    }
+  ]
+}

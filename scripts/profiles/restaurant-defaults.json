@@ -1,0 +1,49 @@
+{
+  "profile_id": "restaurant-defaults",
+  "description": "Detects scaffolder silent defaults in restaurant page output. Restaurant has fewer legacy fallbacks than electrician, but placeholder content and generic defaults still need detection.",
+  "scan_globs": ["*.html", "*.md"],
+  "defaults": [
+    {
+      "field": "placeholder_phone",
+      "default_values": ["(410) 555-0000", "555-0000"],
+      "severity": "blocking",
+      "rationale": "Placeholder phone number from the Asian Delight test config. Any real client config must replace this."
+    },
+    {
+      "field": "placeholder_email",
+      "default_values": ["contact@example.com", "info@example.com"],
+      "severity": "blocking",
+      "rationale": "Generic placeholder email. Real client email required before publish."
+    },
+    {
+      "field": "placeholder_website",
+      "default_values": ["https://example.com"],
+      "severity": "blocking",
+      "rationale": "Generic placeholder URL. Real client website required."
+    },
+    {
+      "field": "electrician_leak_license",
+      "default_values": ["master electrician", "licensed electrician", "electrical contractor"],
+      "severity": "blocking",
+      "rationale": "Electrician-specific terminology that must never appear in restaurant output. Detects cross-type template leaks."
+    },
+    {
+      "field": "electrician_leak_service_area",
+      "default_values": ["Dominion Energy", "ev charger", "panel upgrade", "electrical troubleshooting"],
+      "severity": "blocking",
+      "rationale": "Electrician-specific service/utility references that must never appear in restaurant output."
+    },
+    {
+      "field": "electrician_leak_schema",
+      "default_values": ["LocalBusiness", "\"@type\": \"Service\""],
+      "severity": "blocking",
+      "rationale": "Restaurant pages must use @type Restaurant, not LocalBusiness or Service. Detects wrong schema type in output."
+    },
+    {
+      "field": "electrician_leak_css",
+      "default_values": ["evp-"],
+      "severity": "blocking",
+      "rationale": "Electrician CSS prefix. Restaurant uses rst- prefix. Detects template leak."
+    }
+  ]
+}

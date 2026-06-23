@@ -334,7 +334,13 @@ _JSON_LD_BLOCK_PATTERN = re.compile(
     re.DOTALL,
 )
 
-_REQUIRED_SCHEMA_TYPES = {"LocalBusiness", "Service", "FAQPage"}
+_REQUIRED_SCHEMA_TYPES_ELECTRICIAN = {"LocalBusiness", "Service", "FAQPage"}
+_REQUIRED_SCHEMA_TYPES_RESTAURANT = {"Restaurant"}
+
+# Auto-detect business type from JSON-LD @type values found in the HTML.
+# If Restaurant is found → restaurant requirements. Otherwise → electrician
+# (backward compatible default).
+_REQUIRED_SCHEMA_TYPES = _REQUIRED_SCHEMA_TYPES_ELECTRICIAN  # legacy alias
 
 # Patterns for the placeholder hard-block (Guard 1, Issues #15/#24/#26).
 # Before any publish/update, the draft is scanned for residual placeholder
@@ -421,9 +427,14 @@ def check_placeholder_gate(html: str) -> tuple[bool, list[str]]:
     return (len(findings) == 0), findings
 
 
-def validate_jsonld(html: str) -> tuple[bool, list[str]]:
+def validate_jsonld(html: str, business_type: str | None = None) -> tuple[bool, list[str]]:
     """Pull every JSON-LD block from the HTML, parse each, confirm the required
-    schema types are present. Returns (is_valid, list_of_errors)."""
+    schema types are present. Returns (is_valid, list_of_errors).
+
+    business_type: 'electrician', 'restaurant', or None (auto-detect from HTML).
+    Auto-detect: if Restaurant @type found in the graph → restaurant requirements;
+    otherwise → electrician requirements (backward compatible default).
+    """
     errors: list[str] = []
     found_types: set[str] = set()
 
@@ -459,10 +470,20 @@ def validate_jsonld(html: str) -> tuple[bool, list[str]]:
                     if isinstance(tt, str):
                         found_types.add(tt)
 
-    missing = _REQUIRED_SCHEMA_TYPES - found_types
+    # Determine which required types to check
+    if business_type is None:
+        # Auto-detect from found types
+        business_type = "restaurant" if "Restaurant" in found_types else "electrician"
+
+    if business_type == "restaurant":
+        required = _REQUIRED_SCHEMA_TYPES_RESTAURANT
+    else:
+        required = _REQUIRED_SCHEMA_TYPES_ELECTRICIAN
+
+    missing = required - found_types
     if missing:
         errors.append(
-            f"Missing required @type values: {sorted(missing)} "
+            f"Missing required @type values for {business_type}: {sorted(missing)} "
             f"(found: {sorted(found_types)})"
         )
 

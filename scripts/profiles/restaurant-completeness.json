@@ -1,0 +1,136 @@
+{
+  "profile_id": "restaurant-completeness",
+  "description": "Pre-scaffold completeness gate for restaurant pages. Verifies the client config JSON has every field the restaurant templates reference. Missing field = fail loud, never silent-default. No city/service data files — restaurant uses a single client config.",
+  "data_files": [
+    {
+      "pattern": "client-{client_slug}.json",
+      "required_fields": [
+        {
+          "field": "client_slug",
+          "severity": "blocking",
+          "rationale": "Core identity field — scaffolder uses this for folder names, URLs, and config resolution."
+        },
+        {
+          "field": "business_type",
+          "severity": "blocking",
+          "rationale": "Profile routing key — scaffold-page.py loads profiles/<business_type>/ based on this value."
+        },
+        {
+          "field": "name",
+          "severity": "blocking",
+          "rationale": "Business name appears in headings, meta, JSON-LD Restaurant schema, and body text."
+        },
+        {
+          "field": "owner_name",
+          "severity": "blocking",
+          "rationale": "Owner name in about section, JSON-LD founder.name, and story content."
+        },
+        {
+          "field": "owner_title",
+          "severity": "blocking",
+          "rationale": "Owner title in JSON-LD founder.jobTitle."
+        },
+        {
+          "field": "website_url",
+          "severity": "blocking",
+          "rationale": "Base URL for page_url derivation and JSON-LD Restaurant url."
+        },
+        {
+          "field": "phone_display",
+          "severity": "blocking",
+          "rationale": "Phone number in CTA buttons and body text."
+        },
+        {
+          "field": "phone_tel",
+          "severity": "blocking",
+          "rationale": "tel: link for phone CTA."
+        },
+        {
+          "field": "phone_e164",
+          "severity": "blocking",
+          "rationale": "E.164 phone number in JSON-LD Restaurant telephone."
+        },
+        {
+          "field": "email",
+          "severity": "blocking",
+          "rationale": "Email in JSON-LD Restaurant schema."
+        },
+        {
+          "field": "address",
+          "severity": "blocking",
+          "rationale": "Structured address block — street, locality, region, postal_code, country — for JSON-LD PostalAddress."
+        },
+        {
+          "field": "geo",
+          "severity": "blocking",
+          "rationale": "Lat/long for JSON-LD GeoCoordinates and map embed."
+        },
+        {
+          "field": "hours",
+          "severity": "blocking",
+          "rationale": "Opening hours array for JSON-LD openingHoursSpecification and hours-table section."
+        },
+        {
+          "field": "primary_color",
+          "severity": "blocking",
+          "rationale": "CSS primary color. Missing = broken page styling."
+        },
+        {
+          "field": "business_description_schema",
+          "severity": "blocking",
+          "rationale": "JSON-LD Restaurant description."
+        },
+        {
+          "field": "review_count",
+          "severity": "blocking",
+          "rationale": "Review count in JSON-LD AggregateRating reviewCount."
+        },
+        {
+          "field": "review_rating",
+          "severity": "blocking",
+          "rationale": "Review rating in JSON-LD AggregateRating ratingValue."
+        },
+        {
+          "field": "restaurant.cuisine_types",
+          "severity": "blocking",
+          "rationale": "Array of cuisine types for JSON-LD servesCuisine. Empty = missing schema field."
+        },
+        {
+          "field": "restaurant.primary_cuisine",
+          "severity": "blocking",
+          "rationale": "Primary cuisine used in headings, meta title, and hero text."
+        },
+        {
+          "field": "restaurant.food_price_range",
+          "severity": "blocking",
+          "rationale": "Price range indicator ($/$$/$$$/$$$$) for JSON-LD priceRange."
+        },
+        {
+          "field": "restaurant.accepts_reservations",
+          "severity": "blocking",
+          "rationale": "Boolean for JSON-LD acceptsReservations. Controls whether ReserveAction schema emits on the conversion page."
+        },
+        {
+          "field": "brand_image_url",
+          "severity": "warning",
+          "rationale": "Brand image in JSON-LD image. Empty is acceptable for placeholder configs but should be populated before go-live."
+        },
+        {
+          "field": "restaurant.menu_url",
+          "severity": "warning",
+          "rationale": "URL for JSON-LD hasMenu. Optional — schema emits without it, but menu page loses structured data."
+        },
+        {
+          "field": "restaurant.menu_sections",
+          "severity": "warning",
+          "rationale": "Structured menu data for menu page rendering. Optional — page renders a CTA-only fallback without it."
+        },
+        {
+          "field": "restaurant.signature_dishes",
+          "severity": "warning",
+          "rationale": "Featured dishes for cuisine page cards. Optional — section omits gracefully."
+        }
+      ]
+    }
+  ]
+}

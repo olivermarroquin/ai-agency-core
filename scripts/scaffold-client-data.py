@@ -524,9 +524,13 @@ _STATE_FULL = {
 }
 
 
-def build_client_data(brief: Brief, client_slug: str) -> tuple[dict[str, Any], list[str]]:
+def build_client_data(brief: Brief, client_slug: str, business_type: str = "electrician") -> tuple[dict[str, Any], list[str]]:
     """Produce the data/client-<slug>.json dict and a parallel list of fields
     that need confirmation from the client (because the brief flagged them TBD).
+
+    business_type: 'electrician' (default, backward compatible) or 'restaurant'.
+    Controls whether license extraction runs (electrician only) and which
+    fields are flagged as gaps.
     """
     needs_confirmation: list[str] = []
 
@@ -816,38 +820,44 @@ def build_client_data(brief: Brief, client_slug: str) -> tuple[dict[str, Any], l
         brand_extended = None
 
     # ---------- §8 License ----------
-    va_row = extract_license_row(s8, "Virginia")
-    license_category = va_row.get(list(va_row.keys())[1]) if va_row else None
-    license_issuer_raw = None
-    if va_row:
-        issuer_key = next((k for k in va_row.keys() if "issuer" in k.lower()), None)
-        if issuer_key:
-            license_issuer_raw = va_row[issuer_key]
+    # License is required for electrician (trade license) but NOT for restaurant.
+    # Restaurants may have health permits, but those are not schema.org credentials
+    # and are not tracked in the client config. BTF-2b: skip license extraction
+    # entirely for non-electrician business types.
+    license_block = None
+    if business_type == "electrician":
+        va_row = extract_license_row(s8, "Virginia")
+        license_category = va_row.get(list(va_row.keys())[1]) if va_row else None
+        license_issuer_raw = None
+        if va_row:
+            issuer_key = next((k for k in va_row.keys() if "issuer" in k.lower()), None)
+            if issuer_key:
+                license_issuer_raw = va_row[issuer_key]
 
-    if is_missing(license_category) or not license_category:
-        record_gap("license.category")
-        license_category = None
-    else:
-        license_category = strip_citations(license_category)
+        if is_missing(license_category) or not license_category:
+            record_gap("license.category")
+            license_category = None
+        else:
+            license_category = strip_citations(license_category)
 
-    license_issuer = None
-    if license_issuer_raw and not is_missing(license_issuer_raw):
-        # Strip DPOR gloss text like "(DPOR — Virginia's licensing body)"
-        license_issuer = re.sub(r"\s*\([^)]*\)\s*", "", license_issuer_raw).strip()
-        # Trim leading/trailing punctuation
-        license_issuer = strip_citations(license_issuer)
-    if not license_issuer:
-        record_gap("license.issuer")
+        license_issuer = None
+        if license_issuer_raw and not is_missing(license_issuer_raw):
+            # Strip DPOR gloss text like "(DPOR — Virginia's licensing body)"
+            license_issuer = re.sub(r"\s*\([^)]*\)\s*", "", license_issuer_raw).strip()
+            # Trim leading/trailing punctuation
+            license_issuer = strip_citations(license_issuer)
+        if not license_issuer:
+            record_gap("license.issuer")
 
-    license_state = "Virginia"
-    license_state_full = _STATE_FULL.get(license_state, license_state)
+        license_state = "Virginia"
+        license_state_full = _STATE_FULL.get(license_state, license_state)
 
-    license_block = {
-        "category": license_category,
-        "issuer": license_issuer,
-        "state": license_state,
-        "state_full": license_state_full,
-    }
+        license_block = {
+            "category": license_category,
+            "issuer": license_issuer,
+            "state": license_state,
+            "state_full": license_state_full,
+        }
 
     # ---------- Owner bio paragraphs ----------
     # Generating bio prose from facts produces wooden results, so we leave the
@@ -857,17 +867,20 @@ def build_client_data(brief: Brief, client_slug: str) -> tuple[dict[str, Any], l
     record_gap("owner_bio_paragraphs")
 
     # ---------- Assemble ----------
+    schema_type = "Restaurant" if business_type == "restaurant" else "LocalBusiness"
     data: dict[str, Any] = {
         "_comment": (
             f"Client-level facts for {name or client_slug}. Used by "
-            "scaffold-page.py to fill the LocalBusiness JSON-LD block, "
-            "About section, hero phone CTA, and final CTA across all Core 30 "
-            "pages. One file per client."
+            f"scaffold-page.py to fill the {schema_type} JSON-LD block, "
+            "About section, hero phone CTA, and final CTA. "
+            "One file per client."
         ),
         "_scaffolded": {
             "from_brief": True,
+            "business_type": business_type,
             "needs_confirmation": needs_confirmation,
         },
+        "business_type": business_type,
         "client_slug": client_slug,
         "name": name,
         "alternate_name": alternate_name,
@@ -890,7 +903,14 @@ def build_client_data(brief: Brief, client_slug: str) -> tuple[dict[str, Any], l
         "address": address,
         "geo": geo if geo else {"latitude": None, "longitude": None},
         "hours": hours if hours else [],
-        "license": license_block,
+    }
+
+    # License block: electrician only. Restaurants don't have trade licenses
+    # in the schema.org credential sense (config-schema.json fields_not_used).
+    if license_block is not None:
+        data["license"] = license_block
+
+    data.update({
         "business_description_schema": business_description,
         "brand_image_url": brand_image_url,
         "brand_logo_url": brand_logo_url,
@@ -907,7 +927,7 @@ def build_client_data(brief: Brief, client_slug: str) -> tuple[dict[str, Any], l
         "secondary_cta_label": secondary_cta,
         "primary_cta_label_template": primary_cta,
         "final_cta_response_promise": final_cta,
-    }
+    })
 
     return data, needs_confirmation
 
@@ -1266,6 +1286,7 @@ def scaffold(
     tier3_template_out: Optional[Path],
     overwrite: bool,
     meeting_notes_path: Optional[Path],
+    business_type: str = "electrician",
 ) -> tuple[Path, Path, dict[str, Any]]:
     """Run the scaffolder and return (data_json_path, config_path, data_dict)."""
     brief = parse_brief(brief_path)
@@ -1273,7 +1294,7 @@ def scaffold(
     # Pull client display name from frontmatter (more reliable than table parsing)
     client_name = brief.frontmatter.get("client-name")
 
-    data, needs_confirmation = build_client_data(brief, client_slug)
+    data, needs_confirmation = build_client_data(brief, client_slug, business_type=business_type)
     # If the brief frontmatter has a cleaner client-name than what table parsing
     # found, prefer the frontmatter value
     if client_name and (not data.get("name") or "name" in needs_confirmation):
@@ -1419,6 +1440,14 @@ def main() -> int:
         "copies it manually.",
     )
     p.add_argument(
+        "--business-type",
+        type=str,
+        default="electrician",
+        choices=["electrician", "restaurant"],
+        help="Business type. Controls license extraction (electrician only) "
+        "and which fields are flagged as gaps. Default: electrician.",
+    )
+    p.add_argument(
         "--overwrite",
         action="store_true",
         help="Overwrite existing data/config/tier-3 files instead of writing "
@@ -1466,6 +1495,7 @@ def main() -> int:
             tier3_template_out=args.tier3_template_out,
             overwrite=args.overwrite,
             meeting_notes_path=args.meeting_notes,
+            business_type=args.business_type,
         )
     except Exception as e:
         sys.stderr.write(f"FATAL: {e}\n")

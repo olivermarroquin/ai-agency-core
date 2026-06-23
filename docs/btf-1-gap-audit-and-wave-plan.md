@@ -114,10 +114,11 @@
 ### Wave 2 — Electrician HTML Generalization
 **Goal:** Retire the legacy import. Move electrician HTML rendering onto the profile-driven generic renderer + composable section templates. After Wave 2, `scaffold-core-30-page.py` can be deleted.
 
-> **STATUS 2026-06-22 — engine half DONE + independently reviewed (run `btf2-electrician-html-202206221900`, PASS [3,0]); restaurant-tooling half STILL OPEN.**
-> **Done:** 13 composable section templates, electrician HTML on the generic renderer (zero legacy import, §7.4 clean), `_import_legacy_engine()`/`_render_legacy_html()` removed, `scaffold-core-30-page.py` **deleted**, env-robust regression (5 city pairs vs stored fixtures w/ controlled stubs). See `[[lesson-btf-wave2-retro]]`.
-> **Still OPEN (were NOT in the executed handoff — schedule Wave-2b):** `draft-v1-restaurant.md.tmpl`; restaurant profiles for `facts-completeness-gate.py`, `hardcode-scanner.py`, `verify-artifact.py`; `publish-core-30-page.py` Restaurant schema validation. (`scaffold-client-data.py` parameterization partially present.)
+> **STATUS 2026-06-23 — Wave 2 COMPLETE (engine + restaurant-tooling both independently reviewed).**
+> **Engine half (BTF-2):** 13 composable section templates, electrician HTML on the generic renderer (zero legacy import, §7.4 clean), `scaffold-core-30-page.py` deleted, env-robust regression (5 city pairs). See `[[lesson-btf-wave2-retro]]`. PASS [3,0].
+> **Restaurant-tooling half (BTF-2b):** 3 restaurant profiles (completeness, defaults, verify), `draft-v1-restaurant.md.tmpl` wired into scaffold, `publish-core-30-page.py` Restaurant schema validation (auto-detect), `scaffold-client-data.py --business-type` (license optional), `verify-artifact.py` recursive type extraction + condition-gated checks. See `[[lesson-btf-wave2b-retro]]`. PASS [1,2,1,0].
 > **Deferred to Wave 3:** matrix-page **section sequence** is still hardcoded electrician order (fixed data keys) — drive it from a profile-declared `sections[]` so a new matrix-type needs no engine edit (`[[CR-072]]`).
+> **Deferred (credential checklist):** `scaffold-client-data.py` `CREDENTIALS_CHECKLIST` is still electrician-oriented. Universal items (WP, hosting, GSC, GA4) apply to any type; trade-specific items (Thumbtack, HireNimbus) are irrelevant for restaurants. Parameterize from profile or add a `--credentials-profile` flag. Not blocking — the checklist is stdout-only advisory output, not a gating mechanism.
 
 | Task | Effort | Depends On |
 |---|---|---|

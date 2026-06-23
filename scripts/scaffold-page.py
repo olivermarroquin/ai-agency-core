@@ -1236,15 +1236,51 @@ def _run_matrix_mode(args, client: dict, profile: dict, page_model: dict) -> int
     return 0
 
 
+def _render_fixed_list_markdown(page: dict, ctx: dict, business_type: str) -> str:
+    """Render the markdown frontmatter/checklist for a fixed-list page.
+
+    Selects the template by business_type (e.g., draft-v1-restaurant.md.tmpl).
+    Falls back to a minimal stub if no type-specific template exists.
+    """
+    template_name = f"draft-v1-{business_type}.md.tmpl"
+    template_path = TEMPLATES_DIR / template_name
+    if not template_path.is_file():
+        # No type-specific template — minimal stub
+        return f"# {page['slug']} — draft placeholder\n\nNo template: {template_name}\n"
+    template = template_path.read_text(encoding="utf-8")
+
+    # Build the token dict for template rendering
+    page_title = page["title_template"].format_map(ctx)
+    render_ctx = dict(ctx)
+    render_ctx["page_slug"] = page["slug"]
+    render_ctx["page_title"] = page_title
+    render_ctx["page_role"] = page.get("role", "")
+    render_ctx["focus_keyword"] = ctx.get("meta_description", "")[:60]
+
+    try:
+        return template.format_map(render_ctx)
+    except KeyError:
+        # Safe fallback — render what we can
+        import string
+        fmt = string.Formatter()
+        parts = []
+        for literal, field_name, _, _ in fmt.parse(template):
+            parts.append(literal)
+            if field_name is not None:
+                parts.append(str(render_ctx.get(field_name, f"{{{field_name}}}")))
+        return "".join(parts)
+
+
 def _run_fixed_list_mode(args, client: dict, profile: dict, page_model: dict) -> int:
     """Fixed-list mode: generates all pages declared in the profile."""
     pages = page_model["pages"]
     out_dir = args.output_folder or OUTPUT_DIR / args.client
     out_dir.mkdir(parents=True, exist_ok=True)
+    business_type = client.get("business_type", "restaurant")
 
     manifest = {
         "client": args.client,
-        "business_type": client["business_type"],
+        "business_type": business_type,
         "profile": page_model["page_model_name"],
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "content_status": "placeholder",
@@ -1256,16 +1292,18 @@ def _run_fixed_list_mode(args, client: dict, profile: dict, page_model: dict) ->
         ctx = build_context(client, profile, page_slug=slug)
         jsonld = build_jsonld(client, profile, ctx, page_slug=slug)
         html = render_fixed_list_page(page, ctx, jsonld, profile, client)
+        md = _render_fixed_list_markdown(page, ctx, business_type)
 
         if not args.dry_run:
             (out_dir / f"{slug}.html").write_text(html, encoding="utf-8")
             (out_dir / f"{slug}-schema.json").write_text(jsonld, encoding="utf-8")
+            (out_dir / f"{slug}-draft-v1.md").write_text(md, encoding="utf-8")
 
         manifest["pages"].append({
             "slug": slug, "role": page["role"],
             "title": page["title_template"].format_map(ctx),
         })
-        sys.stderr.write(f"  -> {slug}.html + {slug}-schema.json\n")
+        sys.stderr.write(f"  -> {slug}.html + {slug}-schema.json + {slug}-draft-v1.md\n")
 
     if args.dry_run:
         sys.stderr.write(f"\nDRY RUN — {len(pages)} pages rendered, no files written.\n")
