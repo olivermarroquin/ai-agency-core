@@ -44,7 +44,7 @@ from pathlib import Path
 from typing import Any
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
-DATA_DIR = SCRIPTS_DIR / "data"
+DATA_DIR = Path(os.environ.get("SCAFFOLD_CLIENT_DATA_DIR", str(SCRIPTS_DIR / "data")))
 PROFILES_DIR = SCRIPTS_DIR / "profiles"
 TEMPLATES_DIR = SCRIPTS_DIR / "templates"
 OUTPUT_DIR = SCRIPTS_DIR / "output"

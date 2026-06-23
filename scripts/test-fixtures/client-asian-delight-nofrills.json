@@ -1,0 +1,85 @@
+{
+  "_comment": "NO-FRILLS test config — CR-G proof. Walk-in only, no online ordering, no menu URL. All 3 gated schema blocks should be correctly ABSENT and verify should not false-FAIL.",
+  "_content_status": "test-nofrills",
+
+  "business_type": "restaurant",
+  "client_slug": "asian-delight-nofrills",
+  "name": "Asian Delight",
+  "alternate_name": "Asian Delight Restaurant",
+  "owner_name": "Siang",
+  "owner_first_name": "Siang",
+  "owner_title": "Owner",
+  "website_url": "https://asiandelightbaltimore.com/",
+  "website_url_no_slash": "https://asiandelightbaltimore.com",
+  "phone_display": "(410) 732-8090",
+  "phone_tel": "4107328090",
+  "phone_e164": "+1-410-732-8090",
+  "email": "siang@asiandelightbaltimore.com",
+
+  "primary_color": "#d4a017",
+  "navy": "#2c1810",
+  "accent_yellow": "#f5b400",
+  "heading_color": "#2c1810",
+  "hero_gradient_dark": "#2c1810",
+  "hero_gradient_mid": "#d4a017",
+  "hero_gradient_bright": "#e8b52a",
+
+  "address": {
+    "street": "1015 Leeds Ave",
+    "locality": "Baltimore",
+    "region": "MD",
+    "postal_code": "21229",
+    "country": "US"
+  },
+  "geo": { "latitude": 39.2802, "longitude": -76.6685 },
+
+  "hours": [
+    { "days": ["Monday", "Tuesday", "Wednesday", "Thursday"], "opens": "11:00", "closes": "21:00" },
+    { "days": ["Friday", "Saturday"], "opens": "11:00", "closes": "22:00" },
+    { "days": ["Sunday"], "opens": "12:00", "closes": "21:00" }
+  ],
+
+  "business_description_schema": "Burmese and Asian restaurant in Baltimore, MD.",
+  "brand_image_url": "https://asiandelightbaltimore.com/images/storefront.webp",
+  "brand_logo_url": "",
+
+  "price_range_token": "$$",
+  "review_count": 85,
+  "review_rating": "4.3",
+  "review_count_phrase": "4.3-star average across 85 customer reviews",
+  "review_pitch": "Real reviews from Baltimore diners.",
+
+  "brand_areas_served": ["Baltimore"],
+  "brand_area_county": "Baltimore City, MD",
+  "brand_extended_coverage_phrase": "",
+
+  "owner_bio_paragraphs": ["Siang brings the flavors of Myanmar to Baltimore."],
+
+  "contact_page_path": "/contact/",
+  "secondary_cta_label": "Call Us",
+  "primary_cta_label_template": "Call {phone_display}",
+  "final_cta_response_promise": "We look forward to serving you.",
+
+  "restaurant": {
+    "cuisine_types": ["Burmese", "Myanmar"],
+    "primary_cuisine": "Burmese",
+    "food_price_range": "$$",
+    "dietary_options": ["vegetarian"],
+
+    "accepts_reservations": false,
+    "reservation_url": "",
+
+    "accepts_online_orders": false,
+    "order_url": "",
+
+    "delivery_partners": [],
+    "menu_url": "",
+    "menu_sections": [],
+    "signature_dishes": ["Tea Leaf Salad"],
+
+    "ambiance": "Casual",
+    "seating_capacity": 30,
+    "alcohol_served": false,
+    "parking": "Street parking"
+  }
+}
