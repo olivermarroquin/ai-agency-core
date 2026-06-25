@@ -318,6 +318,49 @@ class TestReadOnlyExempt(unittest.TestCase):
         self._assert_no_dirty("python3 << 'EOF'\nimport json\nprint(1)\nEOF",
                               'heredoc python3')
 
+    # --- CR-105: reviewer capture-then-inspect patterns must NOT gate ---
+    def test_assignment_command_sub_curl_get(self):
+        self._assert_no_dirty(
+            'sitemap=$(curl -s "https://evelectric.pro/page-sitemap.xml")',
+            'var=$(curl GET)')
+
+    def test_bare_assignment_path(self):
+        self._assert_no_dirty(
+            'f=~/workspace/repos/ai-agency-core/scripts/data/services/x.json',
+            'bare path assignment')
+
+    def test_env_prefixed_readonly_command(self):
+        self._assert_no_dirty(
+            'RAND=$(date +%s) curl -s "https://example.com/?nc=$RAND"',
+            'env-prefixed curl GET')
+
+    def test_backtick_capture(self):
+        self._assert_no_dirty('n=`grep -c foo /tmp/x`', 'backtick grep capture')
+
+    def test_capture_with_inner_pipe_to_grep(self):
+        self._assert_no_dirty(
+            'total=$(curl -s "https://evelectric.pro/page-sitemap.xml" '
+            '| grep -c "<loc>")',
+            'var=$(curl | grep) inner pipe')
+
+    def test_grep_quoted_angle_bracket_not_redirect(self):
+        self._assert_no_dirty(
+            'curl -s https://e.com/sitemap.xml | grep -oE "<loc>[^<]+</loc>"',
+            'grep "<loc>" quoted-gt is not a redirect')
+
+    def test_loop_capture_then_inspect(self):
+        self._assert_no_dirty(
+            'for slug in a b; do code=$(curl -s -w "%{http_code}" '
+            '"https://x.com/$slug"); echo "$code"; done',
+            'for-loop curl capture')
+
+    def test_arithmetic_assignment(self):
+        self._assert_no_dirty('n=$((n+1))', 'arithmetic expansion runs no cmd')
+
+    def test_quoted_space_assignment(self):
+        self._assert_no_dirty('label="a b c"; grep "$label" /tmp/x',
+                              'assignment value with spaces')
+
 
 class TestStateChangingCaught(unittest.TestCase):
     """State-changing commands MUST create dirty entries."""
@@ -352,6 +395,23 @@ class TestStateChangingCaught(unittest.TestCase):
     def test_compound_with_push(self):
         self._assert_dirty('echo done && git push origin main',
                            'echo + git push')
+
+    # --- CR-105: malicious/writing substitutions must STILL gate ---
+    def test_assignment_command_sub_rm(self):
+        self._assert_dirty('x=$(rm -rf /tmp/foo)', 'var=$(rm) still gates')
+
+    def test_assignment_command_sub_pipe_tee(self):
+        self._assert_dirty('x=$(curl -s https://e.com | tee /tmp/out.txt)',
+                           'var=$(curl | tee file) still gates')
+
+    def test_assignment_command_sub_curl_post(self):
+        self._assert_dirty('data=$(curl -X POST https://e.com/api)',
+                           'var=$(curl POST) still gates')
+
+    def test_redirect_with_quoted_gt_still_gates(self):
+        # First > is quoted data; the second > is a real stdout redirect.
+        self._assert_dirty('echo ">" > /tmp/realfile.txt',
+                           'real redirect after quoted > still gates')
 
 
 class TestSelfReferentialExclusion(unittest.TestCase):

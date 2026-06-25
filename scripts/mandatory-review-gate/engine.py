@@ -205,6 +205,12 @@ def _has_stdout_file_redirect(cmd: str) -> bool:
     stripped = _strip_stderr_redirects(cmd)
     stripped = re.sub(r'<<<?\s*\S+', '', stripped)
     stripped = re.sub(r"<<\s*['\"]?\w+['\"]?", '', stripped)
+    # Quote-aware (CR-105): a `>` or `<` inside a quoted string is DATA, not a
+    # redirect — e.g. `grep -c "<loc>"` when parsing a sitemap. Drop quoted
+    # spans before scanning. A real redirect to a quoted filename
+    # (`cmd > "out.txt"`) keeps its `>` outside the quotes and is still caught.
+    stripped = re.sub(r'"[^"]*"', '', stripped)
+    stripped = re.sub(r"'[^']*'", '', stripped)
     return bool(re.search(r'(?<!\d)>{1,2}', stripped))
 
 
@@ -215,6 +221,40 @@ def _first_word(cmd: str) -> str:
             continue
         return token
     return ''
+
+
+# Variable-assignment detection (CR-105).
+# A segment that is ONLY assignments runs no command, so it is read-only.
+_ASSIGNMENT_TOKEN_RE = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*=')
+
+
+def _is_pure_assignment(segment: str) -> bool:
+    """True if the segment is only variable assignments and runs no command.
+
+    Examples that are pure assignments (read-only — nothing executes):
+        f=~/workspace/repos/x.json
+        A=1 B=2
+        sitemap=                       (value already blanked by the caller)
+
+    NOT pure (a command runs after the assignments) — returns False so the
+    caller falls through to normal command classification:
+        A=1 ls                         (env-prefixed command)
+
+    Any command-substitution value must already be extracted/verified and
+    blanked by the caller before this runs. Quoted spans are blanked here too
+    so a value with spaces (msg="a b", or msg="a > b") tokenizes as a single
+    assignment instead of splitting into bogus non-assignment tokens.
+    """
+    s = segment.strip()
+    if not s:
+        return True
+    # Blank quoted spans so spaces inside a value don't break tokenization.
+    s = re.sub(r'"[^"]*"', '', s)
+    s = re.sub(r"'[^']*'", '', s)
+    for tok in s.split():
+        if not _ASSIGNMENT_TOKEN_RE.match(tok):
+            return False  # a non-assignment token → a command executes
+    return True
 
 
 # Shell control-flow keywords (RGH-1b item 9).
@@ -281,6 +321,42 @@ def _is_segment_read_only(segment: str) -> bool:
         if not remainder:
             return True  # bare "do" / "then" (body on next line)
         return _is_segment_read_only(remainder)
+
+    # --- Command substitution + variable assignment (CR-105) ---
+    # Reviewer verification scripts overwhelmingly use a "capture then inspect"
+    # shape that the old _first_word() path mis-classified as state-changing:
+    #     sitemap=$(curl -s "$URL")          # command substitution
+    #     content=$(curl -s "...")           # inside a for-loop body
+    #     f=~/workspace/repos/.../x.json     # bare assignment, no command runs
+    # _first_word() skipped the `VAR=` token and classified on the next token
+    # (a flag like `-s`, or nothing), so these were logged as dirty and the
+    # reviewer had to be cleared with an operator gate-skip on EVERY run.
+    #
+    # Fix, safety-preserving:
+    #   1. A $(...)/`...` substitution is read-only iff its inner command(s)
+    #      are read-only. The inner string is run through split_compound() so a
+    #      pipe-to-writer inside the substitution (e.g. $(curl ... | tee f))
+    #      is still caught and still gates.
+    #   2. With substitutions verified and blanked, a segment that is only
+    #      assignments runs no command → read-only.
+    # Arithmetic expansion $((...)) contains no command — blank it first so it
+    # is not mistaken for a command substitution (e.g. n=$((n+1)) in a loop).
+    work = re.sub(r'\$\(\([^()]*(?:\([^()]*\)[^()]*)*\)\)', '', segment)
+    cmd_subs = re.findall(r'\$\(([^()]*(?:\([^()]*\)[^()]*)*)\)', work)
+    cmd_subs += re.findall(r'`([^`]*)`', work)
+    if cmd_subs:
+        for sub in cmd_subs:
+            for sub_seg in split_compound(sub.strip()):
+                if not _is_segment_read_only(sub_seg):
+                    return False
+        outer = re.sub(r'\$\([^()]*(?:\([^()]*\)[^()]*)*\)', '', work)
+        outer = re.sub(r'`[^`]*`', '', outer).strip()
+        if outer == segment.strip():
+            return _is_pure_assignment(outer)  # defensive: avoid recursion loop
+        return _is_segment_read_only(outer)
+    if _is_pure_assignment(work):
+        return True
+
     base = os.path.basename(first)
 
     if base in ('python3', 'python') and re.match(r'^python3?\s+-c\s+', segment):
@@ -368,28 +444,64 @@ def _is_segment_read_only(segment: str) -> bool:
 
 
 def split_compound(cmd: str) -> list:
-    """Split a command on compound operators (|, &&, ||, ;) respecting quotes."""
+    """Split a command on compound operators (|, &&, ||, ;) respecting quotes.
+
+    Substitution-aware (CR-105): operators INSIDE a $( ... ) command
+    substitution or `...` backtick are NOT split points — the inner command
+    is one unit (callers re-split it themselves when they inspect it). Without
+    this, `x=$(curl ... | grep ...)` got split at the inner `|`, mangling the
+    substitution into broken fragments that mis-classified as state-changing.
+    """
     segments = []
     current = []
     i = 0
     in_single = False
     in_double = False
+    in_backtick = False
+    subst_depth = 0  # depth of $( ... ) command substitution
 
     while i < len(cmd):
         c = cmd[i]
 
-        if c == "'" and not in_double:
+        if c == "'" and not in_double and not in_backtick:
             in_single = not in_single
             current.append(c)
             i += 1
             continue
-        if c == '"' and not in_single:
+        if c == '"' and not in_single and not in_backtick:
             in_double = not in_double
             current.append(c)
             i += 1
             continue
 
         if in_single or in_double:
+            current.append(c)
+            i += 1
+            continue
+
+        # Backtick command substitution — opaque to splitting.
+        if c == '`':
+            in_backtick = not in_backtick
+            current.append(c)
+            i += 1
+            continue
+        if in_backtick:
+            current.append(c)
+            i += 1
+            continue
+
+        # $( ... ) command substitution — track depth, never split inside.
+        if c == '$' and i + 1 < len(cmd) and cmd[i+1] == '(':
+            subst_depth += 1
+            current.append('$(')
+            i += 2
+            continue
+        if c == ')' and subst_depth > 0:
+            subst_depth -= 1
+            current.append(c)
+            i += 1
+            continue
+        if subst_depth > 0:
             current.append(c)
             i += 1
             continue
