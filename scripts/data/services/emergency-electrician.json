@@ -32,37 +32,37 @@
 
   "aioseo_page_title_template": "24/7 Emergency Electrician in {city_name_with_state} | {client_name}",
   "aioseo_meta_description_template": "24/7 emergency electrician in {city_name_with_state}. Master Electrician, {dispatch_time_short} response, on-site diagnosis before any work starts. Call {phone_display}.",
-  "aioseo_focus_keyword_template": "emergency electrician {city_slug}",
+  "aioseo_focus_keyword_template": "emergency electrician {city_name}",
   "aioseo_additional_keywords_template": [
-    "24 hour electrician {city_slug}",
-    "24/7 electrician {city_slug}",
-    "emergency electrical service {city_slug}",
-    "emergency electrical repair {city_slug}",
-    "after hours electrician {city_slug}",
-    "weekend electrician {city_slug}",
-    "electrician open now {city_slug}",
-    "24/7 emergency electrical repair {city_slug}",
-    "electrical panel emergency {city_slug}",
-    "power outage electrician {city_slug}",
-    "burning smell electrical {city_slug}",
-    "sparking outlet electrician {city_slug}",
-    "breaker tripped won't reset electrician {city_slug}",
+    "24 hour electrician {city_name}",
+    "24/7 electrician {city_name}",
+    "emergency electrical service {city_name}",
+    "emergency electrical repair {city_name}",
+    "after hours electrician {city_name}",
+    "weekend electrician {city_name}",
+    "electrician open now {city_name}",
+    "24/7 emergency electrical repair {city_name}",
+    "electrical panel emergency {city_name}",
+    "power outage electrician {city_name}",
+    "burning smell electrical {city_name}",
+    "sparking outlet electrician {city_name}",
+    "breaker tripped won't reset electrician {city_name}",
     "emergency electrician near me",
-    "emergency electrician open Sunday {city_slug}"
+    "emergency electrician open Sunday {city_name}"
   ],
   "wordpress_page_title_template": "24/7 Emergency Electrician in {city_name_with_state}",
 
   "hero_eyebrow_template": "24/7 Emergency Electrician in {city_name_with_state}",
   "hero_heading": "Master Electrician. 24/7 Emergency Dispatch.",
-  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician with 16+ years in the trade. We dispatch 24/7 — overnight, Sundays, holidays — with a typical {dispatch_time_phrase} response inside the {city_name} service area. Call comes in, technician rolls, diagnosis before any work starts.",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician. We dispatch 24/7 — overnight, Sundays, holidays — with a typical {dispatch_time_phrase} response inside the {city_name} service area. Call comes in, technician rolls, diagnosis before any work starts.",
   "hero_image_alt_template": "{owner_name}, master electrician, providing emergency electrical service in {city_name_with_state}",
-  "hero_image_url_template": "FILL: Hero image URL. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-emergency-electrician-hero.png",
+  "hero_image_url_template": "FILL: Hero image URL. Pattern: {website_url_no_slash}/wp-content/uploads/YYYY/MM/{city_slug}-emergency-electrician-hero.png",
 
   "what_it_means_heading": "What counts as an electrical emergency",
   "what_it_means_paragraphs": [
     "An electrical emergency is any situation that poses an immediate risk of fire, shock, or loss of essential power in your home. Sparks from an outlet, a burning smell behind a wall, a breaker panel that's hot to the touch, exposed wiring, water pooling near electrical equipment, or a partial power outage when your neighbors still have power — these are all active safety risks. If you see fire, smoke, or active sparking, call 911 first. Then call us. We handle the electrical side once the scene is safe.",
     "Not every electrical issue is an emergency. A single dead outlet, lights that dim briefly when the AC kicks on, or an intermittent flicker in one room — those are worth a service call, but they can usually wait for a scheduled appointment. An emergency is when there's an active safety risk to people in the house or when you've lost power entirely and the utility confirms the outage isn't on their end. If you're not sure which side your situation falls on, call {phone_display} and describe what you see — we'll tell you straight whether it needs a truck now or a Tuesday appointment.",
-    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues — with 16+ years diagnosing residential electrical failures across Northern Virginia, DC, and Maryland. {owner_name} runs a maintenance team, which is what makes the 24/7 dispatch and {dispatch_time_phrase} response time inside the {city_name} service area a real operational number, not a marketing claim. Call comes in. Technician rolls. Temporary safe state first, then targeted diagnosis, then the permanent fix — scheduled or completed the same visit."
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues — with years of experience diagnosing residential electrical failures across the {brand_area_county} region. {owner_name} runs a maintenance team, which is what makes the 24/7 dispatch and {dispatch_time_phrase} response time inside the {city_name} service area a real operational number, not a marketing claim. Call comes in. Technician rolls. Temporary safe state first, then targeted diagnosis, then the permanent fix — scheduled or completed the same visit."
   ],
 
   "quick_ref_heading_template": "Common electrical emergencies in {city_name}",
@@ -159,12 +159,12 @@
 
   "about_heading_template": "About {owner_name}, {owner_title}",
   "about_text_paragraphs": [
-    "{owner_name} is a Master Electrician licensed in Virginia — the highest electrician tier the state issues, requiring several years of journeyman work, a passed state exam, and a clean record. Over 16+ years in the trade, {owner_name} has built a licensed and insured residential and commercial electrical practice serving Northern Virginia, Washington DC, Maryland, and Pennsylvania. He runs a maintenance team, which is what makes the 24/7 emergency dispatch and {dispatch_time_phrase} response time an operational reality, not a phone-room promise.",
+    "{owner_name} is a Master Electrician licensed in {license_state} — the highest electrician tier the state issues, requiring several years of journeyman work, a passed state exam, and a clean record. {owner_name} has built a licensed and insured residential electrical practice serving {brand_area_county} and the surrounding region. He runs a maintenance team, which is what makes the 24/7 emergency dispatch and {dispatch_time_phrase} response time an operational reality, not a phone-room promise.",
     "{owner_name} leads the diagnostic on most residential emergency calls personally. The approach is diagnostic-first, fix-second — he reads the panel, runs the tests, and explains what's happening in plain English before any work starts. Half the time a homeowner calls expecting a full panel replacement, the actual cause is a single worn breaker, a load-balance issue, or a downstream short. The walk-through costs nothing. The misdiagnosis costs everything.",
-    "S&H Contracting Unlimited holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
   ],
   "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
-  "about_portrait_url_template": "FILL: About portrait URL. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-emergency-electrician-about.png",
+  "about_portrait_url_template": "FILL: About portrait URL. Pattern: {website_url_no_slash}/wp-content/uploads/YYYY/MM/{city_slug}-emergency-electrician-about.png",
 
   "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
   "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
@@ -216,8 +216,8 @@
     },
     {
       "question": "Do you dispatch to areas outside {city_name}?",
-      "answer_html": "Probably. The truck radius is 50 miles from the Fairfax / Prince William County corner, which covers Woodbridge, Lake Ridge, Dale City, Manassas, Oakton, Fairfax Station, Alexandria, McLean, Sterling, Ashburn, Chantilly, and into DC and Maryland. For emergency work inside that radius, we dispatch 24/7. For planned work outside it, or emergency work at the edges of the radius, we'll usually know within one phone call whether we can take the job or whether it's smarter to refer you to someone closer. Call {phone_display} and we'll tell you straight.",
-      "answer_schema": "The truck radius is 50 miles from the Fairfax and Prince William County corner, covering Woodbridge, Lake Ridge, Dale City, Manassas, Oakton, Fairfax Station, Alexandria, McLean, Sterling, Ashburn, Chantilly, and into DC and Maryland. For emergency work inside that radius, the company dispatches 24/7. For planned work outside the radius or emergency work at the edges, the company will usually know within one phone call whether it can take the job or refer the caller to someone closer."
+      "answer_html": "Probably. We're based in {brand_area_county} and cover {brand_areas_served_phrase}. {brand_extended_coverage_phrase} For emergency work inside our service area, we dispatch 24/7. For planned work outside it, or emergency work at the edges, we'll usually know within one phone call whether we can take the job or whether it's smarter to refer you to someone closer. Call {phone_display} and we'll tell you straight.",
+      "answer_schema": "The company is based in {brand_area_county} and covers {brand_areas_served_phrase}. {brand_extended_coverage_phrase} For emergency work inside the service area, the company dispatches 24/7. For planned work outside the area or emergency work at the edges, the company will usually know within one phone call whether it can take the job or refer the caller to someone closer."
     }
   ],
 

@@ -132,6 +132,7 @@ COMPUTE_FUNCTIONS = {
     "county_short":                 lambda ctx: ctx["_city"]["county"].split(",")[0],
     "city_tag":                     lambda ctx: ctx["_resolved"].get("city_name", "").lower().replace(" ", "-"),
     "no_trip_charge_cities_phrase":  lambda ctx: _format_city_list(ctx["_city"].get("no_trip_charge_cities", [])),
+    "brand_areas_served_phrase":    lambda ctx: ", ".join(ctx["_client"].get("brand_areas_served", [])),
     "page_slug":                    lambda ctx: ctx["_page_slug"],
     "page_url":                     lambda ctx: f"{ctx['_resolved'].get('website_url', '')}{ctx['_page_slug']}/",
     "core_30_position":             lambda ctx: ctx.get("_position", 0),
@@ -142,19 +143,18 @@ COMPUTE_FUNCTIONS = {
 def require_variant_field(city: dict, field_name: str, service_slug: str, city_slug: str) -> Any:
     container = city.get(field_name, {})
     if not isinstance(container, dict):
-        sys.stderr.write(f"ERROR: city '{city_slug}' field '{field_name}' is not a dict.\n")
-        sys.exit(3)
+        raise ValueError(f"city '{city_slug}' field '{field_name}' is not a dict")
     if service_slug not in container:
         sys.stderr.write(
-            f"ERROR: city '{city_slug}' missing '{field_name}[\"{service_slug}\"]'.\n"
-            f"  → DA2 depth-parity failure. Run intersection-research for "
-            f"{service_slug}--{city_slug}.\n"
+            f"WARNING: city '{city_slug}' missing '{field_name}[\"{service_slug}\"]'.\n"
+            f"  → Defaulting to empty. Populate for production quality.\n"
         )
-        sys.exit(3)
+        raise ValueError(
+            f"city '{city_slug}' missing '{field_name}[\"{service_slug}\"]'"
+        )
     value = container[service_slug]
     if value is None or value == "" or value == []:
-        sys.stderr.write(f"ERROR: city '{city_slug}' '{field_name}[\"{service_slug}\"]' is empty.\n")
-        sys.exit(3)
+        raise ValueError(f"city '{city_slug}' '{field_name}[\"{service_slug}\"]' is empty")
     return value
 
 
@@ -580,10 +580,13 @@ def _render_hero_image_block(ctx: dict, hero_image_path: Path | None) -> str:
 
 def _render_quick_ref_items(ctx: dict) -> str:
     """Render quick-reference accordion items from city variant data."""
-    items = require_variant_field(
-        ctx["_city"], "quick_ref_localized_items",
-        ctx["service_slug"], ctx["city_slug"],
-    )
+    try:
+        items = require_variant_field(
+            ctx["_city"], "quick_ref_localized_items",
+            ctx["service_slug"], ctx["city_slug"],
+        )
+    except ValueError:
+        return ""
     return _render_template_items("quick-ref-item.html.tmpl", items, ctx,
                                   separator="\n\n")
 

@@ -1,0 +1,218 @@
+{
+  "_comment": "Per-service data for a General Electrician city hub — a broad 'electrician in [city]' page targeting the high-volume generic term. Covers all services the client offers rather than one specific service. Authored client-agnostic 2026-06-24 from GSC striking-distance demand (electrician oakton pos 9.8, licensed electrician oakton pos 7.0).",
+  "_scaffolded": {
+    "from_brief": false,
+    "authored_date": "2026-06-24",
+    "authored_by": "a3-ev-build-202606241600",
+    "needs_authoring": [],
+    "needs_confirmation": [
+      "hero_image_url_template path year/month once imagery is generated",
+      "about_portrait_url_template path once imagery is generated"
+    ]
+  },
+  "slug": "general-electrician",
+  "page_slug_template": "electrician-{city_slug}",
+  "name": "Licensed Electrician",
+  "name_with_city": "Licensed Electrician in {city_name_with_state}",
+  "service_type_phrase": "Full-service residential electrical work",
+  "quoted_phrase": "electrician",
+  "lowercase_phrase": "electrician",
+  "tag_short": "general-electrician",
+
+  "aioseo_page_title_template": "Licensed Electrician in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "Licensed Master Electrician in {city_name_with_state}. Panel upgrades, troubleshooting, EV chargers, lighting, rewiring & emergency service. Call {phone_display}.",
+  "aioseo_focus_keyword_template": "electrician {city_name}",
+  "aioseo_additional_keywords_template": [
+    "electrician {city_name}",
+    "licensed electrician {city_name}",
+    "electrician near me {city_name}",
+    "residential electrician {city_name}",
+    "master electrician {city_name}",
+    "electrical contractor {city_name}",
+    "home electrician {city_name}",
+    "local electrician {city_name}",
+    "electrical services {city_name}",
+    "electrician {city_name} VA",
+    "best electrician {city_name}",
+    "certified electrician {city_name}",
+    "insured electrician {city_name}",
+    "affordable electrician {city_name}",
+    "electrician near me"
+  ],
+  "wordpress_page_title_template": "Licensed Electrician in {city_name_with_state}",
+
+  "hero_eyebrow_template": "Licensed Electrician in {city_name_with_state}",
+  "hero_heading": "Master Electrician. Every Residential Service.",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician serving {city_name} — the highest electrician tier the state issues. Panel upgrades, troubleshooting, EV charger installation, lighting, smoke alarms, whole-house rewiring, and 24/7 emergency dispatch. On-site diagnosis, written estimate before any work starts.",
+  "hero_image_alt_template": "{owner_name}, licensed master electrician serving {city_name_with_state}",
+  "hero_image_url_template": "{website_url_no_slash}/wp-content/uploads/2026/06/{city_slug}-general-electrician-hero-PLACEHOLDER.png",
+
+  "what_it_means_heading": "What a Master Electrician license actually means",
+  "what_it_means_paragraphs": [
+    "A Master Electrician license is the highest tier {license_state} issues. It requires years of journeyman-level field work, a passed state exam, and a clean professional record. It's not a certificate you get from a weekend course — it's a credential that says the holder can diagnose, design, and install any residential or commercial electrical system the state code allows.",
+    "Why it matters to you: the person diagnosing your panel, wiring your EV charger, or tracing a fault behind your drywall has been tested on the full code book — not just the section relevant to one trade specialty. {owner_name} holds that license, carries full insurance, and runs a maintenance team so your job doesn't wait on one person's calendar.",
+    "When you search 'electrician {city_name},' you get a mix of handymen, apprentices working under someone else's license, and licensed electricians. The difference shows up when something is wrong — a loose neutral that intermittently drops voltage, a panel that's hot to the touch, or wiring that doesn't match any standard configuration. Those are diagnostic problems, not wrench-turning problems, and they require the training the license represents."
+  ],
+
+  "quick_ref_heading_template": "Electrical services we provide in {city_name}",
+  "quick_ref_intro": "Every residential electrical service under one license. Here's what {city_name} homeowners call us for most.",
+  "quick_ref_footer_html_template": "Need something not listed?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — if it's electrical and residential, we probably do it.",
+
+  "why_city_heading_template": "Why {city_name} homeowners choose a licensed electrician",
+  "why_city_closing_note_template": "Most of the calls we get from {city_name} fall into one of two patterns: something stopped working (troubleshooting), or something needs upgrading (panel, charger, lighting). Either way, the diagnostic step is the same — find the root cause before picking up a tool.",
+
+  "problems_heading_template": "Common electrical needs in {city_name} homes",
+  "problems_intro_template": "Here are the jobs {owner_first_name} handles most often in {city_name}. If your home fits one of these patterns, you already know what to ask about.",
+  "problem_cards": [
+    {
+      "title": "Panel upgrades & replacements",
+      "body": "Older homes in {city_name} often have 100-amp or 150-amp panels that can't keep up with modern loads — central AC, EV chargers, induction ranges. A panel upgrade brings the service to 200 amps and replaces worn breakers. We pull the permit and coordinate the utility disconnect."
+    },
+    {
+      "title": "Electrical troubleshooting & diagnostics",
+      "body": "Flickering lights, dead outlets, breakers that trip every week — these are symptoms with different causes. We trace the circuit, find the root cause (loose connection, overloaded circuit, failed breaker, or a downstream short), and fix the right thing instead of guessing."
+    },
+    {
+      "title": "EV charger installation",
+      "body": "Level 2 home EV charger installation — hardwired or outlet-based, 240V dedicated circuit from the panel to the garage or driveway. We size the circuit, run the conduit, and make sure the panel can handle the continuous draw without tripping."
+    },
+    {
+      "title": "Lighting & ceiling fan installation",
+      "body": "Pendant lights, recessed cans, chandeliers, under-cabinet LEDs, and ceiling fans — including the hard ones: vaulted ceilings, fan-rated boxes, rooms with no existing fixture. Wired to code, mounted level, and balanced."
+    },
+    {
+      "title": "Whole-house rewiring",
+      "body": "Knob-and-tube, aluminum branch wiring, cloth-insulated conductors, ungrounded two-prong circuits — all of these are replacement candidates in older {city_name} homes. We plan the runs to minimize drywall damage, pull the permit, and get it inspected."
+    },
+    {
+      "title": "24/7 emergency electrical service",
+      "body": "Sparking outlets, burning smells, breakers that won't reset, partial power loss — we dispatch 24/7, including overnight, weekends, and holidays, with a typical {dispatch_time_phrase} response inside the {city_name} area. Safety check first, then diagnosis, then a written estimate before any repair."
+    },
+    {
+      "title": "Smoke & CO alarm installation",
+      "body": "Hardwired, interconnected smoke and carbon monoxide alarms — code-compliant placement (every bedroom, every level, outside sleeping areas). Battery backups, 10-year sealed units, and combo smoke/CO where code allows."
+    },
+    {
+      "title": "Outlet & switch installation",
+      "body": "New outlets, GFCI upgrades in kitchens and bathrooms, USB outlets, smart switches, dimmer installations, and dedicated circuits for high-draw appliances. Includes bringing two-prong outlets up to grounded three-prong."
+    },
+    {
+      "title": "Circuit breaker replacement",
+      "body": "A tripping breaker might be the breaker itself, a short downstream, or an overloaded circuit. We diagnose the actual cause before swapping anything — a new breaker doesn't help if the problem is elsewhere in the circuit."
+    }
+  ],
+
+  "process_heading_template": "How a service call works",
+  "process_intro_template": "Whether it's a planned upgrade or a same-day repair, here's what to expect when you call {phone_display}.",
+  "process_steps": [
+    {
+      "title": "Call and describe the situation",
+      "body": "Tell us what you're seeing — the symptom, the location in the house, and when it started. We ask a few diagnostic questions on the phone to understand the scope before scheduling."
+    },
+    {
+      "title": "Scheduling or same-day dispatch",
+      "body": "For planned work (panel upgrade, rewire, new lighting), we schedule at your convenience. For urgent issues (no power, sparking, burning smell), we dispatch same-day or immediately — {owner_first_name} runs a team, so there's almost always a truck available."
+    },
+    {
+      "title": "On-site diagnosis",
+      "body": "{owner_first_name} reads the panel, tests the circuits, and traces the fault. The goal is to find the root cause — not just the symptom. This step takes 30–90 minutes depending on complexity, and you get a plain-English explanation of what's happening."
+    },
+    {
+      "title": "Written estimate before any work",
+      "body": "You get a written estimate on-site before we pick up a tool. No surprise charges, no verbal-only quotes. If the job needs a permit, we name that cost too."
+    },
+    {
+      "title": "Repair or installation",
+      "body": "Most residential repairs are completed the same visit. Larger jobs (panel upgrade, rewire) are scheduled and permitted. We carry common parts on the truck — breakers, outlets, wire, connectors — so single-visit resolution is the norm."
+    },
+    {
+      "title": "Walk-through and cleanup",
+      "body": "Before we leave, we walk you through what was done and why. If the repair uncovered a larger issue (aging panel, undersized service), we name it so you can plan on your schedule."
+    }
+  ],
+
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "We don't post flat-rate prices because every home and every job is different. What we do: you get a written estimate on-site before any work starts, so you know the exact number and approve it before we begin.",
+  "pricing_items": [
+    "Diagnostic visits: we come out, find the root cause, and quote the repair. The diagnostic fee applies to the repair if you proceed same-visit.",
+    "Standard rates during business hours. After-hours, weekend, and holiday dispatch for emergencies may include a surcharge — named on the phone before we roll, not after.",
+    "Panel upgrades, rewires, and EV charger installs are quoted per job based on the scope, not by the hour. Permit fees included in the quote when applicable.",
+    "No trip charge for {no_trip_charge_cities_phrase} during business hours."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase} during business hours.",
+  "pricing_closing_note": "The on-site estimate is the only honest number. We don't post prices that change when we see your panel.",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "{owner_name} is a Master Electrician licensed in {license_state} — the highest electrician tier the state issues, requiring several years of journeyman work, a passed state exam, and a clean record. {owner_name} has built a licensed and insured residential electrical practice serving {brand_area_county} and the surrounding region.",
+    "{owner_name} leads the diagnostic on most residential calls personally. The approach is diagnostic-first, fix-second — read the panel, test the circuits, explain what's happening in plain English before any work starts. Half the time a homeowner calls expecting a full panel replacement, the actual cause is a single worn breaker, a load-balance issue, or a downstream short.",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "{website_url_no_slash}/wp-content/uploads/2026/05/ahmad-shaban-master-electrician.jpg",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Our most-requested services in {city_name}",
+  "related_intro_template": "Here are the specific service pages for the work {city_name} homeowners book most. Each page has full details, pricing context, and FAQs for that service.",
+  "related_cards": [
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
+    { "href_slug": "electrical-troubleshooting-{city_slug}", "label": "Electrical Troubleshooting" },
+    { "href_slug": "ev-charger-{city_slug}", "label": "EV Charger Installation" },
+    { "href_slug": "ceiling-fan-installation-{city_slug}", "label": "Ceiling Fan Installation" },
+    { "href_slug": "emergency-electrician-{city_slug}", "label": "24/7 Emergency Electrician" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    {
+      "question": "What makes a Master Electrician different from a regular electrician?",
+      "answer_html": "A Master Electrician license is the highest tier {license_state} issues. It requires years of journeyman-level field experience, a passed state licensing exam, and a clean professional record. A journeyman works under a Master's license; a Master can pull permits, design systems, and take full responsibility for any residential or commercial installation. When you hire {client_name}, the person diagnosing your system holds that credential — not someone working under someone else's license.",
+      "answer_schema": "A Master Electrician license is the highest tier the state issues. It requires years of journeyman-level field experience, a passed state licensing exam, and a clean professional record. A journeyman works under a Master's license; a Master can pull permits, design systems, and take full responsibility for any installation."
+    },
+    {
+      "question": "How quickly can you get to {city_name_with_state}?",
+      "answer_html": "For planned work (panel upgrade, rewire, new lighting), we schedule at your convenience — usually within a few days. For emergencies (sparking, burning smell, no power), we dispatch same-day or immediately, typically within {dispatch_time_phrase} inside the {city_name} service area. Call {phone_display} and we'll confirm the timeline.",
+      "answer_schema": "For planned work, scheduling is usually within a few days. For emergencies, dispatch is same-day or immediate, typically within {dispatch_time_phrase} inside the service area."
+    },
+    {
+      "question": "Do you provide free estimates?",
+      "answer_html": "We provide written on-site estimates before any work starts — you see the exact number and approve it before we pick up a tool. For diagnostic work (troubleshooting a fault), there's a diagnostic fee that applies to the repair if you proceed same-visit. We don't do estimates over the phone because every home is different — the on-site number is the only honest one.",
+      "answer_schema": "Written on-site estimates are provided before any work starts. For diagnostic work, there is a diagnostic fee that applies to the repair if the customer proceeds same-visit. Estimates are not given over the phone because every home is different."
+    },
+    {
+      "question": "Are you licensed and insured?",
+      "answer_html": "{owner_name} holds a Master Electrician license issued by the {license_state_full}. {client_name} is fully insured — general liability and workers' compensation. We pull permits for work that requires them (panel upgrades, rewires, new circuits) and schedule inspections with the county.",
+      "answer_schema": "The owner holds a Master Electrician license issued by the state. The company is fully insured with general liability and workers compensation. Permits are pulled for work that requires them and inspections are scheduled with the county."
+    },
+    {
+      "question": "What areas do you serve besides {city_name}?",
+      "answer_html": "We're based in {brand_area_county} and serve {brand_areas_served_phrase}. {brand_extended_coverage_phrase} For emergency work inside our service area, we dispatch 24/7. Call {phone_display} and we'll tell you whether your location is in our coverage.",
+      "answer_schema": "The company is based in {brand_area_county} and serves {brand_areas_served_phrase}. {brand_extended_coverage_phrase} For emergency work inside the service area, the company dispatches 24/7."
+    },
+    {
+      "question": "Do you handle commercial electrical work?",
+      "answer_html": "Our primary focus is residential — single-family homes, townhomes, and condos. For light commercial work (small office, retail space) in {city_name}, call {phone_display} and describe the scope — we can usually help. For large commercial or industrial projects, we'll refer you to a commercial specialist.",
+      "answer_schema": "The primary focus is residential including single-family homes, townhomes, and condos. For light commercial work, the company can usually help. For large commercial or industrial projects, a referral to a commercial specialist is provided."
+    },
+    {
+      "question": "What electrical services do you offer?",
+      "answer_html": "The full residential range: electrical troubleshooting and diagnostics, panel upgrades and replacements, EV charger installation, lighting and ceiling fan installation, whole-house rewiring, circuit breaker replacement, smoke and CO alarm installation, outlet and switch work, and 24/7 emergency electrical service. If it's electrical and residential, we almost certainly do it. Call {phone_display} with your specific situation.",
+      "answer_schema": "The company offers the full residential range: electrical troubleshooting and diagnostics, panel upgrades and replacements, EV charger installation, lighting and ceiling fan installation, whole-house rewiring, circuit breaker replacement, smoke and CO alarm installation, outlet and switch work, and 24/7 emergency electrical service."
+    },
+    {
+      "question": "How much does an electrician cost in {city_name_with_state}?",
+      "answer_html": "It depends on the job. We don't post flat-rate prices because every home and every scope is different. What we do: you get a written estimate on-site before any work starts. Panel upgrades, rewires, and EV charger installs are quoted per job (not hourly). Diagnostic visits have a fee that applies to the repair if you proceed same-visit. No trip charge for {no_trip_charge_cities_phrase} during business hours. The on-site estimate is the only honest number.",
+      "answer_schema": "Pricing depends on the job. Written estimates are provided on-site before any work starts. Panel upgrades, rewires, and EV charger installs are quoted per job. Diagnostic visits have a fee that applies to the repair if the customer proceeds same-visit."
+    }
+  ],
+
+  "final_cta_heading": "Need an electrician in {city_name}? Call now.",
+  "final_cta_paragraph_template": "Licensed Master Electrician serving {city_name_with_state}. Panel upgrades, troubleshooting, EV chargers, lighting, rewiring, and 24/7 emergency dispatch. On-site diagnosis, written estimate before any work starts.<br>Call {phone_display}.",
+
+  "schema_service_description_template": "Licensed Master Electrician serving {city_name_with_state}. Full-service residential electrical work including panel upgrades, troubleshooting, EV charger installation, lighting, whole-house rewiring, circuit breaker replacement, smoke alarm installation, and 24/7 emergency dispatch.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "On-site written estimate before any work begins. No trip charge for core service area during business hours. After-hours emergency dispatch available 24/7."
+}

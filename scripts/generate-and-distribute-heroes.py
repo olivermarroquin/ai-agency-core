@@ -102,6 +102,62 @@ _ELECTRICIAN_HERO_PROMPTS: dict[str, str] = {
         "Avoid: people, faces, hands, hard hats, watermarks, garbled text, "
         "cartoon style, construction mess."
     ),
+    "ceiling-fan-installation": (
+        "A modern ceiling fan freshly installed on a white ceiling in a "
+        "bright residential living room, blades still, light kit glowing "
+        "warmly. The fan is sleek — brushed nickel or matte black finish, "
+        "clean contemporary lines. Below it a tidy room with hardwood floors "
+        "in soft focus. Natural daylight from windows. No people in frame. "
+        "Photo-realistic editorial, low angle looking up at the fan, the fan "
+        "fills 60% of the frame. "
+        "Avoid: people, faces, hands, hard hats, watermarks, garbled text, "
+        "cartoon style, spinning blades, motion blur."
+    ),
+    "attic-fan-installation": (
+        "A gable-mount attic ventilation fan freshly installed in a clean "
+        "residential attic space, with visible wiring conduit running neatly "
+        "to a junction box. Exposed rafters, plywood decking, soft natural "
+        "light from a gable vent. The fan unit is modern and compact — "
+        "industrial gray housing with clean louvres. No people in frame. "
+        "Photo-realistic editorial, tight composition on the fan unit, "
+        "shallow depth of field on the attic background. "
+        "Avoid: people, faces, hands, watermarks, garbled text, cartoon "
+        "style, cluttered attic, insulation mess."
+    ),
+    "whole-house-rewire": (
+        "A freshly rewired residential electrical junction box with the "
+        "cover removed, showing new copper wiring neatly bundled with wire "
+        "nuts and labeled. Modern romex NM-B cables running through a clean "
+        "wall cavity, new work electrical box visible. Interior of a home "
+        "renovation in progress — clean drywall opening, no debris. Soft "
+        "warm work lighting. No people in frame. Photo-realistic editorial, "
+        "tight macro shot of the clean wiring. "
+        "Avoid: people, faces, hands, hard hats, watermarks, garbled text, "
+        "cartoon style, messy wiring, old damaged wire."
+    ),
+    "circuit-breaker-replacement": (
+        "A close-up of a residential breaker panel with one new circuit "
+        "breaker being installed — the new breaker is visibly different "
+        "(clean, modern label) from the surrounding older breakers. Panel "
+        "cover open, neat wiring visible behind the breakers. Interior "
+        "utility area, neutral drywall, soft warm lighting. No people in "
+        "frame, no hands. Photo-realistic editorial, tight crop on the "
+        "panel, the new breaker is the focal point. "
+        "Avoid: people, faces, hands, hard hats, watermarks, garbled text, "
+        "gibberish labels, cartoon style, melted components."
+    ),
+    "general-electrician": (
+        "A clean residential electrical panel with the cover open, showing "
+        "neatly organized circuit breakers in rows, labeled clearly, with "
+        "bundled wires running into conduit. The panel is modern and well-"
+        "maintained — a symbol of professional electrical work. Mounted on "
+        "a neutral drywall wall in a residential utility area. Soft warm "
+        "natural light. No people in frame. Photo-realistic editorial, "
+        "50mm lens, the panel fills 60% of the frame, shallow depth of "
+        "field on the wall behind. "
+        "Avoid: people, faces, hands, hard hats, watermarks, garbled text, "
+        "gibberish labels, impossible wiring, cartoon style."
+    ),
 }
 
 # Active lookup table — replaced at runtime when --service-prompts-file is given.

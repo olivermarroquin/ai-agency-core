@@ -51,7 +51,7 @@
       "state": "Virginia",
       "state_full": "Commonwealth of Virginia"
     },
-    "services": ["troubleshooting", "panel-upgrade", "ev-charger", "light-fixture-installation", "smoke-alarm", "outlet-installation", "emergency-electrician"],
+    "services": ["troubleshooting", "panel-upgrade", "ev-charger", "light-fixture-installation", "smoke-alarm", "outlet-installation", "emergency-electrician", "ceiling-fan-installation", "attic-fan-installation", "whole-house-rewire", "circuit-breaker-replacement", "general-electrician"],
     "service_area_cities": ["vienna-va", "fairfax-va", "mclean-va", "oakton-va", "tysons-va", "falls-church-va", "burke-va", "annandale-va"],
     "utility_providers": ["Dominion Energy"],
     "emergency_dispatch": true,

@@ -33,6 +33,10 @@
     "hero_gradient_mid":    "root.hero_gradient_mid",
     "hero_gradient_bright": "root.hero_gradient_bright",
 
+    "brand_area_county":           "root.brand_area_county",
+    "brand_extended_coverage_phrase": "root.brand_extended_coverage_phrase",
+    "brand_areas_served_phrase":    "computed.brand_areas_served_phrase",
+
     "license_state":        "electrician.license.state",
     "license_state_full":   "electrician.license.state_full",
 
