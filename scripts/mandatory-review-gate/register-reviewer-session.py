@@ -36,19 +36,34 @@ def main():
         description='Register a session as a reviewer session (RGH-11).')
     parser.add_argument('--session', required=True,
                         help='This reviewer session ID')
-    parser.add_argument('--reviewing-session', required=True,
-                        help='The producer session ID being reviewed')
+    parser.add_argument('--reviewing-session', default=None,
+                        help='The producer session ID being reviewed '
+                             '(required unless --operator-dispatched)')
+    parser.add_argument('--operator-dispatched', action='store_true',
+                        help='RGH-17C: flag for operator-dispatched reviews '
+                             'where there is no producer CC session (e.g., '
+                             'Cowork-authored changes). Relaxes the '
+                             '--reviewing-session requirement.')
     args = parser.parse_args()
 
+    if not args.reviewing_session and not args.operator_dispatched:
+        print('REJECTED: --reviewing-session is required unless '
+              '--operator-dispatched is set. For reviews of Cowork-authored '
+              'changes with no producer CC session, use --operator-dispatched.',
+              file=sys.stderr)
+        sys.exit(1)
+
+    reviewing_session = args.reviewing_session or 'operator-dispatched'
+
     # Self-review rejected (structural — same protection as RGH-8)
-    if args.session == args.reviewing_session:
+    if args.reviewing_session and args.session == args.reviewing_session:
         print(f'REJECTED: --session and --reviewing-session must differ '
               f'(both = {args.session}). A session cannot review itself.',
               file=sys.stderr)
         sys.exit(1)
 
-    if not args.session.strip() or not args.reviewing_session.strip():
-        print('REJECTED: --session and --reviewing-session must be non-empty.',
+    if not args.session.strip():
+        print('REJECTED: --session must be non-empty.',
               file=sys.stderr)
         sys.exit(1)
 
@@ -57,10 +72,12 @@ def main():
 
     marker = {
         'role': 'reviewer',
-        'reviewing_session': args.reviewing_session,
+        'reviewing_session': reviewing_session,
         'registered_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
         'registered_by': 'register-reviewer-session.py',
     }
+    if args.operator_dispatched:
+        marker['operator_dispatched'] = True
 
     with open(marker_path, 'w') as f:
         json.dump(marker, f, indent=2)
@@ -68,7 +85,7 @@ def main():
     print(json.dumps({
         'status': 'registered',
         'session': args.session,
-        'reviewing_session': args.reviewing_session,
+        'reviewing_session': reviewing_session,
         'marker_path': marker_path,
     }))
 

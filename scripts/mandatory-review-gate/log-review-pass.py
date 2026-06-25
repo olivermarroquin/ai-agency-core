@@ -17,6 +17,7 @@ backstop — spot-check verdict files in <STATE_DIR>/verdicts/.
 """
 
 import argparse
+import json
 import os
 import sys
 
@@ -118,6 +119,66 @@ def main():
                   f'(CR-045 / RGH-8)',
                   file=sys.stderr)
             sys.exit(1)
+
+        # RGH-15A check 1: reviewer_session must be a valid UUID v4.
+        # A fabricated string like "separate-session-reviewer-g3ev-20260624"
+        # fails this alone. (CR-103)
+        import re as _re
+        _UUID4_RE = _re.compile(
+            r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+            _re.IGNORECASE)
+        if not _UUID4_RE.match(args.reviewer_session):
+            print(f'[review-gate] REJECTED: --reviewer-session '
+                  f'("{args.reviewer_session}") is not a valid UUID v4. '
+                  f'Claude Code session IDs are UUID v4 strings. A non-UUID '
+                  f'reviewer_session indicates a fabricated identity. (CR-103 / RGH-15)',
+                  file=sys.stderr)
+            sys.exit(1)
+
+        # RGH-15A check 2: reviewer_session must be in the reviewer-session
+        # registry — a <session>-role.json marker must exist. This proves a
+        # real separate session registered itself via register-reviewer-session.py.
+        # A producer fabricating a plausible UUID fails this check. (CR-103)
+        reviewer_marker_path = os.path.join(
+            STATE_DIR, f'{args.reviewer_session}-role.json')
+        if not os.path.isfile(reviewer_marker_path):
+            print(f'[review-gate] REJECTED: --reviewer-session '
+                  f'("{args.reviewer_session}") has no registered role marker '
+                  f'at {reviewer_marker_path}. The reviewer must register via '
+                  f'register-reviewer-session.py before its verdict is accepted. '
+                  f'(CR-103 / RGH-15)',
+                  file=sys.stderr)
+            sys.exit(1)
+
+        # Validate the marker contents
+        try:
+            with open(reviewer_marker_path, 'r') as _mf:
+                _marker = json.load(_mf)
+            if _marker.get('role') != 'reviewer':
+                print(f'[review-gate] REJECTED: role marker for '
+                      f'"{args.reviewer_session}" has role={_marker.get("role")!r}, '
+                      f'expected "reviewer". (CR-103 / RGH-15)',
+                      file=sys.stderr)
+                sys.exit(1)
+        except (json.JSONDecodeError, OSError) as _e:
+            print(f'[review-gate] REJECTED: could not read role marker '
+                  f'{reviewer_marker_path}: {_e}. (CR-103 / RGH-15)',
+                  file=sys.stderr)
+            sys.exit(1)
+
+        # RGH-15A check 3: reviewer session should have dirty-ledger activity
+        # (proof it actually ran verification). A registered-but-inert session
+        # is suspicious. WARNING only — not blocking, since a reviewer may
+        # legitimately register before its first Bash command.
+        reviewer_ledger = os.path.join(
+            STATE_DIR, f'{args.reviewer_session}-dirty.jsonl')
+        if not os.path.isfile(reviewer_ledger):
+            print(f'[review-gate] WARNING: reviewer session '
+                  f'"{args.reviewer_session}" has no dirty-ledger activity. '
+                  f'A registered-but-inert session may indicate a fabricated '
+                  f'identity. The verdict is accepted but flagged for operator '
+                  f'spot-check. (RGH-15)',
+                  file=sys.stderr)
 
     # OC-17 enforcement: when independent reviewer closes the gate,
     # verify firing-tracker rows exist for this run ID before allowing PASS.

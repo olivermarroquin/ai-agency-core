@@ -201,10 +201,21 @@ def _strip_stderr_redirects(cmd: str) -> str:
 
 
 def _has_stdout_file_redirect(cmd: str) -> bool:
-    """Check if command has stdout redirect to a file (>, >>)."""
+    """Check if command has stdout redirect to a file (>, >>).
+
+    Target-aware (CR-111 / RGH-17E): a redirect to /dev/null is NOT a file
+    write — it discards output. Strip `> /dev/null` and `>> /dev/null`
+    (including `> /dev/null 2>&1`) before the redirect scan so reviewer
+    commands like `python3 -m json.tool "$f" > /dev/null` are not falsely
+    classified as state-changing.
+    """
     stripped = _strip_stderr_redirects(cmd)
     stripped = re.sub(r'<<<?\s*\S+', '', stripped)
     stripped = re.sub(r"<<\s*['\"]?\w+['\"]?", '', stripped)
+    # CR-111: strip stdout redirects to /dev/null BEFORE quote-stripping and
+    # the redirect scan. Covers `> /dev/null`, `>> /dev/null`, and the common
+    # `> /dev/null 2>&1` combo (stderr part already stripped above).
+    stripped = re.sub(r'>{1,2}\s*/dev/null\b', '', stripped)
     # Quote-aware (CR-105): a `>` or `<` inside a quoted string is DATA, not a
     # redirect — e.g. `grep -c "<loc>"` when parsing a sitemap. Drop quoted
     # spans before scanning. A real redirect to a quoted filename
@@ -618,8 +629,19 @@ def _is_segment_write_safe(segment: str) -> bool:
 
     base = os.path.basename(first)
 
-    # File-mutating commands
+    # File-mutating commands — with carve-outs matching _is_segment_read_only
     if base in _FILE_MUTATING_CMDS:
+        # RGH-17D: rm -f .git/index.lock — stale lock cleanup, not deliverable
+        # production. Mirrors the same carve-out in _is_segment_read_only
+        # (RGH12-8). Without this, a registered reviewer's
+        # `rm -f .git/index.lock && git stash && ... && git stash pop`
+        # is classified as write-unsafe and gates the Stop hook.
+        if base == 'rm':
+            parts = segment.split()
+            if len(parts) >= 2 and '-f' in parts:
+                targets = [p for p in parts[1:] if not p.startswith('-')]
+                if targets and all(t.endswith('.git/index.lock') for t in targets):
+                    return True  # stale lock cleanup — write-safe
         return False
 
     # Python inline code with write indicators
@@ -1261,10 +1283,58 @@ def is_all_protocol_exempt(unreviewed: list, workspace_root: str) -> bool:
 # ============================================================================
 
 PLACEHOLDER_PATTERNS = re.compile(
-    r'\b(FILL|TBD|PLACEHOLDER|TODO|FIXME|XXX|CHANGEME)\b', re.IGNORECASE)
+    r'(?<!-)(?<![`])\b(FILL|TBD|PLACEHOLDER|TODO|FIXME|XXX|CHANGEME)\b(?!-)(?![`])'
+    # RGH-14A: case-SENSITIVE. Uppercase FILL/TBD/PLACEHOLDER/TODO/FIXME/XXX/
+    # CHANGEME are placeholder tokens. Lowercase prose use ("the placeholder
+    # sweep", "can fill the field") is natural English, not a placeholder.
+    # Code blocks and inline code spans are stripped before this runs, so
+    # lowercase `todo:` comments in code are already removed.
+)
 
 UNRESOLVED_LINK_PATTERN = re.compile(
     r'\[\[.*?(FILL|TBD|TODO|PLACEHOLDER).*?\]\]', re.IGNORECASE)
+
+
+def _strip_safe_content_for_placeholder_sweep(content: str) -> str:
+    """Strip known-safe patterns before running the placeholder regex.
+
+    RGH-14A: The placeholder sweep false-fires on legitimate vault content.
+    Pre-strip these patterns so they don't produce hits:
+
+    1. [[wikilinks]] — Obsidian internal links, incl. path-prefixed and aliased
+       forms like [[path/to/note|alias]] and [[note]]. These may contain tokens
+       like TODO or FIXME as legitimate note names.
+    2. [A#] / [UPPER+DIGIT] handoff/wave tags — e.g. [A2], [RGH-14], [WF-4],
+       [G4-EV], [PR-1], [CR-105]. These are structural identifiers, not
+       placeholders.
+    3. Lowercase HTML literals — e.g. <a href>, <div class>, <span>. These are
+       documentation/instruction content. UPPER_SNAKE tokens like <PLACEHOLDER>
+       must STILL flag (they are the genuine placeholder pattern).
+    4. est. N-M / numeric range estimates — e.g. "est. 20-30", "~3-5h".
+       Not placeholders.
+    5. Fenced code blocks (``` ... ```) — code examples legitimately contain
+       TODO/FIXME as sample content; stripping them prevents noise on
+       documentation files that quote code.
+    """
+    # 5. Strip fenced code blocks first (they may contain any of the below)
+    content = re.sub(r'```[^\n]*\n.*?```', '', content, flags=re.DOTALL)
+    # 5b. Strip inline code spans (`...`) — documentation quoting token names
+    #     like `FILL`, `TBD` etc. is not a placeholder.
+    content = re.sub(r'`[^`\n]+`', '', content)
+    # 1. Wikilinks: [[...]] including path-prefixed and aliased forms
+    content = re.sub(r'\[\[[^\]]*\]\]', '', content)
+    # 2. Handoff/wave tags: [A2], [RGH-14], [WF-4], [G4-EV], [PR-1], [CR-105]
+    content = re.sub(r'\[[A-Z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*\]', '', content)
+    # 3. Lowercase HTML literals (NOT UPPER_SNAKE placeholders).
+    #    Match tags where the tag name starts with a lowercase letter.
+    #    NO re.IGNORECASE — uppercase tags like <PLACEHOLDER>, <FILL>, <TBD>,
+    #    <CLIENT_NAME>, <API_KEY> are genuine placeholder tokens and must NOT
+    #    be stripped. Lowercase HTML (<a href>, <div>, <span>) already matches
+    #    [a-z] without IGNORECASE.
+    content = re.sub(r'</?[a-z][a-z0-9]*(?:\s[^>]*)?\s*/?>', '', content)
+    # 4. Numeric range estimates: est. N-M, ~N-Mh, N-M ranges
+    content = re.sub(r'(?:est\.?\s*|~)\d+[-–]\d+\w?', '', content)
+    return content
 
 
 def _load_leak_identity_strings(file_path: str) -> list:
@@ -1348,7 +1418,10 @@ def run_fast_path_checks(file_path: str) -> dict:
         return result
 
     # Placeholder sweep — project-agnostic, always runs
-    placeholders = PLACEHOLDER_PATTERNS.findall(content)
+    # RGH-14A: pre-strip known-safe content (wikilinks, handoff tags,
+    # lowercase HTML, code blocks, est-ranges) to eliminate false positives.
+    stripped_content = _strip_safe_content_for_placeholder_sweep(content)
+    placeholders = PLACEHOLDER_PATTERNS.findall(stripped_content)
     ph_count = len(placeholders)
     result['checks'].append({
         'name': 'placeholder-sweep',

@@ -1716,6 +1716,333 @@ class TestTestSuiteWhitelist(unittest.TestCase):
                          'python must NEVER be in READ_ONLY_CMDS')
 
 
+class TestRGH14PlaceholderWhitelist(unittest.TestCase):
+    """RGH-14A: placeholder-sweep whitelist — wikilinks, handoff tags,
+    lowercase HTML, inline code, fenced code blocks, hyphenated compounds,
+    and est-ranges must NOT false-fire. Real placeholders must still fire."""
+
+    def setUp(self):
+        sys.path.insert(0, SCRIPTS)
+        import engine
+        self.engine = engine
+
+    def test_ac1_safe_content_zero_hits(self):
+        """AC-1: fixture with wikilinks, [A4] tags, <a href>, est. 20-30 → 0 hits."""
+        content = (
+            'See [[handoff-2026-06-24-rgh14-placeholder-sweep-whitelist]].\n'
+            'Tags: [A2], [RGH-14], [WF-4], [G4-EV], [PR-1], [CR-105].\n'
+            'Use <a href="url"> and <div class="foo">.\n'
+            'Estimated ~3-5h or est. 20-30 pages.\n'
+            'Inline code: `FILL`, `TBD`, `TODO`, `FIXME`, `XXX`.\n'
+            'Compounds: placeholder-sweep, slot-fill, non-placeholder.\n'
+            '```python\n# TODO: sample code\nFIXME: code block\n```\n'
+        )
+        stripped = self.engine._strip_safe_content_for_placeholder_sweep(content)
+        hits = self.engine.PLACEHOLDER_PATTERNS.findall(stripped)
+        self.assertEqual(len(hits), 0, f'Expected 0, got {hits}')
+
+    def test_ac1_dangerous_content_correct_count(self):
+        """AC-1: fixture with {token}, FILL, TBD, <PLACEHOLDER> → nonzero."""
+        content = 'FILL this TBD section PLACEHOLDER value FIXME TODO XXX CHANGEME'
+        stripped = self.engine._strip_safe_content_for_placeholder_sweep(content)
+        hits = self.engine.PLACEHOLDER_PATTERNS.findall(stripped)
+        self.assertEqual(len(hits), 7,
+                         f'Expected 7 (FILL,TBD,PLACEHOLDER,FIXME,TODO,XXX,CHANGEME), got {hits}')
+
+    def test_wikilink_with_placeholder_token_name(self):
+        """[[TODO-list]] should NOT fire — it's a wikilink to a note named TODO-list."""
+        content = 'See [[TODO-list-for-sprint]] and [[FIXME-tracking]].'
+        stripped = self.engine._strip_safe_content_for_placeholder_sweep(content)
+        hits = self.engine.PLACEHOLDER_PATTERNS.findall(stripped)
+        self.assertEqual(len(hits), 0, f'Wikilinks falsely fired: {hits}')
+
+    def test_handoff_tags_not_flagged(self):
+        """[A2], [RGH-14], [BTF-1] etc. are structural identifiers, not placeholders."""
+        content = '[A2] [RGH-14] [WF-4] [G4-EV] [PR-1] [CR-105] [BTF-1]'
+        stripped = self.engine._strip_safe_content_for_placeholder_sweep(content)
+        hits = self.engine.PLACEHOLDER_PATTERNS.findall(stripped)
+        self.assertEqual(len(hits), 0, f'Handoff tags falsely fired: {hits}')
+
+    def test_lowercase_html_not_flagged(self):
+        """<a href>, <div>, <span> are documentation, not placeholders."""
+        content = 'Use <a href="url"> with <div class="x"> and <span>text</span>.'
+        stripped = self.engine._strip_safe_content_for_placeholder_sweep(content)
+        hits = self.engine.PLACEHOLDER_PATTERNS.findall(stripped)
+        self.assertEqual(len(hits), 0, f'HTML tags falsely fired: {hits}')
+
+    def test_case_sensitive_no_lowercase_prose(self):
+        """Lowercase 'placeholder', 'fill', 'todo' in prose must NOT flag."""
+        content = 'The placeholder sweep checks for fill values. Create a todo list.'
+        stripped = self.engine._strip_safe_content_for_placeholder_sweep(content)
+        hits = self.engine.PLACEHOLDER_PATTERNS.findall(stripped)
+        self.assertEqual(len(hits), 0, f'Lowercase prose falsely fired: {hits}')
+
+    def test_uppercase_still_flags(self):
+        """Uppercase FILL, TBD etc. outside safe patterns must still flag."""
+        content = 'Section: FILL\nStatus: TBD\nValue: PLACEHOLDER'
+        stripped = self.engine._strip_safe_content_for_placeholder_sweep(content)
+        hits = self.engine.PLACEHOLDER_PATTERNS.findall(stripped)
+        self.assertEqual(len(hits), 3, f'Expected FILL,TBD,PLACEHOLDER, got {hits}')
+
+    def test_angle_bracket_placeholder_not_stripped(self):
+        """<PLACEHOLDER>, <FILL>, <CLIENT_NAME> in angle brackets must still flag.
+        BLOCKING-1 regression: re.IGNORECASE on the HTML strip regex was
+        silently removing these genuine placeholder tokens."""
+        content = 'Replace <PLACEHOLDER> with value. Use <FILL> here. Set <CLIENT_NAME>.'
+        stripped = self.engine._strip_safe_content_for_placeholder_sweep(content)
+        hits = self.engine.PLACEHOLDER_PATTERNS.findall(stripped)
+        self.assertIn('PLACEHOLDER', hits, '<PLACEHOLDER> must flag')
+        self.assertIn('FILL', hits, '<FILL> must flag')
+
+    def test_lowercase_html_still_stripped(self):
+        """<a href>, <div>, <span> must still be stripped (not flagged)."""
+        content = '<a href="url"> <div class="x"> <span>text</span>'
+        stripped = self.engine._strip_safe_content_for_placeholder_sweep(content)
+        self.assertNotIn('<a', stripped, '<a> should be stripped')
+        self.assertNotIn('<div', stripped, '<div> should be stripped')
+
+
+class TestRGH17EDevNullRedirect(unittest.TestCase):
+    """CR-111 / RGH-17E: /dev/null redirect target-awareness.
+    Redirects to /dev/null are NOT file writes."""
+
+    def setUp(self):
+        sys.path.insert(0, SCRIPTS)
+        import engine
+        self.engine = engine
+
+    def test_dev_null_stdout_not_flagged(self):
+        """cmd > /dev/null should NOT be classified as a file redirect."""
+        self.assertFalse(
+            self.engine._has_stdout_file_redirect('python3 -m json.tool "$f" > /dev/null'))
+
+    def test_dev_null_append_not_flagged(self):
+        """cmd >> /dev/null should NOT be classified as a file redirect."""
+        self.assertFalse(
+            self.engine._has_stdout_file_redirect('cmd >> /dev/null'))
+
+    def test_dev_null_with_stderr_not_flagged(self):
+        """cmd > /dev/null 2>&1 should NOT be classified as a file redirect."""
+        self.assertFalse(
+            self.engine._has_stdout_file_redirect('cmd > /dev/null 2>&1'))
+
+    def test_real_file_redirect_still_flagged(self):
+        """cmd > out.txt must still be classified as a file redirect."""
+        self.assertTrue(
+            self.engine._has_stdout_file_redirect('cmd > out.txt'))
+
+    def test_real_append_still_flagged(self):
+        """cmd >> log.txt must still be classified as a file redirect."""
+        self.assertTrue(
+            self.engine._has_stdout_file_redirect('cmd >> log.txt'))
+
+    def test_dev_null_read_only_known_cmd(self):
+        """grep ... > /dev/null should be read-only (known read-only cmd)."""
+        self.assertTrue(
+            self.engine.is_read_only_bash('grep -c "test" file.txt > /dev/null'))
+
+    def test_dev_null_write_safe_classification(self):
+        """python3 -m json.tool f > /dev/null should be write-safe."""
+        self.assertTrue(
+            self.engine.is_bash_entry_write_safe('python3 -m json.tool "$f" > /dev/null'))
+
+
+class TestRGH17DWriteSafeIndexLock(unittest.TestCase):
+    """RGH-17D: _is_segment_write_safe consistency fix for rm -f .git/index.lock."""
+
+    def setUp(self):
+        sys.path.insert(0, SCRIPTS)
+        import engine
+        self.engine = engine
+
+    def test_rm_index_lock_write_safe(self):
+        """rm -f .git/index.lock should be write-safe (stale lock cleanup)."""
+        self.assertTrue(
+            self.engine._is_segment_write_safe('rm -f .git/index.lock'))
+
+    def test_rm_full_path_index_lock_write_safe(self):
+        """rm -f /full/path/.git/index.lock should be write-safe."""
+        self.assertTrue(
+            self.engine._is_segment_write_safe(
+                'rm -f ~/workspace/repos/x/.git/index.lock'))
+
+    def test_rm_other_file_not_write_safe(self):
+        """rm -f important.txt should NOT be write-safe."""
+        self.assertFalse(
+            self.engine._is_segment_write_safe('rm -f important.txt'))
+
+    def test_rm_rf_git_not_write_safe(self):
+        """rm -rf .git should NOT be write-safe."""
+        self.assertFalse(
+            self.engine._is_segment_write_safe('rm -rf .git'))
+
+    def test_compound_stash_with_lock_clear_write_safe(self):
+        """rm -f .git/index.lock && git stash && git diff should be write-safe."""
+        self.assertTrue(
+            self.engine.is_bash_entry_write_safe(
+                'rm -f .git/index.lock && git stash && git diff && git stash pop'))
+
+
+class TestRGH15AReviewerSessionValidation(unittest.TestCase):
+    """RGH-15A: reviewer-session UUID validation + registry cross-check."""
+
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.tmpdir)
+
+    def test_reject_non_uuid_reviewer_session(self):
+        """AC-1: non-UUID reviewer_session is REJECTED."""
+        vf = _make_verdict_file(self.tmpdir, verdict='PASS', tier='full',
+                                extra_fields={'reviewer_type': 'independent',
+                                              'mandate_version': '1.0'})
+        r = subprocess.run(
+            ['python3', LOG, '--session', 'aaaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee',
+             '--files', '/tmp/test.md',
+             '--verdict', 'PASS', '--tier', 'full', '--gate-id', 'G-default',
+             '--verdict-file', vf,
+             '--reviewer-type', 'independent',
+             '--reviewer-session', 'separate-session-reviewer-g3ev-20260624',
+             '--run-id', 'test-run'],
+            capture_output=True, text=True,
+            env=_make_env(self.tmpdir),
+        )
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn('not a valid UUID v4', r.stderr)
+
+    def test_reject_uuid_not_in_registry(self):
+        """AC-2: valid UUID but NOT registered is REJECTED."""
+        fake_uuid = 'aaaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee'
+        reviewer_uuid = 'bbbbbbbb-cccc-4ddd-aeee-ffffffffffff'
+        vf = _make_verdict_file(self.tmpdir, verdict='PASS', tier='full',
+                                extra_fields={'reviewer_type': 'independent',
+                                              'mandate_version': '1.0'})
+        r = subprocess.run(
+            ['python3', LOG, '--session', fake_uuid,
+             '--files', '/tmp/test.md',
+             '--verdict', 'PASS', '--tier', 'full', '--gate-id', 'G-default',
+             '--verdict-file', vf,
+             '--reviewer-type', 'independent',
+             '--reviewer-session', reviewer_uuid,
+             '--run-id', 'test-run'],
+            capture_output=True, text=True,
+            env=_make_env(self.tmpdir),
+        )
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn('no registered role marker', r.stderr)
+
+    def test_accept_registered_reviewer(self):
+        """AC-3: registered reviewer with valid UUID is ACCEPTED."""
+        producer_uuid = 'aaaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee'
+        reviewer_uuid = 'bbbbbbbb-cccc-4ddd-aeee-ffffffffffff'
+        # Register the reviewer
+        marker_path = os.path.join(self.tmpdir, f'{reviewer_uuid}-role.json')
+        with open(marker_path, 'w') as f:
+            json.dump({'role': 'reviewer', 'reviewing_session': producer_uuid}, f)
+        # Create a firing tracker with the run_id
+        ft_path = os.path.join(
+            EXPECTED_WORKSPACE_ROOT, 'second-brain', '_meta', 'handoffs',
+            '_review-skill-firing-tracker.md')
+        vf = _make_verdict_file(self.tmpdir, verdict='PASS', tier='full',
+                                extra_fields={'reviewer_type': 'independent',
+                                              'mandate_version': '1.0'})
+        # Need run-id in firing tracker — use a real one or mock
+        r = subprocess.run(
+            ['python3', LOG, '--session', producer_uuid,
+             '--files', '/tmp/test.md',
+             '--verdict', 'PASS', '--tier', 'full', '--gate-id', 'G-default',
+             '--verdict-file', vf,
+             '--reviewer-type', 'independent',
+             '--reviewer-session', reviewer_uuid,
+             '--run-id', 'rgh14-15-17-gate-integrity-202606251800'],
+            capture_output=True, text=True,
+            env=_make_env(self.tmpdir),
+        )
+        # BLOCKING-2 fix: unconditionally assert no crash (NameError, ImportError).
+        # The script may fail on OC-17 (firing-tracker check) — that's a controlled
+        # rejection, not a crash. But it must NEVER crash with a traceback.
+        self.assertNotIn('NameError', r.stderr,
+                         f'Script crashed with NameError: {r.stderr}')
+        self.assertNotIn('ImportError', r.stderr,
+                         f'Script crashed with ImportError: {r.stderr}')
+        self.assertNotIn('Traceback', r.stderr,
+                         f'Script crashed with traceback: {r.stderr}')
+        # Must not fail on UUID or registry checks
+        self.assertNotIn('not a valid UUID', r.stderr,
+                         'UUID validation should not reject a valid UUID')
+        self.assertNotIn('no registered role marker', r.stderr,
+                         'Registry check should not reject a registered reviewer')
+
+
+class TestRGH14BD09Guard(unittest.TestCase):
+    """RGH-14B: D-09 guard — detect model-emitted gate-skip in producer sessions."""
+
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp()
+        sys.path.insert(0, SCRIPTS)
+
+    def tearDown(self):
+        shutil.rmtree(self.tmpdir)
+
+    def test_d09_warning_on_producer_gate_skip(self):
+        """A gate-skip Bash in a producer session emits a D-09 warning to stderr."""
+        sid = 'aaaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee'
+        # Track a gate-skip command — the D-09 guard fires in dirty-ledger-track.py
+        # before the self-referential exclusion returns.
+        event_log = os.path.join(self.tmpdir, '_event-log-test.md')
+        env = _make_env(self.tmpdir, event_log=event_log)
+        r = subprocess.run(
+            ['python3', os.path.join(SCRIPTS, 'dirty-ledger-track.py')],
+            input=json.dumps({
+                'session_id': sid,
+                'tool_name': 'Bash',
+                'tool_input': {
+                    'command': f'python3 {os.path.join(SCRIPTS, "gate-skip.py")} '
+                               f'--session {sid} --reason "test skip"',
+                },
+                'tool_result': {'text': 'ok'},
+            }),
+            capture_output=True, text=True,
+            cwd=SUBDIR_CWD,
+            env=env,
+        )
+        # The D-09 guard emits a warning to stderr for producer sessions
+        # (no role marker = producer by default). Check for the warning.
+        self.assertIn('D-09', r.stderr,
+                      'D-09 warning should fire for gate-skip in a producer session')
+
+    def test_no_d09_warning_for_reviewer_gate_skip(self):
+        """A gate-skip Bash in a registered reviewer session should NOT emit D-09."""
+        reviewer_sid = 'bbbbbbbb-cccc-4ddd-aeee-ffffffffffff'
+        producer_sid = 'aaaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee'
+        # Register as reviewer
+        os.makedirs(self.tmpdir, exist_ok=True)
+        marker = os.path.join(self.tmpdir, f'{reviewer_sid}-role.json')
+        with open(marker, 'w') as f:
+            json.dump({'role': 'reviewer', 'reviewing_session': producer_sid}, f)
+        event_log = os.path.join(self.tmpdir, '_event-log-test.md')
+        env = _make_env(self.tmpdir, event_log=event_log)
+        r = subprocess.run(
+            ['python3', os.path.join(SCRIPTS, 'dirty-ledger-track.py')],
+            input=json.dumps({
+                'session_id': reviewer_sid,
+                'tool_name': 'Bash',
+                'tool_input': {
+                    'command': f'python3 {os.path.join(SCRIPTS, "gate-skip.py")} '
+                               f'--session {producer_sid} --reason "reviewer plumbing"',
+                },
+                'tool_result': {'text': 'ok'},
+            }),
+            capture_output=True, text=True,
+            cwd=SUBDIR_CWD,
+            env=env,
+        )
+        # Reviewer sessions should NOT get D-09 warnings
+        self.assertNotIn('D-09', r.stderr,
+                         'D-09 warning should NOT fire for reviewer sessions')
+
+
 if __name__ == '__main__':
     # Ensure the subdir cwd exists
     if not os.path.isdir(SUBDIR_CWD):

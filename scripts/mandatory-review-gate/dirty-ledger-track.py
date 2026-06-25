@@ -75,6 +75,44 @@ def main():
             any(pat in seg for pat in SELF_PATTERNS)
             for seg in segments
         ):
+            # RGH-14B: D-09 guard — detect model-emitted gate-skip in a
+            # producer session. gate-skip is OPERATOR-ONLY; a model running
+            # it is a D-09 class defect. Flag loudly via stderr + event-log.
+            # The command still executes (operator may have pasted it into CC),
+            # but the D-09 signal is recorded for audit.
+            if 'gate-skip' in bash_cmd:
+                role = engine.classify_session_role(STATE_DIR, session_id)
+                if role == 'producer':
+                    d09_msg = (
+                        f'[review-gate] ⚠️  D-09 WARNING: gate-skip.py invoked '
+                        f'in a PRODUCER session ({session_id}). gate-skip is '
+                        f'OPERATOR-ONLY. If the model authored this command, '
+                        f'that is a D-09 class defect. If the operator pasted '
+                        f'it manually, this warning is informational.'
+                    )
+                    print(d09_msg, file=sys.stderr)
+                    # Write D-09 event-log row for audit trail
+                    try:
+                        from _paths import WORKSPACE_ROOT
+                        event_log = os.environ.get(
+                            'REVIEW_GATE_EVENT_LOG',
+                            os.path.join(WORKSPACE_ROOT, 'second-brain',
+                                         '_meta', '_event-log.md')
+                        )
+                        iso = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+                        row = (
+                            f'\n| {iso} | D-09 gate-skip in producer session | '
+                            f'd-09 | {session_id} | '
+                            f'**D-09 WARNING: gate-skip.py invoked in producer '
+                            f'session.** gate-skip is OPERATOR-ONLY per CLAUDE.md. '
+                            f'If the model authored this invocation, it is a D-09 '
+                            f'defect. Audit: check whether the command was '
+                            f'model-generated or operator-pasted. |'
+                        )
+                        with open(event_log, 'a') as f:
+                            f.write(row)
+                    except OSError:
+                        pass  # best-effort — don't crash tracking
             return
 
     file_path = None
