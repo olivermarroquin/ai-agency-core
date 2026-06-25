@@ -1,0 +1,204 @@
+{
+  "_comment": "Per-service data for Ceiling Fan Installation & Replacement. Used by scaffold-core-30-page.py for every ceiling-fan page across cities. {city}, {client}, {owner} placeholders substituted from the client config at render time. Authored client-agnostic 2026-06-24 (Cowork, EV growth program) from GSC striking-distance demand (ceiling fan installation [city] ranking pos 5-12, no page existed).",
+  "_scaffolded": {
+    "from_brief": false,
+    "authored_date": "2026-06-24",
+    "authored_by": "cowork-ev-growth-planning",
+    "needs_authoring": [],
+    "needs_confirmation": [
+      "hero_image_url_template path year/month once imagery is generated",
+      "about_portrait_url_template path once imagery is generated"
+    ]
+  },
+  "slug": "ceiling-fan-installation",
+  "page_slug_template": "ceiling-fan-installation-{city_slug}",
+  "name": "Ceiling Fan Installation",
+  "name_with_city": "Ceiling Fan Installation in {city_name_with_state}",
+  "service_type_phrase": "Ceiling fan installation, replacement, and repair",
+  "quoted_phrase": "ceiling fan installation",
+  "lowercase_phrase": "ceiling fan installation",
+  "tag_short": "ceiling-fan-installation",
+
+  "aioseo_page_title_template": "Ceiling Fan Installation in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "Ceiling fan installation & replacement in {city_name_with_state}. {license_state}-licensed Master Electrician, safe-rated boxes, vaulted ceilings, no wobble. Call {phone_display}.",
+  "aioseo_focus_keyword_template": "ceiling fan installation {city_name}",
+  "aioseo_additional_keywords_template": [
+    "ceiling fan installation {city_name}",
+    "ceiling fan installation near me",
+    "install ceiling fan {city_name}",
+    "ceiling fan replacement {city_name}",
+    "ceiling fan repair {city_name}",
+    "ceiling fan wobble fix {city_name}",
+    "replace light fixture with ceiling fan {city_name}",
+    "vaulted ceiling fan installation {city_name}",
+    "outdoor patio ceiling fan installation {city_name}",
+    "smart ceiling fan installation {city_name}",
+    "ceiling fan wiring {city_name}",
+    "ceiling fan remote installation {city_name}",
+    "ceiling fan electrician {city_name}",
+    "high ceiling fan installation {city_name}",
+    "bedroom ceiling fan installation {city_name}"
+  ],
+  "wordpress_page_title_template": "Ceiling Fan Installation in {city_name_with_state}",
+
+  "hero_eyebrow_template": "Ceiling Fan Installation in {city_name_with_state}",
+  "hero_heading": "Ceiling Fans, Installed Right the First Time.",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician who installs, replaces, and repairs ceiling fans across {city_name} — including the hard ones: vaulted ceilings, two-story foyers, rooms with no existing fixture, and fans that wobble because the last installer skipped the fan-rated box. Mounted level, wired to code, balanced so it runs quiet.",
+  "hero_image_alt_template": "{owner_name}, master electrician, installing a ceiling fan in {city_name_with_state}",
+  "hero_image_url_template": "{website_url_no_slash}/wp-content/uploads/2026/06/{city_slug}-ceiling-fan-installation-hero-PLACEHOLDER.png",
+
+  "what_it_means_heading": "What ceiling fan installation actually involves",
+  "what_it_means_paragraphs": [
+    "Ceiling fan installation is more than hanging a fan on a hook. A ceiling fan weighs 15 to 50 pounds and spins for years, so it has to mount to a UL-listed fan-rated electrical box anchored to the framing — not the thin pancake box that holds a light fixture, and never just the drywall. Most of the wobbling, rattling, and dropped-fan calls we get trace back to one thing: a fan hung on a box that was never rated to carry a moving load. Getting the box right is the whole job.",
+    "There are three common versions of the work. Swapping an old fan for a new one where a fan already hangs is the quick version — assuming the existing box is fan-rated. Replacing a light fixture with a fan means upgrading the box and often adding a switch leg so you can control the fan and light separately. Putting a fan where there's no fixture at all — a bedroom or living room that never had one — means running new wiring, cutting in a box, and adding a switch, which is the most involved version. We tell you which one you're looking at before we quote it.",
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues — serving {city_name} and the surrounding area. The approach is straightforward: confirm the box and framing can carry the load, mount it dead level, wire the fan and light to the right switches, and balance the blades so it runs quiet at every speed. If your ceiling is vaulted, two stories up, or you want a smart or remote-controlled fan, that's normal work for us, not a reason to turn the job down."
+  ],
+
+  "quick_ref_heading_template": "Ceiling fan jobs we handle in {city_name}",
+  "quick_ref_intro": "From a simple swap to a fan where none ever existed. If your job is on this list, you're in the right place.",
+  "quick_ref_footer_html_template": "Not sure what your install needs?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll tell you straight.",
+
+  "why_city_heading_template": "Why {city_name} homeowners call us for ceiling fan installation",
+  "why_city_closing_note_template": "A lot of {city_name} homes were built with builder-grade light fixtures on standard boxes, so most fan jobs here start with a box upgrade. We carry fan-rated boxes and braces on the truck, so that doesn't turn your one-hour install into a two-trip project.",
+
+  "problems_heading_template": "Ceiling fan situations we handle every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    {
+      "title": "Replacing a light fixture with a ceiling fan",
+      "body": "The most common request — and the one most likely to be done wrong by a handyman. The existing light box almost never carries a fan. We swap it for a UL-listed fan-rated box braced to the joists, run the extra switch leg if you want separate fan and light control, and mount the fan level."
+    },
+    {
+      "title": "Adding a fan to a room that never had one",
+      "body": "No existing fixture means new work: fishing wire through the ceiling, cutting in a fan-rated box, and adding a wall switch. It's the most involved version of the job, but it's routine for us. We'll tell you on-site whether your ceiling and attic access make it a clean run or a more involved one."
+    },
+    {
+      "title": "Fan wobbles, rattles, or drops",
+      "body": "A wobbling fan is almost always a mounting problem — a non-fan-rated box, loose blades, or a fan never balanced after install. A fan that's working loose is a safety issue. We re-mount it to a proper rated box, balance the blades, and make sure it runs quiet at high speed, not just low."
+    },
+    {
+      "title": "Vaulted, sloped, or two-story ceilings",
+      "body": "High and angled ceilings need a sloped-ceiling adapter, a downrod sized to bring the fan to the right height, and the right ladder or scaffold to reach it safely. We carry downrods and slope kits and have the equipment to work two stories up — this is normal work, not an upcharge surprise."
+    },
+    {
+      "title": "Old fan swap for a new one",
+      "body": "If a fan already hangs and the box is fan-rated, swapping in a new fan is quick. We confirm the existing box and wiring are sound, install your new fan or one we supply, and haul the old one away. If the existing box turns out not to be rated, we tell you before we touch it."
+    },
+    {
+      "title": "Outdoor and covered-patio fans",
+      "body": "Porches, patios, and screened rooms need a fan rated for damp or wet locations and a box and wiring to match. A standard indoor fan installed outside will fail. We install the correct wet- or damp-rated fan and weatherproof the connection."
+    },
+    {
+      "title": "Smart, remote, and app-controlled fans",
+      "body": "Modern fans add a remote, a wall control, or Wi-Fi and app control. The wiring behind them isn't always plug-and-play — some need a separate hot for the receiver, some replace the wall switch entirely. We wire it so the remote, the wall switch, and the app all behave the way you expect."
+    },
+    {
+      "title": "Fan and light controlled separately",
+      "body": "If you want the light on while the fan is off, or to dim the light without slowing the fan, you need the right switch setup — often a dual switch or a fan/light control. We add the switch leg and install the control so each works on its own."
+    }
+  ],
+
+  "process_heading_template": "Our ceiling fan installation process",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    {
+      "title": "A real conversation about the job",
+      "body": "We pick up. You tell us the room, the ceiling height, and whether there's a fan or fixture there now. We ask whether you're supplying the fan or want us to, and whether you want separate fan-and-light control. That tells us which version of the job it is and what to bring."
+    },
+    {
+      "title": "On-site check and written estimate",
+      "body": "We look at the existing box, the framing, the switch, and the ceiling. You get a written estimate before any work starts — box upgrade if needed, fan install, any new wiring or switch, and haul-away of the old fan. No surprise charges on the work day."
+    },
+    {
+      "title": "The right fan-rated box and brace",
+      "body": "If the existing box isn't fan-rated, this is the step that matters most. We install a UL-listed fan-rated box anchored to the framing — the part that keeps your fan on the ceiling for the next fifteen years. We carry these on the truck so it doesn't become a second trip."
+    },
+    {
+      "title": "Mount, wire, and level",
+      "body": "We mount the fan dead level, size the downrod to the ceiling height, and wire the fan and light to the correct switches. Sloped ceiling, two stories up, outdoor-rated — we have the adapters and the equipment to do it right."
+    },
+    {
+      "title": "Balance and test every speed",
+      "body": "A new fan isn't done until it runs quiet. We balance the blades, test low, medium, and high, check the remote and wall control, and confirm the light and fan behave independently if that's what you asked for. Then we clean up and haul the old fan away."
+    }
+  ],
+
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "Ceiling fan pricing depends on the version of the job — a straight swap costs differently than a fan in a room that never had one. We give you a written estimate before any work starts, so you know the exact number and approve it before we pick up a tool.",
+  "pricing_items": [
+    "A simple swap where a fan-rated box already exists is the quick, lower-cost version. We confirm the box is sound before quoting it that way.",
+    "Replacing a light fixture with a fan adds a box upgrade and often a switch leg — that's a separate, visible line item, not a surprise.",
+    "Adding a fan where there's no fixture means new wiring and a new switch; the estimate covers the fishing, the box, the switch, and the install.",
+    "If you're supplying the fan, the estimate is labor and materials only. If you'd like us to supply it, we'll quote the fan separately so you see what each piece costs."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}. We don't charge to come look at the job and give you the estimate.",
+  "pricing_closing_note": "We don't post a flat ceiling-fan price because the box, the ceiling height, and whether there's existing wiring change the job completely. The written estimate after we see it is the only honest number.",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues, requiring years of journeyman work, a passed state exam, and a clean record. Licensed and insured, {owner_name} handles residential electrical work across {city_name} and the surrounding area, from ceiling fans and lighting to panel upgrades and EV chargers.",
+    "On a ceiling fan job, the part that matters is the part you can't see: the box and the brace holding the fan to your ceiling. {owner_name} does that part right every time — a fan-rated box anchored to framing — which is why our fans don't wobble, rattle, or work loose. The fan you picked is the easy part; the mount is the job.",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "{website_url_no_slash}/wp-content/uploads/2026/06/{city_slug}-ceiling-fan-installation-about-PLACEHOLDER.png",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "Ceiling fan jobs often go in alongside other lighting and electrical work. These are the services {city_name} homeowners book most often at the same time.",
+  "related_cards": [
+    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures & Chandeliers" },
+    { "href_slug": "attic-fan-installation-{city_slug}", "label": "Attic Fan Installation" },
+    { "href_slug": "outlet-installation-{city_slug}", "label": "Outlet & Switch Installation" },
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    {
+      "question": "Can you install a ceiling fan where there's only a light fixture now?",
+      "answer_html": "Yes — it's one of our most common jobs. The catch is the box: the box holding your light fixture almost never carries the weight and motion of a fan, so we swap it for a UL-listed fan-rated box braced to the framing. If you want to control the fan and light separately, we add a switch leg so each works on its own. We confirm what your ceiling needs on-site and give you the written estimate before any work starts. Call {phone_display} and tell us the room and ceiling height.",
+      "answer_schema": "Yes, installing a ceiling fan where only a light fixture exists is a common job. The existing light box almost never carries the weight and motion of a fan, so the electrician swaps it for a UL-listed fan-rated box braced to the framing. To control the fan and light separately, the electrician adds a switch leg. The job is confirmed on-site with a written estimate before any work starts."
+    },
+    {
+      "question": "Why does my ceiling fan wobble, and can you fix it?",
+      "answer_html": "Almost always, a wobbling fan is a mounting problem, not a fan problem. The usual cause is a box that was never fan-rated — a fan hung on a light box or directly on drywall will wobble and, over time, work loose, which is a safety issue. The other causes are unbalanced or warped blades and a loose downrod. We re-mount the fan to a proper fan-rated box anchored to framing, balance the blades, and tighten everything down so it runs quiet at high speed, not just on low. If the fan itself is failing, we'll tell you that too.",
+      "answer_schema": "A wobbling ceiling fan is almost always a mounting problem, not a fan defect. The usual cause is a box that was never fan-rated, such as a fan hung on a light box or on drywall, which can work loose over time and become a safety issue. Other causes are unbalanced blades and a loose downrod. The fix is re-mounting the fan to a fan-rated box anchored to framing, balancing the blades, and tightening the assembly so it runs quiet at all speeds."
+    },
+    {
+      "question": "Can you install a fan on a vaulted or two-story ceiling?",
+      "answer_html": "Yes. Sloped and high ceilings are routine for us. A vaulted ceiling needs a sloped-ceiling adapter so the fan hangs level instead of at an angle, and a downrod sized to bring the fan down to the right height for airflow. A two-story foyer or great room needs the right ladder or scaffold to reach it safely — which we have. We carry downrods and slope kits on the truck, so a high or angled ceiling doesn't turn into a return trip. Tell us the ceiling height when you call and we'll come prepared.",
+      "answer_schema": "Yes, installing a fan on a vaulted or two-story ceiling is routine. A vaulted ceiling needs a sloped-ceiling adapter so the fan hangs level, plus a downrod sized to lower the fan to the right height for airflow. A two-story space needs proper ladder or scaffold access to work safely. The electrician carries downrods and slope kits to avoid a return trip."
+    },
+    {
+      "question": "Do I need to buy the fan, or can you supply it?",
+      "answer_html": "Either way works. If you've already bought a fan, we install it — the estimate is labor and any materials like a box upgrade or switch. If you'd rather we supply the fan, we'll quote it separately so you can see the fan cost and the install cost as two clear numbers. One tip if you're buying your own: pick a fan rated for the room (damp- or wet-rated for porches and patios) and tell us the ceiling height so we bring the right downrod. Call {phone_display} and we'll point you in the right direction.",
+      "answer_schema": "Both options work. If the homeowner has already bought a fan, the electrician installs it and the estimate covers labor and materials such as a box upgrade or switch. If the homeowner prefers, the electrician can supply the fan and quote it as a separate line item. For outdoor locations, the fan must be damp- or wet-rated, and the ceiling height determines the correct downrod."
+    },
+    {
+      "question": "How long does ceiling fan installation take?",
+      "answer_html": "A straight swap, where a fan-rated box already exists, usually takes under an hour. Replacing a light fixture with a fan, including the box upgrade and any switch work, typically runs one to two hours. Adding a fan to a room with no existing fixture takes longer because it involves running new wiring and cutting in a box and switch — often a half-day depending on attic access and the wiring run. We give you a realistic time estimate along with the price before we start, so you know what to expect.",
+      "answer_schema": "A straight fan swap with an existing fan-rated box usually takes under an hour. Replacing a light fixture with a fan, including the box upgrade and switch work, typically takes one to two hours. Adding a fan to a room with no existing fixture takes longer because it requires new wiring and a new box and switch, often a half-day depending on attic access. A time estimate is provided with the price before work begins."
+    },
+    {
+      "question": "Can you set up the fan and light to work separately?",
+      "answer_html": "Yes. If you want the light on while the fan is off, the fan running without the light, or the ability to dim the light without slowing the fan, you need the right switch setup — usually a dual switch or a dedicated fan/light control at the wall. We add the switch leg and install the control so each one operates independently. Many modern fans also include a remote; we make sure the remote, the wall control, and the fan all behave consistently so you're not fighting the controls. Tell us how you want to control it and we'll wire it that way.",
+      "answer_schema": "Yes, the fan and light can be set to operate separately. Controlling the light and fan independently, or dimming the light without slowing the fan, requires the right switch setup, usually a dual switch or a dedicated fan and light control at the wall. The electrician adds the switch leg and installs the control so each operates independently, and ensures any remote and wall control behave consistently."
+    },
+    {
+      "question": "Is it safe to install a ceiling fan myself?",
+      "answer_html": "The risk isn't the wiring so much as the mount. A ceiling fan weighs 15 to 50 pounds and spins for years, so it has to hang from a UL-listed fan-rated box anchored to the framing. The most common DIY mistake is hanging a fan on the existing light box or on the drywall — it holds at first, then works loose, wobbles, and in the worst case comes down. There's also the wiring side: getting the fan and light on the correct switches, and not overloading a circuit. A licensed electrician gets the box, the wiring, and the balance right the first time. Call {phone_display} if you'd rather not gamble on the mount.",
+      "answer_schema": "The main risk of DIY ceiling fan installation is the mount, not just the wiring. A ceiling fan weighs 15 to 50 pounds and spins for years, so it must hang from a UL-listed fan-rated box anchored to the framing. The most common mistake is hanging a fan on a light box or drywall, which works loose over time and can fall. The wiring side also requires the fan and light on the correct switches without overloading the circuit. A licensed electrician installs the box, wiring, and balance correctly."
+    }
+  ],
+
+  "final_cta_heading": "Ready for a ceiling fan that runs quiet?",
+  "final_cta_paragraph_template": "Ceiling fan installation, replacement, and repair in {city_name_with_state}. {owner_name} mounts it level, wires it to code, and balances it so it runs quiet — vaulted ceilings and new installs included.<br>Call {phone_display} for a written estimate.",
+
+  "schema_service_description_template": "Ceiling fan installation, replacement, and repair in {city_name_with_state}. Master electrician installs UL-listed fan-rated boxes, handles vaulted and two-story ceilings, replaces light fixtures with fans, adds fans to rooms with no existing fixture, and wires separate fan-and-light controls. Written estimate before any work begins.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "Written on-site estimate before any ceiling fan work begins. Fan-rated box and brace installed where the existing box is not rated for a fan. Damp- or wet-rated fans used for outdoor and covered-patio locations."
+}

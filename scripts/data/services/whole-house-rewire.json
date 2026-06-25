@@ -1,0 +1,199 @@
+{
+  "_comment": "Per-service data for Whole-House Rewiring (knob-and-tube, aluminum, cloth/ungrounded wiring replacement). Used by scaffold-core-30-page.py for every whole-house-rewire page across cities. {city}, {client}, {owner} placeholders substituted from the client config at render time. Authored client-agnostic 2026-06-24 (Cowork, EV growth program). Slug matches the existing related_cards reference 'whole-house-rewire-{city_slug}'. High-ticket commercial-intent service flagged in plan-data-driven-growth-2026-06-23 Tier 2.",
+  "_scaffolded": {
+    "from_brief": false,
+    "authored_date": "2026-06-24",
+    "authored_by": "cowork-ev-growth-planning",
+    "needs_authoring": [],
+    "needs_confirmation": [
+      "hero_image_url_template path year/month once imagery is generated",
+      "about_portrait_url_template path once imagery is generated"
+    ]
+  },
+  "slug": "whole-house-rewire",
+  "page_slug_template": "whole-house-rewire-{city_slug}",
+  "name": "Whole-House Rewiring",
+  "name_with_city": "Whole-House Rewiring in {city_name_with_state}",
+  "service_type_phrase": "Whole-house rewiring and old-wiring replacement",
+  "quoted_phrase": "whole-house rewiring",
+  "lowercase_phrase": "whole-house rewiring",
+  "tag_short": "whole-house-rewire",
+
+  "aioseo_page_title_template": "Whole-House Rewiring in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "Whole-house rewiring in {city_name_with_state}. {license_state}-licensed Master Electrician replaces knob-and-tube, aluminum & ungrounded wiring — minimal wall damage, permitted, inspected. Call {phone_display}.",
+  "aioseo_focus_keyword_template": "whole house rewiring {city_name}",
+  "aioseo_additional_keywords_template": [
+    "whole house rewiring {city_name}",
+    "house rewiring {city_name}",
+    "rewire old house {city_name}",
+    "knob and tube wiring replacement {city_name}",
+    "aluminum wiring replacement {city_name}",
+    "cloth wiring replacement {city_name}",
+    "ungrounded wiring {city_name}",
+    "two prong outlet rewiring {city_name}",
+    "electrical rewiring {city_name}",
+    "rewire house cost {city_name}",
+    "old house wiring {city_name}",
+    "replace old electrical wiring {city_name}",
+    "house rewiring electrician {city_name}",
+    "partial house rewire {city_name}",
+    "knob and tube electrician {city_name}"
+  ],
+  "wordpress_page_title_template": "Whole-House Rewiring in {city_name_with_state}",
+
+  "hero_eyebrow_template": "Whole-House Rewiring in {city_name_with_state}",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician who rewires older {city_name} homes — replacing knob-and-tube, aluminum, cloth-insulated, and ungrounded wiring with modern, grounded, code-compliant circuits. We plan the runs to open as little drywall as possible, pull the permit, and get it inspected so it's on the books for your insurer and your buyer.",
+  "hero_heading": "Modern, Grounded Wiring. Minimal Wall Damage.",
+  "hero_image_alt_template": "{owner_name}, master electrician, performing whole-house rewiring in {city_name_with_state}",
+  "hero_image_url_template": "{website_url_no_slash}/wp-content/uploads/2026/06/{city_slug}-whole-house-rewire-hero-PLACEHOLDER.png",
+
+  "what_it_means_heading": "What whole-house rewiring actually means",
+  "what_it_means_paragraphs": [
+    "Whole-house rewiring is replacing the old wiring running through your walls, attic, and basement with new, grounded, code-compliant circuits. Homes get rewired because the original wiring is unsafe, outdated, or can't carry modern loads: knob-and-tube from before the 1950s, the aluminum branch wiring used in the mid-1960s to mid-1970s, cloth- or rubber-insulated wire that's gone brittle, or ungrounded two-prong circuits that can't safely run today's electronics and appliances. It's one of the bigger residential electrical jobs there is — and one of the most important for safety, because failed wiring inside walls is a leading cause of house fires.",
+    "Not every old house needs a full rewire. Sometimes the right answer is a targeted fix — remediating aluminum connections with approved connectors, replacing one bad circuit, or grounding a few critical runs — rather than tearing into every wall. We've talked plenty of homeowners out of a full rewire they didn't need, and we've also caught knob-and-tube that an inspector or insurer flagged for good reason. The honest assessment comes first: we tell you whether you're looking at a whole-house job, a partial rewire, or a handful of targeted repairs.",
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues — serving {city_name} and the surrounding area. A rewire is as much about planning as wire: routing new runs through attics, basements, and existing chases to open the least drywall possible, sequencing the work so you keep power to most of the house through the job, pulling the permit, and getting every circuit inspected and signed off. Done right, you end up with a fully grounded, properly labeled, code-compliant electrical system — and the paperwork to prove it for insurance and resale."
+  ],
+
+  "quick_ref_heading_template": "Signs your {city_name} home may need rewiring",
+  "quick_ref_intro": "Red flags that point to old or failing wiring. If you're seeing several of these, it's worth a real assessment.",
+  "quick_ref_footer_html_template": "Not sure if you need a full rewire?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll tell you straight.",
+
+  "why_city_heading_template": "Why {city_name} homeowners call us for rewiring",
+  "why_city_closing_note_template": "A lot of {city_name}'s older housing stock still has its original wiring — knob-and-tube in the pre-war homes, aluminum branch wiring in the 1960s-70s builds. If your home is from one of those eras and you're seeing two-prong outlets or frequent trips, an assessment is worth it before you buy, sell, or insure.",
+
+  "problems_heading_template": "Wiring situations we handle in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners with older wiring. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    {
+      "title": "Knob-and-tube wiring",
+      "body": "The original wiring in many pre-1950s homes — ungrounded, brittle with age, and unsafe when buried in insulation or overloaded. Many insurers won't write a policy on an active knob-and-tube home, and many buyers walk. We assess how much is still live and lay out a plan to replace it."
+    },
+    {
+      "title": "Aluminum branch wiring",
+      "body": "Used in homes built roughly 1965-1975, aluminum branch wiring expands, contracts, and loosens at connections over time, creating heat at outlets and switches — a documented fire risk. The fix is sometimes a full rewire and sometimes approved connector remediation at every device. We tell you which your home needs."
+    },
+    {
+      "title": "Two-prong, ungrounded outlets throughout",
+      "body": "If most of your outlets are the two-prong kind, your home isn't grounded — which is unsafe for modern electronics and appliances and fails today's code. Depending on the wiring behind them, the fix ranges from running new grounded circuits to a full rewire. We check what's actually in the walls before quoting it."
+    },
+    {
+      "title": "Frequent breaker trips and overloaded circuits",
+      "body": "Old homes were wired for a fraction of today's electrical load. If breakers trip constantly and you're running power strips everywhere, the wiring can't keep up. A rewire adds the circuits and capacity a modern household actually uses — kitchen, laundry, home office, HVAC."
+    },
+    {
+      "title": "Cloth- or rubber-insulated wiring",
+      "body": "Mid-century homes often have wiring whose cloth or rubber insulation has dried out, cracked, and started crumbling off the conductor — leaving bare wire inside boxes and walls. Once insulation is failing, it doesn't get better. We replace the affected runs before they short or arc."
+    },
+    {
+      "title": "Burning smell, scorched outlets, or warm switch plates",
+      "body": "Heat and burning smells from outlets, switches, or behind walls mean a connection is failing somewhere in the wiring — and in old systems, that's often widespread, not isolated. This is the safety case for assessment now, not later. We find the failing points and tell you the scope honestly."
+    },
+    {
+      "title": "Buying or selling an older home",
+      "body": "Home inspections routinely flag knob-and-tube, aluminum, and ungrounded wiring, and those flags kill deals or drop offers. Whether you're buying and want to know the real scope, or selling and want it resolved before listing, we give you a clear assessment and a documented, permitted fix."
+    },
+    {
+      "title": "Major renovation or addition",
+      "body": "Once walls are open for a remodel, it's the cheapest time to rewire — the expensive part of a rewire is opening and closing walls, and a renovation already does that. We coordinate with your contractor to rewire while the framing is exposed."
+    }
+  ],
+
+  "process_heading_template": "Our whole-house rewiring process",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    {
+      "title": "Honest assessment first",
+      "body": "We come out, open a sample of outlets and boxes, check the panel and the wiring type in the attic and basement, and tell you what you're actually dealing with — full rewire, partial rewire, or targeted repairs. We'd rather tell you it's a $2,000 fix than sell you a $20,000 rewire you don't need."
+    },
+    {
+      "title": "A written scope and plan",
+      "body": "You get a written estimate with the scope laid out: which circuits, how the new runs route to minimize drywall damage, whether the panel needs upgrading too, the permit, and the inspection. We sequence it so you keep power to most of the house through the job wherever possible."
+    },
+    {
+      "title": "Permit and inspection scheduling",
+      "body": "A rewire requires a permit pulled by a licensed electrician and an inspection. We file the permit and schedule the inspections — rough-in (before walls close) and final. You don't deal with the county; that's our job, and it's what puts the work on the official record."
+    },
+    {
+      "title": "The rewire — planned to minimize wall damage",
+      "body": "We pull new grounded wire through attics, basements, and existing chases, fish walls carefully, and open only what we have to. New outlets, switches, and grounded circuits go in; the old wiring is disconnected and removed where accessible. We label every circuit at the panel as we go."
+    },
+    {
+      "title": "Inspection, patch coordination, and sign-off",
+      "body": "The inspector signs off the rough-in before walls close and the final when it's done. We coordinate any needed drywall patching so the holes we opened get closed cleanly, and hand you the permit and inspection records — the paperwork your insurer and a future buyer will want to see."
+    }
+  ],
+
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "Rewiring is one of the bigger electrical jobs, and the price swings hugely with the home's size, how accessible the wiring is, and how much is finished wall versus open framing. We assess it in person and give you a written scope and estimate — no real number is possible over the phone, and anyone who quotes one sight-unseen is guessing.",
+  "pricing_items": [
+    "The estimate starts from a real assessment — we look at the wiring type, the home's size, and accessibility before quoting anything.",
+    "Cost is driven mostly by labor and access: open framing (gut renovation) is far cheaper to rewire than fully finished walls that have to be fished and patched.",
+    "If the panel also needs upgrading to support the new circuits — which is common on a rewire — that's a clear, separate line item.",
+    "Drywall patching and painting after the rewire can be included or left to you; we'll lay out both options so you can decide."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}. The in-person assessment that the estimate is built on is part of the job, not an upsell.",
+  "pricing_closing_note": "We don't post a rewire price because home size, wiring type, and wall access change it by tens of thousands of dollars. A written estimate after a real in-person assessment is the only honest number — and the assessment itself often reveals you need less than you feared.",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues, requiring years of journeyman work, a passed state exam, and a clean record. Licensed and insured, {owner_name} handles residential electrical work across {city_name} and the surrounding area, including the full rewiring of older homes.",
+    "On a rewire, the value is in the honesty and the planning: telling you whether you truly need a full rewire or a targeted fix, and routing the new runs to open the least wall possible. {owner_name} leads the assessment personally — half the homeowners who call expecting a five-figure rewire turn out to need a partial job or connector remediation, and we tell them so.",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "{website_url_no_slash}/wp-content/uploads/2026/06/{city_slug}-whole-house-rewire-about-PLACEHOLDER.png",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "Rewiring usually goes hand in hand with a panel upgrade and modern safety devices. These are the services {city_name} homeowners most often pair with a rewire.",
+  "related_cards": [
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
+    { "href_slug": "electrical-troubleshooting-{city_slug}", "label": "Electrical Troubleshooting & Diagnostics" },
+    { "href_slug": "outlet-installation-{city_slug}", "label": "Outlet & Switch Installation" },
+    { "href_slug": "smoke-alarm-{city_slug}", "label": "Smoke Alarm Installation" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    {
+      "question": "How do I know if my house needs to be rewired?",
+      "answer_html": "A few signs point to it: two-prong (ungrounded) outlets throughout, breakers or fuses that trip constantly, a burning smell or warm/scorched outlets and switches, flickering lights across the house, and wiring you can identify as knob-and-tube, aluminum branch wiring, or cloth-insulated. Age is a strong hint too — homes built before 1950 often have knob-and-tube, and 1965-1975 builds often have aluminum. That said, not every old home needs a full rewire; sometimes it's a partial job or targeted repairs. The only way to know the real scope is an in-person assessment, which is where we start. Call {phone_display} and we'll take a look.",
+      "answer_schema": "Signs a house may need rewiring include ungrounded two-prong outlets throughout, breakers or fuses that trip constantly, burning smells or warm and scorched outlets and switches, house-wide flickering lights, and identifiable knob-and-tube, aluminum branch, or cloth-insulated wiring. Homes built before 1950 often have knob-and-tube and 1965-1975 builds often have aluminum. Not every old home needs a full rewire; the real scope requires an in-person assessment."
+    },
+    {
+      "question": "Is knob-and-tube or aluminum wiring actually dangerous?",
+      "answer_html": "Both carry real, documented risk. Knob-and-tube is ungrounded, the insulation becomes brittle with age, and it overheats dangerously when buried in modern insulation or overloaded — and many insurers won't cover a home with active knob-and-tube. Aluminum branch wiring expands and contracts at connections, working them loose over time and generating heat at outlets and switches, which is a recognized fire risk. Neither means your house is going to burn down tomorrow, but both are conditions you want assessed and addressed — through full replacement or, for aluminum, approved connector remediation at every device. We tell you the honest risk level and the right fix.",
+      "answer_schema": "Knob-and-tube and aluminum wiring both carry documented risk. Knob-and-tube is ungrounded, becomes brittle with age, and overheats when buried in insulation or overloaded, and many insurers will not cover homes with active knob-and-tube. Aluminum branch wiring loosens at connections over time and generates heat at outlets and switches, a recognized fire risk. The fixes are full replacement or, for aluminum, approved connector remediation at every device."
+    },
+    {
+      "question": "Do you have to tear open all my walls to rewire?",
+      "answer_html": "No — and minimizing wall damage is most of the skill in a good rewire. We route new runs through accessible paths first: the attic, the basement or crawlspace, and existing wall chases. Where we do have to go through finished walls, we fish the wire and open small, strategic access points rather than tearing out whole sections. You'll have some patching to do — there's no truly zero-hole rewire of a finished house — but a well-planned job opens a fraction of what people fear. If your walls are already open for a renovation, that's the ideal and cheapest time to rewire. We'll show you the planned access points in the estimate.",
+      "answer_schema": "A rewire does not require tearing open all walls. New runs are routed through accessible paths first, including the attic, basement or crawlspace, and existing wall chases. Where finished walls must be accessed, the wire is fished through small strategic openings rather than large sections removed. Some patching is required, but a well-planned job opens far less wall than expected. Walls already open for a renovation are the ideal and cheapest time to rewire."
+    },
+    {
+      "question": "How long does a whole-house rewire take?",
+      "answer_html": "It depends heavily on the home's size and how much is finished wall versus open framing. A small home with good attic and basement access might be a few days; a larger home with fully finished walls that have to be fished and patched can run one to two weeks. We sequence the work so you keep power to most of the house through the job wherever possible, rather than killing everything for the duration. You'll get a realistic timeline in the written estimate, along with the plan for keeping you powered during the work.",
+      "answer_schema": "The duration of a whole-house rewire depends on the home's size and how much is finished wall versus open framing. A small home with good attic and basement access may take a few days; a larger home with fully finished walls can take one to two weeks. The work is sequenced to keep power to most of the house during the job where possible. A realistic timeline is provided in the written estimate."
+    },
+    {
+      "question": "Will I need a permit and inspection for rewiring?",
+      "answer_html": "Yes. Whole-house rewiring requires a permit pulled by a licensed electrician and inspections — typically a rough-in inspection before the walls close back up and a final inspection when the job is complete. This isn't red tape to dread; it's what protects you. The permit and signed inspection records prove the work was done to code, which is exactly what your home insurer and a future buyer will want to see, and it's the difference between a documented upgrade and an unpermitted liability. We file the permit and handle all the inspection scheduling — you don't deal with the county.",
+      "answer_schema": "Whole-house rewiring requires a permit pulled by a licensed electrician and inspections, typically a rough-in inspection before walls close and a final inspection at completion. The permit and signed inspection records prove the work was done to code, which home insurers and future buyers want to see. The electrician files the permit and handles all inspection scheduling."
+    },
+    {
+      "question": "Can I live in my house during the rewire?",
+      "answer_html": "Usually, yes. Most whole-house rewires are done with the homeowners still living there, by sequencing the work room by room and keeping power to the rest of the house. There will be stretches where specific circuits or rooms are down while we work on them, and we plan those with you in advance so the kitchen and at least some outlets stay live. For a larger or more disruptive job — especially one paired with a gut renovation — some homeowners choose to stay elsewhere for part of it. We'll be honest about how disruptive your specific job will be so you can plan around it.",
+      "answer_schema": "Most whole-house rewires are completed with homeowners still living in the home by sequencing the work room by room and keeping power to the rest of the house. Specific circuits or rooms will be down temporarily while being worked on, planned with the homeowner in advance. For larger jobs or those paired with a gut renovation, some homeowners choose to stay elsewhere for part of the work."
+    }
+  ],
+
+  "final_cta_heading": "Worried about old wiring? Get a straight answer.",
+  "final_cta_paragraph_template": "Whole-house rewiring in {city_name_with_state}. {owner_name} assesses what you actually need — full rewire, partial, or targeted repair — then replaces knob-and-tube, aluminum, and ungrounded wiring with modern grounded circuits, permitted and inspected.<br>Call {phone_display} for an honest assessment.",
+
+  "schema_service_description_template": "Whole-house rewiring in {city_name_with_state}. Master electrician replaces knob-and-tube, aluminum branch, cloth-insulated, and ungrounded wiring with modern grounded, code-compliant circuits. Runs planned to minimize wall damage; permit and inspections handled. Written estimate after an in-person assessment.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "In-person assessment and written scope before any rewiring begins. Permit pulled by a licensed electrician; rough-in and final inspections scheduled by the contractor. New circuits grounded and labeled to current code."
+}

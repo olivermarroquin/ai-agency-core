@@ -1,0 +1,195 @@
+{
+  "_comment": "Per-service data for Circuit Breaker Replacement & Repair (tripping breakers, won't-reset breakers, breaker swaps, AFCI/GFCI breaker installs). Used by scaffold-core-30-page.py for every circuit-breaker page across cities. {city}, {client}, {owner} placeholders substituted from the client config at render time. Authored client-agnostic 2026-06-24 (Cowork, EV growth program) from GSC striking-distance demand (circuit breaker replacement pos 7.5). Distinct from panel-upgrade: this is breaker-level service, not a full panel swap.",
+  "_scaffolded": {
+    "from_brief": false,
+    "authored_date": "2026-06-24",
+    "authored_by": "cowork-ev-growth-planning",
+    "needs_authoring": [],
+    "needs_confirmation": [
+      "hero_image_url_template path year/month once imagery is generated",
+      "about_portrait_url_template path once imagery is generated"
+    ]
+  },
+  "slug": "circuit-breaker-replacement",
+  "page_slug_template": "circuit-breaker-replacement-{city_slug}",
+  "name": "Circuit Breaker Replacement",
+  "name_with_city": "Circuit Breaker Replacement in {city_name_with_state}",
+  "service_type_phrase": "Circuit breaker replacement, repair, and diagnostics",
+  "quoted_phrase": "circuit breaker replacement",
+  "lowercase_phrase": "circuit breaker replacement",
+  "tag_short": "circuit-breaker-replacement",
+
+  "aioseo_page_title_template": "Circuit Breaker Replacement in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "Circuit breaker replacement & repair in {city_name_with_state}. {license_state}-licensed Master Electrician diagnoses the real cause before swapping a breaker. Call {phone_display}.",
+  "aioseo_focus_keyword_template": "circuit breaker replacement {city_name}",
+  "aioseo_additional_keywords_template": [
+    "circuit breaker replacement {city_name}",
+    "circuit breaker repair {city_name}",
+    "breaker keeps tripping {city_name}",
+    "breaker won't reset {city_name}",
+    "replace circuit breaker {city_name}",
+    "tripping breaker electrician {city_name}",
+    "GFCI breaker installation {city_name}",
+    "AFCI breaker installation {city_name}",
+    "double tapped breaker {city_name}",
+    "hot circuit breaker {city_name}",
+    "breaker box repair {city_name}",
+    "main breaker replacement {city_name}",
+    "circuit breaker electrician near me",
+    "buzzing circuit breaker {city_name}",
+    "add circuit breaker {city_name}"
+  ],
+  "wordpress_page_title_template": "Circuit Breaker Replacement in {city_name_with_state}",
+
+  "hero_eyebrow_template": "Circuit Breaker Replacement in {city_name_with_state}",
+  "hero_heading": "We Find Why It Trips — Then Fix It.",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician serving {city_name}. A breaker that trips, won't reset, or runs hot is a warning, not a nuisance — and a new breaker only helps if the breaker is the actual problem. We diagnose the real cause first: the breaker, a short, an overload, or a loose connection — then fix the right thing.",
+  "hero_image_alt_template": "{owner_name}, master electrician, replacing a circuit breaker in {city_name_with_state}",
+  "hero_image_url_template": "{website_url_no_slash}/wp-content/uploads/2026/06/{city_slug}-circuit-breaker-replacement-hero-PLACEHOLDER.png",
+
+  "what_it_means_heading": "What a tripping breaker is really telling you",
+  "what_it_means_paragraphs": [
+    "A circuit breaker's whole job is to cut power when a circuit draws more current than it's rated for — that's it doing its job, protecting your wiring from overheating and starting a fire. So when a breaker trips, the first question isn't \"how do I make it stop,\" it's \"why did it trip.\" Sometimes the breaker itself has worn out and trips on normal load, or won't reset, or won't trip when it should — and then it needs replacing. But just as often the breaker is fine and it's reacting to a real problem downstream: an overloaded circuit, a short, a ground fault, or a loose connection generating heat. Swapping the breaker without finding the cause can hide a genuine hazard.",
+    "That's the difference between a breaker swap and breaker service. Replacing a breaker is a fifteen-minute job once you know it's the right fix. The skill — and the safety — is in the diagnosis: testing the circuit, measuring the load, checking for shorts and ground faults, and inspecting the connection at the bus bar. We've replaced plenty of genuinely failed breakers, and we've also found that the \"bad breaker\" was actually a space heater on an overloaded kitchen circuit, or a loose neutral. We test until we know which one it is before we sell you a part.",
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues — serving {city_name} and the surrounding area. We handle straight breaker replacements, AFCI and GFCI breaker installs for code compliance, adding a new breaker for a new circuit, and the diagnostics behind a breaker that keeps tripping. And we're honest about the bigger picture: if your breaker trouble is really a sign the whole panel is undersized, failing, or a known-hazard brand like Federal Pacific or Zinsco, we'll tell you that too — instead of selling you breaker after breaker for a panel that needs replacing."
+  ],
+
+  "quick_ref_heading_template": "Breaker problems we handle in {city_name}",
+  "quick_ref_intro": "Tripping, won't-reset, hot, buzzing, or you just need one added. If your issue is here, you're in the right place.",
+  "quick_ref_footer_html_template": "Breaker acting up?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll diagnose it.",
+
+  "why_city_heading_template": "Why {city_name} homeowners call us for breaker problems",
+  "why_city_closing_note_template": "Most {city_name} breaker calls come down to one of three things — an aging breaker that's worn out, a circuit carrying more load than it was built for, or a loose connection at the panel. We figure out which before we touch a thing, so you're not paying for a part that wasn't the problem.",
+
+  "problems_heading_template": "Breaker situations we handle every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    {
+      "title": "Breaker keeps tripping",
+      "body": "A breaker that trips once did its job. One that trips repeatedly is reacting to an overloaded circuit, a short downstream, a ground fault, or a worn breaker no longer holding. We trace the circuit and measure the load to find which — and never just tape it on or tell you to keep resetting it, which defeats the safety device."
+    },
+    {
+      "title": "Breaker won't reset",
+      "body": "If a breaker won't move back to ON, or snaps right back to tripped, there's either an active fault on the circuit or the breaker has failed internally. We test the circuit first — resetting into a live short is exactly what the breaker is preventing — then replace the breaker only if it's the actual failure."
+    },
+    {
+      "title": "Breaker or panel is hot to the touch",
+      "body": "A breaker that's warm or hot, or a panel cover that's warm, almost always means a loose connection at the breaker or bus bar — and loose connections in panels are a leading cause of electrical fires. Stop using the circuit and call us; we treat heat at the panel as urgent."
+    },
+    {
+      "title": "Buzzing, crackling, or sparking at the panel",
+      "body": "A loud buzz, crackle, or visible arcing inside the panel points to a loose breaker connection or a failing bus bar. Don't open the panel yourself. We assess it same-day, because arcing inside a panel is an active fire risk, not a maintenance item."
+    },
+    {
+      "title": "Adding a breaker for a new circuit",
+      "body": "Adding a dedicated circuit for a new appliance, a garage, a workshop, or an outdoor outlet means adding a breaker — if the panel has a free slot and the capacity. We check both before quoting it, and tell you honestly if the panel's full or maxed out rather than cramming in a tandem breaker that shouldn't be there."
+    },
+    {
+      "title": "AFCI or GFCI breaker installation",
+      "body": "Code now requires arc-fault (AFCI) protection on many living-area circuits and ground-fault (GFCI) protection in wet areas. Installing the right protective breaker brings the circuit up to code and adds real safety. We install AFCI and GFCI breakers and confirm they hold without nuisance-tripping."
+    },
+    {
+      "title": "Double-tapped or wrong-size breakers",
+      "body": "Two wires under one breaker, or a breaker rated higher than the wire it protects, are common mistakes that defeat the breaker's protection — a 20-amp breaker on 15-amp wire won't trip before the wire overheats. We find and correct these, which inspectors and home buyers flag for good reason."
+    }
+  ],
+
+  "process_heading_template": "Our breaker service process",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    {
+      "title": "Symptoms over the phone",
+      "body": "We pick up. You tell us what's happening — trips when you run a specific appliance, won't reset, warm to the touch, buzzing. If you describe heat, burning smell, or sparking at the panel, we treat it as urgent and get you in same-day rather than next week."
+    },
+    {
+      "title": "Diagnose before we replace",
+      "body": "On-site, we test the circuit, measure the load, check for shorts and ground faults, and inspect the breaker connection at the bus bar. The goal is to know whether it's the breaker, the circuit, or the connection — before we recommend a part. Most of the value is here."
+    },
+    {
+      "title": "Plain-language findings and estimate",
+      "body": "We tell you what we found and what it costs to fix — a breaker replacement, a connection repair, splitting an overloaded circuit, or adding a circuit. If the real issue is the panel itself, we say so honestly instead of swapping breakers indefinitely. Written estimate before any work."
+    },
+    {
+      "title": "The fix — usually same visit",
+      "body": "Our trucks carry common breakers — standard, AFCI, GFCI, and the major panel brands. A breaker replacement or a connection repair is typically done the same visit. If it's a larger fix (panel upgrade, circuit splitting requiring new wire), we make it safe and schedule the rest."
+    },
+    {
+      "title": "Test and verify it holds",
+      "body": "We don't call it done until the circuit holds under real load. We re-energize, run the load that was tripping it, and confirm the breaker stays set and the connection runs cool. Then we explain what caused it so you know whether it's resolved or a sign of something bigger."
+    }
+  ],
+
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "Breaker work is mostly diagnosis plus a part. We give you a written estimate on-site before any work — the diagnostic, the breaker or repair, and anything the diagnosis turns up — so you approve the number before we pick up a tool. The honest part: sometimes the fix is a cheap breaker, and sometimes the breaker is a symptom of a bigger panel issue. We tell you which.",
+  "pricing_items": [
+    "A straight breaker replacement, once we've confirmed the breaker is the actual problem, is a low-cost, usually same-visit fix.",
+    "AFCI and GFCI breakers cost more than standard breakers — the part itself is more expensive — and we name that before installing.",
+    "If the diagnosis shows the real issue is an overloaded circuit or a loose connection rather than the breaker, the fix and its cost are different; we explain it before doing it.",
+    "If the breaker trouble points to a failing or undersized panel, that's a panel-upgrade conversation, quoted separately and honestly — not a string of breaker swaps."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}. We don't charge to come diagnose the breaker and give you the estimate.",
+  "pricing_closing_note": "We don't post a flat price because the honest cost depends on what's actually wrong — and that takes a real diagnosis. Often it's an inexpensive breaker; occasionally it's the first sign of a panel that needs replacing. The on-site estimate after we test it is the only honest number.",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues, requiring years of journeyman work, a passed state exam, and a clean record. Licensed and insured, {owner_name} handles residential electrical work across {city_name} and the surrounding area, from breaker and panel work to lighting, rewiring, and EV chargers.",
+    "On a breaker call, the honesty is the whole value: a new breaker only fixes a worn breaker, and most repeat-tripping is a circuit or connection problem the breaker is correctly reacting to. {owner_name} diagnoses the real cause before recommending a part — and tells you straight when the breaker trouble is really a sign the panel itself needs attention, instead of selling breaker after breaker.",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "{website_url_no_slash}/wp-content/uploads/2026/06/{city_slug}-circuit-breaker-replacement-about-PLACEHOLDER.png",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "Breaker trouble often connects to the panel and the circuits behind it. These are the services {city_name} homeowners most often need alongside breaker work.",
+  "related_cards": [
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
+    { "href_slug": "electrical-troubleshooting-{city_slug}", "label": "Electrical Troubleshooting & Diagnostics" },
+    { "href_slug": "outlet-installation-{city_slug}", "label": "Outlet & Switch Installation" },
+    { "href_slug": "emergency-electrician-{city_slug}", "label": "24/7 Emergency Electrician" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    {
+      "question": "Why does my circuit breaker keep tripping?",
+      "answer_html": "A breaker trips to protect the circuit, so repeated tripping means one of four things: the circuit is overloaded (too many devices drawing more than its rating — common on kitchen and bathroom circuits with heaters and hair dryers), there's a short circuit (a hot wire touching neutral or ground), there's a ground fault, or the breaker itself has worn out and trips on normal load. The fix depends entirely on which one it is — and the only way to know is to test the circuit, measure the load, and check for faults. Resetting it over and over, or taping it on, just defeats the safety device. Call {phone_display} and we'll find the real cause.",
+      "answer_schema": "A breaker trips to protect the circuit, so repeated tripping indicates one of four causes: an overloaded circuit drawing more than its rating, a short circuit, a ground fault, or a worn-out breaker that trips on normal load. The correct fix depends on which cause it is, determined by testing the circuit, measuring the load, and checking for faults. Repeatedly resetting or taping the breaker defeats the safety device."
+    },
+    {
+      "question": "Do I need a new breaker, or is it something else?",
+      "answer_html": "Often it's something else — which is exactly why diagnosis matters. A breaker only needs replacing when the breaker itself has failed: it trips on normal load, won't reset, won't hold, or won't trip when it should. But a lot of \"bad breaker\" calls turn out to be an overloaded circuit, a short or ground fault downstream, or a loose connection at the panel generating heat — and a brand-new breaker won't fix any of those. We test before we recommend a part. Sometimes the answer is a fifteen-dollar breaker; sometimes it's splitting an overloaded circuit; occasionally it's the first sign the panel needs replacing. We tell you which.",
+      "answer_schema": "A breaker only needs replacing when the breaker itself has failed: it trips on normal load, will not reset or hold, or will not trip when it should. Many suspected bad-breaker problems are actually an overloaded circuit, a short or ground fault, or a loose panel connection, which a new breaker will not fix. Testing before recommending a part determines whether the fix is a breaker, a circuit repair, or a sign the panel needs replacing."
+    },
+    {
+      "question": "Is a hot or buzzing breaker dangerous?",
+      "answer_html": "Yes — treat it as urgent. A breaker that's hot to the touch, or a panel cover that's warm, almost always means a loose connection at the breaker or the bus bar, and loose connections in panels are a leading cause of electrical fires. A buzzing, crackling, or visibly arcing breaker means current is jumping a gap it shouldn't — an active fire risk. In either case, stop using the affected circuit, don't open the panel cover yourself, and call us; we treat heat, buzzing, and arcing at the panel as same-day calls, not next-week appointments. If you also smell burning or see smoke, call 911 first.",
+      "answer_schema": "A hot or buzzing breaker is dangerous and should be treated as urgent. A breaker hot to the touch or a warm panel cover usually indicates a loose connection at the breaker or bus bar, a leading cause of electrical fires. A buzzing, crackling, or arcing breaker indicates current jumping a gap, an active fire risk. The homeowner should stop using the circuit, not open the panel, and call an electrician same-day. If burning or smoke is present, call 911 first."
+    },
+    {
+      "question": "What are AFCI and GFCI breakers, and do I need them?",
+      "answer_html": "They're protective breakers that guard against two specific hazards. A <strong>GFCI</strong> (ground-fault) breaker cuts power instantly if current leaks to ground — the shock-prevention protection required in wet areas like kitchens, bathrooms, garages, and outdoors. An <strong>AFCI</strong> (arc-fault) breaker detects the dangerous arcing that damaged or loose wiring produces and shuts off before it can start a fire — now required by code on many living-area circuits. Whether you need them depends on the circuit and your local code, and they're often added when you replace a breaker or update a circuit. We install both and make sure they protect the circuit without nuisance-tripping. Call {phone_display} and we'll tell you what your circuits require.",
+      "answer_schema": "GFCI (ground-fault) breakers cut power instantly if current leaks to ground, providing shock protection required in wet areas such as kitchens, bathrooms, garages, and outdoors. AFCI (arc-fault) breakers detect dangerous arcing from damaged or loose wiring and shut off before a fire can start, now required by code on many living-area circuits. The need depends on the circuit and local code, and they are often added during a breaker replacement or circuit update."
+    },
+    {
+      "question": "Can you just add a breaker for a new circuit?",
+      "answer_html": "Yes, if the panel has room and capacity — and checking both is the first step. Adding a dedicated circuit (for a new appliance, a garage, a workshop, an outdoor outlet, or an EV charger) means adding a breaker, but only if there's an open slot and the panel can carry the additional load. If the panel is physically full or already near its capacity, cramming in a tandem breaker or overloading the service isn't safe — that's when the honest answer is a panel upgrade or a sub-panel, not just another breaker. We check the slots and run the load calculation before we quote it, so you get the right solution rather than a shortcut that trips later.",
+      "answer_schema": "A breaker can be added for a new circuit if the panel has an open slot and the capacity to carry the additional load. Adding a dedicated circuit for an appliance, garage, workshop, outdoor outlet, or EV charger requires a breaker, but only if the panel can support it. If the panel is full or near capacity, the safe answer is a panel upgrade or sub-panel rather than a tandem breaker or overloaded service. The electrician checks the slots and runs a load calculation before quoting."
+    },
+    {
+      "question": "How much does circuit breaker replacement cost in {city_name_with_state}?",
+      "answer_html": "It depends on what the diagnosis finds, which is why we give the price on-site after testing rather than over the phone. A straight replacement of a standard breaker, once we've confirmed the breaker is the actual problem, is a low-cost and usually same-visit fix. AFCI and GFCI breakers cost more because the part itself is more expensive. If the diagnosis shows the real issue is an overloaded circuit, a loose connection, or a failing panel, the fix and the price are different — and we'll lay that out before doing anything. You get a written estimate before any work starts, and we won't sell you a breaker that wasn't the problem.",
+      "answer_schema": "Circuit breaker replacement cost depends on the diagnosis, so the price is given on-site after testing. A straight replacement of a standard breaker, once confirmed as the problem, is low-cost and usually same-visit. AFCI and GFCI breakers cost more because the parts are more expensive. If the real issue is an overloaded circuit, a loose connection, or a failing panel, the fix and price differ. A written estimate is provided before any work starts."
+    }
+  ],
+
+  "final_cta_heading": "Breaker tripping or running hot? Let's find out why.",
+  "final_cta_paragraph_template": "Circuit breaker replacement, repair, and diagnostics in {city_name_with_state}. {owner_name} tests the circuit to find the real cause — breaker, overload, short, or connection — and fixes the right thing, usually the same visit.<br>Call {phone_display} now.",
+
+  "schema_service_description_template": "Circuit breaker replacement, repair, and diagnostics in {city_name_with_state}. Master electrician diagnoses the real cause of tripping, won't-reset, or hot breakers before replacing, installs AFCI and GFCI breakers, and adds breakers for new circuits when panel capacity allows. Written estimate before any work begins.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "On-site diagnosis and written estimate before any breaker work begins. Breakers replaced only after testing confirms the breaker is the cause. AFCI and GFCI protective breakers installed to current code; new breakers added only when panel slot and capacity allow."
+}

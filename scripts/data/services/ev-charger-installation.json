@@ -1,5 +1,5 @@
 {
-  "_comment": "Per-service data for EV Charger Installation — S&H Contracting slug variant. S&H's build-order uses 'ev-charger-installation-{city_slug}' (vs EV Electric's 'ev-charger-{city_slug}'). This file carries the S&H-correct page_slug_template so bulk-scaffold-pages.py resolves correctly. Content is structurally identical to ev-charger.json; FILL hints reference {owner_name} placeholders (not a specific owner name) so the scaffolder substitutes from the client JSON.",
+  "_comment": "Per-service data for EV Charger Installation — uses the 'ev-charger-installation-{city_slug}' page slug pattern. Content is structurally identical to ev-charger.json but with the longer slug. FILL hints reference {owner_name} placeholders (not a specific owner name) so the scaffolder substitutes from the client JSON.",
   "_dataforseo_verified": {
     "date": "2026-06-03",
     "chat_id": "ev-pages-06-12-dataforseo-202606032350",
@@ -45,22 +45,22 @@
 
   "aioseo_page_title_template": "EV Charger Installation in {city_name_with_state} | {client_name}",
   "aioseo_meta_description_template": "Licensed EV charger installation in {city_name_with_state}. 240V Level 2 circuits, Tesla Wall Connector, panel assessment. Call {phone_display}.",
-  "aioseo_focus_keyword_template": "ev charger installation {city_slug}",
+  "aioseo_focus_keyword_template": "ev charger installation {city_name}",
   "aioseo_additional_keywords_template": [
-    "tesla charger installation {city_slug}",
-    "tesla wall connector installation {city_slug}",
-    "home ev charger installation {city_slug}",
-    "level 2 charger installation {city_slug}",
-    "electric car charger installation {city_slug}",
-    "ev charger installation cost {city_slug}",
-    "240v ev charger installation {city_slug}",
+    "tesla charger installation {city_name}",
+    "tesla wall connector installation {city_name}",
+    "home ev charger installation {city_name}",
+    "level 2 charger installation {city_name}",
+    "electric car charger installation {city_name}",
+    "ev charger installation cost {city_name}",
+    "240v ev charger installation {city_name}",
     "ev charger installation near me",
-    "nema 14-50 outlet installation for ev {city_slug}",
-    "ev charger permit {city_slug}",
-    "best electrician for ev charger {city_slug}",
-    "ev charger installation with panel upgrade {city_slug}",
+    "nema 14-50 outlet installation for ev {city_name}",
+    "ev charger permit {city_name}",
+    "best electrician for ev charger {city_name}",
+    "ev charger installation with panel upgrade {city_name}",
     "ev charger installation in garage",
-    "outdoor ev charger installation {city_slug}"
+    "outdoor ev charger installation {city_name}"
   ],
   "wordpress_page_title_template": "EV Charger Installation in {city_name_with_state}",
 
@@ -68,13 +68,13 @@
   "hero_heading": "Level 2 EV Charging, Installed Right",
   "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician who installs Level 2 EV chargers across {city_name} and surrounding areas. We assess your panel, run the dedicated 240V circuit, mount your charger, and handle the permit — so you wake up to a full charge instead of waiting all weekend on a trickle outlet.",
   "hero_image_alt_template": "{owner_name}, master electrician, installing an EV charger in a residential garage in {city_name_with_state}",
-  "hero_image_url_template": "FILL: Hero image URL for S&H EV charger pages. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-ev-charger-installation-hero.png",
+  "hero_image_url_template": "FILL: Hero image URL. Pattern: {website_url_no_slash}/wp-content/uploads/YYYY/MM/{city_slug}-ev-charger-installation-hero.png",
 
   "what_it_means_heading": "What \"EV charger installation\" actually means",
   "what_it_means_paragraphs": [
     "EV charger installation means adding a dedicated 240V circuit to your home so your car charges at 25-30 miles of range per hour instead of the 4-5 miles you get from a standard 120V outlet. That standard outlet is Level 1 — fine for a plug-in hybrid you drive ten miles a day, but not practical for a battery-electric vehicle. Level 2 is the dedicated circuit. The charger manufacturer builds the hardware; the licensed electrician installs the circuit, mounts the unit, and makes sure your panel can carry the load safely.",
     "A Level 2 circuit runs on 240 volts at 40-50 amps continuous draw. Some chargers plug into a NEMA 14-50 outlet — the same receptacle a clothes dryer uses — while others, like the Tesla Wall Connector, are hardwired directly to the circuit with no plug at all. Hardwired units deliver higher amperage (up to 48A on the Tesla Wall Connector) and require a dedicated 60-amp breaker. Before any installation, we run a load calculation on your panel to confirm it can support the new circuit without tripping or overloading existing breakers. Most jurisdictions require a permit for the new 240V line.",
-    "When you call S&H Contracting for an EV charger install, {owner_name} — a {license_state}-licensed Master Electrician with 16+ years in the trade — handles the panel assessment personally. He reads the panel, identifies open breaker slots, calculates the load, and tells you straight whether you need an upgrade or whether your existing panel has room. That diagnostic-first approach is how every EV charger job starts in {city_name} and across the service area. The charger goes on the wall only after the electrical side checks out."
+    "When you call {client_name} for an EV charger install, {owner_name} — a {license_state}-licensed Master Electrician — handles the panel assessment personally. He reads the panel, identifies open breaker slots, calculates the load, and tells you straight whether you need an upgrade or whether your existing panel has room. That diagnostic-first approach is how every EV charger job starts in {city_name} and across the service area. The charger goes on the wall only after the electrical side checks out."
   ],
 
   "quick_ref_heading_template": "Common reasons {city_name} homeowners install an EV charger",
@@ -155,12 +155,12 @@
 
   "about_heading_template": "About {owner_name}, {owner_title}",
   "about_text_paragraphs": [
-    "{owner_name} holds a Master Electrician license in Virginia — the highest tier the state issues, requiring years of journeyman work and a passed state exam. He's spent 16+ years doing residential and commercial electrical across Northern Virginia, DC, Maryland, and Pennsylvania, including a steady volume of EV charger installations — Tesla Wall Connectors, ChargePoint Home Flex units, Wallbox Pulsar Plus, and JuiceBox 40. S&H Contracting is fully insured and runs a maintenance team, so scheduling doesn't hinge on one person's calendar.",
+    "{owner_name} holds a Master Electrician license in {license_state} — the highest tier the state issues, requiring years of journeyman work and a passed state exam. {owner_name} has built a licensed and insured residential electrical practice serving {brand_area_county} and the surrounding region, including a steady volume of EV charger installations — Tesla Wall Connectors, ChargePoint Home Flex units, Wallbox Pulsar Plus, and JuiceBox 40. {client_name} runs a maintenance team, so scheduling doesn't hinge on one person's calendar.",
     "{owner_name} is the one who shows up for the panel assessment on most residential EV charger jobs. He reads the panel, runs the load calculation, and explains in plain English whether your existing service can handle a new 40-50 amp circuit or whether an upgrade is the right move. That diagnostic happens before any quote — because quoting a charger install without seeing the panel first is guessing, and guessing costs the homeowner money downstream.",
-    "S&H Contracting Unlimited holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
   ],
   "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
-  "about_portrait_url_template": "FILL: About portrait URL for S&H EV charger pages. Pattern: https://shcontractingunlimited.com/wp-content/uploads/YYYY/MM/{city_slug}-ev-charger-installation-about.png",
+  "about_portrait_url_template": "FILL: About portrait URL. Pattern: {website_url_no_slash}/wp-content/uploads/YYYY/MM/{city_slug}-ev-charger-installation-about.png",
 
   "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
   "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",

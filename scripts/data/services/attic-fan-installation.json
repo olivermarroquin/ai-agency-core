@@ -1,0 +1,195 @@
+{
+  "_comment": "Per-service data for Attic Fan Installation, Replacement & Repair (attic exhaust/ventilation fans + whole-house fans). Used by scaffold-core-30-page.py for every attic-fan page across cities. {city}, {client}, {owner} placeholders substituted from the client config at render time. Authored client-agnostic 2026-06-24 (Cowork, EV growth program) from GSC striking-distance demand (install attic fan pos 7, installing an attic fan pos 12, no page existed).",
+  "_scaffolded": {
+    "from_brief": false,
+    "authored_date": "2026-06-24",
+    "authored_by": "cowork-ev-growth-planning",
+    "needs_authoring": [],
+    "needs_confirmation": [
+      "hero_image_url_template path year/month once imagery is generated",
+      "about_portrait_url_template path once imagery is generated"
+    ]
+  },
+  "slug": "attic-fan-installation",
+  "page_slug_template": "attic-fan-installation-{city_slug}",
+  "name": "Attic Fan Installation",
+  "name_with_city": "Attic Fan Installation in {city_name_with_state}",
+  "service_type_phrase": "Attic fan installation, replacement, and repair",
+  "quoted_phrase": "attic fan installation",
+  "lowercase_phrase": "attic fan installation",
+  "tag_short": "attic-fan-installation",
+
+  "aioseo_page_title_template": "Attic Fan Installation in {city_name_with_state} | {client_name}",
+  "aioseo_meta_description_template": "Attic fan installation & replacement in {city_name_with_state}. {license_state}-licensed Master Electrician wires it to a thermostat, on a safe circuit, done right. Call {phone_display}.",
+  "aioseo_focus_keyword_template": "attic fan installation {city_name}",
+  "aioseo_additional_keywords_template": [
+    "attic fan installation {city_name}",
+    "install attic fan {city_name}",
+    "attic fan installation near me",
+    "attic fan replacement {city_name}",
+    "attic fan repair {city_name}",
+    "attic exhaust fan installation {city_name}",
+    "gable attic fan installation {city_name}",
+    "roof attic fan installation {city_name}",
+    "whole house fan installation {city_name}",
+    "attic fan thermostat installation {city_name}",
+    "solar attic fan installation {city_name}",
+    "noisy attic fan repair {city_name}",
+    "attic ventilation fan {city_name}",
+    "attic fan wiring {city_name}",
+    "attic fan electrician {city_name}"
+  ],
+  "wordpress_page_title_template": "Attic Fan Installation in {city_name_with_state}",
+
+  "hero_eyebrow_template": "Attic Fan Installation in {city_name_with_state}",
+  "hero_heading": "Cool the Attic, Save the AC.",
+  "hero_subheading_template": "{owner_name} is a {license_state}-licensed Master Electrician who installs, replaces, and repairs attic ventilation fans and whole-house fans across {city_name} — wired on a safe circuit, controlled by a thermostat or humidistat so the fan runs when it should, and quiet enough that you forget it's there. New install or swapping a noisy old unit, we handle the electrical side right.",
+  "hero_image_alt_template": "{owner_name}, master electrician, installing an attic ventilation fan in {city_name_with_state}",
+  "hero_image_url_template": "{website_url_no_slash}/wp-content/uploads/2026/06/{city_slug}-attic-fan-installation-hero-PLACEHOLDER.png",
+
+  "what_it_means_heading": "What an attic fan does — and the two kinds people mean",
+  "what_it_means_paragraphs": [
+    "An attic fan pulls superheated air out of your attic so it stops radiating down into your living space and overworking your air conditioner. In a Mid-Atlantic summer, an unvented attic can hit 130 to 150 degrees, and that heat soaks through the ceiling all afternoon and evening. A properly sized, thermostat-controlled attic exhaust fan vents that heat out, which lowers the load on your AC and can take real money off a July electric bill. It also reduces the trapped moisture in winter that leads to mold and rotted sheathing.",
+    "Two different things get called an \"attic fan,\" and it's worth knowing which you want. An attic exhaust (or ventilation) fan mounts on the roof or in a gable vent and exhausts hot air straight out of the attic — it runs on a thermostat and you never really interact with it. A whole-house fan is different: it mounts in the ceiling of your top floor and pulls cooler outside air in through open windows and up through the attic, cooling the living space itself on mild evenings. We install and wire both; we'll tell you which one fits your goal — cut the AC load, or cool the rooms.",
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues — serving {city_name} and the surrounding area. On attic fans the electrical work is the part that has to be right: a correctly sized circuit, a thermostat or humidistat wired so the fan cycles on heat or moisture instead of running nonstop, and a clean, safe connection in a hot attic. We handle the swap of an old, seized, or screaming unit and the wiring for a new one. (If a new roof penetration is needed, we coordinate the cut so the roof stays watertight.)"
+  ],
+
+  "quick_ref_heading_template": "Attic fan jobs we handle in {city_name}",
+  "quick_ref_intro": "New installs, replacements, repairs, and controls. If your job is on this list, you're in the right place.",
+  "quick_ref_footer_html_template": "Not sure which fan you need?<br><a href=\"tel:{phone_tel}\">Call {phone_display}</a> — we'll tell you straight.",
+
+  "why_city_heading_template": "Why {city_name} homeowners call us for attic fan installation",
+  "why_city_closing_note_template": "{city_name} summers are exactly the kind of hot-and-humid that an attic fan is built for. Most of the calls we get here are either a brand-new install to take load off the AC, or a replacement because an old fan finally seized up — and a seized attic fan motor is a fire risk worth handling promptly.",
+
+  "problems_heading_template": "Attic fan situations we handle every week in {city_name}",
+  "problems_intro_template": "Here are the calls {owner_first_name} gets most often from {city_name} homeowners. If your situation matches one of these, you're in the right place.",
+  "problem_cards": [
+    {
+      "title": "Adding an attic fan to cut summer cooling costs",
+      "body": "If your second floor is always hotter than the first and your AC runs all afternoon, a thermostat-controlled attic exhaust fan vents the trapped heat before it soaks into your living space. We size the fan to your attic's square footage, wire it on a safe circuit, and set the thermostat so it runs on heat — not all day."
+    },
+    {
+      "title": "Replacing a noisy, seized, or dead attic fan",
+      "body": "Old attic fans get loud, vibrate, or stop spinning entirely — and a motor that's seized but still getting power is a genuine fire risk. We remove the old unit, install a new fan in the same opening where possible, and wire it clean. If the old thermostat is the actual failure, we'll catch that instead of selling you a whole fan."
+    },
+    {
+      "title": "Adding a thermostat or humidistat control",
+      "body": "An attic fan should run on a thermostat (heat) and ideally a humidistat (moisture), not a wall switch you forget about. We install the control so the fan cycles on automatically when the attic gets hot or damp and shuts off when it doesn't need to run — which is what actually saves you money and protects the fan motor."
+    },
+    {
+      "title": "Whole-house fan installation",
+      "body": "Different animal from an attic exhaust fan: a whole-house fan mounts in the top-floor ceiling and pulls cool evening air through open windows and out the attic, cooling the rooms themselves. It needs a dedicated circuit, the right switch or timer, and an insulated cover for winter. We handle the wiring and controls."
+    },
+    {
+      "title": "Solar attic fan wiring and integration",
+      "body": "Solar attic fans run off a panel and need no house power for the fan itself — but many homeowners want a thermostat, a backup grid connection, or a hybrid unit wired in. We handle the electrical side so it actually switches the way it's supposed to."
+    },
+    {
+      "title": "Attic fan keeps running or won't turn on",
+      "body": "A fan that runs nonstop is usually a stuck or miswired thermostat; a fan that won't start can be the motor, the control, or a tripped circuit. We diagnose which one it is instead of guessing — sometimes it's a fifteen-dollar control, not a new fan."
+    },
+    {
+      "title": "Gable-mount vs. roof-mount decision",
+      "body": "A gable fan mounts in the existing gable vent — no roof penetration, simpler install. A roof-mount fan moves more air but means cutting the roof. We'll tell you which fits your attic and your roofline, and coordinate the roof cut to stay watertight if you go roof-mount."
+    }
+  ],
+
+  "process_heading_template": "Our attic fan installation process",
+  "process_intro_template": "When you call {phone_display} or request a quote online, here's what happens.",
+  "process_steps": [
+    {
+      "title": "A real conversation about your goal",
+      "body": "We pick up. You tell us the problem — a too-hot upstairs, a screaming old fan, or just a high summer bill. We ask about your attic, your vents, and whether you want to cut AC load (attic exhaust fan) or cool the living space (whole-house fan). That tells us which fan and what to bring."
+    },
+    {
+      "title": "On-site assessment and written estimate",
+      "body": "We look at the attic, the existing ventilation, the gable vents or roof, and the nearest power. We size the fan to the attic square footage and give you a written estimate before any work starts — the fan, the circuit, the control, and any coordination with a roofer if a roof cut is needed. No surprises on the work day."
+    },
+    {
+      "title": "Safe circuit and clean wiring",
+      "body": "We run the fan on a properly sized circuit and make a clean, code-correct connection — important in a hot attic where bad connections fail fast. If your panel can't take another circuit, we tell you up front rather than overloading an existing one."
+    },
+    {
+      "title": "Mount and control",
+      "body": "We install the fan in the gable or the roof opening, then wire the thermostat and humidistat so it cycles automatically on heat or moisture. For a whole-house fan, we set the switch or timer and fit the insulated winter cover."
+    },
+    {
+      "title": "Test and verify it cycles right",
+      "body": "We confirm the fan runs at the set temperature, shuts off when it should, and isn't fighting your attic insulation or pulling conditioned air out of the house. Then we walk you through the controls so you know how it behaves."
+    }
+  ],
+
+  "pricing_heading": "How estimates work",
+  "pricing_intro_template": "Attic fan pricing depends on the fan type, whether it's a new install or a swap, and whether your panel can take the circuit. We give you a written estimate before any work starts, so you know the exact number and approve it before we pick up a tool.",
+  "pricing_items": [
+    "Replacing an existing attic fan in the same opening is the quicker, lower-cost version — we reuse the opening and often the circuit.",
+    "A new install adds the fan, a sized circuit, and the thermostat/humidistat control as clear line items.",
+    "Whole-house fans cost more than attic exhaust fans — bigger unit, dedicated circuit, switch or timer, and the winter cover.",
+    "If a roof penetration is required, we coordinate with a roofer so the roof stays watertight; that roofing cost is separate and we'll flag it before you commit."
+  ],
+  "pricing_note_template": "No trip charge for {no_trip_charge_cities_phrase}. We don't charge to come look at the attic and give you the estimate.",
+  "pricing_closing_note": "We don't post a flat attic-fan price because the fan type, the attic, and your panel capacity change the job. The written estimate after we see it is the only honest number.",
+
+  "about_heading_template": "About {owner_name}, {owner_title}",
+  "about_text_paragraphs": [
+    "{owner_name} is a {license_state}-licensed Master Electrician — the highest electrician tier the state issues, requiring years of journeyman work, a passed state exam, and a clean record. Licensed and insured, {owner_name} handles residential electrical work across {city_name} and the surrounding area, from attic fans and lighting to panel upgrades and EV chargers.",
+    "On an attic fan, the electrical work is what keeps it safe and saves you money: a correctly sized circuit, and a thermostat and humidistat wired so the fan runs on heat and moisture instead of all day. {owner_name} does that part right — including catching the times a homeowner thinks they need a new fan when the real failure is a ten-dollar thermostat.",
+    "{client_name} holds a <strong>{review_count_phrase}</strong>. {review_pitch}"
+  ],
+  "about_portrait_alt_template": "{owner_name}, master electrician at {client_name} serving {city_name_with_state}",
+  "about_portrait_url_template": "{website_url_no_slash}/wp-content/uploads/2026/06/{city_slug}-attic-fan-installation-about-PLACEHOLDER.png",
+
+  "neighborhoods_heading_template": "{city_name} neighborhoods we serve",
+  "neighborhoods_intro_template": "We cover all of {city_name_with_state}, including:",
+
+  "related_heading_template": "Related electrical services in {city_name}",
+  "related_intro_template": "Attic fans often go in alongside other electrical work that takes load off your system or improves comfort. These are the services {city_name} homeowners book most often at the same time.",
+  "related_cards": [
+    { "href_slug": "ceiling-fan-installation-{city_slug}", "label": "Ceiling Fan Installation" },
+    { "href_slug": "panel-upgrade-{city_slug}", "label": "Electrical Panel Upgrades" },
+    { "href_slug": "light-fixture-installation-{city_slug}", "label": "Light Fixtures & Chandeliers" },
+    { "href_slug": "electrical-troubleshooting-{city_slug}", "label": "Electrical Troubleshooting & Diagnostics" }
+  ],
+
+  "faq_heading": "Frequently asked questions",
+  "faq_items": [
+    {
+      "question": "Does an attic fan really lower my cooling bill?",
+      "answer_html": "It can, meaningfully, in a hot-summer climate like {city_name_with_state}. An unvented attic can reach 130 to 150 degrees, and that heat radiates down through your ceiling and forces your AC to run longer. A properly sized, thermostat-controlled attic exhaust fan vents that heat out before it loads up your living space, which shortens AC run-time on the hottest days. The key words are <em>properly sized</em> and <em>thermostat-controlled</em> — an undersized fan or one wired to run all day won't deliver the savings. We size it to your attic and wire the control so it only runs when it's actually hot. Call {phone_display} and we'll assess your attic.",
+      "answer_schema": "An attic fan can meaningfully lower cooling bills in a hot-summer climate. An unvented attic can reach 130 to 150 degrees, and that heat radiates through the ceiling and forces the AC to run longer. A properly sized, thermostat-controlled attic exhaust fan vents the heat before it loads the living space, shortening AC run-time. The savings depend on correct sizing and thermostat control; an undersized fan or one running all day will not deliver the benefit."
+    },
+    {
+      "question": "What's the difference between an attic fan and a whole-house fan?",
+      "answer_html": "They solve different problems. An <strong>attic exhaust fan</strong> mounts on the roof or in a gable vent and pushes hot air out of the attic only — it runs on a thermostat, you never touch it, and its job is to take heat load off your AC. A <strong>whole-house fan</strong> mounts in the ceiling of your top floor and pulls cool outside air in through open windows and up out the attic — it cools the living space itself on mild evenings and can let you skip the AC entirely on a nice night. Whole-house fans move more air, need a dedicated circuit and a winter cover, and cost more. Tell us your goal and we'll tell you which one fits.",
+      "answer_schema": "An attic exhaust fan mounts on the roof or in a gable vent and pushes hot air out of the attic, running on a thermostat to reduce AC load. A whole-house fan mounts in the top-floor ceiling and pulls cool outside air in through open windows and out the attic, cooling the living space itself on mild evenings. Whole-house fans move more air, require a dedicated circuit and a winter cover, and cost more."
+    },
+    {
+      "question": "My attic fan is loud or stopped working — repair or replace?",
+      "answer_html": "We diagnose before we recommend. A loud or vibrating fan is sometimes just worn bearings or a loose mount; a fan that won't start can be the motor, the thermostat control, or a tripped circuit. Plenty of times the actual failure is a stuck thermostat, not the fan — which is a small fix, not a replacement. That said, if the motor is seized, replacement is the right call, and a seized motor still getting power is a fire risk worth handling promptly. We find the real cause first and tell you straight whether it's a repair or a replacement.",
+      "answer_schema": "The decision to repair or replace an attic fan depends on the cause. A loud or vibrating fan may have worn bearings or a loose mount; a fan that will not start may have a failed motor, a bad thermostat, or a tripped circuit. Often the failure is the thermostat control, which is a small fix rather than a replacement. If the motor is seized, replacement is warranted, and a seized motor still receiving power is a fire risk. A diagnosis identifies the real cause before recommending repair or replacement."
+    },
+    {
+      "question": "Do you install the fan and cut the roof, or just the electrical?",
+      "answer_html": "We handle the electrical side fully — the circuit, the wiring, the thermostat and humidistat, and the fan unit itself — and we install gable-mounted fans completely since those use the existing vent with no roof work. For a roof-mounted fan that needs a new roof penetration, we coordinate the roof cut with a roofer so the roof stays watertight, and we do all the wiring and controls. On a straight replacement of an existing roof fan, we typically reuse the existing opening. We'll tell you up front exactly which trades your specific job needs so there are no gaps.",
+      "answer_schema": "The electrician handles the full electrical side, including the circuit, wiring, thermostat, humidistat, and the fan unit, and installs gable-mounted fans completely using the existing vent with no roof work. For a roof-mounted fan needing a new penetration, the electrician coordinates the roof cut with a roofer to keep the roof watertight and does all wiring and controls. A straight replacement of an existing roof fan typically reuses the existing opening."
+    },
+    {
+      "question": "How is an attic fan controlled — do I flip a switch?",
+      "answer_html": "Ideally not. The right setup runs the fan on a <strong>thermostat</strong> so it switches on automatically when the attic crosses a set temperature, and often a <strong>humidistat</strong> so it also runs to clear winter moisture that would otherwise cause mold and rot. That automatic control is what protects the motor and actually saves you money — a fan on a wall switch you forget to flip does neither. We install and set the control so the fan runs when it should and rests when it shouldn't. Whole-house fans use a switch or timer instead, since you run those on demand on cool evenings.",
+      "answer_schema": "An attic exhaust fan is ideally controlled by a thermostat that switches it on when the attic crosses a set temperature, and often a humidistat that runs it to clear winter moisture and prevent mold and rot. Automatic control protects the motor and saves money, unlike a wall switch that may be forgotten. Whole-house fans instead use a switch or timer because they run on demand on cool evenings."
+    },
+    {
+      "question": "How long does attic fan installation take?",
+      "answer_html": "A straight replacement of an existing attic exhaust fan, reusing the opening and circuit, is usually a half-day or less. A new attic exhaust fan install — sizing the fan, running a circuit, mounting in the gable or roof, and wiring the thermostat — typically takes a few hours, longer if a new circuit run through the attic is involved. A whole-house fan is more involved because of the larger unit, the dedicated circuit, and the framing work, so it often runs most of a day. We give you a realistic time estimate with the price before we start.",
+      "answer_schema": "A straight replacement of an existing attic exhaust fan, reusing the opening and circuit, usually takes a half-day or less. A new attic exhaust fan install, including sizing, a circuit, mounting, and thermostat wiring, typically takes a few hours, longer if a new circuit run is needed. A whole-house fan is more involved due to the larger unit, dedicated circuit, and framing, often taking most of a day. A time estimate is provided with the price before work begins."
+    }
+  ],
+
+  "final_cta_heading": "Ready to get the heat out of your attic?",
+  "final_cta_paragraph_template": "Attic fan installation, replacement, and repair in {city_name_with_state}. {owner_name} sizes it right, wires it on a safe circuit, and sets the thermostat so it runs when it should — attic exhaust fans and whole-house fans both.<br>Call {phone_display} for a written estimate.",
+
+  "schema_service_description_template": "Attic fan installation, replacement, and repair in {city_name_with_state}. Master electrician installs attic exhaust (ventilation) fans and whole-house fans, sizes the fan to the attic, runs a safe circuit, and wires thermostat and humidistat controls so the fan cycles automatically. Written estimate before any work begins.",
+  "schema_service_price": "",
+  "schema_service_price_description": "",
+  "schema_service_terms": "Written on-site estimate before any attic fan work begins. Attic exhaust fans wired to thermostat and humidistat controls for automatic operation. Roof penetrations coordinated with a roofer to keep the roof watertight."
+}
