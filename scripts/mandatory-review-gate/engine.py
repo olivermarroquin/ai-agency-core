@@ -547,7 +547,12 @@ def is_read_only_bash(command: str) -> bool:
     """Return True if the Bash command is read-only (all segments)."""
     if not command or not command.strip():
         return True
-    segments = split_compound(command.strip())
+    # CR-138: collapse backslash-newline line continuations before splitting.
+    # Shell treats `\<newline>` as a line join — without this, continued
+    # wordlist items (e.g. `for slug in \<NL>  foo \<NL>  bar; do ...`)
+    # are split into separate lines that look like unknown commands.
+    collapsed = re.sub(r'\\\s*\n', ' ', command)
+    segments = split_compound(collapsed.strip())
     for segment in segments:
         if not _is_segment_read_only(segment):
             return False

@@ -1,0 +1,2293 @@
+{
+  "meta": {
+    "client_slug": "ev-electric-services",
+    "gsc_property": "sc-domain:evelectric.pro",
+    "inspected_at": "2026-06-26T14:40:18.525159+00:00Z",
+    "total_urls": 58
+  },
+  "summary": {
+    "indexed": 28,
+    "crawled_not_indexed": 0,
+    "discovered_not_indexed": 26,
+    "unknown_to_google": 4,
+    "noindex": 0,
+    "robots_blocked": 0,
+    "canonical_issue": 0,
+    "other": 0,
+    "error": 0
+  },
+  "categories": {
+    "indexed": [
+      {
+        "url": "https://evelectric.pro/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T12:01:59Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/",
+        "userCanonical": "https://evelectric.pro/",
+        "referringUrls": [
+          "https://evelectric.pro/services/"
+        ],
+        "sitemap": [],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/electrician-oakton-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T07:37:18Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/electrician-oakton-va/",
+        "userCanonical": "https://evelectric.pro/electrician-oakton-va/",
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/emergency-electrician-vienna-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T08:13:49Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/emergency-electrician-vienna-va/",
+        "userCanonical": "https://evelectric.pro/emergency-electrician-vienna-va/",
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/emergency-electrician-oakton-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T08:25:58Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/emergency-electrician-oakton-va/",
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/emergency-electrician-fairfax-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T08:49:13Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/emergency-electrician-fairfax-va/",
+        "userCanonical": "https://evelectric.pro/emergency-electrician-fairfax-va/",
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/circuit-breaker-replacement-oakton-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T10:09:49Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/circuit-breaker-replacement-oakton-va/",
+        "userCanonical": "https://evelectric.pro/circuit-breaker-replacement-oakton-va/",
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/circuit-breaker-replacement-vienna-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T09:55:45Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/circuit-breaker-replacement-vienna-va/",
+        "userCanonical": "https://evelectric.pro/circuit-breaker-replacement-vienna-va/",
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/attic-fan-installation-oakton-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T09:00:19Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/attic-fan-installation-oakton-va/",
+        "userCanonical": "https://evelectric.pro/attic-fan-installation-oakton-va/",
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/whole-house-rewire-fairfax-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T07:49:30Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/whole-house-rewire-fairfax-va/",
+        "userCanonical": "https://evelectric.pro/whole-house-rewire-fairfax-va/",
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/attic-fan-installation-vienna-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T08:38:08Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/attic-fan-installation-vienna-va/",
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/attic-fan-installation-fairfax-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T09:11:24Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/attic-fan-installation-fairfax-va/",
+        "userCanonical": "https://evelectric.pro/attic-fan-installation-fairfax-va/",
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/ceiling-fan-installation-oakton-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T09:33:35Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/ceiling-fan-installation-oakton-va/",
+        "userCanonical": "https://evelectric.pro/ceiling-fan-installation-oakton-va/",
+        "referringUrls": [
+          "https://evelectric.pro/attic-fan-installation-oakton-va/"
+        ],
+        "sitemap": [],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/ceiling-fan-installation-fairfax-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T09:44:40Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/ceiling-fan-installation-fairfax-va/",
+        "userCanonical": "https://evelectric.pro/ceiling-fan-installation-fairfax-va/",
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/services/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-21T20:59:50Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/services/",
+        "userCanonical": "https://evelectric.pro/services/",
+        "referringUrls": [
+          "https://evelectric.pro/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/contact/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-18T18:37:21Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/contact/",
+        "userCanonical": "https://evelectric.pro/contact/",
+        "referringUrls": [
+          "https://evelectric.pro/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/about/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-14T01:35:32Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/about/",
+        "userCanonical": "https://evelectric.pro/about/",
+        "referringUrls": [
+          "https://evelectric.pro/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/service-areas/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T06:43:52Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/service-areas/",
+        "userCanonical": "https://evelectric.pro/service-areas/",
+        "referringUrls": [
+          "https://evelectric.pro/whole-house-rewire-fairfax-va/",
+          "https://evelectric.pro/smoke-alarm-installation/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/outlet-installation/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T06:23:56Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/outlet-installation/",
+        "userCanonical": "https://evelectric.pro/outlet-installation/",
+        "referringUrls": [
+          "https://evelectric.pro/whole-house-rewire-fairfax-va/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/smoke-alarm-installation/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-23T04:39:31Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/smoke-alarm-installation/",
+        "userCanonical": "https://evelectric.pro/smoke-alarm-installation/",
+        "referringUrls": [
+          "https://evelectric.pro/electrical-troubleshooting-vienna-va/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/light-fixture-installation/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-11T00:44:45Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/light-fixture-installation/",
+        "userCanonical": "https://evelectric.pro/light-fixture-installation/",
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/electrical-troubleshooting-vienna-va/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/ev-charger-installation/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-11T00:44:44Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/ev-charger-installation/",
+        "userCanonical": "https://evelectric.pro/ev-charger-installation/",
+        "referringUrls": [
+          "https://evelectric.pro/electrical-troubleshooting-vienna-va/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/panel-upgrade/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-23T00:53:17Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/panel-upgrade/",
+        "userCanonical": "https://evelectric.pro/panel-upgrade/",
+        "referringUrls": [
+          "https://evelectric.pro/electrical-troubleshooting-rockville-md/",
+          "https://evelectric.pro/smoke-alarm-installation/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-11T00:40:42Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/electrical-troubleshooting/",
+        "userCanonical": "https://evelectric.pro/electrical-troubleshooting/",
+        "referringUrls": [
+          "https://evelectric.pro/smoke-alarm-installation/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/panel-upgrade-fairfax-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-14T05:08:53Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/panel-upgrade-fairfax-va/",
+        "userCanonical": "https://evelectric.pro/panel-upgrade-fairfax-va/",
+        "referringUrls": [
+          "https://evelectric.pro/light-fixture-installation-mclean-va/",
+          "https://evelectric.pro/panel-upgrade-vienna-va/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-fairfax-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-23T17:28:33Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/electrical-troubleshooting-fairfax-va/",
+        "userCanonical": "https://evelectric.pro/electrical-troubleshooting-fairfax-va/",
+        "referringUrls": [
+          "https://evelectric.pro/light-fixture-installation-mclean-va/"
+        ],
+        "sitemap": [],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/ev-charger-vienna-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-25T07:00:36Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/ev-charger-vienna-va/",
+        "userCanonical": "https://evelectric.pro/ev-charger-vienna-va/",
+        "referringUrls": [
+          "https://evelectric.pro/outlet-installation/",
+          "https://evelectric.pro/ev-charger-installation/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/panel-upgrade-vienna-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-09T05:07:19Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/panel-upgrade-vienna-va/",
+        "userCanonical": "https://evelectric.pro/panel-upgrade-vienna-va/",
+        "referringUrls": [
+          "https://evelectric.pro/light-fixture-installation-mclean-va/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": "PASS"
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-vienna-va/",
+        "coverageState": "Submitted and indexed",
+        "verdict": "PASS",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "pageFetchState": "SUCCESSFUL",
+        "lastCrawlTime": "2026-06-16T18:53:54Z",
+        "crawledAs": "MOBILE",
+        "googleCanonical": "https://evelectric.pro/electrical-troubleshooting-vienna-va/",
+        "userCanonical": "https://evelectric.pro/electrical-troubleshooting-vienna-va/",
+        "referringUrls": [
+          "https://evelectric.pro/smoke-alarm-vienna-va/"
+        ],
+        "sitemap": [],
+        "richResultsVerdict": "PASS"
+      }
+    ],
+    "unknown-to-google": [
+      {
+        "url": "https://evelectric.pro/ev-charger-installation-fairfax-va/",
+        "coverageState": "URL is unknown to Google",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [],
+        "sitemap": [],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/whole-house-rewire-oakton-va/",
+        "coverageState": "URL is unknown to Google",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [],
+        "sitemap": [],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/smoke-alarm-fairfax-va/",
+        "coverageState": "URL is unknown to Google",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [],
+        "sitemap": [],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-mclean-va/",
+        "coverageState": "URL is unknown to Google",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [],
+        "sitemap": [],
+        "richResultsVerdict": null
+      }
+    ],
+    "discovered-not-indexed": [
+      {
+        "url": "https://evelectric.pro/circuit-breaker-replacement-fairfax-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/whole-house-rewire-vienna-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/ceiling-fan-installation-vienna-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/panel-upgrade-tysons-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/panel-upgrade/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/light-fixture-installation-fairfax-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/panel-upgrade-fairfax-va/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/ev-charger-mclean-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-rockville-md/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-washington-dc/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-tysons-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-potomac-md/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-chevy-chase-md/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-annandale-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/ev-charger-oakton-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/panel-upgrade-oakton-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/panel-upgrade/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-burke-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/panel-upgrade-mclean-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/panel-upgrade-fairfax-va/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-falls-church-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/panel-upgrade-rockville-md/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/panel-upgrade/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/ev-charger-bethesda-md/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/ev-charger-installation/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-bethesda-md/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/service-areas/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/light-fixture-installation-mclean-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/electrical-troubleshooting-oakton-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/smoke-alarm-vienna-va/",
+          "https://evelectric.pro/light-fixture-installation-mclean-va/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/outlet-installation-vienna-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/light-fixture-installation-vienna-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/panel-upgrade-vienna-va/"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/smoke-alarm-vienna-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      },
+      {
+        "url": "https://evelectric.pro/ev-charger-fairfax-va/",
+        "coverageState": "Discovered - currently not indexed",
+        "verdict": "NEUTRAL",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+        "lastCrawlTime": null,
+        "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+        "googleCanonical": null,
+        "userCanonical": null,
+        "referringUrls": [
+          "https://evelectric.pro/page-sitemap.xml"
+        ],
+        "sitemap": [
+          "https://evelectric.pro/page-sitemap.xml",
+          "https://evelectric.pro/sitemap.xml"
+        ],
+        "richResultsVerdict": null
+      }
+    ]
+  },
+  "results": [
+    {
+      "url": "https://evelectric.pro/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T12:01:59Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/",
+      "userCanonical": "https://evelectric.pro/",
+      "referringUrls": [
+        "https://evelectric.pro/services/"
+      ],
+      "sitemap": [],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/ev-charger-installation-fairfax-va/",
+      "coverageState": "URL is unknown to Google",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [],
+      "sitemap": [],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrician-oakton-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T07:37:18Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/electrician-oakton-va/",
+      "userCanonical": "https://evelectric.pro/electrician-oakton-va/",
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/emergency-electrician-vienna-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T08:13:49Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/emergency-electrician-vienna-va/",
+      "userCanonical": "https://evelectric.pro/emergency-electrician-vienna-va/",
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/emergency-electrician-oakton-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T08:25:58Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/emergency-electrician-oakton-va/",
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/emergency-electrician-fairfax-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T08:49:13Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/emergency-electrician-fairfax-va/",
+      "userCanonical": "https://evelectric.pro/emergency-electrician-fairfax-va/",
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/circuit-breaker-replacement-oakton-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T10:09:49Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/circuit-breaker-replacement-oakton-va/",
+      "userCanonical": "https://evelectric.pro/circuit-breaker-replacement-oakton-va/",
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/circuit-breaker-replacement-fairfax-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/circuit-breaker-replacement-vienna-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T09:55:45Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/circuit-breaker-replacement-vienna-va/",
+      "userCanonical": "https://evelectric.pro/circuit-breaker-replacement-vienna-va/",
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/whole-house-rewire-oakton-va/",
+      "coverageState": "URL is unknown to Google",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [],
+      "sitemap": [],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/whole-house-rewire-vienna-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/attic-fan-installation-oakton-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T09:00:19Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/attic-fan-installation-oakton-va/",
+      "userCanonical": "https://evelectric.pro/attic-fan-installation-oakton-va/",
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/whole-house-rewire-fairfax-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T07:49:30Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/whole-house-rewire-fairfax-va/",
+      "userCanonical": "https://evelectric.pro/whole-house-rewire-fairfax-va/",
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/attic-fan-installation-vienna-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T08:38:08Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/attic-fan-installation-vienna-va/",
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/attic-fan-installation-fairfax-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T09:11:24Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/attic-fan-installation-fairfax-va/",
+      "userCanonical": "https://evelectric.pro/attic-fan-installation-fairfax-va/",
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/ceiling-fan-installation-vienna-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/ceiling-fan-installation-oakton-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T09:33:35Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/ceiling-fan-installation-oakton-va/",
+      "userCanonical": "https://evelectric.pro/ceiling-fan-installation-oakton-va/",
+      "referringUrls": [
+        "https://evelectric.pro/attic-fan-installation-oakton-va/"
+      ],
+      "sitemap": [],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/ceiling-fan-installation-fairfax-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T09:44:40Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/ceiling-fan-installation-fairfax-va/",
+      "userCanonical": "https://evelectric.pro/ceiling-fan-installation-fairfax-va/",
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/services/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-21T20:59:50Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/services/",
+      "userCanonical": "https://evelectric.pro/services/",
+      "referringUrls": [
+        "https://evelectric.pro/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/contact/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-18T18:37:21Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/contact/",
+      "userCanonical": "https://evelectric.pro/contact/",
+      "referringUrls": [
+        "https://evelectric.pro/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/about/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-14T01:35:32Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/about/",
+      "userCanonical": "https://evelectric.pro/about/",
+      "referringUrls": [
+        "https://evelectric.pro/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/service-areas/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T06:43:52Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/service-areas/",
+      "userCanonical": "https://evelectric.pro/service-areas/",
+      "referringUrls": [
+        "https://evelectric.pro/whole-house-rewire-fairfax-va/",
+        "https://evelectric.pro/smoke-alarm-installation/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/outlet-installation/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T06:23:56Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/outlet-installation/",
+      "userCanonical": "https://evelectric.pro/outlet-installation/",
+      "referringUrls": [
+        "https://evelectric.pro/whole-house-rewire-fairfax-va/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/smoke-alarm-installation/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-23T04:39:31Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/smoke-alarm-installation/",
+      "userCanonical": "https://evelectric.pro/smoke-alarm-installation/",
+      "referringUrls": [
+        "https://evelectric.pro/electrical-troubleshooting-vienna-va/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/light-fixture-installation/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-11T00:44:45Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/light-fixture-installation/",
+      "userCanonical": "https://evelectric.pro/light-fixture-installation/",
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/electrical-troubleshooting-vienna-va/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/ev-charger-installation/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-11T00:44:44Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/ev-charger-installation/",
+      "userCanonical": "https://evelectric.pro/ev-charger-installation/",
+      "referringUrls": [
+        "https://evelectric.pro/electrical-troubleshooting-vienna-va/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/panel-upgrade/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-23T00:53:17Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/panel-upgrade/",
+      "userCanonical": "https://evelectric.pro/panel-upgrade/",
+      "referringUrls": [
+        "https://evelectric.pro/electrical-troubleshooting-rockville-md/",
+        "https://evelectric.pro/smoke-alarm-installation/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-11T00:40:42Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/electrical-troubleshooting/",
+      "userCanonical": "https://evelectric.pro/electrical-troubleshooting/",
+      "referringUrls": [
+        "https://evelectric.pro/smoke-alarm-installation/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/panel-upgrade-tysons-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/panel-upgrade/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/light-fixture-installation-fairfax-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/panel-upgrade-fairfax-va/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/smoke-alarm-fairfax-va/",
+      "coverageState": "URL is unknown to Google",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [],
+      "sitemap": [],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/ev-charger-mclean-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-rockville-md/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-washington-dc/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-tysons-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-potomac-md/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-chevy-chase-md/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-annandale-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/ev-charger-oakton-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/panel-upgrade-oakton-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/panel-upgrade/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-burke-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/panel-upgrade-mclean-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/panel-upgrade-fairfax-va/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-falls-church-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/panel-upgrade-rockville-md/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/panel-upgrade/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/ev-charger-bethesda-md/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/ev-charger-installation/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-bethesda-md/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/service-areas/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/light-fixture-installation-mclean-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-mclean-va/",
+      "coverageState": "URL is unknown to Google",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [],
+      "sitemap": [],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-oakton-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/smoke-alarm-vienna-va/",
+        "https://evelectric.pro/light-fixture-installation-mclean-va/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/outlet-installation-vienna-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/light-fixture-installation-vienna-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/panel-upgrade-vienna-va/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/smoke-alarm-vienna-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/ev-charger-fairfax-va/",
+      "coverageState": "Discovered - currently not indexed",
+      "verdict": "NEUTRAL",
+      "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+      "googleCanonical": null,
+      "userCanonical": null,
+      "referringUrls": [
+        "https://evelectric.pro/page-sitemap.xml"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": null
+    },
+    {
+      "url": "https://evelectric.pro/panel-upgrade-fairfax-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-14T05:08:53Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/panel-upgrade-fairfax-va/",
+      "userCanonical": "https://evelectric.pro/panel-upgrade-fairfax-va/",
+      "referringUrls": [
+        "https://evelectric.pro/light-fixture-installation-mclean-va/",
+        "https://evelectric.pro/panel-upgrade-vienna-va/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-fairfax-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-23T17:28:33Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/electrical-troubleshooting-fairfax-va/",
+      "userCanonical": "https://evelectric.pro/electrical-troubleshooting-fairfax-va/",
+      "referringUrls": [
+        "https://evelectric.pro/light-fixture-installation-mclean-va/"
+      ],
+      "sitemap": [],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/ev-charger-vienna-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-25T07:00:36Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/ev-charger-vienna-va/",
+      "userCanonical": "https://evelectric.pro/ev-charger-vienna-va/",
+      "referringUrls": [
+        "https://evelectric.pro/outlet-installation/",
+        "https://evelectric.pro/ev-charger-installation/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/panel-upgrade-vienna-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-09T05:07:19Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/panel-upgrade-vienna-va/",
+      "userCanonical": "https://evelectric.pro/panel-upgrade-vienna-va/",
+      "referringUrls": [
+        "https://evelectric.pro/light-fixture-installation-mclean-va/"
+      ],
+      "sitemap": [
+        "https://evelectric.pro/page-sitemap.xml",
+        "https://evelectric.pro/sitemap.xml"
+      ],
+      "richResultsVerdict": "PASS"
+    },
+    {
+      "url": "https://evelectric.pro/electrical-troubleshooting-vienna-va/",
+      "coverageState": "Submitted and indexed",
+      "verdict": "PASS",
+      "robotsTxtState": "ALLOWED",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "lastCrawlTime": "2026-06-16T18:53:54Z",
+      "crawledAs": "MOBILE",
+      "googleCanonical": "https://evelectric.pro/electrical-troubleshooting-vienna-va/",
+      "userCanonical": "https://evelectric.pro/electrical-troubleshooting-vienna-va/",
+      "referringUrls": [
+        "https://evelectric.pro/smoke-alarm-vienna-va/"
+      ],
+      "sitemap": [],
+      "richResultsVerdict": "PASS"
+    }
+  ]
+}

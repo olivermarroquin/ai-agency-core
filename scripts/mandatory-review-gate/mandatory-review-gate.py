@@ -354,8 +354,10 @@ Producer cannot self-clear. A sub-agent does NOT count (shares your session_id â
 {file_list}
 
 STOP. Signal "ready for review" via event-log; operator dispatches a SEPARATE session to review + log PASS:
-   python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-independent --verdict-file <path> --reviewer-type independent --reviewer-session <REVIEWER_SESSION_ID> --run-id <chat-slug>
-Full protocol (+ operator gate-skip): {MANDATE_PATH}"""
+python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-independent --verdict-file <path> --reviewer-type independent --reviewer-session <REVIEWER_SESSION_ID> --run-id <chat-slug>
+Operator-only escape (reviewer plumbing, not deliverables):
+python3 {skip_script} --session {session_id} --reason "reviewer plumbing"
+Full protocol: {MANDATE_PATH}"""
     else:
         # Fast-path â€” deterministic dispatch should have handled it,
         # but if it didn't (e.g., dispatch failed), fall back to self-review
@@ -376,8 +378,8 @@ REQUIRED ACTION before you can stop:
    - Tier '{tier}': {fast_desc}.
 2. Run output-quality-loop on the produced artifacts.
 3. The reviewer dispatch emits its verdict to a file, then logs the marker:
-   python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-default --verdict-file <path-to-verdict.json>
-   The verdict file must be a valid gate-peer-reviewer return contract (JSON with verdict, checks_run[], catches[], cost_usd).
+python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-default --verdict-file <path-to-verdict.json>
+The verdict file must be a valid gate-peer-reviewer return contract (JSON with verdict, checks_run[], catches[], cost_usd).
 4. Then try stopping again.
 
 If blocking findings exist, use --verdict BLOCKING --findings "description" instead.
