@@ -348,45 +348,14 @@ def main():
                     if auto_clear_refusal else '')
 
     if needs_independent:
-        block_msg = f"""MANDATORY PRE-LAND REVIEW GATE — BLOCKED (independent review required)
-
-{count} unreviewed artifact(s) detected. Review tier: {tier}.
-{refusal_line}{dispatch_findings}
-Unreviewed:
+        block_msg = f"""REVIEW GATE — BLOCKED ({count} unreviewed, tier {tier}, independent review required).
+Producer cannot self-clear. A sub-agent does NOT count (shares your session_id → rejected).
+{refusal_line}{dispatch_findings}Unreviewed:
 {file_list}
 
-REQUIRED ACTION — INDEPENDENT REVIEW (RGH-5 + RGH-8):
-
-The gate requires an INDEPENDENT reviewer for full-tier items. You (the producer)
-cannot clear your own gate.
-
-⚠️  AN IN-SESSION SUB-AGENT DOES NOT SATISFY INDEPENDENCE (CR-045 / RGH-8).
-Sub-agents inherit the producer's session_id, so the gate will REJECT any
---reviewer-session that equals this session. Only a SEPARATE-SESSION reviewer
-(an operator-dispatched chat with its own distinct session ID) qualifies.
-
-To clear this gate:
-1. Signal "ready for review" via an event-log row.
-2. The operator dispatches a SEPARATE Claude Code session as the independent
-   reviewer. That reviewer reads and executes the mandate at:
-   {MANDATE_PATH}
-3. The separate-session reviewer runs the full review protocol (Phases A-E),
-   writes its verdict file, and logs the review-pass marker with:
-   python3 {log_script} --session {session_id} --files {files_argv} \\
-     --verdict PASS --tier {tier} --gate-id G-independent \\
-     --verdict-file <verdict-path> --reviewer-type independent \\
-     --reviewer-session <REVIEWER_OWN_SESSION_ID> --run-id <chat-slug>
-4. Once the independent reviewer logs PASS, try stopping again.
-
-OPERATOR ONLY — if these unreviewed entries are a REVIEWER session's own
-read-only checks or working-doc writes (NOT producer deliverables), clear them
-with this ONE-LINE command. Copy the whole line. gate-skip takes ONLY --session
-and --reason — it does NOT accept --files, and must not be split across lines:
-   python3 {skip_script} --session {session_id} --reason "reviewer plumbing"
-
-DO NOT attempt to self-clear (log --reviewer-type independent yourself).
-DO NOT spawn an in-session sub-agent as "independent reviewer" — it shares
-your session_id and will be rejected. Both are D-09 class defects."""
+STOP. Signal "ready for review" via event-log; operator dispatches a SEPARATE session to review + log PASS:
+   python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-independent --verdict-file <path> --reviewer-type independent --reviewer-session <REVIEWER_SESSION_ID> --run-id <chat-slug>
+Full protocol (+ operator gate-skip): {MANDATE_PATH}"""
     else:
         # Fast-path — deterministic dispatch should have handled it,
         # but if it didn't (e.g., dispatch failed), fall back to self-review
