@@ -1,0 +1,41 @@
+{
+  "_comment": "Config-gated pricing for EV Electric Services. pricing.display controls whether dollar figures render on pages. When false, cost sections show cost-education (drivers + inclusions + free-estimate CTA) with no numbers. Flip to true and rebuild to show prices. Decision: 2026-07-01 per Ahmad — no pricing displayed for now.",
+  "client_slug": "ev-electric-services",
+  "pricing": {
+    "display": false,
+    "last_verified": null,
+    "verified_by": null,
+    "services": {
+      "troubleshooting": {
+        "avg_ticket": 350,
+        "diagnostic_only": 169,
+        "after_hours_surcharge": 169,
+        "no_trip_charge_areas": ["City of Fairfax", "Mantua", "Kings Park", "Fair Oaks", "Fair Lakes", "Vienna", "McLean", "Oakton", "Tysons"],
+        "market_ref": "$150 first 30 min, $150-375 typical"
+      },
+      "panel_upgrade": {
+        "range_100_to_200A": null,
+        "range_notes": "RECONCILE WITH AHMAD: current page says $2,500-$4,000 but code-complete market reads $6,000-$7,500 (AJ Long incl disconnect+surge). Get Ahmad's real range + confirm inclusions.",
+        "includes": ["outdoor emergency disconnect (NEC 230.85)", "whole-home surge protection (NEC 230.67)", "permit", "inspection", "Dominion coordination"],
+        "market_ref_aj_long": "$6,000-$7,500 code-complete"
+      },
+      "ev_charger": {
+        "install_no_panel": null,
+        "install_typical": null,
+        "install_with_panel": null,
+        "permit_range": null,
+        "range_notes": "RECONCILE WITH AHMAD: confirm real install ranges. Market: ~$700-$1,800 no-panel, $900-$3,000 typical, +$5k-$13k with panel upgrade.",
+        "dominion_program": {
+          "name": "Dominion Residential Charger Program",
+          "terms_verified": false,
+          "notes": "VERIFY CURRENT TERMS from dominionenergy.com before publishing"
+        },
+        "federal_credit": {
+          "form": "Form 8911",
+          "terms_verified": false,
+          "notes": "VERIFY current Form 8911 terms from IRS before publishing"
+        }
+      }
+    }
+  }
+}
