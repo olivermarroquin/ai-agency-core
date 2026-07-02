@@ -1,0 +1,37 @@
+{
+  "client_slug": "ev-electric-services",
+  "domain": "https://evelectric.pro",
+  "wp_user": "oliver",
+  "pages": [
+    {
+      "slug": "electrical-troubleshooting-fairfax-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/ev-electric-services/website-archive/new/core-30/04-electrical-troubleshooting-fairfax-va/draft-v5-WP-WRAPPED.html",
+      "wp_id": 6178,
+      "verify_string": "evp-safety-triage"
+    },
+    {
+      "slug": "panel-upgrade-fairfax-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/ev-electric-services/website-archive/new/core-30/05-panel-upgrade-fairfax-va/draft-v5-WP-WRAPPED.html",
+      "wp_id": 6179,
+      "verify_string": "evp-safety-triage"
+    },
+    {
+      "slug": "ev-charger-vienna-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/ev-electric-services/website-archive/new/core-30/03-ev-charger-vienna-va/draft-v5-WP-WRAPPED.html",
+      "wp_id": 6177,
+      "verify_string": "evp-safety-triage"
+    },
+    {
+      "slug": "electrical-troubleshooting-vienna-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/ev-electric-services/website-archive/new/core-30/01-electrical-troubleshooting-vienna-va/draft-v23-WP-WRAPPED.html",
+      "wp_id": null,
+      "verify_string": "evp-safety-triage"
+    },
+    {
+      "slug": "panel-upgrade-vienna-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/ev-electric-services/website-archive/new/core-30/02-panel-upgrade-vienna-va/draft-v15-WP-WRAPPED.html",
+      "wp_id": null,
+      "verify_string": "evp-safety-triage"
+    }
+  ]
+}
