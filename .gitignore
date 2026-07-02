@@ -17,3 +17,10 @@ node_modules/
 **/node_modules/
 .claude/
 wordpress-plugins/zirpKnWf
+
+# --- git-cleaning 2026-07-02: local cruft + test fixtures ---
+.review-gate/
+scripts/output/
+scripts/data/__symlink_probe.json
+scripts/data/client-rev-*.json
+wordpress-plugins/zi5rpQqs
