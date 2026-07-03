@@ -33,8 +33,7 @@
   "geo": { "latitude": 38.8462, "longitude": -77.3064 },
 
   "hours": [
-    { "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:00", "closes": "18:00" },
-    { "days": ["Saturday"], "opens": "09:00", "closes": "16:00" }
+    { "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "opens": "00:00", "closes": "23:59" }
   ],
 
   "license": {
