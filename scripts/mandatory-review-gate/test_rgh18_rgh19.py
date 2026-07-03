@@ -778,5 +778,200 @@ class TestCR160_StagingAuditAlreadyStaged(unittest.TestCase):
                            'Staging audit must block on foreign staged files')
 
 
+# =====================================================================
+# RGH-16 AC-2 Regression: Orchestrator completeness — missing
+# tracker/lesson must BLOCK through the deterministic pre-checks
+# that the reviewer-orchestrator invokes at Step 2.
+# =====================================================================
+
+class TestRGH16OrchestratorCompletenessBlocking(unittest.TestCase):
+    """AC-2: synthetic run missing a required tracker/lesson → BLOCKING.
+
+    These fixtures simulate what the reviewer-orchestrator's Step 2 does:
+    run RGH-19 on a producer session. If required documentation artifacts
+    are missing, RGH-19 must return BLOCKING — which the orchestrator
+    surfaces as DETERMINISTIC-BLOCKED (skipping LLM dispatch).
+    """
+
+    def setUp(self):
+        self.f = TempFixture()
+
+    def tearDown(self):
+        self.f.cleanup()
+
+    def _make_minimal_exec_log(self, *, include_knowledge_audit=True,
+                               include_evidence=True):
+        """Build an exec log with controllable completeness."""
+        sections = textwrap.dedent("""\
+            ---
+            type: execution-log
+            status: draft
+            created: 2026-07-03
+            updated: 2026-07-03
+            venture: test
+            tags: [execution-log, test]
+            ---
+
+            ## 2026-07-03 — Test task
+
+            **What was built:** Test feature
+            **Decision made:** Used approach A
+            **Alternatives considered:** Approach B
+            **Why this approach:** Simpler
+            **Reusable for future apps?:** No
+        """)
+        if include_evidence:
+            sections += "\n### Acceptance criteria results\n- AC-1: PASS — verified on disk\n"
+        if include_knowledge_audit:
+            sections += textwrap.dedent("""
+                ### Knowledge capture audit
+                1. Bugs/failures: none
+                2. Decisions: documented above
+                3. Patterns: none emerging
+                4. Lessons: none
+                5. State updates: done
+                6. Productization (if applicable): N/A
+            """)
+        return sections
+
+    def _make_handoff_with_dod(self):
+        """Build a handoff with a DoD that references an exec log."""
+        return textwrap.dedent("""\
+            ---
+            status: active
+            ---
+            # Test handoff
+
+            ## Definition of Done
+            | # | Deliverable | Path or glob | Assertion | Source | Check |
+            |---|---|---|---|---|---|
+            | 1 | Execution log | repos/test-repo/.kos/execution-logs/*.md | exists + substantive | handoff | OC-21 |
+        """)
+
+    def test_missing_exec_log_blocks(self):
+        """RGH-19 OC-21: no execution log at all → BLOCKING."""
+        handoff = self.f.write_handoff(self._make_handoff_with_dod())
+        # Write a dirty-ledger entry for some file, but NO exec log
+        path = self.f.write_file('repos/test-repo/feature.py', 'print("hello")')
+        self.f.write_dirty_ledger([
+            {'file_path': path, 'timestamp': 1000, 'tool': 'Write'}
+        ])
+        result = run_rgh19(self.f, handoff=handoff, tier='Productize')
+        self.assertEqual(result['verdict'], 'BLOCKING',
+                         'Missing exec log must produce BLOCKING through RGH-19')
+        oc21_fails = [c for c in result.get('catches', [])
+                      if 'OC-21' in c.get('surface', '')]
+        self.assertGreater(len(oc21_fails), 0,
+                           'OC-21 (exec-log substantiveness) must fire')
+
+    def test_exec_log_missing_knowledge_audit_blocks(self):
+        """RGH-19 OC-26: exec log exists but missing knowledge capture audit → BLOCKING."""
+        handoff = self.f.write_handoff(self._make_handoff_with_dod())
+        exec_content = self._make_minimal_exec_log(include_knowledge_audit=False)
+        exec_path = self.f.write_file(
+            'repos/test-repo/.kos/execution-logs/execution-log-2026-07-03-test.md',
+            exec_content)
+        self.f.write_dirty_ledger([
+            {'file_path': exec_path, 'timestamp': 1000, 'tool': 'Write'}
+        ])
+        result = run_rgh19(self.f, exec_log=exec_path, handoff=handoff,
+                           tier='Productize')
+        self.assertEqual(result['verdict'], 'BLOCKING',
+                         'Missing knowledge-capture audit must BLOCK')
+        oc26_fails = [c for c in result.get('catches', [])
+                      if 'OC-26' in c.get('surface', '')]
+        self.assertGreater(len(oc26_fails), 0,
+                           'OC-26 (knowledge-capture-audit-ran) must fire')
+
+    def test_productize_tier_missing_dod_b1b6_blocks(self):
+        """RGH-19 OC-20: Productize tier run without B1-B6 DoD → BLOCKING."""
+        handoff = self.f.write_handoff(self._make_handoff_with_dod())
+        # Exec log has everything EXCEPT productization section
+        exec_content = self._make_minimal_exec_log()
+        exec_path = self.f.write_file(
+            'repos/test-repo/.kos/execution-logs/execution-log-2026-07-03-test.md',
+            exec_content)
+        self.f.write_dirty_ledger([
+            {'file_path': exec_path, 'timestamp': 1000, 'tool': 'Write'}
+        ])
+        result = run_rgh19(self.f, exec_log=exec_path, handoff=handoff,
+                           tier='Productize')
+        # Unconditional: Productize tier missing B1-B6 MUST block
+        self.assertEqual(result['verdict'], 'BLOCKING',
+                         'Productize tier without B1-B6 must BLOCK')
+        # Verify OC-20 / productization-dod check ran and caught it
+        oc20_checks = [c for c in result.get('checks_run', [])
+                       if 'b1-b6' in c.get('name', '').lower()
+                       or 'productization-dod' in c.get('name', '')]
+        self.assertGreater(len(oc20_checks), 0,
+                           'productization-dod-b1-b6 check must appear in checks_run')
+        oc20_catches = [c for c in result.get('catches', [])
+                       if 'OC-20' in c.get('surface', '')
+                       or 'b1-b6' in c.get('surface', '').lower()]
+        self.assertGreater(len(oc20_catches), 0,
+                           'OC-20 must catch missing Productize DoD B1-B6')
+
+    def test_complete_run_passes(self):
+        """Complete exec log + handoff + all artifacts → PASS (control)."""
+        handoff = self.f.write_handoff(self._make_handoff_with_dod())
+        # Build an exec log that satisfies OC-21 requirements:
+        # - Has a "What Happened" section header
+        # - Has ≥3 list items
+        exec_content = textwrap.dedent("""\
+            ---
+            type: execution-log
+            status: draft
+            created: 2026-07-03
+            updated: 2026-07-03
+            venture: test
+            tags: [execution-log, test]
+            ---
+
+            ## 2026-07-03 — Test task
+
+            ### What Happened
+            - Built the test feature
+            - Resolved configuration issue
+            - Verified on disk
+            - Committed changes
+
+            ### Decisions Made
+            - Used approach A over B for simplicity
+
+            ### Acceptance criteria results
+            - AC-1: PASS — verified on disk
+
+            ### Knowledge capture audit
+            1. Bugs/failures: none
+            2. Decisions: documented above
+            3. Patterns: none emerging
+            4. Lessons: none
+            5. State updates: done
+            6. Productization (if applicable): N/A
+        """)
+        exec_path = self.f.write_file(
+            'repos/test-repo/.kos/execution-logs/execution-log-2026-07-03-test.md',
+            exec_content)
+        self.f.write_dirty_ledger([
+            {'file_path': exec_path, 'timestamp': 1000, 'tool': 'Write'}
+        ])
+        # Write a minimal omission-check-registry so OC-27 doesn't fail
+        self.f.write_registry(textwrap.dedent("""\
+            ---
+            type: reference
+            ---
+            # Omission-check registry
+            | OC | Name | Check |
+            |---|---|---|
+            | OC-21 | exec-log-substantive | presence |
+        """))
+        # For Capture-only tier, B1-B6 not required
+        result = run_rgh19(self.f, exec_log=exec_path, handoff=handoff,
+                           tier='Capture-only')
+        self.assertEqual(result['verdict'], 'PASS',
+                         f'Complete Capture-only run should PASS, got catches: '
+                         f'{json.dumps(result.get("catches", []), indent=2)}')
+
+
 if __name__ == '__main__':
     unittest.main()
