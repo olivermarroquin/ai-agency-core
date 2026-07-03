@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "demand-capture client config",
+  "description": "Per-client configuration for the demand-capture routine (LU-R9). Zero hardcoded client values — all client-specific data lives here, not in the engine. The engine substitutes {service}, {city}, {state}, {occupation} placeholders at runtime from CLI args + this config.",
+  "type": "object",
+  "required": ["client_slug", "domain", "gsc_property", "state_abbrev", "occupation"],
+  "properties": {
+    "client_slug": {
+      "type": "string",
+      "description": "Client identifier matching the folder name under second-brain/04_projects/clients/_active/ and the *.config.json slug",
+      "examples": ["ev-electric-services", "s-and-h-contracting"]
+    },
+    "domain": {
+      "type": "string",
+      "description": "Client's primary domain (used in NO-MIRROR assertions and GSC matching)",
+      "examples": ["evelectric.pro", "shcontractingunlimited.com"]
+    },
+    "gsc_property": {
+      "type": "string",
+      "description": "GSC property URL — domain-property (sc-domain:X) or URL-prefix (https://X/). Must match the client's *.config.json gsc_property.",
+      "examples": ["sc-domain:evelectric.pro", "https://shcontractingunlimited.com/"]
+    },
+    "state_abbrev": {
+      "type": "string",
+      "description": "Two-letter US state abbreviation for this client's service area. Used in query templates via {state}.",
+      "default": "va",
+      "examples": ["va", "md", "dc"]
+    },
+    "location_code": {
+      "type": "integer",
+      "description": "DataForSEO location code. 2840 = US (national). State/metro codes available at DataForSEO docs for hyperlocal volume.",
+      "default": 2840
+    },
+    "occupation": {
+      "type": "string",
+      "description": "The trade/occupation used in head-term query templates via {occupation}. This is client-specific config, not hardcoded in the engine.",
+      "examples": ["electrician", "contractor", "plumber", "hvac technician"]
+    },
+    "volume_head_terms": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Generic head terms always included in the S3 volume pull. Supports {service}, {city}, {state}, {occupation} placeholders. These terms are included alongside the template-generated per-service/city keywords.",
+      "examples": [["electrician near me", "breaker keeps tripping", "outlet not working"]]
+    },
+    "volume_templates": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Template patterns for building per-service/city volume keywords. Supports {service}, {city}, {state}, {occupation} placeholders.",
+      "default": ["{service} {city} {state}", "{occupation} {city} {state}"],
+      "examples": [["{service} {city} {state}", "{occupation} {city} {state}", "{service} near me"]]
+    },
+    "sonar_query_templates": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Perplexity Sonar query templates for S5 answer-engine capture. Supports {service}, {city}, {state}, {occupation} placeholders.",
+      "default": ["{service} {city} {state}", "{occupation} near me {city} {state}"]
+    },
+    "chatgpt_gemini_query_templates": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "ChatGPT/Gemini manual query templates for the gated S5 step. Supports {service}, {city}, {state}, {occupation} placeholders.",
+      "default": ["{service} {city} {state}", "{occupation} near me {city} {state}"]
+    },
+    "service_display_names": {
+      "type": "object",
+      "additionalProperties": {"type": "string"},
+      "description": "Override service slug → display name mapping. If a slug is not listed, hyphens are replaced with spaces (e.g., 'panel-upgrade' → 'panel upgrade'). Use this when the natural display form differs from the slug (e.g., 'ev-charger-installation' → 'EV charger installation').",
+      "examples": [{"panel-upgrade": "electrical panel upgrade", "ev-charger-installation": "EV charger installation"}]
+    }
+  },
+  "additionalProperties": false
+}

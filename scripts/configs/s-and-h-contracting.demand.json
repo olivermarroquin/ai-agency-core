@@ -1,0 +1,34 @@
+{
+  "client_slug": "s-and-h-contracting",
+  "domain": "shcontractingunlimited.com",
+  "gsc_property": "https://shcontractingunlimited.com/",
+  "state_abbrev": "va",
+  "location_code": 2840,
+  "occupation": "electrician",
+  "volume_head_terms": [
+    "{occupation} near me",
+    "breaker keeps tripping",
+    "outlet not working",
+    "fuse box replacement",
+    "200 amp panel upgrade cost",
+    "{occupation} {city} {state}"
+  ],
+  "volume_templates": [
+    "{service} {city} {state}",
+    "{occupation} {city} {state}"
+  ],
+  "sonar_query_templates": [
+    "{service} {city} {state}",
+    "{occupation} near me {city} {state}"
+  ],
+  "chatgpt_gemini_query_templates": [
+    "{service} {city} {state}",
+    "{occupation} near me {city} {state}"
+  ],
+  "service_display_names": {
+    "panel-upgrade": "panel upgrade",
+    "emergency-electrician": "emergency electrician",
+    "ev-charger-installation": "ev charger installation",
+    "light-fixture-installation": "light fixture installation"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "client_slug": "ev-electric-services",
+  "domain": "evelectric.pro",
+  "gsc_property": "sc-domain:evelectric.pro",
+  "state_abbrev": "va",
+  "location_code": 2840,
+  "occupation": "electrician",
+  "volume_head_terms": [
+    "{occupation} near me",
+    "breaker keeps tripping",
+    "outlet not working",
+    "fuse box replacement",
+    "200 amp panel upgrade cost",
+    "federal pacific panel replacement",
+    "{occupation} {city} {state}",
+    "electrical repair {city} {state}"
+  ],
+  "volume_templates": [
+    "{service} {city} {state}",
+    "{occupation} {city} {state}"
+  ],
+  "sonar_query_templates": [
+    "{service} {city} {state}",
+    "{occupation} near me {city} {state}"
+  ],
+  "chatgpt_gemini_query_templates": [
+    "{service} {city} {state}",
+    "{occupation} near me {city} {state}"
+  ],
+  "service_display_names": {
+    "panel-upgrade": "panel upgrade",
+    "electrical-troubleshooting": "electrical troubleshooting",
+    "ev-charger-installation": "ev charger installation"
+  }
+}
