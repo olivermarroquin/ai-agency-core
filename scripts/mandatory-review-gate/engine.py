@@ -184,6 +184,13 @@ READ_ONLY_PYTHON_SCRIPTS = frozenset({
     'test_conformance.py',
     'test_git_hook_conformance.py',
     'verify-artifact.py',
+    # CR-154/CR-160: read-only check/sweep scripts that produce no writes.
+    # These run deterministic checks (grep-like) and report via stdout/exit code.
+    'brief-citation-sweep.py',
+    'brief-preflight.py',
+    'dod-check.py',
+    'rgh18-build-correctness.py',
+    'rgh19-doc-completeness.py',
 })
 
 # CR-012: Do NOT whitelist python3 commands by flag heuristic (--skip-http,

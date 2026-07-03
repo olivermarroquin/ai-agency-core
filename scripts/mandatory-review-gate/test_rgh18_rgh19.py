@@ -544,5 +544,239 @@ class TestOC25NoSilentDeferrals(unittest.TestCase):
         self.assertEqual(oc25[0]['result'], 'FAIL')
 
 
+# =====================================================================
+# CR-160 Calibration Fixtures (RGH-18/19-CAL)
+# Each class has a false-positive (must NOT fire) + true-positive (must fire)
+# =====================================================================
+
+class TestCR160_OC24_DateMisParse(unittest.TestCase):
+    """CR-160 class 1: OC-24 must parse filing date from column 2 only."""
+
+    def setUp(self):
+        self.f = TempFixture()
+
+    def tearDown(self):
+        self.f.cleanup()
+
+    def test_false_positive_resolution_date_does_not_fire(self):
+        """CR row with today in resolution column but old filing date → NO fire."""
+        import time
+        today = time.strftime('%Y-%m-%d')
+
+        # Write a catch register with a CR filed on an old date,
+        # but resolved today (today's date appears in a later column)
+        register_content = textwrap.dedent(f"""\
+            # Catch Register
+            | CR | Filed | Surface | Severity | Description | Status |
+            |---|---|---|---|---|---|
+            | CR-010 | 2026-06-18 | RGH-19/OC-24 | blocking | old catch | Resolved ({today}) |
+            | CR-054 | 2026-06-22 | RGH-18/sweep | blocking | another old | Resolved ({today}) |
+        """)
+        self.f.write_file(
+            'second-brain/_meta/handoffs/_review-gate-catch-register.md',
+            register_content)
+
+        # Write exec log that does NOT mention CR-010 or CR-054
+        exec_log = self.f.write_exec_log(textwrap.dedent("""\
+            ---
+            type: execution-log
+            status: draft
+            created: 2026-07-02
+            updated: 2026-07-02
+            ---
+            ## What Happened
+            - Calibrated the gate checks
+            - Fixed false positives
+            - Resolved old CRs
+        """))
+
+        result = run_rgh19(self.f, exec_log=exec_log, tier='Capture-only')
+        oc24 = [c for c in result.get('checks_run', [])
+                if c.get('name') == 'catches-referenced']
+        self.assertTrue(oc24)
+        # Should NOT fail — those CRs were filed on old dates, not today
+        self.assertNotEqual(oc24[0]['result'], 'FAIL',
+                            'OC-24 must not fire on CRs resolved today but filed earlier')
+
+    def test_true_positive_cr_filed_today_missing_from_log(self):
+        """CR genuinely filed today and absent from exec log → MUST fire."""
+        import time
+        today = time.strftime('%Y-%m-%d')
+
+        register_content = textwrap.dedent(f"""\
+            # Catch Register
+            | CR | Filed | Surface | Severity | Description | Status |
+            |---|---|---|---|---|---|
+            | CR-999 | {today} | RGH-18/sweep | blocking | new catch today | Open |
+        """)
+        self.f.write_file(
+            'second-brain/_meta/handoffs/_review-gate-catch-register.md',
+            register_content)
+
+        # Exec log does NOT mention CR-999
+        exec_log = self.f.write_exec_log(textwrap.dedent("""\
+            ---
+            type: execution-log
+            ---
+            ## What Happened
+            - Did some work
+            - No CR references here
+            - Just regular build steps
+        """))
+
+        result = run_rgh19(self.f, exec_log=exec_log, tier='Capture-only')
+        oc24 = [c for c in result.get('checks_run', [])
+                if c.get('name') == 'catches-referenced']
+        self.assertTrue(oc24)
+        self.assertEqual(oc24[0]['result'], 'FAIL',
+                         'OC-24 must fire on CR filed today but missing from exec log')
+
+
+class TestCR160_PlaceholderSweepSpecExemption(unittest.TestCase):
+    """CR-160 class 2: placeholder sweep must exempt spec/reference docs."""
+
+    def setUp(self):
+        self.f = TempFixture()
+
+    def tearDown(self):
+        self.f.cleanup()
+
+    def test_false_positive_spec_routing_table_tokens(self):
+        """spec-routing-table.md with {client_name}/<slug>/FILL: → NO block."""
+        # Write a spec file with template tokens (documented syntax)
+        spec_path = self.f.write_repo_file(
+            'references/spec-routing-table.md',
+            textwrap.dedent("""\
+                # Spec Routing Table
+                | Artifact type | Route | Spec |
+                |---|---|---|
+                | content-brief | repos/{client_name}/briefs/ | FILL: per-client |
+                | page | repos/<service-slug>/pages/ | template-page.md |
+                | schema | repos/{client_name}/schema/ | PLACEHOLDER syntax doc |
+            """))
+        self.f.write_dirty_ledger([
+            {'file_path': spec_path, 'timestamp': 1000, 'tool': 'Write'}
+        ])
+        result = run_rgh18(self.f, tier='Capture-only')
+        sweep_catches = [c for c in result.get('catches', [])
+                         if 'dirty-file-sweep' in c.get('surface', '')
+                         and 'placeholder' in c.get('surface', '').lower()]
+        self.assertEqual(len(sweep_catches), 0,
+                         'Placeholder sweep must not fire on spec/reference docs')
+
+    def test_true_positive_real_deliverable_with_fill(self):
+        """A real deliverable file with unresolved FILL: → MUST block."""
+        deliverable_path = self.f.write_repo_file(
+            'pages/ev-charger-vienna.md',
+            textwrap.dedent("""\
+                # EV Charger Installation Vienna
+                The cost is FILL: per unit.
+                Contact PLACEHOLDER for details.
+            """))
+        self.f.write_dirty_ledger([
+            {'file_path': deliverable_path, 'timestamp': 1000, 'tool': 'Write'}
+        ])
+        result = run_rgh18(self.f, tier='Capture-only')
+        sweep_catches = [c for c in result.get('catches', [])
+                         if 'dirty-file-sweep' in c.get('surface', '')]
+        self.assertGreater(len(sweep_catches), 0,
+                           'Placeholder sweep must block on real deliverable with FILL:')
+
+
+class TestCR160_CompletenessDiffTierNone(unittest.TestCase):
+    """CR-160 class 3: tier-None must NOT default to Productize."""
+
+    def setUp(self):
+        self.f = TempFixture()
+
+    def tearDown(self):
+        self.f.cleanup()
+
+    def test_false_positive_no_tier_no_manifest_passes(self):
+        """Run with no tier and no manifest → must NOT block."""
+        handoff = self.f.write_handoff(textwrap.dedent("""\
+            ---
+            status: active
+            ---
+            # One-function robustness patch
+            No deliverable manifest needed — this is a small fix.
+        """))
+        self.f.write_dirty_ledger([])
+        # tier=None (not passed) — detect_tier should return None, not Productize
+        result = run_rgh18(self.f, handoff=handoff)
+        self.assertEqual(result['verdict'], 'PASS',
+                         'tier-None must not default to Productize and demand a manifest')
+
+    def test_true_positive_productize_no_manifest_blocks(self):
+        """Explicitly Productize tier with no manifest → MUST block."""
+        handoff = self.f.write_handoff(textwrap.dedent("""\
+            ---
+            status: active
+            ---
+            # Major skill build
+            No manifest here but tier is Productize.
+        """))
+        self.f.write_dirty_ledger([])
+        result = run_rgh18(self.f, handoff=handoff, tier='Productize')
+        self.assertEqual(result['verdict'], 'BLOCKING',
+                         'Explicit Productize tier with no manifest must block')
+
+
+class TestCR160_StagingAuditAlreadyStaged(unittest.TestCase):
+    """CR-160 class 4: staging audit must not flag touched-not-staged."""
+
+    def setUp(self):
+        self.f = TempFixture()
+
+    def tearDown(self):
+        self.f.cleanup()
+
+    def test_false_positive_touched_file_not_yet_staged(self):
+        """File in dirty ledger but not yet git-staged → must NOT block.
+
+        The producer's commit block hasn't run yet, so the file is
+        legitimately unstaged. The session knows about it (it's in the
+        dirty ledger). This is not a 'forgot to stage' situation.
+        """
+        # Create a file in the repo, commit it, then modify it (unstaged)
+        path = self.f.write_repo_file('script.py', '# original', commit=True)
+        with open(path, 'w') as fh:
+            fh.write('# modified by this session')
+
+        self.f.write_dirty_ledger([
+            {'file_path': path, 'timestamp': 1000, 'tool': 'Edit'}
+        ])
+
+        result = run_rgh18(self.f, tier='Capture-only')
+        staging_catches = [c for c in result.get('catches', [])
+                           if 'staging-audit' in c.get('surface', '')]
+        self.assertEqual(len(staging_catches), 0,
+                         'Staging audit must not block on touched-not-yet-staged files')
+
+    def test_true_positive_foreign_staged_file_blocks(self):
+        """File staged by another chat (not in dirty ledger) → MUST block."""
+        # Create and commit two files
+        path_foreign = self.f.write_repo_file('foreign.py', '# original', commit=True)
+        path_own = self.f.write_repo_file('own.py', '# own file', commit=True)
+
+        # Modify and stage foreign.py (simulating another chat's work)
+        with open(path_foreign, 'w') as fh:
+            fh.write('# modified by ANOTHER session')
+        subprocess.run(['git', 'add', 'foreign.py'],
+                       cwd=self.f.repo, capture_output=True)
+
+        # Dirty ledger only has own.py — NOT foreign.py
+        # (need at least one entry in this repo so the audit runs)
+        self.f.write_dirty_ledger([
+            {'file_path': path_own, 'timestamp': 1000, 'tool': 'Edit'}
+        ])
+
+        result = run_rgh18(self.f, tier='Capture-only')
+        staging_catches = [c for c in result.get('catches', [])
+                           if 'staging-audit' in c.get('surface', '')]
+        self.assertGreater(len(staging_catches), 0,
+                           'Staging audit must block on foreign staged files')
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -55,6 +55,44 @@ APPEND_ONLY_BASENAMES = frozenset([
     '_review-gate-catch-register.md',
 ])
 
+# Spec/reference/template-documenting files: these legitimately contain
+# placeholder-like tokens ({client_name}, <slug>, FILL:, etc.) as
+# DOCUMENTED SYNTAX, not unresolved deliverable placeholders. Exempting
+# them from the placeholder sweep prevents false-positive blocks on
+# skill specs, routing tables, and template docs. (CR-160 class 2.)
+#
+# Match by: (a) basename patterns, (b) parent-directory names.
+SPEC_REFERENCE_BASENAMES = frozenset([
+    'spec-routing-table.md',
+])
+
+SPEC_REFERENCE_DIR_NAMES = frozenset([
+    'references',
+    'templates',
+])
+
+
+def _is_spec_reference_doc(file_path):
+    """Check if a file is a spec/reference/template-documenting doc.
+
+    These files legitimately contain placeholder-like tokens as documented
+    syntax (e.g. {client_name}, <service-slug>, FILL: in routing specs).
+    They should be exempt from the placeholder sweep but NOT from the
+    leak audit or link resolution checks.
+    """
+    basename = os.path.basename(file_path)
+    if basename in SPEC_REFERENCE_BASENAMES:
+        return True
+    # Check if any parent directory is a known spec/reference dir
+    parts = file_path.replace('\\', '/').split('/')
+    for part in parts:
+        if part in SPEC_REFERENCE_DIR_NAMES:
+            return True
+    # Check for spec/reference filename patterns
+    if basename.startswith(('spec-', 'template-')) and basename.endswith('.md'):
+        return True
+    return False
+
 
 def _is_append_only(file_path):
     """Check if a file is an append-only shared file."""
@@ -108,11 +146,14 @@ def _get_added_lines(file_path):
     return '\n'.join(added)
 
 
-def _run_fast_path_on_content(content, file_path):
+def _run_fast_path_on_content(content, file_path, skip_placeholder=False):
     """Run fast-path checks on a string of content (for diff-aware mode).
 
     Mirrors engine.run_fast_path_checks() but on arbitrary content
     instead of reading from disk.
+
+    If skip_placeholder is True, the placeholder sweep is skipped
+    (used for spec/reference/template docs — CR-160 class 2).
     """
     import engine
 
@@ -120,17 +161,26 @@ def _run_fast_path_on_content(content, file_path):
     passed = True
 
     # Placeholder sweep with safe-content stripping
-    stripped = engine._strip_safe_content_for_placeholder_sweep(content)
-    placeholders = engine.PLACEHOLDER_PATTERNS.findall(stripped)
-    ph_count = len(placeholders)
-    checks.append({
-        'name': 'placeholder-sweep',
-        'result': 'PASS' if ph_count == 0 else 'FAIL',
-        'count': ph_count,
-        'mode': 'diff-aware',
-    })
-    if ph_count > 0:
-        passed = False
+    if skip_placeholder:
+        checks.append({
+            'name': 'placeholder-sweep',
+            'result': 'SKIP',
+            'count': 0,
+            'mode': 'diff-aware',
+            'reason': 'spec/reference/template doc — tokens are documented syntax',
+        })
+    else:
+        stripped = engine._strip_safe_content_for_placeholder_sweep(content)
+        placeholders = engine.PLACEHOLDER_PATTERNS.findall(stripped)
+        ph_count = len(placeholders)
+        checks.append({
+            'name': 'placeholder-sweep',
+            'result': 'PASS' if ph_count == 0 else 'FAIL',
+            'count': ph_count,
+            'mode': 'diff-aware',
+        })
+        if ph_count > 0:
+            passed = False
 
     # Leak audit — use the same project-aware loading
     identity_strings = engine._load_leak_identity_strings(file_path)
@@ -299,6 +349,10 @@ def run_all_dirty_file_sweep(state_dir, session_id):
 
         files_checked += 1
 
+        # CR-160 class 2: spec/reference/template docs get placeholder
+        # exemption (tokens are documented syntax, not unresolved deliverables)
+        skip_ph = _is_spec_reference_doc(fp)
+
         if _is_append_only(fp):
             # DIFF-AWARE: only check added lines
             diff_aware_files += 1
@@ -306,15 +360,27 @@ def run_all_dirty_file_sweep(state_dir, session_id):
 
             if added_content is None:
                 # Untracked file — check whole file
-                result = engine.run_fast_path_checks(fp)
+                if skip_ph:
+                    with open(fp, 'r', errors='replace') as fh:
+                        result = _run_fast_path_on_content(
+                            fh.read(), fp, skip_placeholder=True)
+                else:
+                    result = engine.run_fast_path_checks(fp)
             elif not added_content:
                 # No changes — skip
                 continue
             else:
-                result = _run_fast_path_on_content(added_content, fp)
+                result = _run_fast_path_on_content(
+                    added_content, fp, skip_placeholder=skip_ph)
         else:
-            # Standard: check entire file
-            result = engine.run_fast_path_checks(fp)
+            if skip_ph:
+                # Read and run with placeholder exemption
+                with open(fp, 'r', errors='replace') as fh:
+                    result = _run_fast_path_on_content(
+                        fh.read(), fp, skip_placeholder=True)
+            else:
+                # Standard: check entire file
+                result = engine.run_fast_path_checks(fp)
 
         for c in result.get('checks', []):
             checks.append(c)
@@ -387,14 +453,29 @@ def run_staging_reality_audit(state_dir, session_id, workspace_root):
                 capture_output=True, text=True, timeout=30)
             result = json.loads(proc.stdout)
 
-            verdict = result.get('verdict', 'ERROR')
+            # CR-160 class 4: filter out 'touched-not-staged' findings.
+            # When rgh18 runs BEFORE the commit block executes, files the
+            # session touched are still unstaged — but they ARE in the dirty
+            # ledger and the producer's proposed commit block, so flagging
+            # them as "forgot to stage" is a false positive. The dangerous
+            # case is 'staged-not-touched' (foreign work); that still blocks.
+            findings = result.get('findings', [])
+            filtered_findings = [
+                f for f in findings
+                if f.get('issue') != 'touched-not-staged'
+            ]
+
+            has_blocking = any(
+                f.get('severity') == 'blocking' for f in filtered_findings)
+            verdict = 'FAIL' if has_blocking else 'PASS'
+
             checks.append({
                 'name': f'staging-audit-{repo_name}',
                 'result': verdict,
                 'detail': result.get('summary', ''),
             })
 
-            for finding in result.get('findings', []):
+            for finding in filtered_findings:
                 if finding.get('severity') == 'blocking':
                     catches.append({
                         'surface': f'RGH-18/staging-audit/{repo_name}',
@@ -422,7 +503,9 @@ def detect_tier(handoff_path, exec_log_paths=None):
     """Detect the run's tier from the execution log or handoff.
 
     Looks for **Tier:** line in execution logs, then handoff frontmatter.
-    Default per PR-1 §A: code/pages/skills → Productize.
+    Returns None if no tier is found — callers must handle None gracefully.
+    Previously defaulted to 'Productize' which caused false-positive blocks
+    on non-Productize runs that didn't declare a tier. (CR-160 class 3.)
     """
     # Check execution logs first
     if exec_log_paths:
@@ -448,8 +531,9 @@ def detect_tier(handoff_path, exec_log_paths=None):
         except OSError:
             pass
 
-    # Default: Productize (code/pages/skills per PR-1 §A)
-    return 'Productize'
+    # No tier found — return None, NOT Productize.
+    # Callers require the manifest only when tier is explicitly 'Productize'.
+    return None
 
 
 # ===== Main =====

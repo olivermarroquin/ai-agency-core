@@ -366,11 +366,23 @@ def check_oc24_catches_referenced(exec_log_path, state_dir, session_id,
     today = time.strftime('%Y-%m-%d')
     cr_pattern = re.compile(r'CR-(\d+)')
 
-    # Find CRs filed today (rough heuristic: rows with today's date)
+    # Find CRs filed today — parse the FILING DATE from COLUMN 2 ONLY.
+    # The catch register is a markdown table: | CR-NNN | filing-date | ... |
+    # Previously matched today's date anywhere in the row, which false-fired
+    # on rows being RESOLVED today (resolution date in a later column) even
+    # though the CR was filed weeks ago. (CR-160 class 1: OC-24 date mis-parse.)
     todays_crs = set()
     for line in register_content.splitlines():
-        if today in line:
-            for m in cr_pattern.finditer(line):
+        # Only process table rows (lines starting with |)
+        if not line.strip().startswith('|'):
+            continue
+        cols = [c.strip() for c in line.split('|')]
+        # cols[0] is empty (before first |), cols[1] = CR-NNN, cols[2] = filing date
+        if len(cols) < 3:
+            continue
+        filing_date_col = cols[2]
+        if today in filing_date_col:
+            for m in cr_pattern.finditer(cols[1]):
                 todays_crs.add(f'CR-{m.group(1)}')
 
     if not todays_crs:
@@ -739,7 +751,11 @@ def check_oc20_productization_dod(exec_log_path, tier):
 # ===== Tier detection (shared with RGH-18) =====
 
 def detect_tier(exec_log_path, handoff_path):
-    """Detect run tier from exec log or handoff."""
+    """Detect run tier from exec log or handoff.
+
+    Returns None if no tier is found — callers must handle None gracefully.
+    Previously defaulted to 'Productize' (CR-160 class 3).
+    """
     for path in [exec_log_path, handoff_path]:
         if path and os.path.isfile(path):
             try:
@@ -750,7 +766,7 @@ def detect_tier(exec_log_path, handoff_path):
                     return m.group(1)
             except OSError:
                 continue
-    return 'Productize'
+    return None
 
 
 # ===== Exec-log discovery =====
