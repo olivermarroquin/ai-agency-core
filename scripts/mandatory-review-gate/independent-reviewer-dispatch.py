@@ -214,6 +214,42 @@ def log_independent_marker(session_id, file_paths, verdict, tier,
     return markers
 
 
+def _run_rgh18(session_id, state_dir, workspace_root, handoff_path):
+    """Run RGH-18 build-correctness checks. Returns parsed JSON or None."""
+    script = os.path.join(SCRIPT_DIR, 'rgh18-build-correctness.py')
+    if not os.path.isfile(script):
+        return None
+    cmd = [sys.executable, script,
+           '--session', session_id,
+           '--state-dir', state_dir,
+           '--workspace-root', workspace_root]
+    if handoff_path:
+        cmd.extend(['--handoff', handoff_path])
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        return json.loads(proc.stdout)
+    except (subprocess.TimeoutExpired, json.JSONDecodeError, OSError):
+        return None
+
+
+def _run_rgh19(session_id, state_dir, workspace_root, handoff_path):
+    """Run RGH-19 doc-completeness checks. Returns parsed JSON or None."""
+    script = os.path.join(SCRIPT_DIR, 'rgh19-doc-completeness.py')
+    if not os.path.isfile(script):
+        return None
+    cmd = [sys.executable, script,
+           '--session', session_id,
+           '--state-dir', state_dir,
+           '--workspace-root', workspace_root]
+    if handoff_path:
+        cmd.extend(['--handoff', handoff_path])
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        return json.loads(proc.stdout)
+    except (subprocess.TimeoutExpired, json.JSONDecodeError, OSError):
+        return None
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Independent reviewer dispatch — deterministic layer')
@@ -302,6 +338,26 @@ def main():
             'result': 'SKIP',
             'detail': 'no handoff with DoD section found',
         })
+
+    # --- RGH-18: Build-correctness checks (full tier) ---
+    if args.tier == 'full':
+        rgh18_result = _run_rgh18(
+            args.session, args.state_dir, args.workspace_root, handoff_path)
+        if rgh18_result:
+            for c in rgh18_result.get('checks_run', []):
+                checks_run.append(c)
+            for c in rgh18_result.get('catches', []):
+                catches.append(c)
+
+    # --- RGH-19: Doc-completeness checks (full tier) ---
+    if args.tier == 'full':
+        rgh19_result = _run_rgh19(
+            args.session, args.state_dir, args.workspace_root, handoff_path)
+        if rgh19_result:
+            for c in rgh19_result.get('checks_run', []):
+                checks_run.append(c)
+            for c in rgh19_result.get('catches', []):
+                catches.append(c)
 
     # For full tier, add ground-truth cross-check deferred entry
     # (the LLM agent handles the actual cross-check)
