@@ -139,23 +139,41 @@ def resolve_wikilink(slug: str, vault_root: Path, brief_dir: Path) -> bool:
     # Try with and without .md extension
     names_to_try = [filename, f"{filename}.md"]
 
-    for base in candidates:
-        for name in names_to_try:
-            if (base / name).exists():
-                return True
-        # Recursive search (one level deep for performance)
-        if base.is_dir():
-            for child in base.iterdir():
-                if child.is_dir():
-                    for name in names_to_try:
-                        if (child / name).exists():
-                            return True
+    try:
+        for base in candidates:
+            # Bound walk to vault root — skip bases outside it
+            if not str(base).startswith(str(vault_root)) and base != brief_dir and base != brief_dir / "demand-captures":
+                continue
+            for name in names_to_try:
+                try:
+                    if (base / name).exists():
+                        return True
+                except (PermissionError, OSError):
+                    continue
+            # Recursive search (one level deep for performance)
+            try:
+                if base.is_dir():
+                    for child in base.iterdir():
+                        if child.is_dir():
+                            for name in names_to_try:
+                                try:
+                                    if (child / name).exists():
+                                        return True
+                                except (PermissionError, OSError):
+                                    continue
+            except (PermissionError, OSError):
+                continue
 
-    # Try glob across vault for deeper matches
-    for name in names_to_try:
-        matches = list(vault_root.rglob(name))
-        if matches:
-            return True
+        # Try glob across vault for deeper matches (bounded to vault root)
+        for name in names_to_try:
+            try:
+                matches = list(vault_root.rglob(name))
+                if matches:
+                    return True
+            except (PermissionError, OSError):
+                continue
+    except (PermissionError, OSError):
+        pass
 
     return False
 
