@@ -599,15 +599,19 @@ class TestCR160_OC24_DateMisParse(unittest.TestCase):
                             'OC-24 must not fire on CRs resolved today but filed earlier')
 
     def test_true_positive_cr_filed_today_missing_from_log(self):
-        """CR genuinely filed today and absent from exec log → MUST fire."""
+        """CR genuinely filed today BY THIS SESSION and absent from exec log → MUST fire.
+
+        CR-166 update: OC-24 now scopes by session_id in the "surfaced by"
+        column (col 3). The fixture must include the session_id to match.
+        """
         import time
         today = time.strftime('%Y-%m-%d')
 
         register_content = textwrap.dedent(f"""\
             # Catch Register
-            | CR | Filed | Surface | Severity | Description | Status |
-            |---|---|---|---|---|---|
-            | CR-999 | {today} | RGH-18/sweep | blocking | new catch today | Open |
+            | CR | Filed | Surfaced by | Surface | Severity | Description | Status |
+            |---|---|---|---|---|---|---|
+            | CR-999 | {today} | {self.f.session_id} / this-run | RGH-18/sweep | blocking | new catch today | Open |
         """)
         self.f.write_file(
             'second-brain/_meta/handoffs/_review-gate-catch-register.md',
@@ -629,7 +633,7 @@ class TestCR160_OC24_DateMisParse(unittest.TestCase):
                 if c.get('name') == 'catches-referenced']
         self.assertTrue(oc24)
         self.assertEqual(oc24[0]['result'], 'FAIL',
-                         'OC-24 must fire on CR filed today but missing from exec log')
+                         'OC-24 must fire on CR filed today by this session but missing from exec log')
 
 
 class TestCR160_PlaceholderSweepSpecExemption(unittest.TestCase):
@@ -971,6 +975,645 @@ class TestRGH16OrchestratorCompletenessBlocking(unittest.TestCase):
         self.assertEqual(result['verdict'], 'PASS',
                          f'Complete Capture-only run should PASS, got catches: '
                          f'{json.dumps(result.get("catches", []), indent=2)}')
+
+
+# =====================================================================
+# CR-161 / RGH-18/19-CAL-2 Fixtures
+# Each fix has a false-positive (must NOT fire) + true-positive (must fire)
+# =====================================================================
+
+class TestCR161_SourceCodePlaceholderExemption(unittest.TestCase):
+    """CR-161 class 1: placeholder sweep must not fire on source-code files
+    that contain trigger words as string literals / regex / constants."""
+
+    def setUp(self):
+        self.f = TempFixture()
+
+    def tearDown(self):
+        self.f.cleanup()
+
+    def test_false_positive_py_file_with_trigger_words(self):
+        """A .py file containing FILL/TODO/PLACEHOLDER as string literals → NO block."""
+        py_path = self.f.write_repo_file(
+            'engine.py',
+            textwrap.dedent("""\
+                # Detection engine
+                PLACEHOLDER_PATTERNS = re.compile(
+                    r'(FILL|TBD|PLACEHOLDER|TODO|FIXME|XXX|CHANGEME)')
+                TRIGGER_WORDS = ['FILL', 'TODO', 'PLACEHOLDER']
+                def check_placeholder(text):
+                    return any(w in text for w in TRIGGER_WORDS)
+            """))
+        self.f.write_dirty_ledger([
+            {'file_path': py_path, 'timestamp': 1000, 'tool': 'Write'}
+        ])
+        result = run_rgh18(self.f, tier='Capture-only')
+        sweep_catches = [c for c in result.get('catches', [])
+                         if 'dirty-file-sweep' in c.get('surface', '')
+                         and 'placeholder' in c.get('surface', '').lower()]
+        self.assertEqual(len(sweep_catches), 0,
+                         'Placeholder sweep must not fire on .py source-code files')
+
+    def test_false_positive_test_file_with_trigger_words(self):
+        """A test_*.py file with FILL/PLACEHOLDER as test data → NO block."""
+        test_path = self.f.write_repo_file(
+            'test_checks.py',
+            textwrap.dedent("""\
+                import unittest
+                class TestPlaceholder(unittest.TestCase):
+                    def test_detects_fill(self):
+                        self.assertIn('FILL', detect('The FILL value'))
+                    def test_detects_placeholder(self):
+                        content = 'PLACEHOLDER text TODO item'
+                        self.assertTrue(has_placeholder(content))
+            """))
+        self.f.write_dirty_ledger([
+            {'file_path': test_path, 'timestamp': 1000, 'tool': 'Write'}
+        ])
+        result = run_rgh18(self.f, tier='Capture-only')
+        sweep_catches = [c for c in result.get('catches', [])
+                         if 'dirty-file-sweep' in c.get('surface', '')
+                         and 'placeholder' in c.get('surface', '').lower()]
+        self.assertEqual(len(sweep_catches), 0,
+                         'Placeholder sweep must not fire on test_*.py files')
+
+    def test_true_positive_markdown_deliverable_still_blocks(self):
+        """A shipped markdown deliverable with unresolved FILL → MUST block."""
+        md_path = self.f.write_repo_file(
+            'deliverable-page.md',
+            textwrap.dedent("""\
+                # Service Page
+                Contact us at FILL for a free quote.
+                Our PLACEHOLDER service covers TODO areas.
+            """))
+        self.f.write_dirty_ledger([
+            {'file_path': md_path, 'timestamp': 1000, 'tool': 'Write'}
+        ])
+        result = run_rgh18(self.f, tier='Capture-only')
+        sweep_catches = [c for c in result.get('catches', [])
+                         if 'dirty-file-sweep' in c.get('surface', '')]
+        self.assertGreater(len(sweep_catches), 0,
+                           'Placeholder sweep must still block on markdown deliverables')
+
+
+class TestCR161_BookkeepingFastPath(unittest.TestCase):
+    """CR-161 class 2: close-out bookkeeping files are self-review-exempt."""
+
+    def setUp(self):
+        self.f = TempFixture()
+
+    def tearDown(self):
+        self.f.cleanup()
+
+    def test_false_positive_tracker_is_bookkeeping(self):
+        """_active-chats-tracker.md is classified as bookkeeping → exempt."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        tracker_path = os.path.join(
+            self.f.workspace, 'second-brain', '_meta', 'handoffs',
+            '_active-chats-tracker.md')
+        self.assertTrue(
+            engine.is_bookkeeping_entry(tracker_path, self.f.workspace),
+            '_active-chats-tracker.md must be classified as bookkeeping')
+
+    def test_false_positive_event_log_is_bookkeeping(self):
+        """_event-log.md is classified as bookkeeping → exempt."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        event_log_path = os.path.join(
+            self.f.workspace, 'second-brain', '_meta', '_event-log.md')
+        self.assertTrue(
+            engine.is_bookkeeping_entry(event_log_path, self.f.workspace),
+            '_event-log.md must be classified as bookkeeping')
+
+    def test_false_positive_recently_closed_is_bookkeeping(self):
+        """_recently-closed.md is classified as bookkeeping → exempt."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        path = os.path.join(
+            self.f.workspace, 'second-brain', '_meta', 'handoffs',
+            '_recently-closed.md')
+        self.assertTrue(
+            engine.is_bookkeeping_entry(path, self.f.workspace),
+            '_recently-closed.md must be classified as bookkeeping')
+
+    def test_true_positive_deliverable_not_bookkeeping(self):
+        """A real deliverable file is NOT bookkeeping → still gates."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        deliverable_path = os.path.join(
+            self.f.workspace, 'repos', 'test-repo', 'pages', 'service.md')
+        self.assertFalse(
+            engine.is_bookkeeping_entry(deliverable_path, self.f.workspace),
+            'A deliverable file must NOT be classified as bookkeeping')
+
+    def test_bash_event_log_append_is_bookkeeping(self):
+        """A BASH printf >> _event-log.md is bookkeeping → exempt."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        entry = {
+            'file_path': 'BASH:51f8293aa3bf',
+            'bash_cmd': "printf '| 2026-07-03 | shipped |\\n' >> /Users/olivermarroquin/workspace/second-brain/_meta/_event-log.md",
+            'display': "printf '| 2026-07-03 | shipped |\\n' >> /Users/olivermarroquin/workspace/second-brain/_meta/_event-log.md",
+        }
+        self.assertTrue(
+            engine.is_bookkeeping_entry(entry, self.f.workspace),
+            'BASH printf >> _event-log.md must be classified as bookkeeping')
+
+    def test_bash_non_bookkeeping_target_not_exempt(self):
+        """A BASH command writing to a non-bookkeeping file is NOT exempt."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        entry = {
+            'file_path': 'BASH:deadbeef1234',
+            'bash_cmd': "echo 'exploit' >> /tmp/deliverable.md",
+            'display': "echo 'exploit' >> /tmp/deliverable.md",
+        }
+        self.assertFalse(
+            engine.is_bookkeeping_entry(entry, self.f.workspace),
+            'BASH writing to non-bookkeeping file must NOT be exempt')
+
+    def test_bash_no_command_not_exempt(self):
+        """A BASH: entry with no command info is NOT exempt (fail closed)."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        entry = {'file_path': 'BASH:abc123def456'}
+        self.assertFalse(
+            engine.is_bookkeeping_entry(entry, self.f.workspace),
+            'BASH entry with no command must NOT be bookkeeping (fail closed)')
+
+    def test_bash_string_path_not_bookkeeping(self):
+        """A bare BASH: string (backward compat) is NOT bookkeeping."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        self.assertFalse(
+            engine.is_bookkeeping_entry('BASH:abc123def456', self.f.workspace),
+            'Bare BASH string must NOT be classified as bookkeeping')
+
+    def test_handoff_status_only_flip_is_bookkeeping(self):
+        """A handoff edit with ONLY status/consumed/updated + blockquote → exempt."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        # Create and commit a handoff with original status
+        handoff_path = self.f.write_repo_file(
+            'handoffs/handoff-2026-07-03-status-test.md',
+            textwrap.dedent("""\
+                ---
+                status: ready
+                created: 2026-07-02
+                priority: high
+                ---
+                # Test handoff
+                ## Scope
+                Build the widget.
+            """),
+            commit=True)
+        # Flip to consumed with updated + blockquote (the real close shape)
+        with open(handoff_path, 'w') as fh:
+            fh.write(textwrap.dedent("""\
+                ---
+                status: consumed
+                created: 2026-07-02
+                updated: 2026-07-03
+                consumed: 2026-07-03
+                priority: high
+                ---
+                > **Actual deliverable:** 4 fixes shipped including `engine.py` changes and 15 new test fixtures. Independent review PASS session abc123. CR-161 Resolved.
+
+                # Test handoff
+                ## Scope
+                Build the widget.
+            """))
+        self.assertTrue(
+            engine._is_handoff_status_only_edit(handoff_path, self.f.workspace),
+            'Handoff with only status/consumed/updated + blockquote must be bookkeeping-exempt')
+
+    def test_anti_smuggle_handoff_scope_change_not_exempt(self):
+        """A handoff edit that changes scope/AC text is NOT bookkeeping (anti-smuggle)."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        # Create and commit a handoff with original scope
+        handoff_path = self.f.write_repo_file(
+            'handoffs/handoff-2026-07-03-test.md',
+            textwrap.dedent("""\
+                ---
+                status: active
+                ---
+                # Test handoff
+                ## Scope
+                Build the widget.
+                ## Acceptance criteria
+                - AC-1: widget works
+            """),
+            commit=True)
+        # Now modify the scope (not just status flip)
+        with open(handoff_path, 'w') as fh:
+            fh.write(textwrap.dedent("""\
+                ---
+                status: consumed
+                consumed: 2026-07-03
+                ---
+                # Test handoff
+                ## Scope
+                Build the widget AND the gadget (scope change!).
+                ## Acceptance criteria
+                - AC-1: widget works
+                - AC-2: gadget works too (new AC!)
+            """))
+        self.assertFalse(
+            engine._is_handoff_status_only_edit(handoff_path, self.f.workspace),
+            'Handoff edit with scope/AC changes must NOT be bookkeeping-exempt (anti-smuggle)')
+
+    def test_anti_smuggle_body_key_value_not_exempt(self):
+        """A handoff edit that adds body lines like 'note: ...' or 'fix: ...'
+        is NOT bookkeeping — these look like YAML but are scope content.
+        (BLOCKING-1 regression fixture.)"""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        handoff_path = self.f.write_repo_file(
+            'handoffs/handoff-2026-07-03-smuggle.md',
+            textwrap.dedent("""\
+                ---
+                status: active
+                ---
+                # Test handoff
+                ## Scope
+                Build the widget.
+            """),
+            commit=True)
+        # Add body lines that look like key:value but are scope content
+        with open(handoff_path, 'w') as fh:
+            fh.write(textwrap.dedent("""\
+                ---
+                status: consumed
+                consumed: 2026-07-03
+                ---
+                # Test handoff
+                ## Scope
+                Build the widget.
+                note: weakened AC to skip safety check
+                fix: remove the guard entirely
+                reason: old approach was too strict
+            """))
+        self.assertFalse(
+            engine._is_handoff_status_only_edit(handoff_path, self.f.workspace),
+            'Body key:value lines (note:/fix:/reason:) must NOT pass anti-smuggle (BLOCKING-1)')
+
+    def test_anti_smuggle_arbitrary_blockquote_not_exempt(self):
+        """A handoff edit that adds an arbitrary blockquote (not Actual-deliverable)
+        is NOT bookkeeping — only the Actual-deliverable block is exempt."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+        handoff_path = self.f.write_repo_file(
+            'handoffs/handoff-2026-07-03-bq-smuggle.md',
+            textwrap.dedent("""\
+                ---
+                status: active
+                ---
+                # Test handoff
+                ## Scope
+                Build the widget.
+            """),
+            commit=True)
+        with open(handoff_path, 'w') as fh:
+            fh.write(textwrap.dedent("""\
+                ---
+                status: consumed
+                consumed: 2026-07-03
+                ---
+                > This is a smuggled scope note disguised as a blockquote.
+                > It changes the deliverable requirements.
+                # Test handoff
+                ## Scope
+                Build the widget.
+            """))
+        self.assertFalse(
+            engine._is_handoff_status_only_edit(handoff_path, self.f.workspace),
+            'Arbitrary blockquote (not Actual-deliverable) must NOT pass anti-smuggle')
+
+
+class TestCR166_OC24_OtherChatsExemption(unittest.TestCase):
+    """CR-166: OC-24 must only flag CRs this run filed, not other chats'."""
+
+    def setUp(self):
+        self.f = TempFixture()
+
+    def tearDown(self):
+        self.f.cleanup()
+
+    def test_false_positive_cr_filed_by_other_chat_does_not_fire(self):
+        """CR filed today by a DIFFERENT session → NO fire on this session."""
+        import time
+        today = time.strftime('%Y-%m-%d')
+        other_session = 'other-chat-session-723cb41b'
+
+        register_content = textwrap.dedent(f"""\
+            # Catch Register
+            | CR | Filed | Surfaced by | Surface | Severity | Description | Status |
+            |---|---|---|---|---|---|---|
+            | CR-163 | {today} | {other_session} / hermes-p3-scoping | RGH-19 | blocking | stale substrate | Open |
+        """)
+        self.f.write_file(
+            'second-brain/_meta/handoffs/_review-gate-catch-register.md',
+            register_content)
+
+        exec_log = self.f.write_exec_log(textwrap.dedent("""\
+            ---
+            type: execution-log
+            ---
+            ## What Happened
+            - Fixed the reviewer orchestrator
+            - Shipped completeness checks
+            - No CR-163 here — that's another chat's catch
+        """))
+
+        result = run_rgh19(self.f, exec_log=exec_log, tier='Capture-only')
+        oc24 = [c for c in result.get('checks_run', [])
+                if c.get('name') == 'catches-referenced']
+        self.assertTrue(oc24)
+        self.assertNotEqual(oc24[0]['result'], 'FAIL',
+                            'OC-24 must not fire on CRs filed by other chats')
+
+    def test_true_positive_cr_filed_by_this_session_missing_from_log(self):
+        """CR filed today by THIS session, absent from exec log → MUST fire."""
+        import time
+        today = time.strftime('%Y-%m-%d')
+
+        register_content = textwrap.dedent(f"""\
+            # Catch Register
+            | CR | Filed | Surfaced by | Surface | Severity | Description | Status |
+            |---|---|---|---|---|---|---|
+            | CR-888 | {today} | {self.f.session_id} / this-run | RGH-18/sweep | blocking | real catch | Open |
+        """)
+        self.f.write_file(
+            'second-brain/_meta/handoffs/_review-gate-catch-register.md',
+            register_content)
+
+        exec_log = self.f.write_exec_log(textwrap.dedent("""\
+            ---
+            type: execution-log
+            ---
+            ## What Happened
+            - Did some work
+            - No CR references here
+            - Just regular build steps
+        """))
+
+        result = run_rgh19(self.f, exec_log=exec_log, tier='Capture-only')
+        oc24 = [c for c in result.get('checks_run', [])
+                if c.get('name') == 'catches-referenced']
+        self.assertTrue(oc24)
+        self.assertEqual(oc24[0]['result'], 'FAIL',
+                         'OC-24 must fire on CR filed by this session but missing from exec log')
+
+
+class TestCR165_ReviewerSessionRequired(unittest.TestCase):
+    """CR-165: log-review-pass.py must REJECT a PASS with no --reviewer-session."""
+
+    def setUp(self):
+        self.f = TempFixture()
+        # Create a valid verdict file
+        self.verdict_data = {
+            'verdict': 'PASS',
+            'checks_run': [{'name': 'ground-truth-cross-check', 'result': 'PASS'}],
+            'catches': [],
+            'cost_usd': 0.0,
+            'reviewer_type': 'independent',
+            'mandate_version': '3.0',
+        }
+        self.verdict_path = os.path.join(self.f.state_dir, 'verdict-test.json')
+        with open(self.verdict_path, 'w') as fv:
+            json.dump(self.verdict_data, fv)
+
+        # Create a registered reviewer session
+        self.reviewer_session = 'a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'
+        marker_path = os.path.join(self.f.state_dir,
+                                   f'{self.reviewer_session}-role.json')
+        with open(marker_path, 'w') as fm:
+            json.dump({'role': 'reviewer',
+                       'reviewing_session': self.f.session_id}, fm)
+
+        # Create a firing tracker with a row for the run
+        self.f.write_file(
+            'second-brain/_meta/handoffs/_review-skill-firing-tracker.md',
+            '| test-run-id | Gate | Yes | ... |\n')
+
+        # Write a dummy file to review
+        self.reviewed_file = self.f.write_file(
+            'repos/test-repo/feature.py', 'print("hello")')
+
+    def tearDown(self):
+        self.f.cleanup()
+
+    def test_no_reviewer_session_rejects(self):
+        """log-review-pass with NO --reviewer-session → REJECTED."""
+        log_script = os.path.join(SCRIPT_DIR, 'log-review-pass.py')
+        cmd = [
+            sys.executable, log_script,
+            '--session', self.f.session_id,
+            '--files', self.reviewed_file,
+            '--verdict', 'PASS',
+            '--tier', 'full',
+            '--gate-id', 'G-default',
+            '--verdict-file', self.verdict_path,
+            # NO --reviewer-session
+        ]
+        env = os.environ.copy()
+        env['REVIEW_GATE_STATE_DIR'] = self.f.state_dir
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
+                              env=env)
+        self.assertNotEqual(proc.returncode, 0,
+                            'Must REJECT when --reviewer-session is omitted')
+        self.assertIn('REJECTED', proc.stderr,
+                      'Error message must contain REJECTED')
+        self.assertIn('CR-165', proc.stderr,
+                      'Error must reference CR-165')
+
+    def test_unregistered_reviewer_session_rejects(self):
+        """log-review-pass with an unregistered UUID → REJECTED."""
+        log_script = os.path.join(SCRIPT_DIR, 'log-review-pass.py')
+        fake_uuid = 'aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee'
+        cmd = [
+            sys.executable, log_script,
+            '--session', self.f.session_id,
+            '--files', self.reviewed_file,
+            '--verdict', 'PASS',
+            '--tier', 'full',
+            '--gate-id', 'G-default',
+            '--verdict-file', self.verdict_path,
+            '--reviewer-session', fake_uuid,
+        ]
+        env = os.environ.copy()
+        env['REVIEW_GATE_STATE_DIR'] = self.f.state_dir
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
+                              env=env)
+        self.assertNotEqual(proc.returncode, 0,
+                            'Must REJECT unregistered reviewer session')
+        self.assertIn('REJECTED', proc.stderr)
+
+    def test_registered_reviewer_session_passes(self):
+        """log-review-pass with a genuinely registered reviewer → PASSES.
+
+        Uses --reviewer-type producer (not independent) to test the
+        universal --reviewer-session requirement without needing the
+        firing-tracker (which requires WORKSPACE_ROOT resolution).
+        The independent-specific firing-tracker check is tested by
+        the existing conformance suite.
+        """
+        log_script = os.path.join(SCRIPT_DIR, 'log-review-pass.py')
+        cmd = [
+            sys.executable, log_script,
+            '--session', self.f.session_id,
+            '--files', self.reviewed_file,
+            '--verdict', 'PASS',
+            '--tier', 'full',
+            '--gate-id', 'G-default',
+            '--verdict-file', self.verdict_path,
+            '--reviewer-type', 'producer',
+            '--reviewer-session', self.reviewer_session,
+        ]
+        env = os.environ.copy()
+        env['REVIEW_GATE_STATE_DIR'] = self.f.state_dir
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
+                              env=env)
+        self.assertEqual(proc.returncode, 0,
+                         f'Registered reviewer must PASS. stderr: {proc.stderr}')
+        self.assertIn('Logged PASS', proc.stdout,
+                      'Should confirm the PASS was logged')
+
+
+class TestE2E_SyntheticCleanClose(unittest.TestCase):
+    """AC-4: synthetic clean close with reviewed deliverable + bookkeeping
+    lands green with zero gate-skip."""
+
+    def setUp(self):
+        self.f = TempFixture()
+
+    def tearDown(self):
+        self.f.cleanup()
+
+    def test_clean_close_with_bookkeeping_passes_gate(self):
+        """Reviewed deliverable + normal bookkeeping (including BASH event-log
+        append) → gate PASS (no skip). This is the full close shape."""
+        import sys as _sys
+        _sys.path.insert(0, SCRIPT_DIR)
+        import engine
+
+        session_id = self.f.session_id
+        reviewer_session = 'r1e2v3i4-e5w6-4e7r-8s9e-0s1s2i3o4n5d'
+
+        # 1. Create a deliverable file (already reviewed)
+        deliverable = self.f.write_file(
+            'repos/test-repo/feature.py', 'print("delivered")')
+
+        # 2. Create bookkeeping files (the close paperwork)
+        tracker = self.f.write_file(
+            'second-brain/_meta/handoffs/_active-chats-tracker.md',
+            '# Tracker\n| row |\n')
+        changelog = self.f.write_file(
+            'second-brain/_meta/handoffs/_active-chats-tracker-changelog.md',
+            '### Pass 356\nClosed the chat.\n')
+        recently_closed = self.f.write_file(
+            'second-brain/_meta/handoffs/_recently-closed.md',
+            '# Recently closed\n| chat | outcome |\n')
+        event_log = self.f.write_file(
+            'second-brain/_meta/_event-log.md',
+            '| 2026-07-03 | shipped |\n')
+        firing_tracker = self.f.write_file(
+            'second-brain/_meta/handoffs/_review-skill-firing-tracker.md',
+            '| run | gate | yes |\n')
+
+        # 3. BASH event-log append command (the exact close-out pattern)
+        bash_event_log_cmd = (
+            f"printf '| 2026-07-03 | shipped |\\n' >> {event_log}")
+        bash_entry_key = engine.bash_entry_id(bash_event_log_cmd)
+
+        # 4. Write dirty ledger with all files INCLUDING BASH entries
+        now = 1000.0
+        dirty_entries = [
+            {'file_path': deliverable, 'timestamp': now,
+             'tool': 'Write', 'tier': 'full', 'entry_source': 'producer',
+             'source': 'claude-code'},
+            {'file_path': tracker, 'timestamp': now + 1,
+             'tool': 'Edit', 'tier': 'full', 'entry_source': 'producer',
+             'source': 'claude-code'},
+            {'file_path': changelog, 'timestamp': now + 2,
+             'tool': 'Write', 'tier': 'full', 'entry_source': 'producer',
+             'source': 'claude-code'},
+            {'file_path': recently_closed, 'timestamp': now + 3,
+             'tool': 'Edit', 'tier': 'full', 'entry_source': 'producer',
+             'source': 'claude-code'},
+            {'file_path': event_log, 'timestamp': now + 4,
+             'tool': 'Edit', 'tier': 'full', 'entry_source': 'producer',
+             'source': 'claude-code'},
+            {'file_path': firing_tracker, 'timestamp': now + 5,
+             'tool': 'Edit', 'tier': 'full', 'entry_source': 'producer',
+             'source': 'claude-code'},
+            # BASH event-log append — the entry that was missing from Fix B
+            {'file_path': bash_entry_key, 'timestamp': now + 6,
+             'tool': 'Bash', 'tier': 'full', 'entry_source': 'producer',
+             'source': 'claude-code',
+             'bash_cmd': bash_event_log_cmd,
+             'display': bash_event_log_cmd},
+        ]
+        self.f.write_dirty_ledger(dirty_entries)
+
+        # 5. Write a reviewed-ledger entry for the deliverable (cleared by
+        #    a genuinely registered independent reviewer)
+        reviewed_entry = {
+            'timestamp': now + 0.5,
+            'file_path': deliverable,
+            'verdict': 'PASS',
+            'tier': 'full',
+            'gate_id': 'G-independent',
+            'evidence': 'independent review PASS',
+            'verdict_file': '/tmp/verdict.json',
+            'verdict_data': {'verdict': 'PASS',
+                             'checks_run': [{'name': 'ground-truth-cross-check',
+                                             'result': 'PASS'}],
+                             'catches': [], 'cost_usd': 0.0},
+            'reviewer_type': 'independent',
+            'reviewer_session': reviewer_session,
+        }
+        reviewed_path = os.path.join(
+            self.f.state_dir, f'{session_id}-reviewed.jsonl')
+        os.makedirs(self.f.state_dir, exist_ok=True)
+        with open(reviewed_path, 'w') as f:
+            f.write(json.dumps(reviewed_entry) + '\n')
+
+        # 6. Register the reviewer session
+        marker_path = os.path.join(
+            self.f.state_dir, f'{reviewer_session}-role.json')
+        with open(marker_path, 'w') as fm:
+            json.dump({'role': 'reviewer',
+                       'reviewing_session': session_id}, fm)
+
+        # 7. Run the gate check — should PASS (bookkeeping exempt including
+        #    BASH event-log append, deliverable reviewed by independent)
+        result = engine.check_gate(
+            state_dir=self.f.state_dir,
+            session_id=session_id,
+            workspace_root=self.f.workspace,
+            included_sources=frozenset({'claude-code', ''}),
+            attempt_auto_clear=True,
+        )
+
+        self.assertIn(result.status, ('clear', 'clean', 'auto-cleared', 'exempt'),
+                      f'Gate must PASS on clean close with bookkeeping + BASH. '
+                      f'Got status={result.status}, '
+                      f'unreviewed={[e.get("file_path") for e in result.unreviewed]}')
 
 
 if __name__ == '__main__':

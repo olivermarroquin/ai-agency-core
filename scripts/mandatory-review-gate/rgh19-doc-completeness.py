@@ -325,7 +325,14 @@ def check_oc23_pattern_candidates(exec_log_path):
 
 def check_oc24_catches_referenced(exec_log_path, state_dir, session_id,
                                    workspace_root=None):
-    """Every CR-### filed this run must appear in exec log or lessons."""
+    """Every CR-### filed THIS RUN must appear in exec log or lessons.
+
+    CR-166 fix: only require the exec log to reference CRs that THIS run
+    filed or resolved — not every CR that happens to carry today's date.
+    Ownership is determined by matching the session_id in the "surfaced by"
+    column (col 3) of the catch register. Falls back to today's-date +
+    session-match for robustness.
+    """
     ws = workspace_root or WORKSPACE_ROOT
     result = {
         'check': 'OC-24', 'check_name': 'catches-referenced',
@@ -360,42 +367,52 @@ def check_oc24_catches_referenced(exec_log_path, state_dir, session_id,
         result['summary'] = 'cannot read catch register'
         return result
 
-    # Find all CR-### numbers that reference this session's chat ID
-    # The session_id may appear as a chat ID in the register rows
-    # Also look for today's date as a proxy
     today = time.strftime('%Y-%m-%d')
     cr_pattern = re.compile(r'CR-(\d+)')
 
-    # Find CRs filed today — parse the FILING DATE from COLUMN 2 ONLY.
-    # The catch register is a markdown table: | CR-NNN | filing-date | ... |
-    # Previously matched today's date anywhere in the row, which false-fired
-    # on rows being RESOLVED today (resolution date in a later column) even
-    # though the CR was filed weeks ago. (CR-160 class 1: OC-24 date mis-parse.)
-    todays_crs = set()
+    # CR-166 fix: find CRs that THIS RUN owns.
+    # A CR belongs to this run if BOTH:
+    #   (a) filed today (col 2 = filing date), AND
+    #   (b) the "surfaced by" column (col 3) contains this session_id
+    # This prevents flagging CRs filed by OTHER parallel chats that happen
+    # to carry today's date. (Evidence: RO-FIX blocked on CR-163, which
+    # the hermes-p3 chat filed — session 723cb41b, not RO-FIX's session.)
+    #
+    # The catch register table format:
+    # | CR-NNN | filing-date | surfaced-by / session | surface | type | desc | sev | ... |
+    this_runs_crs = set()
     for line in register_content.splitlines():
         # Only process table rows (lines starting with |)
         if not line.strip().startswith('|'):
             continue
         cols = [c.strip() for c in line.split('|')]
-        # cols[0] is empty (before first |), cols[1] = CR-NNN, cols[2] = filing date
-        if len(cols) < 3:
+        # cols[0] is empty (before first |), cols[1] = CR-NNN,
+        # cols[2] = filing date, cols[3] = surfaced-by/session
+        if len(cols) < 4:
             continue
         filing_date_col = cols[2]
-        if today in filing_date_col:
-            for m in cr_pattern.finditer(cols[1]):
-                todays_crs.add(f'CR-{m.group(1)}')
+        surfaced_by_col = cols[3] if len(cols) > 3 else ''
 
-    if not todays_crs:
-        result['summary'] = 'no CRs filed today'
+        # Must be filed today
+        if today not in filing_date_col:
+            continue
+
+        # Must be surfaced by THIS session (session_id appears in col 3)
+        if session_id and session_id in surfaced_by_col:
+            for m in cr_pattern.finditer(cols[1]):
+                this_runs_crs.add(f'CR-{m.group(1)}')
+
+    if not this_runs_crs:
+        result['summary'] = 'no CRs filed by this session today'
         result['results'].append({
-            'name': 'no-todays-crs', 'verdict': 'PASS',
-            'details': 'no CRs to cross-reference',
+            'name': 'no-own-crs', 'verdict': 'PASS',
+            'details': 'no CRs to cross-reference for this session',
         })
         return result
 
     # Check each CR appears in exec log
     missing = []
-    for cr_id in sorted(todays_crs):
+    for cr_id in sorted(this_runs_crs):
         if cr_id not in exec_content:
             missing.append(cr_id)
 
@@ -403,17 +420,19 @@ def check_oc24_catches_referenced(exec_log_path, state_dir, session_id,
         result['verdict'] = 'FAIL'
         for cr_id in missing:
             result['results'].append({
-                'name': f'cr-not-in-exec-log', 'verdict': 'FAIL',
-                'details': f'{cr_id} filed today but not referenced in exec log',
+                'name': 'cr-not-in-exec-log', 'verdict': 'FAIL',
+                'details': (f'{cr_id} filed today by this session but '
+                            f'not referenced in exec log'),
             })
     else:
         result['results'].append({
             'name': 'all-crs-referenced', 'verdict': 'PASS',
-            'details': f'{len(todays_crs)} CRs filed today, all in exec log',
+            'details': (f'{len(this_runs_crs)} CRs filed by this session '
+                        f'today, all in exec log'),
         })
 
-    result['summary'] = (f'{len(todays_crs) - len(missing)}/{len(todays_crs)} '
-                          f'CRs referenced')
+    result['summary'] = (f'{len(this_runs_crs) - len(missing)}/'
+                          f'{len(this_runs_crs)} CRs referenced')
     return result
 
 

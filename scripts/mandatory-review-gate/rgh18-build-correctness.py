@@ -71,6 +71,30 @@ SPEC_REFERENCE_DIR_NAMES = frozenset([
     'templates',
 ])
 
+# Source-code file extensions: these legitimately contain placeholder trigger
+# words (FILL, TODO, PLACEHOLDER) as string literals, regex patterns, or
+# variable names — not as unresolved deliverable placeholders. Exempting them
+# from the FULL-FILE bare-word placeholder sweep prevents false-positive
+# blocks on gate code, test files, and scripts. (CR-161 class 1.)
+# Deliverable markdown/prose files are NOT exempt.
+SOURCE_CODE_EXTENSIONS = frozenset([
+    '.py', '.js', '.ts', '.jsx', '.tsx', '.sh', '.bash',
+    '.rb', '.go', '.rs', '.java', '.c', '.cpp', '.h', '.hpp',
+    '.yaml', '.yml', '.json', '.toml',
+])
+
+
+def _is_source_code_file(file_path):
+    """Check if a file is source code (not a prose/deliverable doc).
+
+    Source-code files legitimately contain placeholder trigger words as
+    string literals, regex patterns, or variable/constant names. They
+    should be exempt from the full-file bare-word placeholder sweep but
+    NOT from the leak audit or link resolution checks. (CR-161 class 1.)
+    """
+    _, ext = os.path.splitext(file_path)
+    return ext.lower() in SOURCE_CODE_EXTENSIONS
+
 
 def _is_spec_reference_doc(file_path):
     """Check if a file is a spec/reference/template-documenting doc.
@@ -351,7 +375,9 @@ def run_all_dirty_file_sweep(state_dir, session_id):
 
         # CR-160 class 2: spec/reference/template docs get placeholder
         # exemption (tokens are documented syntax, not unresolved deliverables)
-        skip_ph = _is_spec_reference_doc(fp)
+        # CR-161 class 1: source-code files get placeholder exemption
+        # (trigger words are string literals/regex, not unresolved placeholders)
+        skip_ph = _is_spec_reference_doc(fp) or _is_source_code_file(fp)
 
         if _is_append_only(fp):
             # DIFF-AWARE: only check added lines

@@ -67,6 +67,70 @@ def main():
     if args.verdict == 'BLOCKING' and not args.findings:
         parser.error('--findings is required when verdict is BLOCKING')
 
+    # CR-165 fix: --reviewer-session is REQUIRED on ALL paths.
+    # Previously, --reviewer-session was only validated when
+    # --reviewer-type=independent. Omitting --reviewer-type entirely
+    # (defaulting to 'producer') allowed a PASS with no reviewer session,
+    # bypassing RGH-15's fabricated-verdict guard entirely.
+    # Now: every PASS must have a registered reviewer session, regardless
+    # of reviewer-type. No code path logs a PASS without it.
+    if not args.reviewer_session:
+        print('[review-gate] REJECTED: --reviewer-session is required. '
+              'Every review-pass marker must identify the reviewer session '
+              '(a valid UUID v4, registered via register-reviewer-session.py, '
+              'distinct from the producer session). A verdict with no '
+              'reviewer-session is rejected. (CR-165 / RGH-18/19-CAL-2)',
+              file=sys.stderr)
+        sys.exit(1)
+
+    # Validate reviewer-session format: must be a valid UUID v4
+    import re as _re
+    _UUID4_RE = _re.compile(
+        r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+        _re.IGNORECASE)
+    if not _UUID4_RE.match(args.reviewer_session):
+        print(f'[review-gate] REJECTED: --reviewer-session '
+              f'("{args.reviewer_session}") is not a valid UUID v4. '
+              f'(CR-165 / RGH-18/19-CAL-2)',
+              file=sys.stderr)
+        sys.exit(1)
+
+    # Reviewer session must differ from producer session
+    if args.reviewer_session == args.session:
+        print(f'[review-gate] REJECTED: --reviewer-session equals --session '
+              f'("{args.session}"). The reviewer must be a separate session. '
+              f'(CR-165 / RGH-18/19-CAL-2)',
+              file=sys.stderr)
+        sys.exit(1)
+
+    # Reviewer session must be registered (role marker exists)
+    _reviewer_marker = os.path.join(STATE_DIR, f'{args.reviewer_session}-role.json')
+    if not os.path.isfile(_reviewer_marker):
+        print(f'[review-gate] REJECTED: --reviewer-session '
+              f'("{args.reviewer_session}") has no registered role marker '
+              f'at {_reviewer_marker}. Register via '
+              f'register-reviewer-session.py first. '
+              f'(CR-165 / RGH-18/19-CAL-2)',
+              file=sys.stderr)
+        sys.exit(1)
+
+    # Validate the marker contents
+    try:
+        with open(_reviewer_marker, 'r') as _mf:
+            _marker_data = json.load(_mf)
+        if _marker_data.get('role') != 'reviewer':
+            print(f'[review-gate] REJECTED: role marker for '
+                  f'"{args.reviewer_session}" has role='
+                  f'{_marker_data.get("role")!r}, expected "reviewer". '
+                  f'(CR-165 / RGH-18/19-CAL-2)',
+                  file=sys.stderr)
+            sys.exit(1)
+    except (json.JSONDecodeError, OSError) as _e:
+        print(f'[review-gate] REJECTED: could not read role marker '
+              f'{_reviewer_marker}: {_e}. (CR-165 / RGH-18/19-CAL-2)',
+              file=sys.stderr)
+        sys.exit(1)
+
     # Verdict file is now required — reject bare --evidence
     if not args.verdict_file:
         print('[review-gate] REJECTED: --verdict-file is required. '
@@ -97,79 +161,14 @@ def main():
                   file=sys.stderr)
             sys.exit(1)
 
-    # CR-045 / RGH-8: reviewer-independence enforcement.
-    # Sub-agents inherit the parent session_id (confirmed real-runner 2026-06-12,
-    # CC v2.1.85). If reviewer_session == producer session, the "independent"
-    # reviewer is actually an in-session sub-agent — reject.
+    # CR-045 / RGH-8: additional independent-reviewer-specific checks.
+    # The universal reviewer-session checks (UUID v4, registered, != producer)
+    # are now enforced above for ALL reviewer types (CR-165 fix).
+    # The independent-type-specific checks below validate the verdict schema
+    # and the firing-tracker rows.
     if args.reviewer_type == 'independent':
-        if not args.reviewer_session:
-            print('[review-gate] REJECTED: --reviewer-session is required when '
-                  '--reviewer-type=independent. The independent reviewer must '
-                  'supply its own session ID so we can verify it differs from '
-                  'the producer session. (CR-045 / RGH-8)',
-                  file=sys.stderr)
-            sys.exit(1)
-
-        if args.reviewer_session == args.session:
-            print('[review-gate] REJECTED: --reviewer-session equals --session '
-                  f'("{args.session}"). An in-session sub-agent inherits the '
-                  f'producer\'s session_id and cannot provide independent review. '
-                  f'Only a SEPARATE-SESSION reviewer (distinct session ID) '
-                  f'satisfies the independent-review mandate. '
-                  f'(CR-045 / RGH-8)',
-                  file=sys.stderr)
-            sys.exit(1)
-
-        # RGH-15A check 1: reviewer_session must be a valid UUID v4.
-        # A fabricated string like "separate-session-reviewer-g3ev-20260624"
-        # fails this alone. (CR-103)
-        import re as _re
-        _UUID4_RE = _re.compile(
-            r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
-            _re.IGNORECASE)
-        if not _UUID4_RE.match(args.reviewer_session):
-            print(f'[review-gate] REJECTED: --reviewer-session '
-                  f'("{args.reviewer_session}") is not a valid UUID v4. '
-                  f'Claude Code session IDs are UUID v4 strings. A non-UUID '
-                  f'reviewer_session indicates a fabricated identity. (CR-103 / RGH-15)',
-                  file=sys.stderr)
-            sys.exit(1)
-
-        # RGH-15A check 2: reviewer_session must be in the reviewer-session
-        # registry — a <session>-role.json marker must exist. This proves a
-        # real separate session registered itself via register-reviewer-session.py.
-        # A producer fabricating a plausible UUID fails this check. (CR-103)
-        reviewer_marker_path = os.path.join(
-            STATE_DIR, f'{args.reviewer_session}-role.json')
-        if not os.path.isfile(reviewer_marker_path):
-            print(f'[review-gate] REJECTED: --reviewer-session '
-                  f'("{args.reviewer_session}") has no registered role marker '
-                  f'at {reviewer_marker_path}. The reviewer must register via '
-                  f'register-reviewer-session.py before its verdict is accepted. '
-                  f'(CR-103 / RGH-15)',
-                  file=sys.stderr)
-            sys.exit(1)
-
-        # Validate the marker contents
-        try:
-            with open(reviewer_marker_path, 'r') as _mf:
-                _marker = json.load(_mf)
-            if _marker.get('role') != 'reviewer':
-                print(f'[review-gate] REJECTED: role marker for '
-                      f'"{args.reviewer_session}" has role={_marker.get("role")!r}, '
-                      f'expected "reviewer". (CR-103 / RGH-15)',
-                      file=sys.stderr)
-                sys.exit(1)
-        except (json.JSONDecodeError, OSError) as _e:
-            print(f'[review-gate] REJECTED: could not read role marker '
-                  f'{reviewer_marker_path}: {_e}. (CR-103 / RGH-15)',
-                  file=sys.stderr)
-            sys.exit(1)
-
         # RGH-15A check 3: reviewer session should have dirty-ledger activity
-        # (proof it actually ran verification). A registered-but-inert session
-        # is suspicious. WARNING only — not blocking, since a reviewer may
-        # legitimately register before its first Bash command.
+        # (proof it actually ran verification). WARNING only — not blocking.
         reviewer_ledger = os.path.join(
             STATE_DIR, f'{args.reviewer_session}-dirty.jsonl')
         if not os.path.isfile(reviewer_ledger):

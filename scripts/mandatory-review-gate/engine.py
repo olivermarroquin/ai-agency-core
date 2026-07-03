@@ -1275,6 +1275,237 @@ PROTOCOL_EXEMPT_RELPATHS = frozenset({
 })
 
 
+# ============================================================================
+# Close-out bookkeeping exemption (CR-161 class 2)
+# ============================================================================
+#
+# Pure close-out bookkeeping files are written AFTER the independent review
+# completes (they ARE the act of closing). Requiring independent review of
+# them creates an impossible dependency: the paperwork can never be pre-
+# reviewed because it doesn't exist until after the review. This forced an
+# operator gate-skip on every close (observed 5x in a row 2026-07-02..03).
+#
+# Fix: classify these files as bookkeeping-exempt. They still get cheap
+# deterministic checks (placeholder sweep, leak audit, link resolution)
+# via fast-path auto-clear — they are exempt only from the FULL-TIER
+# INDEPENDENT-REVIEW requirement.
+#
+# ANTI-SMUGGLE GUARD (load-bearing): a file is only bookkeeping-exempt if
+# its CONTENT matches the bookkeeping shape. A handoff edit that changes
+# scope/AC text (not just status: flip) is NOT exempt. A tracker edit that
+# embeds new deliverable content is NOT exempt. The classifier checks both
+# the file path AND the diff shape.
+
+BOOKKEEPING_BASENAMES = frozenset({
+    '_active-chats-tracker.md',
+    '_active-chats-tracker-changelog.md',
+    '_recently-closed.md',
+    '_event-log.md',
+    '_review-skill-firing-tracker.md',
+})
+
+# Handoff files: exempt ONLY when the edit is a pure status/consumed flip
+# (frontmatter-only change or Actual-deliverable blockquote addition).
+# Scope/AC/body changes are NOT exempt.
+BOOKKEEPING_HANDOFF_DIR = 'handoffs'
+
+
+def _is_bookkeeping_basename(file_path: str) -> bool:
+    """Check if a file is a known bookkeeping file by basename."""
+    return os.path.basename(file_path) in BOOKKEEPING_BASENAMES
+
+
+def _is_handoff_status_only_edit(file_path: str, workspace_root: str) -> bool:
+    """Check if a handoff file edit is a pure status/consumed flip.
+
+    Returns True only if the diff shows ONLY:
+    - YAML frontmatter field changes (status, consumed, updated, priority, etc.)
+    - An Actual-deliverable blockquote addition (> **Actual deliverable:** ...)
+    - Empty lines
+
+    Scope, acceptance criteria, or body content changes cause False.
+    This is the anti-smuggle guard.
+    """
+    basename = os.path.basename(file_path)
+    if not basename.startswith('handoff-') or not basename.endswith('.md'):
+        return False
+
+    # Must be in a handoffs directory
+    if BOOKKEEPING_HANDOFF_DIR not in file_path:
+        return False
+
+    # Get the diff to inspect what changed
+    import subprocess
+    repo_root = None
+    d = os.path.dirname(os.path.realpath(file_path))
+    while d != '/':
+        if os.path.isdir(os.path.join(d, '.git')):
+            repo_root = d
+            break
+        d = os.path.dirname(d)
+
+    if not repo_root:
+        return False  # can't verify — fail closed
+
+    rel_path = os.path.relpath(os.path.realpath(file_path), repo_root)
+
+    # Check if tracked
+    proc = subprocess.run(
+        ['git', 'ls-files', '--error-unmatch', rel_path],
+        capture_output=True, text=True, cwd=repo_root)
+    if proc.returncode != 0:
+        return False  # untracked — can't verify diff
+
+    # Get diff
+    proc = subprocess.run(
+        ['git', 'diff', 'HEAD', '--', rel_path],
+        capture_output=True, text=True, cwd=repo_root, timeout=30)
+    if proc.returncode != 0 or not proc.stdout.strip():
+        return False  # no diff or error
+
+    # Analyze added/removed lines (skip diff headers)
+    added_lines = []
+    removed_lines = []
+    for line in proc.stdout.splitlines():
+        if line.startswith('+++') or line.startswith('---'):
+            continue
+        if line.startswith('+'):
+            added_lines.append(line[1:])
+        elif line.startswith('-'):
+            removed_lines.append(line[1:])
+
+    # Allowed patterns for bookkeeping edits (BLOCKING-1 tightened):
+    #
+    # ANTI-SMUGGLE (load-bearing): a body line like "note: weakened AC"
+    # or "fix: remove safety check" looks like YAML but is scope content.
+    # The old regex `[a-z]...:` matched ANY key: value — defeated.
+    # Fix: explicit allowlist of known handoff frontmatter keys only.
+    #
+    # Blockquote: only the Actual-deliverable blockquote is exempt, not
+    # arbitrary blockquotes. The opener `> **Actual deliverable` and its
+    # continuations (lines starting with `>`) are allowed ONLY after the
+    # opener has been seen. This prevents smuggling scope via blockquote.
+    _BOOKKEEPING_FM_KEYS = frozenset({
+        'status', 'consumed', 'updated', 'created', 'priority', 'type',
+        'purpose', 'spawned-from', 'preferred-substrate', 'depends-on',
+        'tags', 'immutable', 'skill', 'skill-version', 'description',
+        'last-change', 'client', 'milestone', 'category', 'confidence',
+        'times-observed', 'domains', 'venture',
+    })
+    _fm_key_pattern = '|'.join(re.escape(k) for k in sorted(_BOOKKEEPING_FM_KEYS))
+    _BOOKKEEPING_FM_RE = re.compile(
+        r'^(?:' + _fm_key_pattern + r'):\s', re.IGNORECASE)
+
+    # Two-pass: first check all lines are in the allowed set.
+    # Track whether we're inside an Actual-deliverable blockquote.
+    in_actual_blockquote = False
+
+    for line in added_lines + removed_lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+
+        # YAML frontmatter delimiters
+        if re.match(r'^-{3}\s*$', stripped):
+            continue
+
+        # Known frontmatter keys only
+        if _BOOKKEEPING_FM_RE.match(stripped):
+            continue
+
+        # Actual-deliverable blockquote opener
+        if re.match(r'^>\s*\*\*Actual\s+deliverable', stripped, re.IGNORECASE):
+            in_actual_blockquote = True
+            continue
+
+        # Blockquote continuation — only if we're inside the Actual block
+        if in_actual_blockquote and stripped.startswith('>'):
+            continue
+
+        # Empty blockquote line resets (end of blockquote block)
+        if in_actual_blockquote and not stripped.startswith('>'):
+            in_actual_blockquote = False
+
+        # Anything else is non-bookkeeping content — NOT exempt
+        return False
+
+    return True
+
+
+def _is_bash_bookkeeping(entry: dict) -> bool:
+    """Check if a BASH dirty-ledger entry targets a bookkeeping file.
+
+    A BASH entry is bookkeeping when its command writes (via >> or >)
+    to a file whose basename is in BOOKKEEPING_BASENAMES. This covers
+    the common close-out pattern: `printf '...' >> _event-log.md`.
+
+    The command is extracted from the entry's 'bash_cmd' or 'display'
+    field (the human-readable command text stored alongside the hash key).
+    """
+    bash_cmd = entry.get('bash_cmd', entry.get('display', ''))
+    if not bash_cmd:
+        return False
+
+    # Extract write targets from >> or > redirects
+    # Strip stderr redirects first, then find stdout redirects
+    cleaned = re.sub(r'2>>&?\d*', '', bash_cmd)
+    cleaned = re.sub(r'2>/dev/null', '', cleaned)
+    cleaned = re.sub(r'2>&\d+', '', cleaned)
+    cleaned = re.sub(r'2>\s*\S+', '', cleaned)
+
+    # Find >> or > targets (not preceded by a digit = not fd redirect)
+    targets = re.findall(r'(?<!\d)>{1,2}\s*(\S+)', cleaned)
+
+    if not targets:
+        return False
+
+    # Every write target must be a bookkeeping basename
+    for target in targets:
+        target_clean = target.strip("'\"")
+        if os.path.basename(target_clean) not in BOOKKEEPING_BASENAMES:
+            return False
+
+    return True
+
+
+def is_bookkeeping_entry(entry_or_path, workspace_root: str) -> bool:
+    """Classify a dirty-ledger entry as close-out bookkeeping.
+
+    Accepts either a full entry dict (from dirty ledger) or a file_path
+    string (backward compat). When given a dict, also checks BASH entries
+    for bookkeeping write targets.
+
+    Returns True if the entry is a pure bookkeeping file that should be
+    exempt from the full-tier independent-review requirement. The file
+    still gets fast-path deterministic checks (placeholder, leak, link).
+
+    ANTI-SMUGGLE: handoff edits are only exempt if they are pure
+    status/consumed flips. Content changes still gate. BASH entries
+    are only exempt if ALL their write targets are bookkeeping basenames.
+    """
+    # Accept either dict or string
+    if isinstance(entry_or_path, dict):
+        file_path = entry_or_path.get('file_path', '')
+        entry = entry_or_path
+    else:
+        file_path = entry_or_path
+        entry = {'file_path': file_path}
+
+    # BASH entries: check if command writes to bookkeeping files
+    if file_path.startswith('BASH:'):
+        return _is_bash_bookkeeping(entry)
+
+    # Known bookkeeping basenames — always exempt
+    if _is_bookkeeping_basename(file_path):
+        return True
+
+    # Handoff files — exempt ONLY for status-only edits
+    if _is_handoff_status_only_edit(file_path, workspace_root):
+        return True
+
+    return False
+
+
 def is_all_protocol_exempt(unreviewed: list, workspace_root: str) -> bool:
     """Return True if every unreviewed entry is a protocol-exempt file."""
     exempt_abspaths = frozenset(
@@ -1716,14 +1947,37 @@ def check_gate(
 
     unreviewed = unreviewed_producer
 
+    # CR-161 class 2: close-out bookkeeping exemption.
+    # Pure bookkeeping files (tracker, changelog, _recently-closed, event-log,
+    # firing-tracker, handoff status-only flips) are exempt from the full-tier
+    # independent-review requirement. They still get fast-path auto-clear
+    # checks (placeholder, leak, link). Anti-smuggle: handoff edits with
+    # scope/content changes are NOT exempt.
+    bookkeeping_keys = set()
+    if unreviewed:
+        still_gated = []
+        for e in unreviewed:
+            fp = e.get('file_path', '')
+            if is_bookkeeping_entry(e, workspace_root):
+                bookkeeping_keys.add(fp)
+            else:
+                still_gated.append(e)
+        if bookkeeping_keys:
+            log_metrics(state_dir, session_id, 'bookkeeping-exempt',
+                        len(bookkeeping_keys), 'n/a', 0,
+                        extra={'bookkeeping_files': list(bookkeeping_keys)})
+        unreviewed = still_gated
+
     if not unreviewed:
-        # All files have review markers OR are source-exempt — but full-tier
-        # producer items require independent review (RGH-5). Check only
-        # producer entries for the independent-review requirement.
+        # All files have review markers OR are source-exempt OR bookkeeping —
+        # but full-tier producer items require independent review (RGH-5).
+        # Check only non-exempt producer entries for the independent-review
+        # requirement.
         producer_dirty = [
             e for e in dirty_entries
             if e.get('entry_source', 'producer') not in _EXEMPT_ENTRY_SOURCES
             and e.get('file_path', '') not in session_exempt_keys
+            and e.get('file_path', '') not in bookkeeping_keys
         ]
         if producer_dirty:
             tier = determine_review_tier(producer_dirty)
