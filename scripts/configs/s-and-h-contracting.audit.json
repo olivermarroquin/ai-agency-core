@@ -1,0 +1,50 @@
+{
+  "client_slug": "s-and-h-contracting",
+  "domain": "shcontractingunlimited.com",
+  "sitemap_url": "https://shcontractingunlimited.com/sitemap_index.xml",
+  "wp_rest_base": "https://shcontractingunlimited.com",
+  "expected_page_count": 34,
+  "flag_threshold": 0.40,
+  "critical_threshold": 0.60,
+  "output_dir": "/Users/olivermarroquin/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting",
+  "gsc_reason_code_file": null,
+  "strip_tokens": {
+    "cities": [
+      "alexandria", "burke", "dale-city", "dale", "city",
+      "lake-ridge", "lake", "ridge", "lorton", "manassas",
+      "springfield", "stafford", "woodbridge"
+    ],
+    "brand": [
+      "s&h", "s-and-h", "sh", "contracting", "unlimited"
+    ],
+    "owner": [
+      "mohammed", "salahuddin"
+    ],
+    "state": [
+      "va", "virginia"
+    ]
+  },
+  "grouping_rules": {
+    "service_prefixes": [
+      "emergency-electrician",
+      "ev-charger-installation",
+      "panel-upgrade",
+      "light-fixture-installation"
+    ],
+    "city_suffixes": [
+      "alexandria-va", "burke-va", "dale-city-va",
+      "lake-ridge-va", "lorton-va", "manassas-va",
+      "springfield-va", "stafford-va", "woodbridge-va"
+    ],
+    "hub_slugs": [
+      "emergency-electrician",
+      "ev-charger-installation",
+      "panel-upgrade",
+      "light-fixture-installation",
+      "service-areas"
+    ],
+    "exclude_slugs": [
+      "emergency-electrical-assistance"
+    ]
+  }
+}

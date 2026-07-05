@@ -1,0 +1,71 @@
+{
+  "client_slug": "ev-electric-services",
+  "domain": "evelectric.pro",
+  "sitemap_url": "https://evelectric.pro/sitemap_index.xml",
+  "wp_rest_base": "https://evelectric.pro",
+  "expected_page_count": 58,
+  "flag_threshold": 0.40,
+  "critical_threshold": 0.60,
+  "output_dir": "/Users/olivermarroquin/workspace/second-brain/04_projects/clients/_active/ev-electric-services",
+  "gsc_reason_code_file": null,
+  "strip_tokens": {
+    "cities": [
+      "vienna", "fairfax", "oakton", "mclean", "tysons",
+      "burke", "annandale", "falls-church", "falls", "church",
+      "bethesda", "chevy-chase", "chevy", "chase",
+      "potomac", "rockville", "washington", "dc", "gaithersburg"
+    ],
+    "brand": [
+      "ev", "electric", "evelectric"
+    ],
+    "owner": [
+      "ahmad", "shaban"
+    ],
+    "state": [
+      "va", "md", "virginia", "maryland"
+    ]
+  },
+  "grouping_rules": {
+    "service_prefixes": [
+      "electrical-troubleshooting",
+      "panel-upgrade",
+      "ev-charger",
+      "light-fixture-installation",
+      "smoke-alarm",
+      "outlet-installation"
+    ],
+    "city_suffixes": [
+      "vienna-va", "fairfax-va", "oakton-va", "mclean-va",
+      "tysons-va", "burke-va", "annandale-va", "falls-church-va",
+      "bethesda-md", "chevy-chase-md", "potomac-md",
+      "rockville-md", "washington-dc", "gaithersburg-md"
+    ],
+    "hub_slugs": [
+      "electrical-troubleshooting",
+      "panel-upgrade",
+      "ev-charger-installation",
+      "light-fixture-installation",
+      "smoke-alarm-installation",
+      "outlet-installation"
+    ],
+    "exclude_slugs": [
+      "electrician-oakton-va",
+      "emergency-electrician-fairfax-va",
+      "emergency-electrician-vienna-va",
+      "emergency-electrician-oakton-va",
+      "circuit-breaker-replacement-vienna-va",
+      "circuit-breaker-replacement-oakton-va",
+      "circuit-breaker-replacement-fairfax-va",
+      "attic-fan-installation-fairfax-va",
+      "attic-fan-installation-vienna-va",
+      "attic-fan-installation-oakton-va",
+      "whole-house-rewire-fairfax-va",
+      "whole-house-rewire-vienna-va",
+      "whole-house-rewire-oakton-va",
+      "ceiling-fan-installation-fairfax-va",
+      "ceiling-fan-installation-vienna-va",
+      "ceiling-fan-installation-oakton-va",
+      "ev-charger-installation-fairfax-va"
+    ]
+  }
+}
