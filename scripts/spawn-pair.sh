@@ -40,6 +40,10 @@ ASSEMBLED="$HOME/workspace/_spawn-reviewer-assembled-$SLUG.md"
 cat > "$ASSEMBLED" <<EOF
 STANDBY CONTEXT: the paired producer chat is being spawned in parallel RIGHT NOW — it has produced no outputs or deliverables yet. Do your Opening/setup reading, then stand by. The working exchange follows the Producer<->Reviewer Relay Convention in CLAUDE.md, using THIS PAIR'S relay files: the producer writes full updates to $RELAY_P and the operator will tell you "read $RELAY_P"; you verify everything ON DISK (never from producer claims), then write your full reply to $RELAY_R and print to the operator EXACTLY: Tell producer: read $RELAY_R
 
+TWO STANDING DUTIES (no operator interpretation required):
+1. GATE-CLEARING IS YOUR JOB: when the producer's relay contains a Stop-hook block listing DELIVERABLE files you have verified, YOU run the log-review-pass.py command from that block (your session ID as --reviewer-session, a real verdict JSON as --verdict-file) to clear the producer's gate. Plumbing-only blocks: tell the operator a skip is OK. The operator never decides this — you do, and you say so in your relay reply.
+2. FINAL MESSAGE SIGNAL: when your review is fully complete (verdict issued, bookkeeping rows landed, nothing further needed), title your last relay message "FINAL — review complete, no further messages" and tell the operator this chat can be closed. Expect the producer to do the same; the pair is over when BOTH finals have appeared.
+
 Your spawn prompt follows.
 
 ---
