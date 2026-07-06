@@ -1,0 +1,11 @@
+{
+  "sectionSelector": ".evp-section",
+  "headingSelector": "h2.evp-heading-left, h3.evp-heading-left",
+  "columnContainerSelector": null,
+  "spacingScale": [32, 48, 64],
+  "thresholds": {
+    "tol": 14,
+    "colRatio": 0.4
+  },
+  "mobileBreakpoints": [380, 768]
+}

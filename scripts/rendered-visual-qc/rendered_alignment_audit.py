@@ -179,6 +179,40 @@ CHECK_JS = r"""
         }
       }
     }
+
+    // --- A2. Mixed alignment within a section (catches centered-headed sections A skips) ---
+    // Collect substantial body paragraphs (direct-child <p> of wrapper, height > 55px).
+    // Normalize textAlign: start→left, end→right. If not all the same → flag.
+    const subParas = Array.from(wrapper.children).filter(el => {
+      if (el.tagName !== "P") return false;
+      const r = el.getBoundingClientRect();
+      return r.height > 55;
+    });
+    if (subParas.length >= 2) {
+      const normAlign = (a) => {
+        if (a === "start") return "left";
+        if (a === "end") return "right";
+        return a;
+      };
+      const aligns = subParas.map(p => normAlign(cs(p).textAlign));
+      // Find the majority alignment
+      const counts = {};
+      aligns.forEach(a => { counts[a] = (counts[a] || 0) + 1; });
+      const majority = Object.keys(counts).reduce((a, b) => counts[a] >= counts[b] ? a : b);
+      const mixed = aligns.some(a => a !== majority);
+      if (mixed) {
+        subParas.forEach((p, idx) => {
+          if (normAlign(cs(p).textAlign) !== majority) {
+            findings.push({
+              check: "A2-mixed-alignment", severity: "warn", viewport,
+              section: snip(wrapper.querySelector("h1,h2,h3,h4,h5,h6") || section),
+              detail: "paragraph is " + normAlign(cs(p).textAlign) + " among " + majority + " siblings",
+              element: '<p> "' + snip(p) + '"'
+            });
+          }
+        });
+      }
+    }
   });
 
   // --- C. Horizontal overflow (all elements within detected scope) ---
@@ -308,6 +342,13 @@ body{margin:0;font-family:sans-serif}
   <p>Content for spacing measurement.</p>
 </div></section>
 
+<section style="margin-bottom:20px"><div class="inner">
+  <h2 style="text-align:center">When panels fail — seasonal patterns</h2>
+  <p style="text-align:center;margin:0 auto;max-width:620px">Summer overloads are the leading cause of panel failures in the region. Air conditioning loads push aging panels past their rated capacity, and the resulting heat accelerates connection degradation inside the panel enclosure over multiple cooling seasons. Sustained draws from HVAC systems compound the thermal stress on bus bar connections, leading to progressive resistance increases that further generate heat in a feedback loop.</p>
+  <p style="text-align:left;max-width:620px;margin-left:0">Winter brings a different pattern entirely. Heating systems cycling on and off create rapid thermal expansion and contraction stress on bus bars and connections throughout the distribution panel. Ice storms cause voltage surges that trip breakers in sequence across the entire panel. This is a substantial left-aligned paragraph among centered siblings — reproducing the EV Tysons seasonal-patterns alignment bug that check A2 must catch regardless of heading alignment.</p>
+  <p style="text-align:center;margin:0 auto;max-width:620px">Both seasons share a common thread: aging infrastructure meeting modern electrical demand. The fix is the same regardless of which season exposed the weakness — a panel upgrade sized for current loads plus a margin for future additions like EV chargers and heat pumps. Schedule the upgrade before the next peak season to avoid emergency service rates and extended outage windows that come with emergency panel replacements.</p>
+</div></section>
+
 <section><div class="inner">
   <h2>Mobile overflow section</h2>
   <div style="width:500px;background:#eee;padding:1rem">This 500px-wide box fits at 1280px but overflows at 380px (check C at mobile / check G).</div>
@@ -315,7 +356,7 @@ body{margin:0;font-family:sans-serif}
 
 </body></html>"""
 
-# Clean fixture: passes all checks A-F at desktop and mobile
+# Clean fixture: passes all checks A-F + A2 at desktop and mobile
 SELFTEST_CLEAN = """\
 <!doctype html><html><head><meta charset="utf-8"><style>
 body{margin:0;font-family:sans-serif}
@@ -352,6 +393,12 @@ section{margin-bottom:48px}
 <section><div class="inner">
   <h2>Mobile-safe section</h2>
   <div style="max-width:100%;background:#eee;padding:1rem">Responsive box — fits any viewport.</div>
+</div></section>
+
+<section><div class="inner">
+  <h2 style="text-align:center">Centered-headed section — uniform alignment</h2>
+  <p style="text-align:center;margin:0 auto;max-width:820px">First substantial centered paragraph. Air conditioning loads push aging panels past their rated capacity, and the resulting heat accelerates connection degradation inside the panel enclosure over seasons of repeated thermal cycling.</p>
+  <p style="text-align:center;margin:0 auto;max-width:820px">Second substantial centered paragraph. Winter brings different stress patterns but the same root cause: thermal expansion on connections plus voltage surges from ice storms cycling breakers in sequence across the distribution bus.</p>
 </div></section>
 
 </body></html>"""
@@ -427,6 +474,13 @@ section .container p.secondary{max-width:600px;margin-left:auto;margin-right:aut
       <h3>Pro</h3><p style="font-size:2rem;font-weight:bold">$99/mo</p><p>For growing teams that need more power and integrations.</p>
     </div>
   </div>
+</div></section>
+
+<section style="margin-bottom:20px"><div class="container">
+  <h2 style="text-align:center">Product Updates — Seasonal Releases</h2>
+  <p style="text-align:center;margin:0 auto;max-width:700px">Spring release focuses on analytics improvements. The new dashboard engine processes data 3x faster than the previous generation, with real-time streaming for teams of any size and custom alert thresholds per metric category.</p>
+  <p style="text-align:left;max-width:700px;margin-left:0">Fall release shifts to infrastructure hardening. Load balancing, failover automation, and zero-downtime deployments become the default for all tiers. This left-aligned paragraph among centered siblings reproduces the Tysons seasonal-patterns bug on a non-EV design (check A2).</p>
+  <p style="text-align:center;margin:0 auto;max-width:700px">Both releases share a theme: making the platform invisible so teams focus on building, not operating. Upgrade paths are automatic for Pro customers and self-serve for Starter accounts with no downtime window required.</p>
 </div></section>
 
 <section><div class="container">
@@ -515,6 +569,12 @@ section{margin-bottom:48px}
 </div></section>
 
 <section><div class="container">
+  <h2 style="text-align:center">Centered-headed — uniform alignment</h2>
+  <p style="text-align:center;margin:0 auto;max-width:700px">First substantial centered paragraph for A2-clean test. The new dashboard engine processes data faster than the previous generation, with real-time streaming for teams of any size and custom alert thresholds per metric category.</p>
+  <p style="text-align:center;margin:0 auto;max-width:700px">Second substantial centered paragraph. Both paragraphs share the same alignment so A2 must NOT fire here. Upgrade paths are automatic for Pro customers and self-serve for Starter accounts with no downtime window required.</p>
+</div></section>
+
+<section><div class="container">
   <h2>Get Started</h2>
   <p>Sign up today and start building with Acme.</p>
   <div style="max-width:100%;background:#1a1a2e;color:#fff;padding:1rem;border-radius:8px;margin-top:1rem">
@@ -529,6 +589,7 @@ section{margin-bottom:48px}
 </body></html>"""
 
 # Profile fixture: uses .evp-* classes, only detected via profile
+# Includes both A (left-edge drift) and A2 (mixed-alignment) bugs
 SELFTEST_PROFILE = """\
 <!doctype html><html><head><meta charset="utf-8"><style>
 body{margin:0;font-family:sans-serif}
@@ -542,6 +603,13 @@ body{margin:0;font-family:sans-serif}
   <h2 class="evp-heading-left">EV-styled section</h2>
   <p>Intro paragraph is left-aligned.</p>
   <p>Trailing paragraph CENTERED by generic rule — drifts (check A via profile).</p>
+</div></div>
+
+<div class="evp-section"><div class="evp-section-inner">
+  <h2 style="text-align:center">When Tysons panels fail — seasonal patterns</h2>
+  <p style="text-align:center;margin:0 auto;max-width:620px">Summer overloads push aging panels past their rated capacity. Air conditioning loads create sustained thermal stress on bus bar connections, accelerating degradation that accumulates over multiple cooling seasons inside the panel enclosure. Sustained draws from HVAC systems compound the thermal stress on connections, leading to progressive resistance increases that further generate heat in a destructive feedback loop throughout the panel assembly.</p>
+  <p style="text-align:left;max-width:620px;margin-left:0">Winter brings ice storms and heating-cycle surges that trip breakers in sequence across the distribution panel. The underlying cause is the same: aging infrastructure meeting modern demand loads that exceed original design capacity. This left-aligned paragraph among centered siblings is the EV Tysons A2 mixed-alignment bug reproduced via the design profile selector, proving the check works through profile-based detection paths.</p>
+  <p style="text-align:center;margin:0 auto;max-width:620px">Both seasons point to the same fix: a panel upgrade sized for current loads plus a generous margin for future additions like EV chargers and heat pumps. Schedule the upgrade before the next peak season to avoid emergency service rates and the extended outage windows that come with rushed emergency panel replacements during high-demand periods.</p>
 </div></div>
 
 </body></html>"""
@@ -637,6 +705,7 @@ def run_selftest(a):
         bug_col = any(f["check"] == "B-underfilled-column" for f in bugf)
         bug_overlap = any(f["check"] == "E-element-overlap" for f in bugf)
         bug_spacing = any(f["check"] == "F-spacing-inconsistency" for f in bugf)
+        bug_a2 = any(f["check"] == "A2-mixed-alignment" for f in bugf)
 
         # 2. Bug fixture at mobile (380px) for check G/C
         bugf_mobile = audit(pw, bf, viewport_w=380, viewport_h=2200)
@@ -648,6 +717,7 @@ def run_selftest(a):
         clean_drift = any(f["check"] == "A-left-edge-drift" for f in cleanf)
         clean_overlap = any(f["check"] == "E-element-overlap" for f in cleanf)
         clean_spacing = any(f["check"] == "F-spacing-inconsistency" for f in cleanf)
+        clean_a2 = any(f["check"] == "A2-mixed-alignment" for f in cleanf)
 
         # 4. Clean fixture at mobile (380px)
         cleanf_mobile = audit(pw, cf, viewport_w=380, viewport_h=2200)
@@ -659,6 +729,7 @@ def run_selftest(a):
         nonev_drift = any(f["check"] == "A-left-edge-drift" for f in nevf)
         nonev_overlap = any(f["check"] == "E-element-overlap" for f in nevf)
         nonev_spacing = any(f["check"] == "F-spacing-inconsistency" for f in nevf)
+        nonev_a2 = any(f["check"] == "A2-mixed-alignment" for f in nevf)
 
         # 6. Non-EV bug at mobile
         nevf_mobile = audit(pw, nef, viewport_w=380, viewport_h=2200)
@@ -669,6 +740,7 @@ def run_selftest(a):
         ncf_results = audit(pw, ncf)
         nonev_clean_drift = any(f["check"] == "A-left-edge-drift" for f in ncf_results)
         nonev_clean_overlap = any(f["check"] == "E-element-overlap" for f in ncf_results)
+        nonev_clean_a2 = any(f["check"] == "A2-mixed-alignment" for f in ncf_results)
 
         # 8. Profile fixture: without profile (div.evp-section not a <section>)
         pf = os.path.join(a.out, "_selftest-profile.html")
@@ -676,25 +748,31 @@ def run_selftest(a):
         ev_profile = load_profile(ev_profile_path)
         prof_withprof = audit(pw, pf, profile=ev_profile)
         prof_drift_with = any(f["check"] == "A-left-edge-drift" for f in prof_withprof)
+        prof_a2_with = any(f["check"] == "A2-mixed-alignment" for f in prof_withprof)
 
     # --- Report ---
     checks = [
         ("bug A-drift", bug_drift, True),
+        ("bug A2-mixed-alignment (Tysons seasonal)", bug_a2, True),
         ("bug B-underfilled", bug_col, True),
         ("bug E-overlap", bug_overlap, True),
         ("bug F-spacing", bug_spacing, True),
         ("bug mobile C-overflow (G)", bug_mobile_overflow, True),
         ("clean A-drift (false-pos?)", clean_drift, False),
+        ("clean A2-mixed-alignment (false-pos?)", clean_a2, False),
         ("clean E-overlap (false-pos?)", clean_overlap, False),
         ("clean F-spacing (false-pos?)", clean_spacing, False),
         ("clean mobile C-overflow (false-pos?)", clean_mobile_overflow, False),
         ("nonev-bug A-drift (generality)", nonev_drift, True),
+        ("nonev-bug A2-mixed-alignment (generality)", nonev_a2, True),
         ("nonev-bug E-overlap (generality)", nonev_overlap, True),
         ("nonev-bug F-spacing (generality)", nonev_spacing, True),
         ("nonev-bug mobile C-overflow (generality)", nonev_mobile_overflow, True),
         ("nonev-clean A-drift (false-pos?)", nonev_clean_drift, False),
+        ("nonev-clean A2-mixed-alignment (false-pos?)", nonev_clean_a2, False),
         ("nonev-clean E-overlap (false-pos?)", nonev_clean_overlap, False),
         ("profile A-drift (with profile)", prof_drift_with, True),
+        ("profile A2-mixed-alignment (with profile)", prof_a2_with, True),
     ]
 
     for label, got, expected in checks:
