@@ -33,7 +33,7 @@ import sys, os, glob, json, argparse, re
 CHECK_JS = r"""
 (args) => {
   const tol = args.tol, colRatio = args.colRatio, colFloor = args.colFloor,
-        checkImages = args.checkImages, vw = window.innerWidth;
+        colMinWidth = args.colMinWidth, checkImages = args.checkImages, vw = window.innerWidth;
   const findings = [];
   const snip = (el) => (el.innerText || "").trim().replace(/\s+/g, " ").slice(0, 90);
   const cs = (el) => window.getComputedStyle(el);
@@ -85,13 +85,19 @@ CHECK_JS = r"""
       const cols = Array.from(g.children).map((c) => {
         const kids = Array.from(c.children)
           .map(k => k.getBoundingClientRect()).filter(r => r.height > 0);
-        let h = c.getBoundingClientRect().height;
+        const rect = c.getBoundingClientRect();
+        let h = rect.height;
         if (kids.length) h = Math.max(...kids.map(r => r.bottom)) - Math.min(...kids.map(r => r.top));
-        return { el: c, h, t: snip(c) };
+        return { el: c, h, w: rect.width, x: rect.left, t: snip(c) };
       }).filter(c => c.t.length > 0);
-      if (cols.length < 2) return;
+      if (cols.length !== 2) return;
+      // must be SIDE-BY-SIDE columns, not a vertical stack (title-above-body cards
+      // share a left edge and would otherwise be misread as an empty column).
+      const lr = cols.slice().sort((a, b) => a.x - b.x);
+      if (lr[1].x < lr[0].x + lr[0].w - 20) return;
       const maxH = Math.max(...cols.map(c => c.h));
       const minC = cols.reduce((a, b) => (a.h < b.h ? a : b));
+      if (minC.w < colMinWidth) return;   // narrow = icon/decoration, not a content column
       if (maxH >= colFloor && minC.h < colRatio * maxH) {
         findings.push({
           check: "B-underfilled-column", severity: "warn",
@@ -193,7 +199,8 @@ def run_selftest(a):
             pg.set_content(load_html(fp), wait_until="domcontentloaded", timeout=15000)
             pg.wait_for_timeout(300)
             f = pg.evaluate(CHECK_JS, {"tol": a.tol, "colRatio": a.col_ratio,
-                                       "colFloor": a.col_floor, "checkImages": False})
+                                       "colFloor": a.col_floor, "colMinWidth": a.col_min_width,
+                                       "checkImages": False})
             b.close(); return f
     bugf, cleanf = audit(bug), audit(clean)
     bug_drift = any(f["check"] == "A-left-edge-drift" for f in bugf)
@@ -231,6 +238,8 @@ def main():
     ap.add_argument("--tol", type=int, default=14, help="left-edge px tolerance")
     ap.add_argument("--col-ratio", type=float, default=0.4, dest="col_ratio")
     ap.add_argument("--col-floor", type=int, default=140, dest="col_floor")
+    ap.add_argument("--col-min-width", type=int, default=140, dest="col_min_width",
+                    help="min px width for a grid cell to count as a content column (skips icons)")
     ap.add_argument("--out", default="./visual-qc-out")
     ap.add_argument("--check-images", action="store_true")
     ap.add_argument("--json", default="")
@@ -265,7 +274,7 @@ def main():
                 page.wait_for_timeout(500)  # settle layout/fonts
                 findings = page.evaluate(CHECK_JS, {
                     "tol": a.tol, "colRatio": a.col_ratio, "colFloor": a.col_floor,
-                    "checkImages": a.check_images})
+                    "colMinWidth": a.col_min_width, "checkImages": a.check_images})
                 shot = os.path.join(a.out, name + ".png")
                 page.screenshot(path=shot, full_page=True)
                 entry["findings"] = findings
