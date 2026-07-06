@@ -795,7 +795,8 @@ class TestSubAgentCoverage(unittest.TestCase):
         r = _run_gate(self.SID, self.state_dir)
         self.assertEqual(r.returncode, 2,
                          'Stop must block on unreviewed sub-agent artifact')
-        self.assertIn('unreviewed', r.stderr.lower())
+        # RGH-20: compact message says 'blocked' not 'unreviewed'
+        self.assertIn('blocked', r.stderr.lower())
 
     def test_stop_clears_after_subagent_reviewed(self):
         """Stop approves once sub-agent artifact is reviewed."""
@@ -1042,9 +1043,10 @@ class TestBlockMessageContent(unittest.TestCase):
         r = _run_gate(self.SID, self.state_dir)
         self.assertEqual(r.returncode, 2)
         msg = r.stderr
-        self.assertIn('MANDATORY PRE-LAND REVIEW GATE', msg)
-        self.assertIn('unreviewed', msg.lower())
-        self.assertIn('log-review-pass.py', msg)
+        # RGH-20: compact block message format
+        self.assertIn('REVIEW GATE BLOCKED', msg)
+        self.assertIn('deliverables', msg.lower())
+        self.assertIn('Details + ready-made commands:', msg)
 
     def test_block_on_re_edit_after_review(self):
         """D-04: re-edit after review must re-block."""

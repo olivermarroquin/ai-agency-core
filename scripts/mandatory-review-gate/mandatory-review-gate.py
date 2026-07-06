@@ -310,7 +310,6 @@ def main():
     # Blocked -> auto-run independent dispatch (RGH-5)
     tier = result.tier
     count = len(unreviewed)
-    auto_clear_refusal = result.auto_clear_refusal  # RGH-1b item 1
 
     dispatch_result, dispatch_stderr = _run_independent_dispatch(
         session_id, tier, unreviewed)
@@ -322,7 +321,8 @@ def main():
     # safety invariant (D-04). The dispatch's role is to surface deterministic
     # findings and instruct the LLM agent spawn — not to bypass the gate.
 
-    # Still blocked — format the block message
+    # Still blocked — format the block message (RGH-20 Part B: compact,
+    # operator-first, ≤8 lines on terminal, full detail in block file)
     file_list = engine.format_file_list(unreviewed)
     files_argv = engine.format_files_argv(unreviewed)
 
@@ -344,46 +344,151 @@ def main():
 
     # RGH-1b item 1: surface auto-clear refusal so operator can distinguish
     # "auto-clear attempted but failed" from "auto-clear never attempted"
-    refusal_line = (f'\n[auto-clear] {auto_clear_refusal}\n'
-                    if auto_clear_refusal else '')
+    auto_clear_refusal = result.auto_clear_refusal
+
+    # --- RGH-20 Part C: repeat-block dedupe ---
+    # Hash the unreviewed set; if identical to last block → one-line reminder.
+    # _check_circuit_breaker above already appended one row for THIS firing,
+    # so tail_count >= 2 means the PREVIOUS firing also had the same set —
+    # this is truly a repeat, not the first block.
+    block_fingerprint = _entry_fingerprint(
+        sorted(e.get('file_path', '') for e in unreviewed))
+    last_count, last_fp = _read_history_tail(session_id)
+    if last_fp == block_fingerprint and last_count >= 2:
+        # Same set as last block — print one-line reminder, don't repeat
+        _append_history(session_id,
+                        sorted(e.get('file_path', '') for e in unreviewed))
+        reminder = (f'REVIEW GATE -- still blocked (same {count} items). '
+                    f'Waiting on operator skip or reviewer log-pass.')
+        print(reminder, file=sys.stderr)
+        sys.exit(2)
+
+    # --- Classify entries as deliverables vs plumbing ---
+    deliverable_entries = []
+    plumbing_entries = []
+    for e in unreviewed:
+        fp = e.get('file_path', '')
+        tool = e.get('tool', '')
+        bash_cmd_e = e.get('bash_cmd', e.get('display', ''))
+        annotation = engine.is_plumbing_exempt(fp, tool, bash_cmd_e,
+                                                WORKSPACE_ROOT)
+        if annotation:
+            plumbing_entries.append(e)
+        else:
+            deliverable_entries.append(e)
+    n_deliverables = len(deliverable_entries)
+    n_plumbing = len(plumbing_entries)
+
+    # --- Build compact terminal message (≤8 lines) ---
+    # Line 1: headline
+    headline = (f'REVIEW GATE BLOCKED -- {count} unreviewed '
+                f'({n_deliverables} deliverables, {n_plumbing} plumbing). '
+                f'Producer cannot self-clear.')
+
+    # Lines 2..N: bulleted findings (basename only, one per line)
+    bullets = []
+    for e in unreviewed:
+        fp = e.get('file_path', '')
+        if fp.startswith('BASH:'):
+            label = e.get('display', fp)[:60]
+        else:
+            label = os.path.basename(fp)
+        tier_e = e.get('tier', '?')
+        bullets.append(f'  - {label} ({tier_e})')
+
+    # Decision line
+    if n_deliverables > 0:
+        decision = (
+            f'-> Relay to your reviewer: "Producer blocked on '
+            f'{n_deliverables} deliverables -- verify and log the '
+            f'review-pass marker; full details in the block file."')
+    else:
+        # Plumbing only — write a skip script for the operator
+        skip_script_path = os.path.join(
+            WORKSPACE_ROOT,
+            f'.gate-skip-{session_id[:12]}.sh')
+        skip_cmd = (f'python3 {skip_script} --session {session_id} '
+                    f'--reason "CR-219 plumbing-only block"')
+        try:
+            with open(skip_script_path, 'w') as f:
+                f.write('#!/usr/bin/env bash\n')
+                f.write(f'{skip_cmd}\n')
+            os.chmod(skip_script_path, 0o755)
+        except OSError:
+            pass
+        decision = (
+            f'-> Operator skip OK: '
+            f'bash {skip_script_path} && rm {skip_script_path}')
+
+    # --- Write block file with full details + ready-made commands ---
+    block_file_path = os.path.join(
+        STATE_DIR,
+        f'block-{session_id}-{int(time.time())}.md')
+    os.makedirs(STATE_DIR, exist_ok=True)
+
+    block_file_content = f"""# Review Gate Block Details
+
+**Session:** {session_id}
+**Tier:** {tier}
+**Deliverables:** {n_deliverables}  |  **Plumbing:** {n_plumbing}
+
+## Unreviewed entries
+{file_list}
+"""
+    if auto_clear_refusal:
+        block_file_content += f'\n## Auto-clear refusal\n{auto_clear_refusal}\n'
+    if dispatch_findings:
+        block_file_content += f'\n## Independent dispatch findings\n{dispatch_findings}\n'
 
     if needs_independent:
-        block_msg = f"""REVIEW GATE — BLOCKED ({count} unreviewed, tier {tier}, independent review required).
-Producer cannot self-clear. A sub-agent does NOT count (shares your session_id → rejected).
-{refusal_line}{dispatch_findings}Unreviewed:
-{file_list}
+        block_file_content += f"""
+## Ready-made commands
 
-STOP. Signal "ready for review" via event-log; operator dispatches a SEPARATE session to review + log PASS:
+### For reviewer (log review-pass):
+```
 python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-independent --verdict-file <path> --reviewer-type independent --reviewer-session <REVIEWER_SESSION_ID> --run-id <chat-slug>
-Operator-only escape (reviewer plumbing, not deliverables):
+```
+
+### For operator (emergency skip):
+```
 python3 {skip_script} --session {session_id} --reason "reviewer plumbing"
-Full protocol: {MANDATE_PATH}"""
+```
+
+## Protocol
+Full protocol: {MANDATE_PATH}
+Producer cannot self-clear. A sub-agent does NOT count (shares session_id).
+"""
     else:
-        # Fast-path — deterministic dispatch should have handled it,
-        # but if it didn't (e.g., dispatch failed), fall back to self-review
-        fast_desc = (
-            'fast-path = grep-based surface sweep + source-client-leak-audit '
-            '+ link-resolution (no Sonar/LLM-research)')
+        block_file_content += f"""
+## Ready-made commands
 
-        block_msg = f"""MANDATORY PRE-LAND REVIEW GATE — BLOCKED
-
-{count} unreviewed artifact(s) detected. Review tier: {tier}.
-{refusal_line}{dispatch_findings}
-Unreviewed:
-{file_list}
-
-REQUIRED ACTION before you can stop:
-1. Dispatch gate-peer-reviewer on the touched artifacts/state.
-   - Use the registered gate type if one applies; otherwise use G-default.
-   - Tier '{tier}': {fast_desc}.
-2. Run output-quality-loop on the produced artifacts.
-3. The reviewer dispatch emits its verdict to a file, then logs the marker:
+### Self-review (fast-path):
+```
 python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-default --verdict-file <path-to-verdict.json>
-The verdict file must be a valid gate-peer-reviewer return contract (JSON with verdict, checks_run[], catches[], cost_usd).
-4. Then try stopping again.
+```
 
-If blocking findings exist, use --verdict BLOCKING --findings "description" instead.
-The BLOCKING verdict still clears the gate (findings were surfaced, not hidden)."""
+Verdict file must be a valid gate-peer-reviewer return contract (JSON with verdict, checks_run[], catches[], cost_usd).
+Use --verdict BLOCKING --findings "description" for blocking findings.
+"""
+
+    try:
+        with open(block_file_path, 'w') as f:
+            f.write(block_file_content)
+    except OSError:
+        block_file_path = '(failed to write block file)'
+
+    # Assemble terminal message (compact)
+    bullet_str = '\n'.join(bullets[:6])  # cap at 6 to stay within 8 lines
+    if len(bullets) > 6:
+        bullet_str += f'\n  ... and {len(bullets) - 6} more'
+
+    block_msg = f"""{headline}
+{bullet_str}
+{decision}
+Details + ready-made commands: {block_file_path}"""
+
+    # NOTE: _check_circuit_breaker() already appended to history above —
+    # no duplicate append needed here.
 
     print(block_msg, file=sys.stderr)
     sys.exit(2)

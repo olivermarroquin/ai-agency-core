@@ -10,6 +10,7 @@ returns structured results. It never imports substrate-specific protocols
 
 Created by [RGH-2] (2026-06-16) as part of the substrate-abstraction refactor.
 Per-project config support added by [RGH-4] (2026-06-16).
+Reviewer-plumbing exemption added by [RGH-20] (2026-07-06).
 """
 
 import dataclasses
@@ -1064,6 +1065,191 @@ def get_project_profile_name(file_path: str = None) -> str:
 
 
 # ============================================================================
+# Reviewer-plumbing exemption (RGH-20 / CR-219)
+# ============================================================================
+#
+# Sessions registered as reviewers (RGH-17 marker) get a narrow, deterministic
+# exemption for "plumbing" artifacts: relay files, gate-skip scripts, spawn
+# files, their own execution logs, etc. These are coordination scratch, not
+# deliverables. Without this exemption, the operator had to run 5+ manual
+# gate-skip commands per day (all CR-219 class).
+#
+# SAFETY:
+# - Only reviewer sessions get the exemption (classify_session_role check).
+# - Hard non-exempt paths (04_projects/, 05_shared-intelligence/, repos/*
+#   except .kos/execution-logs/ and .commit.sh, skills/) are NEVER exempt.
+# - Every exemption annotates the dirty-ledger entry so audit trail is loud.
+# - Adversarial fixtures test deliverable-smuggling through each pattern.
+
+_plumbing_config_cache = None  # type: Optional[dict]
+
+
+def load_plumbing_whitelist(workspace_root: str = None) -> dict:
+    """Load .review-gate/plumbing-whitelist.yml. Cached after first load.
+
+    Returns parsed dict or empty dict if no config exists.
+    """
+    global _plumbing_config_cache
+    if _plumbing_config_cache is not None:
+        return _plumbing_config_cache
+
+    if workspace_root is None:
+        workspace_root = WORKSPACE_ROOT
+
+    config_path = os.path.join(workspace_root, '.review-gate',
+                               'plumbing-whitelist.yml')
+    if not os.path.isfile(config_path):
+        _plumbing_config_cache = {}
+        return _plumbing_config_cache
+
+    try:
+        try:
+            import yaml
+            with open(config_path, 'r') as f:
+                _plumbing_config_cache = yaml.safe_load(f) or {}
+        except ImportError:
+            _plumbing_config_cache = _parse_plumbing_minimal(config_path)
+    except Exception:
+        _plumbing_config_cache = {}
+
+    return _plumbing_config_cache
+
+
+def _parse_plumbing_minimal(path: str) -> dict:
+    """Minimal parser for plumbing-whitelist.yml when PyYAML is unavailable.
+
+    Parses the subset we need: plumbing_patterns list and hard_non_exempt list.
+    """
+    result = {'plumbing_patterns': [], 'hard_non_exempt': []}
+    try:
+        with open(path, 'r') as f:
+            content = f.read()
+        # Extract plumbing patterns
+        import re as _re
+        for m in _re.finditer(
+                r"-\s+pattern:\s+['\"](.+?)['\"]\s*\n"
+                r"\s+name:\s+(\S+)",
+                content):
+            entry = {'pattern': m.group(1), 'name': m.group(2)}
+            # Check for scope field on next line
+            scope_m = _re.search(
+                r'name:\s+' + _re.escape(m.group(2)) + r'\s*\n\s+scope:\s+(\S+)',
+                content)
+            if scope_m:
+                entry['scope'] = scope_m.group(1)
+            result['plumbing_patterns'].append(entry)
+        # Extract hard_non_exempt
+        in_hard = False
+        for line in content.splitlines():
+            if line.strip() == 'hard_non_exempt:':
+                in_hard = True
+                continue
+            if in_hard:
+                if line.strip().startswith("- '") or line.strip().startswith('- "'):
+                    val = line.strip()[3:-1]  # strip "- '" and trailing "'"
+                    result['hard_non_exempt'].append(val)
+                elif line.strip() and not line.strip().startswith('#'):
+                    if not line.startswith(' ') and not line.startswith('\t'):
+                        break  # new top-level key
+    except Exception:
+        pass
+    return result
+
+
+def _reset_plumbing_cache():
+    """Reset the plumbing whitelist cache (for testing)."""
+    global _plumbing_config_cache
+    _plumbing_config_cache = None
+
+
+# Compiled regex cache for plumbing patterns
+_plumbing_regex_cache = {}  # type: dict[str, re.Pattern]
+
+
+def _get_plumbing_regex(pattern_str: str) -> re.Pattern:
+    """Get or compile a regex for a plumbing pattern string."""
+    if pattern_str not in _plumbing_regex_cache:
+        _plumbing_regex_cache[pattern_str] = re.compile(pattern_str)
+    return _plumbing_regex_cache[pattern_str]
+
+
+def is_plumbing_exempt(file_path: str, tool_name: str, bash_cmd: str = '',
+                       workspace_root: str = None) -> Optional[str]:
+    """Check if a dirty-ledger entry qualifies for plumbing exemption.
+
+    Returns the exemption annotation string (e.g. 'CR-219 relay-file')
+    if the entry matches a plumbing pattern and does NOT match any hard
+    non-exemption. Returns None if not exempt.
+
+    This function does NOT check session role — the caller must verify
+    the session is a registered reviewer before applying the exemption.
+
+    Args:
+        file_path: Normalized file path or BASH:<hash> key.
+        tool_name: The tool that produced the entry (Write, Edit, Bash).
+        bash_cmd: Raw Bash command (only for Bash entries).
+        workspace_root: Override for testing.
+
+    Returns:
+        Annotation string or None.
+    """
+    config = load_plumbing_whitelist(workspace_root)
+    if not config:
+        return None
+
+    patterns = config.get('plumbing_patterns', [])
+    hard_non = config.get('hard_non_exempt', [])
+
+    if not patterns:
+        return None
+
+    # For Bash entries, match against bash_cmd for scope=bash patterns,
+    # and skip path-scoped patterns (BASH:<hash> won't match path patterns).
+    # For Write/Edit, match against file_path for scope=path patterns.
+    is_bash = tool_name == 'Bash' or file_path.startswith('BASH:')
+
+    matched_name = None
+
+    for p in patterns:
+        pat_str = p.get('pattern', '')
+        name = p.get('name', 'unknown')
+        scope = p.get('scope', 'path')
+
+        if not pat_str:
+            continue
+
+        if is_bash and scope == 'bash':
+            # Match pattern against the bash command text
+            if bash_cmd and _get_plumbing_regex(pat_str).search(bash_cmd):
+                matched_name = name
+                break
+        elif not is_bash and scope != 'bash':
+            # Match pattern against the file path
+            if _get_plumbing_regex(pat_str).search(file_path):
+                matched_name = name
+                break
+
+    if matched_name is None:
+        return None
+
+    # Check hard non-exemptions AFTER matching a plumbing pattern.
+    # A file matching a hard non-exempt pattern is NEVER exempt.
+    if not is_bash:
+        for hard in hard_non:
+            if hard in file_path:
+                # Carve-out: .kos/execution-logs/ inside repos/ is allowed
+                # (reviewer's own execution logs live there)
+                if hard == 'repos/' or hard.startswith('repos/'):
+                    if '.kos/execution-logs/' in file_path:
+                        continue
+                    if file_path.endswith('.commit.sh'):
+                        continue
+                return None  # hard non-exempt overrides
+
+    return f'CR-219 {matched_name}'
+
+
+# ============================================================================
 # Tier classification
 # ============================================================================
 
@@ -1947,6 +2133,35 @@ def check_gate(
 
     unreviewed = unreviewed_producer
 
+    # RGH-20 / CR-219: reviewer-plumbing exemption.
+    # For confirmed reviewer sessions, exempt entries matching plumbing
+    # whitelist patterns (relay files, gate-skip scripts, spawn files,
+    # execution logs, etc.) that do NOT match hard non-exemption paths.
+    # This is ADDITIVE to the RGH-11/12 Bash exemption above — it covers
+    # Write/Edit entries (relay files, skip scripts) that RGH-11 cannot
+    # exempt because they are not Bash commands.
+    plumbing_exempt_keys = set()
+    if session_role == 'reviewer' and unreviewed:
+        still_gated = []
+        plumbing_exempt = 0
+        for e in unreviewed:
+            fp = e.get('file_path', '')
+            tool = e.get('tool', '')
+            bash_cmd = e.get('bash_cmd', e.get('display', ''))
+            annotation = is_plumbing_exempt(
+                fp, tool, bash_cmd, workspace_root)
+            if annotation:
+                plumbing_exempt += 1
+                plumbing_exempt_keys.add(fp)
+                continue
+            still_gated.append(e)
+        if plumbing_exempt > 0:
+            log_metrics(state_dir, session_id, 'plumbing-exempt',
+                        plumbing_exempt, 'n/a', 0,
+                        extra={'session_role': 'reviewer',
+                               'plumbing_files': list(plumbing_exempt_keys)})
+        unreviewed = still_gated
+
     # CR-161 class 2: close-out bookkeeping exemption.
     # Pure bookkeeping files (tracker, changelog, _recently-closed, event-log,
     # firing-tracker, handoff status-only flips) are exempt from the full-tier
@@ -1977,6 +2192,7 @@ def check_gate(
             e for e in dirty_entries
             if e.get('entry_source', 'producer') not in _EXEMPT_ENTRY_SOURCES
             and e.get('file_path', '') not in session_exempt_keys
+            and e.get('file_path', '') not in plumbing_exempt_keys
             and e.get('file_path', '') not in bookkeeping_keys
         ]
         if producer_dirty:

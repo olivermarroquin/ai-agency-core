@@ -137,6 +137,28 @@ def main():
     else:
         return
 
+    # RGH-20 / CR-219 Part C: plumbing-scratch suppression.
+    # Workspace-root scratch files (.gate-skip*.sh, _relay-*.md, _spawn-*.md,
+    # .pair-launch-*.sh) are NEVER deliverables regardless of session role.
+    # Suppress dirty entries entirely to prevent the self-referential recursion
+    # where writing .gate-skip.sh grows the unreviewed set while waiting for
+    # the operator to run it. The audit trail is the file itself on disk.
+    bash_cmd_raw = tool_input.get('command', '') if tool_name == 'Bash' else ''
+    plumbing_annotation = engine.is_plumbing_exempt(
+        file_path, tool_name, bash_cmd_raw)
+    if plumbing_annotation:
+        # Suppress: don't create a dirty entry. Print a quiet ack.
+        print(json.dumps({
+            'continue': True,
+            'hookSpecificOutput': {
+                'hookEventName': 'PostToolUse',
+                'additionalContext': (
+                    f'[review-gate] Plumbing-exempt (suppressed): '
+                    f'{file_path} ({plumbing_annotation})'),
+            },
+        }))
+        return
+
     tier = engine.classify_tier(file_path, tool_input, tool_name)
 
     # Substrate source: env override or default 'claude-code' (PostToolUse
