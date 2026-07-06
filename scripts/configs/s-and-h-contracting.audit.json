@@ -7,7 +7,7 @@
   "flag_threshold": 0.40,
   "critical_threshold": 0.60,
   "output_dir": "/Users/olivermarroquin/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting",
-  "gsc_reason_code_file": null,
+  "gsc_reason_code_file": "/Users/olivermarroquin/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/gsc-reason-codes-s-and-h-2026-07-06.json",
   "strip_tokens": {
     "cities": [
       "alexandria", "burke", "dale-city", "dale", "city",

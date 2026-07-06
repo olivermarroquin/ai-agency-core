@@ -27,8 +27,8 @@ Hard requirements:
   - No credentials needed (published-page reads only)
 
 Usage:
-    python3 sitewide_similarity_audit.py --config configs/s-and-h-contracting.audit.json
-    python3 sitewide_similarity_audit.py --config configs/ev-electric-services.audit.json --dry-run
+    python3 sitewide_similarity_audit.py --config configs/<client-slug>.audit.json
+    python3 sitewide_similarity_audit.py --config configs/<client-slug>.audit.json --dry-run
 
 Author: Oliver Marroquin (via Claude Code)
 Created: 2026-07-05
@@ -880,14 +880,14 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # S&H full audit
-  python3 sitewide_similarity_audit.py --config configs/s-and-h-contracting.audit.json
+  # Full audit
+  python3 sitewide_similarity_audit.py --config configs/<client-slug>.audit.json
 
-  # EV 2nd-instance proof
-  python3 sitewide_similarity_audit.py --config configs/ev-electric-services.audit.json
+  # 2nd-instance / calibration proof
+  python3 sitewide_similarity_audit.py --config configs/<client-slug>.audit.json
 
   # Dry run (no fetching)
-  python3 sitewide_similarity_audit.py --config configs/s-and-h-contracting.audit.json --dry-run
+  python3 sitewide_similarity_audit.py --config configs/<client-slug>.audit.json --dry-run
 """
     )
     parser.add_argument("--config", required=True, help="Path to client audit config JSON")
