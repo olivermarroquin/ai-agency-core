@@ -1,0 +1,4 @@
+visual-qc-out/
+*.png
+_selftest-*.html
+__pycache__/

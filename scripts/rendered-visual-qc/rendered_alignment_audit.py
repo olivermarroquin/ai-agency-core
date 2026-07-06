@@ -69,24 +69,34 @@ CHECK_JS = r"""
     });
 
     // --- B. empty / underfilled column ---
+    // Measure each column's CONTENT extent (top of first child to bottom of last),
+    // not the column box: grid/flex default `align-items:stretch` forces column
+    // boxes to equal height, which would hide an underfilled column.
+    // Only TRUE 2-column split layouts (main text + sidebar). Card/tile grids
+    // (3+ items) legitimately vary in height and must NOT be flagged — that was
+    // the false-positive flood. A genuine "empty column" is a 2-track section
+    // where one side is nearly empty.
     const grids = Array.from(section.querySelectorAll("*")).filter((el) => {
       const d = cs(el).display;
       return (d === "grid" || d === "flex") &&
-             Array.from(el.children).filter(c => c.getBoundingClientRect().height > 0).length >= 2;
+             Array.from(el.children).filter(c => c.getBoundingClientRect().height > 0).length === 2;
     });
     grids.forEach((g) => {
-      const cols = Array.from(g.children)
-        .map(c => ({ el: c, h: c.getBoundingClientRect().height, t: snip(c) }))
-        .filter(c => c.h > 0);
+      const cols = Array.from(g.children).map((c) => {
+        const kids = Array.from(c.children)
+          .map(k => k.getBoundingClientRect()).filter(r => r.height > 0);
+        let h = c.getBoundingClientRect().height;
+        if (kids.length) h = Math.max(...kids.map(r => r.bottom)) - Math.min(...kids.map(r => r.top));
+        return { el: c, h, t: snip(c) };
+      }).filter(c => c.t.length > 0);
       if (cols.length < 2) return;
       const maxH = Math.max(...cols.map(c => c.h));
       const minC = cols.reduce((a, b) => (a.h < b.h ? a : b));
-      // ignore obviously non-text columns (images/maps) with little text
-      if (maxH >= colFloor && minC.h < colRatio * maxH && (minC.t.length > 0)) {
+      if (maxH >= colFloor && minC.h < colRatio * maxH) {
         findings.push({
           check: "B-underfilled-column", severity: "warn",
           section: snip(g.closest("section") ? g.closest("section").querySelector("h2,h3") || g : g),
-          detail: `column height ${Math.round(minC.h)}px vs tallest ${Math.round(maxH)}px (${Math.round(100*minC.h/maxH)}%)`,
+          detail: `column content ${Math.round(minC.h)}px vs tallest ${Math.round(maxH)}px (${Math.round(100*minC.h/maxH)}%)`,
           element: `short column: "${minC.t}"`
         });
       }
