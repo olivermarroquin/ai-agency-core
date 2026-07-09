@@ -404,8 +404,10 @@ def main():
             f'review-pass marker; full details in the block file."')
     else:
         # Plumbing only — write a skip script for the operator
+        skip_dir = os.path.join(WORKSPACE_ROOT, '_scratch', 'skip')
+        os.makedirs(skip_dir, exist_ok=True)
         skip_script_path = os.path.join(
-            WORKSPACE_ROOT,
+            skip_dir,
             f'.gate-skip-{session_id[:12]}.sh')
         skip_cmd = (f'python3 {skip_script} --session {session_id} '
                     f'--reason "CR-219 plumbing-only block"')

@@ -180,6 +180,80 @@ class TestPlumbingExemptionUnit(unittest.TestCase):
         self.assertIsNone(result)
 
 
+class TestScratchDirExemptions(unittest.TestCase):
+    """New _scratch/ convention paths are plumbing-exempt."""
+
+    def setUp(self):
+        engine._reset_plumbing_cache()
+
+    def tearDown(self):
+        engine._reset_plumbing_cache()
+
+    def test_scratch_relay_exempt(self):
+        """Relay files in _scratch/relay/ match the plumbing pattern."""
+        result = engine.is_plumbing_exempt(
+            f'{WORKSPACE_ROOT}/_scratch/relay/_relay-producer-task.md',
+            'Write', '', WORKSPACE_ROOT)
+        self.assertIsNotNone(result)
+        self.assertIn('relay-file', result)
+
+    def test_scratch_relay_reviewer_exempt(self):
+        result = engine.is_plumbing_exempt(
+            f'{WORKSPACE_ROOT}/_scratch/relay/_relay-reviewer-task.md',
+            'Write', '', WORKSPACE_ROOT)
+        self.assertIsNotNone(result)
+        self.assertIn('relay-file', result)
+
+    def test_scratch_relay_default_exempt(self):
+        result = engine.is_plumbing_exempt(
+            f'{WORKSPACE_ROOT}/_scratch/relay/_relay-producer.md',
+            'Write', '', WORKSPACE_ROOT)
+        self.assertIsNotNone(result)
+        self.assertIn('relay-file', result)
+
+    def test_scratch_gate_skip_exempt(self):
+        result = engine.is_plumbing_exempt(
+            f'{WORKSPACE_ROOT}/_scratch/skip/.gate-skip-abc123.sh',
+            'Write', '', WORKSPACE_ROOT)
+        self.assertIsNotNone(result)
+        self.assertIn('gate-skip-script', result)
+
+    def test_scratch_gate_skip_default_exempt(self):
+        result = engine.is_plumbing_exempt(
+            f'{WORKSPACE_ROOT}/_scratch/skip/.gate-skip.sh',
+            'Write', '', WORKSPACE_ROOT)
+        self.assertIsNotNone(result)
+        self.assertIn('gate-skip-script', result)
+
+    def test_scratch_pair_launch_exempt(self):
+        result = engine.is_plumbing_exempt(
+            f'{WORKSPACE_ROOT}/_scratch/launch/.pair-launch-producer-task.sh',
+            'Write', '', WORKSPACE_ROOT)
+        self.assertIsNotNone(result)
+        self.assertIn('pair-launch-script', result)
+
+    def test_scratch_spawn_producer_exempt(self):
+        result = engine.is_plumbing_exempt(
+            f'{WORKSPACE_ROOT}/_scratch/spawn/_spawn-producer-task.md',
+            'Write', '', WORKSPACE_ROOT)
+        self.assertIsNotNone(result)
+        self.assertIn('spawn-file', result)
+
+    def test_scratch_spawn_reviewer_assembled_exempt(self):
+        result = engine.is_plumbing_exempt(
+            f'{WORKSPACE_ROOT}/_scratch/spawn/_spawn-reviewer-assembled-task.md',
+            'Write', '', WORKSPACE_ROOT)
+        self.assertIsNotNone(result)
+        self.assertIn('spawn-file', result)
+
+    def test_scratch_readme_not_exempt(self):
+        """The _scratch/_README.md is NOT a coordination file — not exempt."""
+        result = engine.is_plumbing_exempt(
+            f'{WORKSPACE_ROOT}/_scratch/_README.md',
+            'Write', '', WORKSPACE_ROOT)
+        self.assertIsNone(result)
+
+
 class TestHardNonExemptions(unittest.TestCase):
     """AC-2: Adversarial — deliverable writes disguised via plumbing patterns."""
 

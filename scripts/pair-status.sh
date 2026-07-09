@@ -8,8 +8,9 @@ SB="$W/second-brain"
 echo "==================== PAIR / SESSION STATUS ===================="
 
 # 1) Relay pairs: FINAL signal present in each direction?
+#    Scan both _scratch/relay/ (new convention) and workspace root (legacy in-flight pairs).
 FOUND_PAIR=0
-for P in "$W"/_relay-producer*.md; do
+for P in "$W"/_scratch/relay/_relay-producer*.md "$W"/_relay-producer*.md; do
   [ -f "$P" ] || continue
   FOUND_PAIR=1
   SLUG=$(basename "$P" .md | sed 's/_relay-producer-\{0,1\}//'); [ -z "$SLUG" ] && SLUG="(default)"
@@ -36,7 +37,8 @@ ACT=$(grep -rl "^status: active" "$SB/_meta/handoffs" --include="*.md" 2>/dev/nu
 
 echo "---------------------------------------------------------------"
 # 3) Scratch that indicates pending operator action:
-for S in "$W"/.gate-skip*.sh; do
+#    Scan both _scratch/skip/ (new convention) and workspace root (legacy).
+for S in "$W"/_scratch/skip/.gate-skip*.sh "$W"/.gate-skip*.sh; do
   [ -f "$S" ] && echo "PENDING SKIP not yet run: bash ${S/$HOME/~} && rm ${S/$HOME/~}"
 done
 for C in "$W"/second-brain/.commit.sh "$W"/repos/*/.commit.sh "$W"/ai-factory/.commit.sh "$W"/skills/.commit.sh; do
