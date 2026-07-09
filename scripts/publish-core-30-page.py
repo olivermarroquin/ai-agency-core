@@ -1565,6 +1565,32 @@ def publish(
             else:
                 print("→ wp:html guard: ✓ wrapper preserved")
 
+    # Guard 5 — render-time CSS integrity check (Issue: EV Wave-1 2026-07-09 —
+    # stored content was byte-identical to drafts, but wpautop injected </p><p>
+    # into <style> blocks during rendering when wp:html markers were missing.
+    # Stored-content checks alone miss this defect class. This guard fetches
+    # the RENDERED content and asserts 0 <p> tags inside any <style> block.)
+    import re as _re
+    rendered_url = (
+        f"{client.base_url}/wp-json/wp/v2/pages/{page_id}"
+        f"?_fields=content"
+    )
+    rendered_resp = requests.get(
+        rendered_url, headers=client.headers, timeout=client.timeout
+    )
+    if rendered_resp.status_code == 200:
+        rendered_content = rendered_resp.json().get("content", {}).get("rendered", "")
+        for _sm in _re.finditer(r'<style[^>]*>(.*?)</style>', rendered_content, _re.DOTALL):
+            _css = _sm.group(1)
+            _p_count = _css.count('<p>')
+            if _p_count > 0:
+                print(f"→ CSS integrity guard: ✗ FAILED — {_p_count} <p> tags inside <style> block. "
+                      f"wpautop is corrupting CSS at render time. "
+                      f"Check that content is wrapped in <!-- wp:html --> markers.")
+                break
+        else:
+            print("→ CSS integrity guard: ✓ 0 <p> tags in rendered <style>")
+
     # Set theme page-display options via the Keelworks bridge plugin.
     # These are theme-specific post-meta keys (not registered with show_in_rest)
     # that control header, padding, breadcrumb, and title visibility.

@@ -58,7 +58,7 @@ def build_headers(config: dict) -> dict:
 
 
 def fetch_page(headers: dict, page_id: int) -> dict:
-    url = f"{BASE_URL}/wp-json/wp/v2/pages/{page_id}"
+    url = f"{BASE_URL}/wp-json/wp/v2/pages/{page_id}?context=edit"
     resp = requests.get(url, headers=headers, timeout=TIMEOUT)
     resp.raise_for_status()
     return resp.json()
@@ -107,7 +107,7 @@ def main():
         print(f"\n{'[DRY RUN] ' if args.dry_run else ''}Processing WP {page_id} ({slug})...")
 
         page = fetch_page(headers, page_id)
-        content = page.get("content", {}).get("rendered", "")
+        content = page.get("content", {}).get("raw", "")
 
         new_content, replacements = replace_body_only(content)
 
