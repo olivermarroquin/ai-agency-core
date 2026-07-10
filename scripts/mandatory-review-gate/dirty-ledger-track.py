@@ -36,6 +36,7 @@ SELF_PATTERNS = [
     'dirty-ledger-track',
     'gate-status',
     'gate-skip',
+    'assert-gate-clear',
     'register-reviewer-session',
     '_paths.py',
     'from _paths import',
@@ -136,6 +137,47 @@ def main():
         display = re.sub(r'\s+', ' ', bash_cmd.strip())[:80]
     else:
         return
+
+    # --- D-09 guard for Write/Edit of skip scripts (CR-224 / skip-provenance) ---
+    # A model writing a .gate-skip*.sh file via Write/Edit is a D-09 candidate.
+    # The gate's own auto-written skip scripts go through mandatory-review-gate.py
+    # (not PostToolUse), so they don't trigger this guard. Only model hand-writes
+    # via the Write/Edit tools pass through here.
+    if tool_name in ('Write', 'Edit') and re.search(
+            r'\.gate-skip.*\.sh$', file_path):
+        d09_msg = (
+            f'[review-gate] ⚠️  D-09 WARNING: Write/Edit of gate-skip script '
+            f'detected ({os.path.basename(file_path)}). gate-skip scripts are '
+            f'OPERATOR-ONLY. A model authoring a skip script via {tool_name} '
+            f'is a D-09 class defect. Session: {session_id}'
+        )
+        print(d09_msg, file=sys.stderr)
+        # Write D-09 event-log row for audit trail
+        try:
+            from _paths import WORKSPACE_ROOT
+            event_log = os.environ.get(
+                'REVIEW_GATE_EVENT_LOG',
+                os.path.join(WORKSPACE_ROOT, 'second-brain',
+                             '_meta', '_event-log.md')
+            )
+            iso = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+            row = (
+                f'\n| {iso} | D-09 Write/Edit of gate-skip script | '
+                f'd-09 | {session_id} | '
+                f'**D-09 WARNING: model wrote gate-skip script '
+                f'({os.path.basename(file_path)}) via {tool_name}.** '
+                f'gate-skip scripts are OPERATOR-ONLY per CLAUDE.md. '
+                f'The Write/Edit tool was used to author a skip script, '
+                f'bypassing Bash-only D-09 detection. '
+                f'Full path: {file_path} |'
+            )
+            with open(event_log, 'a') as f:
+                f.write(row)
+        except OSError:
+            pass  # best-effort — don't crash tracking
+        # NOTE: we still fall through to the plumbing suppression below.
+        # The skip script IS plumbing (not a deliverable), but the D-09
+        # signal was recorded. Detection, not gating.
 
     # RGH-20 / CR-219 Part C: plumbing-scratch suppression.
     # Workspace-root scratch files (.gate-skip*.sh, _relay-*.md, _spawn-*.md,

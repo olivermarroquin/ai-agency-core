@@ -1391,10 +1391,13 @@ class TestGateSkip(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.state_dir, ignore_errors=True)
 
-    def _run_skip(self, reason='Testing emergency skip for conformance'):
+    def _run_skip(self, reason='Testing emergency skip for conformance',
+                   force=False):
+        cmd = ['python3', SKIP, '--session', self.SID, '--reason', reason]
+        if force:
+            cmd.append('--force-deliverables')
         return subprocess.run(
-            ['python3', SKIP, '--session', self.SID, '--reason', reason],
-            capture_output=True, text=True,
+            cmd, capture_output=True, text=True,
             cwd=SUBDIR_CWD, env=_make_env(self.state_dir))
 
     def test_skip_clears_unreviewed(self):
@@ -1410,8 +1413,10 @@ class TestGateSkip(unittest.TestCase):
         # Gate blocks before skip
         r = _run_gate(self.SID, self.state_dir)
         self.assertEqual(r.returncode, 2)
-        # Skip
-        r = self._run_skip()
+        # Skip (force=True: temp-dir files are classified as deliverables
+        # by the new deliverable guard; these tests exercise skip mechanics,
+        # not deliverable classification — that's in test_skip_provenance.py)
+        r = self._run_skip(force=True)
         self.assertEqual(r.returncode, 0, f'Skip failed: {r.stderr}')
         # Gate approves after skip
         r = _run_gate(self.SID, self.state_dir)
@@ -1428,13 +1433,13 @@ class TestGateSkip(unittest.TestCase):
         _run_track(self.SID, 'Write', {
             'file_path': artifact, 'content': content,
         }, self.state_dir)
-        self._run_skip()
+        self._run_skip(force=True)
         metrics = os.path.join(self.state_dir, 'metrics.jsonl')
         self.assertTrue(os.path.exists(metrics))
         with open(metrics) as f:
             lines = f.readlines()
         skip_entries = [json.loads(l) for l in lines
-                        if json.loads(l).get('outcome') == 'SKIP']
+                        if json.loads(l).get('outcome') in ('SKIP', 'SKIP-FORCED')]
         self.assertTrue(len(skip_entries) > 0,
                         'metrics.jsonl must contain a SKIP entry')
         self.assertIn('skip_reason', skip_entries[0])
@@ -1462,10 +1467,12 @@ class TestGateSkip(unittest.TestCase):
             'file_path': artifact, 'content': '# content\n',
         }, self.state_dir)
         isolated_log = os.path.join(self.state_dir, '_event-log-test.md')
-        # Run skip with the unique SID
+        # Run skip with the unique SID (force=True: temp-dir files are
+        # deliverables; this test exercises event-log isolation, not classification)
         r = subprocess.run(
             ['python3', SKIP, '--session', unique_sid,
-             '--reason', 'Testing event-log isolation for conformance'],
+             '--reason', 'Testing event-log isolation for conformance',
+             '--force-deliverables'],
             capture_output=True, text=True,
             cwd=SUBDIR_CWD, env=_make_env(self.state_dir))
         self.assertEqual(r.returncode, 0, f'Skip failed: {r.stderr}')
@@ -1474,7 +1481,9 @@ class TestGateSkip(unittest.TestCase):
                         'gate-skip must write to REVIEW_GATE_EVENT_LOG')
         with open(isolated_log) as f:
             content = f.read()
-        self.assertIn('GATE SKIP', content)
+        # Accept both normal and forced skip event-log rows
+        self.assertTrue('GATE SKIP' in content or 'FORCED' in content,
+                        f'Event log must contain skip row: {content}')
         self.assertIn(unique_sid, content)
         # Production event log must NOT contain the unique SID
         prod_log = os.path.join(EXPECTED_WORKSPACE_ROOT, 'second-brain',
