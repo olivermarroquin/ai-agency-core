@@ -62,6 +62,16 @@ def main():
                              '--session (the producer session), because sub-agents '
                              'inherit the parent session_id and cannot provide '
                              'independent review. (CR-045 / RGH-8)')
+    parser.add_argument('--operator-acknowledged', action='store_true',
+                        default=False,
+                        help='Acknowledge that BLOCKING close-gap findings '
+                             'are genuinely unfixable in-session. Required '
+                             'when deterministic close-gap checks still fail '
+                             'after re-check. (CR-229a)')
+    parser.add_argument('--relay-slug', default=None,
+                        help='Relay slug for operator mirror file verification. '
+                             'Used to locate _relay-operator-<slug>.md for '
+                             'BLOCKING findings surfacing check. (CR-229b)')
     args = parser.parse_args()
 
     if args.verdict == 'BLOCKING' and not args.findings:
@@ -215,6 +225,80 @@ def main():
                 'rows before clearing the gate.\n'
                 'See Closing Protocol Step 3b in '
                 '_review-skill-firing-tracker.md.',
+                file=sys.stderr)
+            sys.exit(1)
+
+    # --- CR-229a: BLOCKING close-gap re-check ---
+    # When verdict=BLOCKING and the verdict file's catches include
+    # deterministic close-gap checks, re-run them. If resolved, refuse
+    # the marker — the reviewer should re-run with --verdict PASS.
+    if args.verdict == 'BLOCKING':
+        catches = verdict_data.get('catches', [])
+        if isinstance(catches, list):
+            recheck_results = engine.recheck_close_gap_catches(
+                catches, args.files)
+            resolved = [(n, d) for n, still_fail, d in recheck_results
+                        if not still_fail]
+            still_failing = [(n, d) for n, still_fail, d in recheck_results
+                             if still_fail]
+
+            if resolved:
+                resolved_names = ', '.join(n for n, _ in resolved)
+                print(
+                    f'[review-gate] REJECTED: close-gap finding(s) resolved '
+                    f'since the verdict was authored: {resolved_names}. '
+                    f'Details: {"; ".join(d for _, d in resolved)}. '
+                    f'Re-run the review with --verdict PASS, or remove the '
+                    f'resolved catches from the verdict file. (CR-229a)',
+                    file=sys.stderr)
+                sys.exit(1)
+
+            if still_failing and not args.operator_acknowledged:
+                failing_names = ', '.join(n for n, _ in still_failing)
+                print(
+                    f'[review-gate] REJECTED: BLOCKING close-gap findings '
+                    f'still present ({failing_names}) but '
+                    f'--operator-acknowledged not set. Either fix the '
+                    f'findings and re-run with --verdict PASS, or add '
+                    f'--operator-acknowledged to confirm the findings are '
+                    f'genuinely unfixable in-session. (CR-229a)',
+                    file=sys.stderr)
+                sys.exit(1)
+
+    # --- CR-229b: BLOCKING findings must reach the operator ---
+    # For any BLOCKING marker: verify the findings text is present in the
+    # operator mirror file (paired sessions) or --operator-acknowledged
+    # is set (unpaired sessions). Mechanical check on findings text.
+    if args.verdict == 'BLOCKING' and args.findings:
+        findings_surfaced = False
+
+        if args.relay_slug:
+            mirror_path = os.path.join(
+                WORKSPACE_ROOT, '_scratch', 'relay',
+                f'_relay-operator-{args.relay_slug}.md')
+            if os.path.isfile(mirror_path):
+                try:
+                    with open(mirror_path, 'r') as mf:
+                        mirror_content = mf.read()
+                    # Substring match on the first 200 chars of findings
+                    # (enough to verify substance, not just a flag)
+                    findings_snippet = args.findings[:200]
+                    if findings_snippet in mirror_content:
+                        findings_surfaced = True
+                except OSError:
+                    pass
+
+        if args.operator_acknowledged:
+            findings_surfaced = True
+
+        if not findings_surfaced:
+            print(
+                f'[review-gate] REJECTED: BLOCKING findings must reach '
+                f'the operator. Either: (1) write findings to the operator '
+                f'mirror file (_relay-operator-<slug>.md) and pass '
+                f'--relay-slug, or (2) pass --operator-acknowledged for '
+                f'unpaired sessions. The findings text must be a substring '
+                f'match in the mirror file. (CR-229b)',
                 file=sys.stderr)
             sys.exit(1)
 

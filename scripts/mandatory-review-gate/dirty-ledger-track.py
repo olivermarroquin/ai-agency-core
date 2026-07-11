@@ -43,6 +43,36 @@ SELF_PATTERNS = [
 ]
 
 
+# CR-230: benign navigation commands that are safe companions to
+# self-referential gate commands. These never produce state changes.
+_BENIGN_NAV_CMDS = frozenset({
+    'cd', 'pushd', 'popd', 'source', '.', 'export', 'true', 'echo',
+    'printf', 'set', 'unset', 'alias', 'hash', 'pwd',
+})
+
+
+def _is_benign_nav_segment(segment: str) -> bool:
+    """Check if a command segment is benign navigation (cd, pushd, etc.).
+
+    Also handles pure variable assignments like VAR=value (no command runs).
+    """
+    segment = segment.strip()
+    if not segment:
+        return True
+    # Pure variable assignment: VAR=value with no command
+    tokens = segment.split()
+    all_assignments = all(
+        '=' in t and not t.startswith('-') and t.split('=')[0].replace('_', '').isalnum()
+        for t in tokens
+    )
+    if all_assignments:
+        return True
+    # First word is a benign nav command
+    first = tokens[0]
+    base = os.path.basename(first)
+    return base in _BENIGN_NAV_CMDS
+
+
 def main():
     try:
         raw = sys.stdin.read()
@@ -58,8 +88,16 @@ def main():
     tool_input = data.get('tool_input', {})
 
     # Self-referential exclusion — per-segment: split compound commands and
-    # exclude ONLY if EVERY segment is self-referential. A mixed command
+    # exclude ONLY if EVERY segment is either self-referential (gate script)
+    # or benign navigation (cd, pushd, popd, env assignment). A mixed command
     # (state-change + gate command) must be tracked.
+    #
+    # CR-230: the previous check required EVERY segment to contain a
+    # SELF_PATTERNS substring. This failed for cd-prefixed invocations:
+    #   cd ~/workspace && python3 .../log-review-pass.py --session ...
+    # because "cd ~/workspace" doesn't contain any gate script name.
+    # Fix: classify each segment as benign-nav OR self-ref OR other.
+    # Exclude only if no "other" segments exist and at least one is self-ref.
     if tool_name == 'Bash':
         bash_cmd = tool_input.get('command', '')
         # Gate-infrastructure path exclusion: Bash commands that target
@@ -72,10 +110,20 @@ def main():
         if '/.review-gate/' in bash_cmd:
             return
         segments = engine.split_compound(bash_cmd.strip()) if bash_cmd.strip() else []
-        if segments and all(
-            any(pat in seg for pat in SELF_PATTERNS)
-            for seg in segments
-        ):
+        has_self_ref = False
+        all_safe = True
+        for seg in segments:
+            seg_stripped = seg.strip()
+            if not seg_stripped:
+                continue
+            if any(pat in seg_stripped for pat in SELF_PATTERNS):
+                has_self_ref = True
+            elif _is_benign_nav_segment(seg_stripped):
+                pass  # benign navigation — neither self-ref nor problematic
+            else:
+                all_safe = False
+                break
+        if segments and has_self_ref and all_safe:
             # RGH-14B: D-09 guard — detect model-emitted gate-skip in a
             # producer session. gate-skip is OPERATOR-ONLY; a model running
             # it is a D-09 class defect. Flag loudly via stderr + event-log.
@@ -143,13 +191,35 @@ def main():
     # The gate's own auto-written skip scripts go through mandatory-review-gate.py
     # (not PostToolUse), so they don't trigger this guard. Only model hand-writes
     # via the Write/Edit tools pass through here.
-    if tool_name in ('Write', 'Edit') and re.search(
-            r'\.gate-skip.*\.sh$', file_path):
+    #
+    # CR-230 Part 2: also scan ANY .sh file's content for --force-deliverables.
+    # A session can compose a skip with --force-deliverables under a non-skip
+    # filename to bypass the filename-based D-09 detection.
+    d09_skip_file = (tool_name in ('Write', 'Edit') and
+                     re.search(r'\.gate-skip.*\.sh$', file_path))
+    d09_force_content = False
+    if tool_name in ('Write', 'Edit') and file_path.endswith('.sh'):
+        content = tool_input.get('content', '') or tool_input.get('new_string', '')
+        if 'force-deliverables' in content:
+            d09_force_content = True
+
+    if d09_skip_file or d09_force_content:
+        if d09_force_content and not d09_skip_file:
+            d09_detail = (
+                f'Script content contains --force-deliverables '
+                f'({os.path.basename(file_path)})')
+            d09_label = 'D-09 --force-deliverables in script content'
+        else:
+            d09_detail = (
+                f'gate-skip script authored via {tool_name} '
+                f'({os.path.basename(file_path)})')
+            d09_label = 'D-09 Write/Edit of gate-skip script'
+
         d09_msg = (
-            f'[review-gate] ⚠️  D-09 WARNING: Write/Edit of gate-skip script '
-            f'detected ({os.path.basename(file_path)}). gate-skip scripts are '
-            f'OPERATOR-ONLY. A model authoring a skip script via {tool_name} '
-            f'is a D-09 class defect. Session: {session_id}'
+            f'[review-gate] ⚠️  D-09 WARNING: {d09_detail}. '
+            f'gate-skip scripts are OPERATOR-ONLY. A model authoring a skip '
+            f'script via {tool_name} is a D-09 class defect. '
+            f'Session: {session_id}'
         )
         print(d09_msg, file=sys.stderr)
         # Write D-09 event-log row for audit trail
@@ -162,13 +232,10 @@ def main():
             )
             iso = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
             row = (
-                f'\n| {iso} | D-09 Write/Edit of gate-skip script | '
+                f'\n| {iso} | {d09_label} | '
                 f'd-09 | {session_id} | '
-                f'**D-09 WARNING: model wrote gate-skip script '
-                f'({os.path.basename(file_path)}) via {tool_name}.** '
+                f'**D-09 WARNING: {d09_detail}.** '
                 f'gate-skip scripts are OPERATOR-ONLY per CLAUDE.md. '
-                f'The Write/Edit tool was used to author a skip script, '
-                f'bypassing Bash-only D-09 detection. '
                 f'Full path: {file_path} |'
             )
             with open(event_log, 'a') as f:

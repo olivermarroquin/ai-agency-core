@@ -1137,6 +1137,13 @@ def _parse_plumbing_minimal(path: str) -> dict:
                 content)
             if scope_m:
                 entry['scope'] = scope_m.group(1)
+            # Check for reviewer_only field (CR-228)
+            ro_m = _re.search(
+                r'name:\s+' + _re.escape(m.group(2))
+                + r'(?:\s*\n\s+\w+:\s+\S+)*?\s*\n\s+reviewer_only:\s+(true|false)',
+                content)
+            if ro_m and ro_m.group(1) == 'true':
+                entry['reviewer_only'] = True
             result['plumbing_patterns'].append(entry)
         # Extract hard_non_exempt
         in_hard = False
@@ -1174,7 +1181,8 @@ def _get_plumbing_regex(pattern_str: str) -> re.Pattern:
 
 
 def is_plumbing_exempt(file_path: str, tool_name: str, bash_cmd: str = '',
-                       workspace_root: str = None) -> Optional[str]:
+                       workspace_root: str = None,
+                       include_reviewer_only: bool = False) -> Optional[str]:
     """Check if a dirty-ledger entry qualifies for plumbing exemption.
 
     Returns the exemption annotation string (e.g. 'CR-219 relay-file')
@@ -1189,6 +1197,11 @@ def is_plumbing_exempt(file_path: str, tool_name: str, bash_cmd: str = '',
         tool_name: The tool that produced the entry (Write, Edit, Bash).
         bash_cmd: Raw Bash command (only for Bash entries).
         workspace_root: Override for testing.
+        include_reviewer_only: If False (default), skip patterns with
+            reviewer_only=true. PostToolUse passes False (role-independent
+            suppression must not exempt reviewer-only patterns for
+            producers). check_gate passes True (reviewer session already
+            verified). (CR-228)
 
     Returns:
         Annotation string or None.
@@ -1218,9 +1231,34 @@ def is_plumbing_exempt(file_path: str, tool_name: str, bash_cmd: str = '',
         if not pat_str:
             continue
 
+        # CR-228: skip reviewer_only patterns unless caller opted in
+        if p.get('reviewer_only', False) and not include_reviewer_only:
+            continue
+
         if is_bash and scope == 'bash':
-            # Match pattern against the bash command text
-            if bash_cmd and _get_plumbing_regex(pat_str).search(bash_cmd):
+            # CR-228 R2: for reviewer_only bash patterns, split compound
+            # commands and match segments independently. This handles:
+            #   cd dir && pytest tests/ → cd is read-only, pytest matches → EXEMPT
+            #   pytest; rm -rf / → pytest matches, rm is NOT read-only → NOT EXEMPT
+            # Non-reviewer-only patterns match the whole command (legacy behavior).
+            if bash_cmd and p.get('reviewer_only', False):
+                segments = split_compound(bash_cmd.strip()) if bash_cmd.strip() else []
+                pat_re = _get_plumbing_regex(pat_str)
+                has_match = False
+                all_others_safe = True
+                for seg in segments:
+                    seg = seg.strip()
+                    if not seg:
+                        continue
+                    if pat_re.search(seg):
+                        has_match = True
+                    elif not _is_segment_read_only(seg):
+                        all_others_safe = False
+                        break
+                if has_match and all_others_safe:
+                    matched_name = name
+                    break
+            elif bash_cmd and _get_plumbing_regex(pat_str).search(bash_cmd):
                 matched_name = name
                 break
         elif not is_bash and scope != 'bash':
@@ -2169,7 +2207,8 @@ def check_gate(
             tool = e.get('tool', '')
             bash_cmd = e.get('bash_cmd', e.get('display', ''))
             annotation = is_plumbing_exempt(
-                fp, tool, bash_cmd, workspace_root)
+                fp, tool, bash_cmd, workspace_root,
+                include_reviewer_only=True)  # CR-228: reviewer session verified above
             if annotation:
                 plumbing_exempt += 1
                 plumbing_exempt_keys.add(fp)
@@ -2489,3 +2528,154 @@ def format_file_list(entries: list) -> str:
 def format_files_argv(entries: list) -> str:
     """Build the --files argument string with file_path keys."""
     return ' '.join(f'"{e["file_path"]}"' for e in entries)
+
+
+# ============================================================================
+# CR-229a: BLOCKING close-gap re-check (deterministic)
+# ============================================================================
+
+# Check names that are deterministic and re-runnable in-process.
+# If a BLOCKING verdict cites one of these and the re-check now passes,
+# the finding was fixed and the BLOCKING marker is refused — the reviewer
+# should re-run with --verdict PASS.
+RECHECKABLE_CLOSE_GAP_CHECKS = frozenset({
+    'KCA-not-recorded',
+    'exec-log-required-sections',
+    'exec-log-substantive',
+})
+
+# Patterns used by each re-check (compiled lazily)
+_KCA_PATTERN = re.compile(
+    r'(?i)(knowledge\s+capture|pattern\s+candidate|lesson|retro|'
+    r'checkpoint\s+complete|captured:)',
+)
+_EXEC_LOG_REQUIRED_HEADERS = [
+    re.compile(r'(?i)\bwhat\s+was\s+built\b'),
+    re.compile(r'(?i)\bdecision\b'),
+]
+_FRONTMATTER_RE = re.compile(r'^---\s*$')
+
+
+def _recheck_kca(target_file: str) -> tuple:
+    """Re-check KCA-not-recorded: does the file mention knowledge capture?
+
+    Returns (still_failing: bool, detail: str).
+    """
+    if not os.path.isfile(target_file):
+        return True, f'target file not found: {target_file}'
+    try:
+        with open(target_file, 'r') as f:
+            content = f.read()
+    except OSError as e:
+        return True, f'cannot read target: {e}'
+    if _KCA_PATTERN.search(content):
+        return False, 'KCA content found — finding resolved'
+    return True, 'no KCA content found'
+
+
+def _recheck_exec_log_sections(target_file: str) -> tuple:
+    """Re-check exec-log-required-sections: required headers present?
+
+    Returns (still_failing: bool, detail: str).
+    """
+    if not os.path.isfile(target_file):
+        return True, f'target file not found: {target_file}'
+    try:
+        with open(target_file, 'r') as f:
+            content = f.read()
+    except OSError as e:
+        return True, f'cannot read target: {e}'
+    missing = []
+    for pat in _EXEC_LOG_REQUIRED_HEADERS:
+        if not pat.search(content):
+            missing.append(pat.pattern)
+    if missing:
+        return True, f'missing required sections matching: {missing}'
+    return False, 'all required sections present — finding resolved'
+
+
+def _recheck_exec_log_substantive(target_file: str) -> tuple:
+    """Re-check exec-log-substantive: non-trivial content after headers?
+
+    Returns (still_failing: bool, detail: str).
+    Requires at least 3 non-header, non-frontmatter, non-blank lines
+    after the first ## heading.
+    """
+    if not os.path.isfile(target_file):
+        return True, f'target file not found: {target_file}'
+    try:
+        with open(target_file, 'r') as f:
+            lines = f.readlines()
+    except OSError as e:
+        return True, f'cannot read target: {e}'
+
+    # Skip frontmatter
+    in_frontmatter = False
+    content_lines = []
+    past_first_heading = False
+    for line in lines:
+        stripped = line.strip()
+        if _FRONTMATTER_RE.match(stripped):
+            in_frontmatter = not in_frontmatter
+            continue
+        if in_frontmatter:
+            continue
+        if stripped.startswith('##'):
+            past_first_heading = True
+            continue
+        if past_first_heading and stripped and not stripped.startswith('#'):
+            content_lines.append(stripped)
+
+    if len(content_lines) >= 3:
+        return False, f'{len(content_lines)} substantive lines — finding resolved'
+    return True, f'only {len(content_lines)} substantive lines (need >= 3)'
+
+
+_RECHECK_DISPATCH = {
+    'KCA-not-recorded': _recheck_kca,
+    'exec-log-required-sections': _recheck_exec_log_sections,
+    'exec-log-substantive': _recheck_exec_log_substantive,
+}
+
+
+def recheck_close_gap_catches(catches: list, reviewed_files: list) -> list:
+    """Re-run deterministic close-gap checks from a BLOCKING verdict's catches.
+
+    Args:
+        catches: List of catch dicts from the verdict file. Each has at minimum
+            a 'name' field. May have 'target_file' or 'file' for the path.
+        reviewed_files: The --files argument from log-review-pass (fallback
+            for finding the target execution log).
+
+    Returns:
+        List of (check_name, still_failing, detail) tuples.
+        Only checks in RECHECKABLE_CLOSE_GAP_CHECKS are re-run.
+    """
+    results = []
+    for catch in catches:
+        if not isinstance(catch, dict):
+            continue
+        name = catch.get('name', '')
+        if name not in RECHECKABLE_CLOSE_GAP_CHECKS:
+            continue
+
+        fn = _RECHECK_DISPATCH.get(name)
+        if fn is None:
+            continue
+
+        # Locate target file: explicit in catch, or fallback to --files
+        target = catch.get('target_file', catch.get('file', ''))
+        if not target or not os.path.isfile(target):
+            for f in reviewed_files:
+                if 'execution-log' in os.path.basename(f):
+                    target = f
+                    break
+
+        if not target:
+            results.append((name, True, 'no target file found'))
+            continue
+
+        still_failing, detail = fn(target)
+        results.append((name, still_failing, detail))
+
+    return results

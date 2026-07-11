@@ -450,12 +450,19 @@ def main():
 ```
 python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-independent --verdict-file <path> --reviewer-type independent --reviewer-session <REVIEWER_SESSION_ID> --run-id <chat-slug>
 ```
-
+"""
+        # CR-229c: omit emergency-skip section when deliverables > 0.
+        # Deliverable blocks must be cleared by the reviewer, not skipped.
+        # gate-skip.py already refuses deliverables (CR-224); printing the
+        # command contradicts the provenance rule.
+        if n_deliverables == 0:
+            block_file_content += f"""
 ### For operator (emergency skip):
 ```
 python3 {skip_script} --session {session_id} --reason "reviewer plumbing"
 ```
-
+"""
+        block_file_content += f"""
 ## Protocol
 Full protocol: {MANDATE_PATH}
 Producer cannot self-clear. A sub-agent does NOT count (shares session_id).
