@@ -1232,6 +1232,26 @@ def is_plumbing_exempt(file_path: str, tool_name: str, bash_cmd: str = '',
     if matched_name is None:
         return None
 
+    # --- Traversal guard for scratch-cleanup patterns (skip-provenance) ---
+    # A command like `rm -f ~/workspace/_scratch/../repos/x/file.ts` matches
+    # the regex because the argument CONTAINS `/workspace/_scratch/`, but the
+    # resolved path escapes _scratch/ via `..`. For scratch-cleanup-rm and
+    # scratch-cleanup-mv patterns, extract all path tokens from the bash command,
+    # resolve each via normpath, and reject if ANY resolved path is not under
+    # <workspace>/_scratch/.
+    if is_bash and matched_name in ('scratch-cleanup-rm', 'scratch-cleanup-mv'):
+        ws = workspace_root or WORKSPACE_ROOT
+        scratch_prefix = os.path.join(ws, '_scratch')
+        # Extract path tokens: skip the command name and flags
+        tokens = bash_cmd.split() if bash_cmd else []
+        path_tokens = [t for t in tokens[1:]
+                       if not t.startswith('-')]
+        # Expand ~ and resolve .. sequences
+        for tok in path_tokens:
+            resolved = os.path.normpath(os.path.expanduser(tok))
+            if not resolved.startswith(scratch_prefix):
+                return None  # traversal detected — NOT exempt
+
     # Check hard non-exemptions AFTER matching a plumbing pattern.
     # A file matching a hard non-exempt pattern is NEVER exempt.
     if not is_bash:

@@ -421,6 +421,59 @@ class TestBashScratchCleanupExemption:
 
 
 # ============================================================================
+# Path traversal guard (post-FINAL addendum)
+# ============================================================================
+
+class TestScratchTraversalGuard:
+    """rm/mv with .. traversal escaping _scratch/ must NOT be exempt."""
+
+    def test_rm_traversal_not_exempt(self):
+        """rm -f ~/workspace/_scratch/../repos/x/file.ts → NOT exempt."""
+        engine._reset_plumbing_cache()
+        result = engine.is_plumbing_exempt(
+            'BASH:trav01', 'Bash',
+            'rm -f ~/workspace/_scratch/../repos/x/file.ts')
+        assert result is None, \
+            'Path traversal via .. must NOT be exempt'
+
+    def test_rm_plain_scratch_still_exempt(self):
+        """rm -f ~/workspace/_scratch/skip/.gate-skip-x.sh → still exempt."""
+        engine._reset_plumbing_cache()
+        result = engine.is_plumbing_exempt(
+            'BASH:trav02', 'Bash',
+            'rm -f ~/workspace/_scratch/skip/.gate-skip-x.sh')
+        assert result is not None, \
+            'Plain _scratch/ rm must still be exempt after traversal guard'
+
+    def test_mv_traversal_not_exempt(self):
+        """mv ~/workspace/_scratch/../repos/x.py ~/workspace/_scratch/y.py → NOT exempt."""
+        engine._reset_plumbing_cache()
+        result = engine.is_plumbing_exempt(
+            'BASH:trav03', 'Bash',
+            'mv ~/workspace/_scratch/../repos/x.py ~/workspace/_scratch/y.py')
+        assert result is None, \
+            'mv with traversal source must NOT be exempt'
+
+    def test_mv_both_scratch_still_exempt(self):
+        """mv ~/workspace/_scratch/a.md ~/workspace/_scratch/b.md → still exempt."""
+        engine._reset_plumbing_cache()
+        result = engine.is_plumbing_exempt(
+            'BASH:trav04', 'Bash',
+            'mv ~/workspace/_scratch/a.md ~/workspace/_scratch/b.md')
+        assert result is not None, \
+            'mv within _scratch/ must still be exempt'
+
+    def test_rm_double_traversal_not_exempt(self):
+        """rm ~/workspace/_scratch/../../etc/passwd → NOT exempt."""
+        engine._reset_plumbing_cache()
+        result = engine.is_plumbing_exempt(
+            'BASH:trav05', 'Bash',
+            'rm ~/workspace/_scratch/../../etc/passwd')
+        assert result is None, \
+            'Double traversal must NOT be exempt'
+
+
+# ============================================================================
 # Run with pytest
 # ============================================================================
 
