@@ -120,8 +120,11 @@ def _ensure_reviewer_session(state_dir, producer_session_id):
     """Create and register a valid reviewer session for test use.
 
     CR-165: log-review-pass.py now requires --reviewer-session on ALL paths.
-    This helper creates a registered reviewer session that can be passed to
-    _run_log(). Returns the reviewer session UUID.
+    RGH-15 hardened (CR-232 Fix 6): inert reviewers (no dirty-ledger activity)
+    are DENIED unless operator-dispatched. This helper creates both the role
+    marker AND a dummy dirty-ledger entry to prove the reviewer ran verification.
+
+    Returns the reviewer session UUID.
     """
     import hashlib
     h = hashlib.md5(state_dir.encode()).hexdigest()
@@ -133,6 +136,25 @@ def _ensure_reviewer_session(state_dir, producer_session_id):
         with open(marker_path, 'w') as f:
             json.dump({'role': 'reviewer',
                        'reviewing_session': producer_session_id}, f)
+
+    # RGH-15 hardened: create dirty-ledger activity so the reviewer
+    # is not classified as inert (which would cause DENY).
+    ledger_path = os.path.join(state_dir, f'{reviewer_uuid}-dirty.jsonl')
+    if not os.path.isfile(ledger_path):
+        import time
+        entry = {
+            'timestamp': time.time(),
+            'iso_time': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+            'tool': 'Bash',
+            'file_path': 'BASH:test_activity',
+            'tier': 'full',
+            'source': 'claude-code',
+            'entry_source': 'reviewer',
+            'display': 'grep -r pattern .',
+        }
+        with open(ledger_path, 'w') as f:
+            f.write(json.dumps(entry) + '\n')
+
     return reviewer_uuid
 
 

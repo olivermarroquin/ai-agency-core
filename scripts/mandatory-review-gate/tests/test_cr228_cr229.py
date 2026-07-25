@@ -800,8 +800,12 @@ class TestCR230ForceDeliverablesD09:
                 }, tmpdir)
             assert 'D-09' not in stderr, f'No D-09 expected, got: {stderr}'
 
-    def test_force_deliverables_in_non_sh_file_no_d09(self):
-        """Write of .py file with force-deliverables text → no D-09 (not .sh)."""
+    def test_force_deliverables_in_py_file_fires_d09(self):
+        """Write of .py file with force-deliverables text → D-09 fires.
+
+        CR-238 Fix 4: extended force-deliverables content scan to .py/.zsh/.bash
+        (not just .sh). A .py file containing --force-deliverables is now caught.
+        """
         with tempfile.TemporaryDirectory() as tmpdir:
             rc, stdout, stderr, state_dir, event_log = _run_dirty_ledger_track(
                 'test-cr230-d09-4', 'Write',
@@ -809,4 +813,4 @@ class TestCR230ForceDeliverablesD09:
                     'file_path': '/Users/olivermarroquin/workspace/repos/test/test.py',
                     'content': '# test force-deliverables flag handling\n',
                 }, tmpdir)
-            assert 'D-09' not in stderr
+            assert 'D-09' in stderr

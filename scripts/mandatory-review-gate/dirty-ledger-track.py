@@ -142,12 +142,7 @@ def main():
                     print(d09_msg, file=sys.stderr)
                     # Write D-09 event-log row for audit trail
                     try:
-                        from _paths import WORKSPACE_ROOT
-                        event_log = os.environ.get(
-                            'REVIEW_GATE_EVENT_LOG',
-                            os.path.join(WORKSPACE_ROOT, 'second-brain',
-                                         '_meta', '_event-log.md')
-                        )
+                        event_log = engine.get_event_log_path()
                         iso = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
                         row = (
                             f'\n| {iso} | D-09 gate-skip in producer session | '
@@ -162,6 +157,73 @@ def main():
                             f.write(row)
                     except OSError:
                         pass  # best-effort — don't crash tracking
+
+            # CR-232 Fix 5: Self-clearing tripwire (identity stopgap).
+            # Detect when a session runs log-review-pass.py --session <itself>
+            # or register-reviewer-session.py where it registers itself.
+            # This makes the fabricated-reviewer path NOISY instead of silent.
+            if 'log-review-pass' in bash_cmd:
+                # Extract --session value from the command
+                session_match = re.search(
+                    r'--session\s+(\S+)', bash_cmd)
+                if session_match:
+                    target_session = session_match.group(1)
+                    if target_session == session_id:
+                        d09_msg = (
+                            f'[review-gate] ⚠️  D-09 SELF-CLEAR WARNING: '
+                            f'session {session_id} is running '
+                            f'log-review-pass.py --session <itself>. '
+                            f'A session clearing its own gate is a D-09 '
+                            f'class defect (fabricated-reviewer path). '
+                            f'The real fix is the GIT-GATE daemon (Phase 2/3).'
+                        )
+                        print(d09_msg, file=sys.stderr)
+                        try:
+                            event_log = engine.get_event_log_path()
+                            iso = time.strftime(
+                                '%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+                            row = (
+                                f'\n| {iso} | D-09 self-clear attempt | '
+                                f'd-09 | {session_id} | '
+                                f'**D-09 SELF-CLEAR: session ran '
+                                f'log-review-pass.py --session <itself>.** '
+                                f'Fabricated-reviewer path detected. |'
+                            )
+                            with open(event_log, 'a') as f:
+                                f.write(row)
+                        except OSError:
+                            pass
+
+            if 'register-reviewer-session' in bash_cmd:
+                # Detect self-registration as reviewer
+                session_match = re.search(
+                    r'--session\s+(\S+)', bash_cmd)
+                if session_match:
+                    target_session = session_match.group(1)
+                    if target_session == session_id:
+                        d09_msg = (
+                            f'[review-gate] ⚠️  D-09 SELF-REGISTER WARNING: '
+                            f'session {session_id} is registering itself as '
+                            f'a reviewer via register-reviewer-session.py. '
+                            f'Self-registration is a D-09 class defect.'
+                        )
+                        print(d09_msg, file=sys.stderr)
+                        try:
+                            event_log = engine.get_event_log_path()
+                            iso = time.strftime(
+                                '%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+                            row = (
+                                f'\n| {iso} | D-09 self-register attempt | '
+                                f'd-09 | {session_id} | '
+                                f'**D-09 SELF-REGISTER: session ran '
+                                f'register-reviewer-session.py --session '
+                                f'<itself>.** |'
+                            )
+                            with open(event_log, 'a') as f:
+                                f.write(row)
+                        except OSError:
+                            pass
+
             return
 
     file_path = None
@@ -195,10 +257,16 @@ def main():
     # CR-230 Part 2: also scan ANY .sh file's content for --force-deliverables.
     # A session can compose a skip with --force-deliverables under a non-skip
     # filename to bypass the filename-based D-09 detection.
+    # CR-238 fix: drop leading-dot requirement in gate-skip filename regex.
+    # The old regex `\.gate-skip.*\.sh$` missed files like `test-gate-skip.sh`
+    # (no leading dot). Now matches any filename containing 'gate-skip'.
+    # Also extend force-deliverables content scan to .py/.zsh/.bash (B-3 fix).
     d09_skip_file = (tool_name in ('Write', 'Edit') and
-                     re.search(r'\.gate-skip.*\.sh$', file_path))
+                     re.search(r'gate-skip[^/]*\.sh$', file_path))
     d09_force_content = False
-    if tool_name in ('Write', 'Edit') and file_path.endswith('.sh'):
+    _EXECUTABLE_EXTENSIONS = ('.sh', '.py', '.zsh', '.bash')
+    if tool_name in ('Write', 'Edit') and any(
+            file_path.endswith(ext) for ext in _EXECUTABLE_EXTENSIONS):
         content = tool_input.get('content', '') or tool_input.get('new_string', '')
         if 'force-deliverables' in content:
             d09_force_content = True
@@ -224,12 +292,7 @@ def main():
         print(d09_msg, file=sys.stderr)
         # Write D-09 event-log row for audit trail
         try:
-            from _paths import WORKSPACE_ROOT
-            event_log = os.environ.get(
-                'REVIEW_GATE_EVENT_LOG',
-                os.path.join(WORKSPACE_ROOT, 'second-brain',
-                             '_meta', '_event-log.md')
-            )
+            event_log = engine.get_event_log_path()
             iso = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
             row = (
                 f'\n| {iso} | {d09_label} | '

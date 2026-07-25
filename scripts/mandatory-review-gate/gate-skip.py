@@ -145,11 +145,8 @@ def main():
                        count, tier, 0, extra=metrics_extra)
 
     # Write LOUD event-log row
-    # REVIEW_GATE_EVENT_LOG env override for test isolation (default unchanged)
-    event_log = os.environ.get(
-        'REVIEW_GATE_EVENT_LOG',
-        os.path.join(WORKSPACE_ROOT, 'second-brain', '_meta', '_event-log.md')
-    )
+    # CR-236: validated event-log path (rejects /dev/null + out-of-workspace)
+    event_log = engine.get_event_log_path()
     skipped_files = ', '.join(e.get('file_path', '?')[:60] for e in unreviewed[:5])
     if count > 5:
         skipped_files += f' (+{count - 5} more)'

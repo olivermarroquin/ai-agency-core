@@ -177,17 +177,45 @@ def main():
     # The independent-type-specific checks below validate the verdict schema
     # and the firing-tracker rows.
     if args.reviewer_type == 'independent':
-        # RGH-15A check 3: reviewer session should have dirty-ledger activity
-        # (proof it actually ran verification). WARNING only — not blocking.
+        # CR-232 Fix 6 / RGH-15 hardened: inert reviewer → DENY by default.
+        # An inert reviewer (no dirty-ledger activity) is now REJECTED unless
+        # the reviewer's role marker carries operator_dispatched=true.
+        # Operator-dispatched external reviewers (the legitimate external-clear
+        # path) still work; a fabricated inert reviewer minted for self-clearing
+        # is rejected.
         reviewer_ledger = os.path.join(
             STATE_DIR, f'{args.reviewer_session}-dirty.jsonl')
         if not os.path.isfile(reviewer_ledger):
-            print(f'[review-gate] WARNING: reviewer session '
-                  f'"{args.reviewer_session}" has no dirty-ledger activity. '
-                  f'A registered-but-inert session may indicate a fabricated '
-                  f'identity. The verdict is accepted but flagged for operator '
-                  f'spot-check. (RGH-15)',
-                  file=sys.stderr)
+            # Check if reviewer was operator-dispatched (legitimate path)
+            _reviewer_marker_path = os.path.join(
+                STATE_DIR, f'{args.reviewer_session}-role.json')
+            _is_operator_dispatched = False
+            try:
+                with open(_reviewer_marker_path, 'r') as _rmf:
+                    _rm_data = json.load(_rmf)
+                _is_operator_dispatched = _rm_data.get(
+                    'operator_dispatched', False)
+            except (json.JSONDecodeError, OSError):
+                pass
+
+            if _is_operator_dispatched:
+                print(f'[review-gate] WARNING: reviewer session '
+                      f'"{args.reviewer_session}" has no dirty-ledger '
+                      f'activity but is operator-dispatched — accepted. '
+                      f'(RGH-15 hardened)',
+                      file=sys.stderr)
+            else:
+                print(f'[review-gate] REJECTED: reviewer session '
+                      f'"{args.reviewer_session}" has no dirty-ledger '
+                      f'activity (no proof of verification work). '
+                      f'An inert reviewer session may indicate a '
+                      f'fabricated identity. Either: (1) the reviewer '
+                      f'must run verification commands to create ledger '
+                      f'activity, or (2) use --operator-dispatched when '
+                      f'registering the reviewer session. (RGH-15 '
+                      f'hardened, CR-232 Fix 6)',
+                      file=sys.stderr)
+                sys.exit(1)
 
     # OC-17 enforcement: when independent reviewer closes the gate,
     # verify firing-tracker rows exist for this run ID before allowing PASS.

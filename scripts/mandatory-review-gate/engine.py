@@ -29,6 +29,67 @@ from _paths import STATE_DIR, WORKSPACE_ROOT
 
 
 # ============================================================================
+# Event-log path hardening (CR-236)
+# ============================================================================
+#
+# REVIEW_GATE_EVENT_LOG=/dev/null silences the skip audit row (red-team
+# finding B-4). Fix: validate the env override points to a real, writable
+# file under workspace root (or STATE_DIR for tests). /dev/null and
+# non-existent paths are rejected; the hard-coded default is used instead.
+
+_DEFAULT_EVENT_LOG = os.path.join(
+    WORKSPACE_ROOT, 'second-brain', '_meta', '_event-log.md')
+
+
+def get_event_log_path() -> str:
+    """Return the validated event-log path.
+
+    Accepts REVIEW_GATE_EVENT_LOG override ONLY if it points to:
+    - A path under WORKSPACE_ROOT, OR
+    - A path under STATE_DIR (for test isolation)
+
+    Rejects /dev/null, non-existent parent dirs, and paths outside the
+    workspace. Falls back to the hard-coded default with a stderr warning.
+    """
+    override = os.environ.get('REVIEW_GATE_EVENT_LOG')
+    if not override:
+        return _DEFAULT_EVENT_LOG
+
+    resolved = os.path.realpath(override)
+
+    # Reject /dev/null explicitly
+    if resolved == '/dev/null':
+        print('[review-gate] WARNING: REVIEW_GATE_EVENT_LOG=/dev/null '
+              'rejected (CR-236 audit-integrity). Using default.',
+              file=sys.stderr)
+        return _DEFAULT_EVENT_LOG
+
+    # Accept paths under workspace root, STATE_DIR, or STATE_DIR's parent
+    # (test isolation puts event-log as a sibling of the state subdir)
+    ws_resolved = os.path.realpath(WORKSPACE_ROOT)
+    sd_resolved = os.path.realpath(STATE_DIR)
+    sd_parent = os.path.dirname(sd_resolved)
+    if not (resolved.startswith(ws_resolved + os.sep) or
+            resolved.startswith(sd_resolved + os.sep) or
+            resolved.startswith(sd_parent + os.sep) or
+            resolved == ws_resolved or resolved == sd_resolved):
+        print(f'[review-gate] WARNING: REVIEW_GATE_EVENT_LOG={override!r} '
+              f'is outside workspace root and STATE_DIR. '
+              f'Rejected (CR-236). Using default.', file=sys.stderr)
+        return _DEFAULT_EVENT_LOG
+
+    # Verify parent directory exists
+    parent = os.path.dirname(resolved)
+    if not os.path.isdir(parent):
+        print(f'[review-gate] WARNING: REVIEW_GATE_EVENT_LOG={override!r} '
+              f'parent dir does not exist. Rejected (CR-236). Using default.',
+              file=sys.stderr)
+        return _DEFAULT_EVENT_LOG
+
+    return override
+
+
+# ============================================================================
 # Ledger I/O
 # ============================================================================
 
@@ -302,6 +363,125 @@ _INLINE_CODE_RE = re.compile(
     r'^(?:\S*/)?(?:python3?|bash|sh|zsh|node|ruby|perl)\b[^\n]*\s-c\b')
 
 
+# CR-233: Allowlist of read-only Python inline idioms for -c and heredocs.
+# ONLY these patterns pass as read-only. Everything else is state-changing.
+# This replaces the old blanket whitelist that was the red-team's most
+# dangerous finding (writes misclassified as read-only).
+_PYTHON_READ_ONLY_IDIOMS = re.compile(
+    r'^(?:'
+    r'(?:import\s+(?:json|yaml|re|sys|os\.path|pathlib|collections|itertools'
+    r'|functools|math|string|textwrap|pprint|ast|hashlib|base64|urllib\.parse'
+    r'|datetime|time|copy|io|csv|configparser|argparse|glob|fnmatch'
+    r'|posixpath|ntpath|stat|os)'
+    r'(?:\s*[,;]\s*(?:import\s+)?[a-zA-Z_.]+)*'
+    r'(?:\s*;?\s*)?)'  # import statements
+    r'|print\s*\('  # print(...)
+    r'|json\.loads?\s*\('  # json.load/loads
+    r'|json\.dumps?\s*\('  # json.dump/dumps to stdout
+    r'|yaml\.safe_load\s*\('  # yaml.safe_load
+    r'|len\s*\('  # len(...)
+    r'|type\s*\('  # type(...)
+    r'|isinstance\s*\('  # isinstance(...)
+    r'|str\s*\('  # str(...)
+    r'|int\s*\('  # int(...)
+    r'|float\s*\('  # float(...)
+    r'|bool\s*\('  # bool(...)
+    r'|list\s*\('  # list(...)
+    r'|dict\s*\('  # dict(...)
+    r'|sorted\s*\('  # sorted(...)
+    r'|repr\s*\('  # repr(...)
+    r'|hasattr\s*\('  # hasattr(...)
+    # NOTE: getattr INTENTIONALLY EXCLUDED (CR-233 R1 review).
+    # getattr(os, "remove")("/tmp/x") returns the callable and the trailing
+    # parens execute it — dynamic dispatch bypasses the write-indicator check.
+    # hasattr is safe (returns bool); getattr is not.
+    r'|os\.path\.\w+\s*\('  # os.path.exists/join/etc
+    r'|sys\.version'  # sys.version
+    r'|sys\.executable'  # sys.executable
+    r'|sys\.path'  # sys.path
+    r')',
+    re.MULTILINE,
+)
+
+# Patterns in python3 -c / heredoc that indicate WRITES — these BLOCK
+# even if an allowlisted idiom is also present. Defence-in-depth.
+_PYTHON_WRITE_INDICATORS = re.compile(
+    r"""open\s*\(.*['"][wa]"""   # open(..., 'w') or open(..., 'a')
+    r"""|\.write\s*\("""         # .write(
+    r"""|\.writelines\s*\("""    # .writelines(
+    r"""|os\.rename\s*\("""      # os.rename(
+    r"""|os\.remove\s*\("""      # os.remove(
+    r"""|os\.unlink\s*\("""      # os.unlink(
+    r"""|os\.rmdir\s*\("""       # os.rmdir(
+    r"""|os\.makedirs?\s*\("""   # os.makedirs/mkdir
+    r"""|os\.system\s*\("""      # os.system(
+    r"""|subprocess\."""          # subprocess.run/call/etc
+    r"""|shutil\."""              # shutil.copy/move/rmtree/etc.
+    r"""|__import__\s*\("""      # __import__("os").system(...)
+    r"""|exec\s*\("""            # exec(...)
+    r"""|eval\s*\("""            # eval(...)
+    r"""|compile\s*\("""         # compile(...)
+    r"""|importlib\."""           # importlib.import_module(...)
+    r"""|pathlib\.Path\(.*\.(?:write|mkdir|unlink|rmdir|rename|touch)"""
+    r"""|urllib\.request\.urlretrieve"""  # downloads file
+    ,
+    re.IGNORECASE,
+)
+
+
+def _is_python_inline_read_only(segment: str) -> bool:
+    """Check if a python3 -c or heredoc command is provably read-only.
+
+    Returns True ONLY if:
+    1. No write indicators are present (defence-in-depth), AND
+    2. The code body matches known read-only idioms.
+
+    Returns False (state-changing) in all other cases — fail-closed.
+    """
+    # First: reject if ANY write indicator is present
+    if _PYTHON_WRITE_INDICATORS.search(segment):
+        return False
+
+    # Also check the existing _PYTHON_INLINE_WRITE_RE for completeness
+    if _PYTHON_INLINE_WRITE_RE.search(segment):
+        return False
+
+    # Extract the code body for idiom matching
+    # For -c: everything after the -c flag
+    c_match = re.search(r'-c\s+(.+)', segment, re.DOTALL)
+    if c_match:
+        body = c_match.group(1).strip().strip("'\"")
+    else:
+        # Heredoc: extract body between << MARKER and MARKER
+        heredoc_match = re.search(
+            r"<<\s*['\"]?(\w+)['\"]?\s*\n(.*?)(?:\n\1\s*$|\Z)",
+            segment, re.DOTALL)
+        if heredoc_match:
+            body = heredoc_match.group(2)
+        else:
+            body = segment
+
+    # Check if the body matches a known read-only idiom
+    # Split on both semicolons and newlines (heredocs use newlines, -c uses ;)
+    statements = []
+    for line in body.split('\n'):
+        for stmt in line.split(';'):
+            stmt = stmt.strip()
+            if stmt:
+                statements.append(stmt)
+
+    if not statements:
+        return True  # empty body — no-op
+
+    for stmt in statements:
+        if not stmt or stmt.startswith('#'):
+            continue
+        if not _PYTHON_READ_ONLY_IDIOMS.match(stmt):
+            return False  # unknown idiom — fail closed
+
+    return True
+
+
 def _is_segment_read_only(segment: str) -> bool:
     """Check if a single command segment is read-only."""
     segment = segment.strip()
@@ -378,10 +558,19 @@ def _is_segment_read_only(segment: str) -> bool:
 
     base = os.path.basename(first)
 
+    # CR-233 fix: python3 -c and heredocs default to STATE-CHANGING.
+    # Only whitelisted read-only idioms pass. The old code returned True
+    # unconditionally — the most dangerous single finding in the red-team.
     if base in ('python3', 'python') and re.match(r'^python3?\s+-c\s+', segment):
-        return True
+        # Extract the -c argument (everything after -c, possibly quoted)
+        if _is_python_inline_read_only(segment):
+            return True
+        return False  # default: state-changing
     if base in ('python3', 'python') and re.search(r"<<\s*['\"]?\w+['\"]?", segment):
-        return True
+        # Heredoc: same treatment — check for write indicators, default unsafe
+        if _is_python_inline_read_only(segment):
+            return True
+        return False  # default: state-changing
     # RGH-1b item 4: specific test-suite scripts whitelisted by exact basename.
     # CR-012: NO flag-based heuristic — only exact basename whitelist.
     if base in ('python3', 'python'):
@@ -444,16 +633,75 @@ def _is_segment_read_only(segment: str) -> bool:
                 return False
         return True
 
-    if base in ('curl', 'wget'):
-        curl_write_flags = {'-X', '--request', '-d', '--data', '--data-raw',
-                            '--data-binary', '--data-urlencode', '-F', '--form',
-                            '--upload-file', '-T'}
+    # CR-235 fix: curl with -o/--output/-O writes response to file.
+    # wget ALWAYS writes to disk by default (only -O - sends to stdout).
+    # The old code missed output-to-file flags entirely (red-team finding C-2).
+    # Target-aware: -o /dev/null and -o - (stdout) are NOT writes — they
+    # discard or pipe the response. Only -o <real-file> is a write.
+    if base == 'curl':
+        curl_upload_flags = {'-X', '--request', '-d', '--data', '--data-raw',
+                             '--data-binary', '--data-urlencode', '-F', '--form',
+                             '--upload-file', '-T'}
+        # Flags that take the next arg as an output target
+        curl_output_flags = {'-o', '--output'}
+        curl_remote_name = {'-O', '--remote-name'}
         parts = segment.split()
-        for p in parts[1:]:
-            if p in curl_write_flags:
+        i = 1
+        while i < len(parts):
+            p = parts[i]
+            if p in curl_upload_flags:
                 return False
             if p.startswith('-X') and len(p) > 2:
                 return False
+            # -o / --output: check the NEXT arg for /dev/null or - (stdout)
+            if p in curl_output_flags:
+                if i + 1 < len(parts):
+                    target = parts[i + 1]
+                    if target in ('/dev/null', '-'):
+                        i += 2  # skip flag + target, NOT a write
+                        continue
+                return False  # -o <real-file> or bare -o at end
+            # -O / --remote-name always writes (uses server filename)
+            if p in curl_remote_name:
+                return False
+            # Combined short flags: -sLo requires target check too
+            if (p.startswith('-') and not p.startswith('--')
+                    and len(p) > 1 and 'o' in p):
+                # 'o' in a combined flag like -sLo — next arg is the target
+                if p.endswith('o'):
+                    # -sLo <target> — check target
+                    if i + 1 < len(parts):
+                        target = parts[i + 1]
+                        if target in ('/dev/null', '-'):
+                            i += 2
+                            continue
+                    return False
+                else:
+                    # 'o' not at end of combined flag — unusual, treat as write
+                    return False
+            i += 1
+        return True
+
+    if base == 'wget':
+        # wget writes to disk by default. Only stdout-only mode (-O -) is read-only.
+        parts = segment.split()
+        has_stdout_only = False
+        for i, p in enumerate(parts[1:], 1):
+            if p in ('-O', '--output-document'):
+                # Check next arg: only '-' (stdout) is read-only
+                if i + 1 < len(parts) and parts[i + 1] == '-':
+                    has_stdout_only = True
+                else:
+                    return False  # writing to a file
+            elif p.startswith('-O') and len(p) > 2:
+                # -O- or -Ofilename
+                if p == '-O-':
+                    has_stdout_only = True
+                else:
+                    return False
+        # wget without -O - writes to disk → state-changing
+        if not has_stdout_only:
+            return False
         return True
 
     if base in READ_ONLY_CMDS:
