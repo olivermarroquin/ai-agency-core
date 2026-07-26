@@ -94,7 +94,14 @@ def _create_dirty_entry(sid, state_dir, file_path):
 
 
 class TestCircuitBreaker(unittest.TestCase):
-    """Test the circuit breaker in mandatory-review-gate.py."""
+    """Test the circuit breaker in mandatory-review-gate.py.
+
+    NOTE: The independent reviewer dispatch (RGH-5) auto-writes a BLOCKING
+    reviewed marker on first block, which clears the entry from the unreviewed
+    set. To test the circuit breaker in isolation, we must remove the
+    dispatch-written reviewed entries between firings so the entries remain
+    unreviewed and the circuit breaker can accumulate consecutive blocks.
+    """
 
     def setUp(self):
         self.tmpdir = tempfile.mkdtemp(prefix='rg-cb-test-')
@@ -107,6 +114,15 @@ class TestCircuitBreaker(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.tmpdir, ignore_errors=True)
 
+    def _clear_dispatch_artifacts(self):
+        """Remove reviewed entries and verdict files written by the
+        independent dispatch so the dirty entry stays unreviewed."""
+        import glob as glob_mod
+        for f in glob_mod.glob(os.path.join(self.state_dir, f'{self.sid}-reviewed.jsonl')):
+            os.remove(f)
+        for f in glob_mod.glob(os.path.join(self.state_dir, 'verdict-*.json')):
+            os.remove(f)
+
     def test_circuit_breaker_fires_on_3rd_consecutive_block(self):
         """DoD #3, #4: auto-skip on 3 consecutive identical blocks with loud warning."""
         _create_dirty_entry(self.sid, self.state_dir, self.test_file)
@@ -114,10 +130,12 @@ class TestCircuitBreaker(unittest.TestCase):
         # First firing — should block (exit 2)
         r1 = _run_gate(self.sid, self.state_dir)
         self.assertEqual(r1.returncode, 2, f'1st firing should block. stderr: {r1.stderr}')
+        self._clear_dispatch_artifacts()
 
         # Second firing — should block (exit 2)
         r2 = _run_gate(self.sid, self.state_dir)
         self.assertEqual(r2.returncode, 2, f'2nd firing should block. stderr: {r2.stderr}')
+        self._clear_dispatch_artifacts()
 
         # Third firing — circuit breaker fires, should allow (exit 0)
         r3 = _run_gate(self.sid, self.state_dir)
@@ -152,9 +170,12 @@ class TestCircuitBreaker(unittest.TestCase):
         """DoD #5: metrics.jsonl has circuit-breaker-triggered entry."""
         _create_dirty_entry(self.sid, self.state_dir, self.test_file)
 
-        # Fire 3 times to trigger circuit breaker
+        # Fire 3 times to trigger circuit breaker, clearing dispatch
+        # artifacts between firings so entries stay unreviewed.
         _run_gate(self.sid, self.state_dir)
+        self._clear_dispatch_artifacts()
         _run_gate(self.sid, self.state_dir)
+        self._clear_dispatch_artifacts()
         _run_gate(self.sid, self.state_dir)
 
         metrics_path = os.path.join(self.state_dir, 'metrics.jsonl')
@@ -178,8 +199,10 @@ class TestCircuitBreaker(unittest.TestCase):
         # Fire twice — blocked both times, counter at 2
         r1 = _run_gate(self.sid, self.state_dir)
         self.assertEqual(r1.returncode, 2)
+        self._clear_dispatch_artifacts()
         r2 = _run_gate(self.sid, self.state_dir)
         self.assertEqual(r2.returncode, 2)
+        self._clear_dispatch_artifacts()
 
         # Add a NEW entry — this changes the entry set
         new_file = os.path.join(self.tmpdir, 'new-artifact.md')

@@ -1631,7 +1631,12 @@ class TestReviewerDocWriteIntegration(unittest.TestCase):
                              f'Got exit {r.returncode}. stderr: {r.stderr}')
 
     def test_reviewer_compound_bypass_still_blocks(self):
-        """B3 guard: reviewer with compound doc-write + deploy → blocks."""
+        """B3 guard: reviewer with compound non-bookkeeping write + deploy → blocks.
+
+        Updated per CR-107: original test used _review-skill-firing-tracker.md
+        which is in BOOKKEEPING_BASENAMES (CR-161 exemption). The bookkeeping
+        exemption is session-role-independent and pre-empts the B3 guard.
+        Changed to a non-bookkeeping write target to actually test B3."""
         with tempfile.TemporaryDirectory() as state_dir:
             reviewer_sid = 'reviewer-compound-bypass'
             producer_sid = 'producer-compound'
@@ -1641,20 +1646,24 @@ class TestReviewerDocWriteIntegration(unittest.TestCase):
                 'iso_time': '2026-06-23T00:00:00Z',
                 'tool': 'Bash',
                 'file_path': 'BASH:compound1',
-                'display': 'cat >> tracker.md && npm deploy',
-                'bash_cmd': 'cat >> /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md && npm run deploy',
+                'display': 'cat >> some-deliverable.md && npm deploy',
+                'bash_cmd': 'cat >> /workspace/repos/some-deliverable.md && npm run deploy',
                 'tier': 'full',
                 'source': 'claude-code',
                 'entry_source': 'producer',
             }])
             r = _run_gate(reviewer_sid, state_dir)
             self.assertEqual(r.returncode, 2,
-                             f'Compound doc-write + deploy MUST block even '
-                             f'for verified reviewer. Got exit {r.returncode}')
+                             f'Compound non-bookkeeping write + deploy MUST block '
+                             f'even for verified reviewer. Got exit {r.returncode}')
 
-    def test_unverified_session_doc_write_still_blocks(self):
-        """Unverified session writing to reviewer-doc path → blocks.
-        B3 guard: session role must be confirmed first."""
+    def test_unverified_session_non_bookkeeping_write_blocks(self):
+        """Unverified session writing to a non-bookkeeping path → blocks.
+
+        Updated per CR-107: original test used _review-skill-firing-tracker.md
+        which is in BOOKKEEPING_BASENAMES (CR-161 exemption, session-role-
+        independent). Changed to a non-bookkeeping target to actually test
+        that unverified sessions are blocked on state-changing Bash."""
         with tempfile.TemporaryDirectory() as state_dir:
             sid = 'unverified-doc-writer'
             _write_dirty_entries(state_dir, sid, [{
@@ -1662,15 +1671,15 @@ class TestReviewerDocWriteIntegration(unittest.TestCase):
                 'iso_time': '2026-06-23T00:00:00Z',
                 'tool': 'Bash',
                 'file_path': 'BASH:unverified1',
-                'display': 'cat >> _review-skill-firing-tracker.md',
-                'bash_cmd': 'cat >> /workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md',
+                'display': 'cat >> some-deliverable.md',
+                'bash_cmd': 'cat >> /workspace/repos/some-deliverable.md',
                 'tier': 'full',
                 'source': 'claude-code',
                 'entry_source': 'producer',
             }])
             r = _run_gate(sid, state_dir)
             self.assertEqual(r.returncode, 2,
-                             f'Unverified session doc-write MUST block. '
+                             f'Unverified session non-bookkeeping write MUST block. '
                              f'Got exit {r.returncode}')
 
 
