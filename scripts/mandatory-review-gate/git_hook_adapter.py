@@ -140,7 +140,8 @@ def collect_all_reviewed_entries(state_dir: str) -> dict:
     return all_reviewed
 
 
-def check_staged_files(staged: set, state_dir: str) -> list:
+def check_staged_files(staged: set, state_dir: str,
+                       workspace_root: str = None) -> list:
     """Check staged files against the dirty ledger.
 
     Returns a list of unreviewed entries for staged files.
@@ -148,12 +149,23 @@ def check_staged_files(staged: set, state_dir: str) -> list:
     (they were edited outside any tracked agent — the gate doesn't block
     normal human commits).
 
+    Exemptions (parity with Stop hook in engine.check_gate):
+      - Bookkeeping files (CR-161): basenames in BOOKKEEPING_BASENAMES
+        (e.g. _review-skill-firing-tracker.md, _event-log.md) are exempt.
+      - Plumbing files (CR-219): paths matching plumbing-whitelist patterns
+        (relay files, skip scripts, spawn files) are exempt.
+    These match the same predicates the Stop hook uses — a file that does
+    NOT block at turn-end must NOT block at commit-time.
+
     NOTE (C-02, RGH-2 peer review): This does NOT use engine.check_gate()
     because the git hook's scoping is fundamentally different — it reads ALL
     sessions' ledgers (not just one session) and cross-references against
     staged files. If unreviewed-computation logic in engine.get_unreviewed()
     changes, verify this function's equivalent logic stays in sync.
     """
+    if workspace_root is None:
+        workspace_root = WORKSPACE_ROOT
+
     all_dirty = collect_all_dirty_entries(state_dir)
     all_reviewed = collect_all_reviewed_entries(state_dir)
 
@@ -167,6 +179,26 @@ def check_staged_files(staged: set, state_dir: str) -> list:
         reviewed_ts = all_reviewed.get(fp, 0)
 
         if dirty_ts > reviewed_ts:
+            # Apply exemptions (parity with Stop hook) before blocking.
+            # Fail safe: if the exemption check errors, treat as non-exempt.
+            try:
+                if engine.is_bookkeeping_entry(dirty_entry, workspace_root):
+                    continue  # CR-161: bookkeeping exempt
+            except Exception:
+                pass  # fail closed — treat as non-exempt
+
+            try:
+                tool = dirty_entry.get('tool', '')
+                bash_cmd = dirty_entry.get('bash_cmd',
+                                           dirty_entry.get('display', ''))
+                annotation = engine.is_plumbing_exempt(
+                    fp, tool, bash_cmd, workspace_root,
+                    include_reviewer_only=True)
+                if annotation:
+                    continue  # CR-219: plumbing exempt
+            except Exception:
+                pass  # fail closed — treat as non-exempt
+
             unreviewed.append(dirty_entry)
 
     return unreviewed
