@@ -172,6 +172,79 @@ def check_staged_files(staged: set, state_dir: str) -> list:
     return unreviewed
 
 
+GATE_CODE_DIR = os.path.realpath(os.path.dirname(os.path.abspath(__file__)))
+
+
+def has_staged_gate_files(staged: set) -> bool:
+    """Return True if any staged file is under the gate code directory.
+
+    Uses realpath comparison so symlinks and relative paths resolve correctly.
+    The gate code directory is scripts/mandatory-review-gate/ (this module's
+    own directory, including its tests/ subdir).
+    """
+    gate_prefix = GATE_CODE_DIR + os.sep
+    for fp in staged:
+        real = os.path.realpath(fp)
+        if real.startswith(gate_prefix) or real == GATE_CODE_DIR:
+            return True
+    return False
+
+
+def run_gate_test_suite(timeout_seconds: int = 120) -> tuple:
+    """Run the full gate test suite via pytest subprocess.
+
+    Returns (success: bool, output: str, failed_count: int, total_count: int).
+    - success=True means all tests passed.
+    - success=False with failed_count>0 means test failures.
+    - success=False with failed_count=0 means pytest itself failed (import
+      error, not installed, timeout, etc.) — fail closed.
+
+    The suite runs from the gate code directory so _paths resolves correctly.
+    Uses --tb=short for concise failure output and --no-header to reduce noise.
+    """
+    pytest_cmd = [
+        sys.executable, '-m', 'pytest',
+        # Top-level test files + tests/ subdir — the same scope as the
+        # gate-suite-green pair verified (731 passed).
+        '--tb=short', '-q', '--no-header',
+    ]
+
+    try:
+        result = subprocess.run(
+            pytest_cmd,
+            capture_output=True, text=True,
+            cwd=GATE_CODE_DIR,
+            timeout=timeout_seconds,
+        )
+    except subprocess.TimeoutExpired:
+        return (False, f'pytest timed out after {timeout_seconds}s', 0, 0)
+    except FileNotFoundError:
+        return (False, 'python3 / pytest not found on PATH', 0, 0)
+    except Exception as exc:
+        return (False, f'pytest launch error: {exc}', 0, 0)
+
+    output = (result.stdout + '\n' + result.stderr).strip()
+
+    if result.returncode == 0:
+        # Parse total from summary line like "731 passed in 28.21s"
+        total = _parse_pytest_count(output, 'passed')
+        return (True, output, 0, total)
+
+    # returncode != 0 — parse failure count
+    failed = _parse_pytest_count(output, 'failed')
+    passed = _parse_pytest_count(output, 'passed')
+    total = failed + passed
+    return (False, output, failed, total)
+
+
+def _parse_pytest_count(output: str, keyword: str) -> int:
+    """Extract a count like '5 failed' or '731 passed' from pytest summary."""
+    import re
+    # Match patterns like "5 failed", "731 passed"
+    m = re.search(rf'(\d+) {keyword}', output)
+    return int(m.group(1)) if m else 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Git hook adapter for the mandatory review gate')
@@ -209,58 +282,117 @@ def main():
                            extra={'hook_type': args.hook,
                                   'repo_root': repo_root,
                                   'staged_count': len(staged)})
-        sys.exit(0)
+    else:
+        # Blocked — unreviewed agent-produced files are being committed
+        tier = engine.determine_review_tier(unreviewed)
+        count = len(unreviewed)
 
-    # Blocked — unreviewed agent-produced files are being committed
-    tier = engine.determine_review_tier(unreviewed)
-    count = len(unreviewed)
+        engine.log_metrics(STATE_DIR, session_id, 'git-hook-block',
+                           count, tier, wall_ms,
+                           extra={'hook_type': args.hook,
+                                  'repo_root': repo_root,
+                                  'staged_count': len(staged)})
 
-    engine.log_metrics(STATE_DIR, session_id, 'git-hook-block',
-                       count, tier, wall_ms,
-                       extra={'hook_type': args.hook,
-                              'repo_root': repo_root,
-                              'staged_count': len(staged)})
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        log_script = os.path.join(script_dir, 'log-review-pass.py')
 
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    log_script = os.path.join(script_dir, 'log-review-pass.py')
+        print('', file=sys.stderr)
+        print('=' * 60, file=sys.stderr)
+        print('MANDATORY REVIEW GATE — COMMIT BLOCKED', file=sys.stderr)
+        print('=' * 60, file=sys.stderr)
+        print(f'', file=sys.stderr)
+        print(f'{count} unreviewed agent-produced file(s) staged for commit.',
+              file=sys.stderr)
+        print(f'Review tier: {tier}', file=sys.stderr)
+        print(f'', file=sys.stderr)
+        print(f'Unreviewed files:', file=sys.stderr)
+        for e in unreviewed:
+            fp = e.get('file_path', '?')
+            src = e.get('source', '?')
+            sid = e.get('_session_id', '?')
+            print(f'  - {fp}  (source: {src}, session: {sid})',
+                  file=sys.stderr)
+        print(f'', file=sys.stderr)
+        print(f'To resolve:', file=sys.stderr)
+        print(f'  1. Run the review gate on these files', file=sys.stderr)
+        print(f'  2. Log the review pass:', file=sys.stderr)
 
-    print('', file=sys.stderr)
-    print('=' * 60, file=sys.stderr)
-    print('MANDATORY REVIEW GATE — COMMIT BLOCKED', file=sys.stderr)
-    print('=' * 60, file=sys.stderr)
-    print(f'', file=sys.stderr)
-    print(f'{count} unreviewed agent-produced file(s) staged for commit.',
-          file=sys.stderr)
-    print(f'Review tier: {tier}', file=sys.stderr)
-    print(f'', file=sys.stderr)
-    print(f'Unreviewed files:', file=sys.stderr)
-    for e in unreviewed:
-        fp = e.get('file_path', '?')
-        src = e.get('source', '?')
-        sid = e.get('_session_id', '?')
-        print(f'  - {fp}  (source: {src}, session: {sid})', file=sys.stderr)
-    print(f'', file=sys.stderr)
-    print(f'To resolve:', file=sys.stderr)
-    print(f'  1. Run the review gate on these files', file=sys.stderr)
-    print(f'  2. Log the review pass:', file=sys.stderr)
+        files_argv = ' '.join(f'"{e["file_path"]}"' for e in unreviewed)
+        # Use the session that produced the artifact for the review marker
+        sessions = set(e.get('_session_id', session_id) for e in unreviewed)
+        for sid in sessions:
+            sid_files = [e for e in unreviewed
+                         if e.get('_session_id') == sid]
+            sid_argv = ' '.join(f'"{e["file_path"]}"' for e in sid_files)
+            print(f'     python3 {log_script} --session {sid} '
+                  f'--files {sid_argv} --verdict PASS --tier {tier} '
+                  f'--gate-id G-default --verdict-file <verdict.json>',
+                  file=sys.stderr)
 
-    files_argv = ' '.join(f'"{e["file_path"]}"' for e in unreviewed)
-    # Use the session that produced the artifact for the review marker
-    sessions = set(e.get('_session_id', session_id) for e in unreviewed)
-    for sid in sessions:
-        sid_files = [e for e in unreviewed if e.get('_session_id') == sid]
-        sid_argv = ' '.join(f'"{e["file_path"]}"' for e in sid_files)
-        print(f'     python3 {log_script} --session {sid} '
-              f'--files {sid_argv} --verdict PASS --tier {tier} '
-              f'--gate-id G-default --verdict-file <verdict.json>',
+        print(f'', file=sys.stderr)
+        print(f'To bypass (operator-only, audited):', file=sys.stderr)
+        print(f'  git commit --no-verify', file=sys.stderr)
+        print(f'', file=sys.stderr)
+
+        sys.exit(1)
+
+    # --- Gate test suite auto-run (added by gate-testhook) ---
+    # After the review-gate check passes, if any staged file touches gate
+    # code, run the full test suite. Block on any red. Fail closed if pytest
+    # itself can't run. Non-gate commits skip this entirely (stay fast).
+    if has_staged_gate_files(staged):
+        print('', file=sys.stderr)
+        print('[gate-testhook] Gate code staged — running full test suite...',
               file=sys.stderr)
 
-    print(f'', file=sys.stderr)
-    print(f'To bypass (operator-only, audited):', file=sys.stderr)
-    print(f'  git commit --no-verify', file=sys.stderr)
-    print(f'', file=sys.stderr)
+        success, output, failed, total = run_gate_test_suite()
 
-    sys.exit(1)
+        if success:
+            print(f'[gate-testhook] All {total} tests passed.',
+                  file=sys.stderr)
+            # Fall through to exit(0)
+        elif failed > 0:
+            # Test failures — block the commit
+            print('', file=sys.stderr)
+            print('=' * 60, file=sys.stderr)
+            print('GATE TEST SUITE — COMMIT BLOCKED', file=sys.stderr)
+            print('=' * 60, file=sys.stderr)
+            print(f'', file=sys.stderr)
+            print(f'{failed} test(s) FAILED out of {total}.',
+                  file=sys.stderr)
+            print(f'', file=sys.stderr)
+            # Show last ~30 lines of output (pytest summary + failures)
+            lines = output.splitlines()
+            tail = lines[-30:] if len(lines) > 30 else lines
+            for line in tail:
+                print(f'  {line}', file=sys.stderr)
+            print(f'', file=sys.stderr)
+            print('Fix the failing tests before committing gate code.',
+                  file=sys.stderr)
+            print('Override (operator only): git commit --no-verify',
+                  file=sys.stderr)
+            print('', file=sys.stderr)
+            sys.exit(1)
+        else:
+            # pytest itself failed (not installed, import error, etc.)
+            # Fail closed — a broken checker must not silently pass.
+            print('', file=sys.stderr)
+            print('=' * 60, file=sys.stderr)
+            print('GATE TEST SUITE — COMMIT BLOCKED (pytest error)',
+                  file=sys.stderr)
+            print('=' * 60, file=sys.stderr)
+            print(f'', file=sys.stderr)
+            print(f'Could not run the gate test suite:', file=sys.stderr)
+            print(f'  {output[:500]}', file=sys.stderr)
+            print(f'', file=sys.stderr)
+            print('The test suite must be runnable to commit gate code.',
+                  file=sys.stderr)
+            print('Override (operator only): git commit --no-verify',
+                  file=sys.stderr)
+            print('', file=sys.stderr)
+            sys.exit(1)
+
+    sys.exit(0)
 
 
 if __name__ == '__main__':

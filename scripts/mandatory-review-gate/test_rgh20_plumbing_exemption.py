@@ -49,7 +49,7 @@ def _make_env(state_dir, source=None):
 
 def _run_track(sid, tool_name, tool_input, state_dir, source=None):
     return subprocess.run(
-        ['python3', TRACK],
+        [sys.executable, TRACK],
         input=json.dumps({
             'session_id': sid, 'tool_name': tool_name,
             'tool_input': tool_input, 'tool_result': {'text': 'ok'},
@@ -62,7 +62,7 @@ def _run_track(sid, tool_name, tool_input, state_dir, source=None):
 
 def _run_gate(sid, state_dir):
     return subprocess.run(
-        ['python3', GATE],
+        [sys.executable, GATE],
         input=json.dumps({'session_id': sid, 'stop_reason': 'end_turn'}),
         capture_output=True, text=True,
         cwd=SUBDIR_CWD,
@@ -682,7 +682,7 @@ class TestConfigDriven(unittest.TestCase):
     def test_config_file_exists(self):
         """The plumbing whitelist config file exists at the expected path."""
         config_path = os.path.join(WORKSPACE_ROOT, '.review-gate',
-                                   'plumbing-whitelist.yml')
+                                   'plumbing-whitelist.json')
         self.assertTrue(os.path.isfile(config_path),
                         f'Config file must exist at {config_path}')
 

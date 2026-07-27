@@ -67,7 +67,7 @@ def _make_env(state_dir, source=None, event_log=None):
 
 def _run_track(sid, tool_name, tool_input, state_dir, cwd=None, source=None):
     return subprocess.run(
-        ['python3', TRACK],
+        [sys.executable, TRACK],
         input=json.dumps({
             'session_id': sid, 'tool_name': tool_name,
             'tool_input': tool_input, 'tool_result': {'text': 'ok'},
@@ -80,7 +80,7 @@ def _run_track(sid, tool_name, tool_input, state_dir, cwd=None, source=None):
 
 def _run_gate(sid, state_dir, cwd=None):
     return subprocess.run(
-        ['python3', GATE],
+        [sys.executable, GATE],
         input=json.dumps({'session_id': sid, 'stop_reason': 'end_turn'}),
         capture_output=True, text=True,
         cwd=cwd or SUBDIR_CWD,
@@ -218,7 +218,7 @@ def _run_log(sid, files, state_dir, verdict='PASS', tier='full',
         run_id = _TEST_CANARY_RUN_ID
         _seed_firing_tracker(run_id)
 
-    args = ['python3', LOG, '--session', sid, '--files'] + files + [
+    args = [sys.executable, LOG, '--session', sid, '--files'] + files + [
         '--verdict', verdict, '--tier', tier, '--gate-id', gate_id,
         '--verdict-file', verdict_file,
         '--reviewer-type', reviewer_type,
@@ -248,7 +248,7 @@ class TestStateDirDerivation(unittest.TestCase):
     def test_default_state_dir_under_workspace(self):
         """Without REVIEW_GATE_STATE_DIR, default is <workspace>/.review-gate/state."""
         r = subprocess.run(
-            ['python3', '-c',
+            [sys.executable, '-c',
              'import sys; sys.path.insert(0, "' + SCRIPTS + '"); '
              'import importlib.util, os; '
              'os.environ.pop("REVIEW_GATE_STATE_DIR", None); '
@@ -280,7 +280,7 @@ class TestStateDirDerivation(unittest.TestCase):
         """REVIEW_GATE_STATE_DIR env var overrides the default."""
         with tempfile.TemporaryDirectory() as tmpdir:
             r = subprocess.run(
-                ['python3', '-c',
+                [sys.executable, '-c',
                  'import sys; sys.path.insert(0, "' + SCRIPTS + '"); '
                  'from _paths import STATE_DIR; print(STATE_DIR)'],
                 capture_output=True, text=True,
@@ -691,7 +691,7 @@ class TestVerdictFileRequired(unittest.TestCase):
         # CR-165: supply a valid --reviewer-session so we reach the
         # verdict-file check (reviewer-session is now checked first).
         reviewer_session = _ensure_reviewer_session(self.state_dir, self.SID)
-        args = ['python3', LOG, '--session', self.SID,
+        args = [sys.executable, LOG, '--session', self.SID,
                 '--files', '/tmp/x',
                 '--verdict', 'PASS', '--tier', 'full',
                 '--gate-id', 'G-default',
@@ -1425,7 +1425,7 @@ class TestGateStatus(unittest.TestCase):
         shutil.rmtree(self.state_dir, ignore_errors=True)
 
     def _run_status(self, as_json=False):
-        args = ['python3', STATUS, '--session', self.SID]
+        args = [sys.executable, STATUS, '--session', self.SID]
         if as_json:
             args.append('--json')
         return subprocess.run(
@@ -1481,7 +1481,7 @@ class TestGateSkip(unittest.TestCase):
 
     def _run_skip(self, reason='Testing emergency skip for conformance',
                    force=False):
-        cmd = ['python3', SKIP, '--session', self.SID, '--reason', reason]
+        cmd = [sys.executable, SKIP, '--session', self.SID, '--reason', reason]
         if force:
             cmd.append('--force-deliverables')
         return subprocess.run(
@@ -1558,7 +1558,7 @@ class TestGateSkip(unittest.TestCase):
         # Run skip with the unique SID (force=True: temp-dir files are
         # deliverables; this test exercises event-log isolation, not classification)
         r = subprocess.run(
-            ['python3', SKIP, '--session', unique_sid,
+            [sys.executable, SKIP, '--session', unique_sid,
              '--reason', 'Testing event-log isolation for conformance',
              '--force-deliverables'],
             capture_output=True, text=True,
@@ -1634,95 +1634,131 @@ class TestProjectConfig(unittest.TestCase):
         engine._project_config_cache = None
 
     def _write_config(self, config_content):
-        """Write a config.yml to a temp dir and point load_project_config at it."""
+        """Write a config.json to a temp dir and point load_project_config at it."""
         import engine
         config_path = os.path.join(self.config_dir, '.review-gate')
         os.makedirs(config_path, exist_ok=True)
-        with open(os.path.join(config_path, 'config.yml'), 'w') as f:
+        with open(os.path.join(config_path, 'config.json'), 'w') as f:
             f.write(config_content)
         return self.config_dir
 
-    def test_load_project_config_with_real_config(self):
-        """load_project_config returns parsed config from .review-gate/config.yml."""
+    # Fixture config for deterministic tests (no live-config dependency).
+    # Mirrors the real config.json structure but uses test-specific values.
+    FIXTURE_CONFIG = json.dumps({
+        "schema_version": 1,
+        "default_state_path_patterns": [
+            "ai-factory/system-state/",
+            "second-brain/_meta/",
+            "\\.claude/"
+        ],
+        "default_leak_patterns": [],
+        "projects": {
+            "test-project": {
+                "description": "Test Project for fixture-based testing",
+                "path_markers": [
+                    "repos/test-project/scripts/data/",
+                    "repos/test-project/scripts/publish-test-page"
+                ],
+                "extra_state_path_patterns": [
+                    "publish-test-page\\.py",
+                    "test_indexing\\.py"
+                ],
+                "leak_audit": None,
+                "facts_profile_id": None
+            }
+        }
+    }, indent=2)
+
+    def _load_fixture_config(self):
+        """Write fixture config and load it via engine. Returns the config dict."""
+        import engine
+        engine._project_config_cache = None
+        workspace = self._write_config(self.FIXTURE_CONFIG)
+        return engine.load_project_config(workspace)
+
+    @unittest.skipUnless(
+        os.path.isfile(os.path.join(
+            EXPECTED_WORKSPACE_ROOT, '.review-gate', 'config.json')),
+        'Live config.json not present (CI/minimal environment)')
+    def test_load_project_config_live_smoke(self):
+        """Smoke test: live config.json parses and contains expected structure."""
         import engine
         engine._project_config_cache = None
         config = engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
         self.assertIn('projects', config)
-        self.assertIn('core-30-seo', config['projects'])
+        # Structural check only — don't assert specific project names
+        self.assertIsInstance(config['projects'], dict)
+        self.assertGreater(len(config['projects']), 0)
 
     def test_load_project_config_no_file_returns_empty(self):
-        """load_project_config returns empty dict when no config.yml exists."""
+        """load_project_config returns empty dict when no config.json exists."""
         import engine
         engine._project_config_cache = None
         config = engine.load_project_config('/nonexistent/path')
         self.assertEqual(config, {})
 
-    def test_resolve_project_matches_core30_path(self):
-        """resolve_project matches files in Core-30 data paths."""
+    def test_load_project_config_with_fixture(self):
+        """load_project_config parses fixture config correctly."""
+        config = self._load_fixture_config()
+        self.assertIn('projects', config)
+        self.assertIn('test-project', config['projects'])
+        self.assertEqual(config['schema_version'], 1)
+
+    def test_resolve_project_matches_path(self):
+        """resolve_project matches files via path_markers in fixture config."""
         import engine
-        engine._project_config_cache = None
-        config = engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        config = self._load_fixture_config()
         proj = engine.resolve_project(
-            os.path.join(EXPECTED_WORKSPACE_ROOT,
-                         'repos/ai-agency-core/scripts/data/client-ev.json'),
+            '/some/root/repos/test-project/scripts/data/client.json',
             config)
         self.assertIsNotNone(proj)
-        self.assertIn('Core 30', proj.get('description', ''))
+        self.assertIn('Test Project', proj.get('description', ''))
 
     def test_resolve_project_returns_none_for_unrelated(self):
         """resolve_project returns None for paths outside any configured project."""
         import engine
-        engine._project_config_cache = None
-        config = engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        config = self._load_fixture_config()
         proj = engine.resolve_project('/tmp/some-random-project/file.md', config)
         self.assertIsNone(proj)
 
     def test_get_state_path_patterns_defaults_only_for_generic(self):
-        """Generic paths get only DEFAULT_STATE_PATH_PATTERNS (no Core-30 extras)."""
+        """Generic paths get only DEFAULT_STATE_PATH_PATTERNS (no project extras)."""
         import engine
-        engine._project_config_cache = None
-        # Force load from real config
-        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        self._load_fixture_config()
         patterns = engine.get_state_path_patterns('/tmp/unrelated.md')
         self.assertEqual(len(patterns), len(engine.DEFAULT_STATE_PATH_PATTERNS))
         pattern_str = str(patterns)
-        self.assertNotIn('publish-core-30-page', pattern_str)
-        self.assertNotIn('gsc_indexing', pattern_str)
+        self.assertNotIn('publish-test-page', pattern_str)
+        self.assertNotIn('test_indexing', pattern_str)
 
-    def test_get_state_path_patterns_includes_extras_for_core30(self):
-        """Core-30 paths get DEFAULT + extra project-specific patterns."""
+    def test_get_state_path_patterns_includes_extras_for_project(self):
+        """Project paths get DEFAULT + extra project-specific patterns."""
         import engine
-        engine._project_config_cache = None
-        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
-        core30_path = os.path.join(EXPECTED_WORKSPACE_ROOT,
-                                   'repos/ai-agency-core/scripts/data/foo.json')
-        patterns = engine.get_state_path_patterns(core30_path)
+        self._load_fixture_config()
+        project_path = '/some/root/repos/test-project/scripts/data/foo.json'
+        patterns = engine.get_state_path_patterns(project_path)
         self.assertGreater(len(patterns), len(engine.DEFAULT_STATE_PATH_PATTERNS))
-        self.assertTrue(any('publish-core-30-page' in p for p in patterns))
+        self.assertTrue(any('publish-test-page' in p for p in patterns))
 
     def test_get_project_profile_name_honest_reporting(self):
-        """Profile name is 'generic (no project profile)' for unmatched paths."""
+        """Profile name is 'generic' for unmatched, project name for matched."""
         import engine
-        engine._project_config_cache = None
-        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        self._load_fixture_config()
         name = engine.get_project_profile_name('/tmp/unrelated.md')
         self.assertIn('generic', name)
-        # Core-30 path should name the project
-        core30_path = os.path.join(EXPECTED_WORKSPACE_ROOT,
-                                   'repos/ai-agency-core/scripts/data/x.json')
-        name = engine.get_project_profile_name(core30_path)
-        self.assertIn('Core 30', name)
+        # Project-matched path should name the project
+        project_path = '/some/root/repos/test-project/scripts/data/x.json'
+        name = engine.get_project_profile_name(project_path)
+        self.assertIn('Test Project', name)
 
     def test_classify_tier_project_aware(self):
-        """classify_tier uses project-specific patterns for Core-30, defaults for generic."""
+        """classify_tier uses project-specific patterns, defaults for generic."""
         import engine
-        engine._project_config_cache = None
-        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        self._load_fixture_config()
 
-        # Core-30 script path → full (matched by extra pattern)
+        # Project script path → full (matched by extra pattern)
         tier = engine.classify_tier(
-            os.path.join(EXPECTED_WORKSPACE_ROOT,
-                         'repos/ai-agency-core/scripts/publish-core-30-page.py'),
+            '/some/root/repos/test-project/scripts/publish-test-page.py',
             {'new_string': 'x', 'old_string': 'y'}, 'Edit')
         self.assertEqual(tier, 'full')
 
@@ -1735,8 +1771,7 @@ class TestProjectConfig(unittest.TestCase):
     def test_run_fast_path_checks_leak_audit_na_for_generic(self):
         """Leak audit reports N/A on files outside any configured project."""
         import engine
-        engine._project_config_cache = None
-        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        self._load_fixture_config()
 
         tf = tempfile.NamedTemporaryFile(
             mode='w', suffix='.md', delete=False,
@@ -1756,8 +1791,7 @@ class TestProjectConfig(unittest.TestCase):
     def test_run_fast_path_checks_placeholder_still_catches(self):
         """Placeholder sweep still catches real placeholders on generic files."""
         import engine
-        engine._project_config_cache = None
-        engine.load_project_config(EXPECTED_WORKSPACE_ROOT)
+        self._load_fixture_config()
 
         tf = tempfile.NamedTemporaryFile(
             mode='w', suffix='.md', delete=False,
@@ -1775,7 +1809,7 @@ class TestProjectConfig(unittest.TestCase):
             os.unlink(tf.name)
 
     def test_no_config_fallback_graceful(self):
-        """Engine works correctly when no config.yml exists (graceful fallback)."""
+        """Engine works correctly when no config.json exists (graceful fallback)."""
         import engine
         engine._project_config_cache = None
         # Load from a path with no config
@@ -2047,7 +2081,7 @@ class TestRGH15AReviewerSessionValidation(unittest.TestCase):
                                 extra_fields={'reviewer_type': 'independent',
                                               'mandate_version': '1.0'})
         r = subprocess.run(
-            ['python3', LOG, '--session', 'aaaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee',
+            [sys.executable, LOG, '--session', 'aaaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee',
              '--files', '/tmp/test.md',
              '--verdict', 'PASS', '--tier', 'full', '--gate-id', 'G-default',
              '--verdict-file', vf,
@@ -2068,7 +2102,7 @@ class TestRGH15AReviewerSessionValidation(unittest.TestCase):
                                 extra_fields={'reviewer_type': 'independent',
                                               'mandate_version': '1.0'})
         r = subprocess.run(
-            ['python3', LOG, '--session', fake_uuid,
+            [sys.executable, LOG, '--session', fake_uuid,
              '--files', '/tmp/test.md',
              '--verdict', 'PASS', '--tier', 'full', '--gate-id', 'G-default',
              '--verdict-file', vf,
@@ -2098,7 +2132,7 @@ class TestRGH15AReviewerSessionValidation(unittest.TestCase):
                                               'mandate_version': '1.0'})
         # Need run-id in firing tracker — use a real one or mock
         r = subprocess.run(
-            ['python3', LOG, '--session', producer_uuid,
+            [sys.executable, LOG, '--session', producer_uuid,
              '--files', '/tmp/test.md',
              '--verdict', 'PASS', '--tier', 'full', '--gate-id', 'G-default',
              '--verdict-file', vf,
@@ -2142,7 +2176,7 @@ class TestRGH14BD09Guard(unittest.TestCase):
         event_log = os.path.join(self.tmpdir, '_event-log-test.md')
         env = _make_env(self.tmpdir, event_log=event_log)
         r = subprocess.run(
-            ['python3', os.path.join(SCRIPTS, 'dirty-ledger-track.py')],
+            [sys.executable, os.path.join(SCRIPTS, 'dirty-ledger-track.py')],
             input=json.dumps({
                 'session_id': sid,
                 'tool_name': 'Bash',
@@ -2173,7 +2207,7 @@ class TestRGH14BD09Guard(unittest.TestCase):
         event_log = os.path.join(self.tmpdir, '_event-log-test.md')
         env = _make_env(self.tmpdir, event_log=event_log)
         r = subprocess.run(
-            ['python3', os.path.join(SCRIPTS, 'dirty-ledger-track.py')],
+            [sys.executable, os.path.join(SCRIPTS, 'dirty-ledger-track.py')],
             input=json.dumps({
                 'session_id': reviewer_sid,
                 'tool_name': 'Bash',

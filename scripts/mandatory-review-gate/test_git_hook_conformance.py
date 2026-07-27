@@ -109,7 +109,7 @@ def _write_reviewed_entry(state_dir, session_id, file_path):
 def _run_adapter(repo, state_dir, hook_type='pre-commit'):
     """Run the git hook adapter."""
     return subprocess.run(
-        ['python3', ADAPTER, '--hook', hook_type],
+        [sys.executable, ADAPTER, '--hook', hook_type],
         capture_output=True, text=True,
         cwd=repo,
         env=_make_env(state_dir),
@@ -479,7 +479,7 @@ class TestOC16GitIntegration(unittest.TestCase):
 
     def _run_oc16(self, ledger_path):
         return subprocess.run(
-            ['python3', OC16, '--ledger', ledger_path,
+            [sys.executable, OC16, '--ledger', ledger_path,
              '--repo-root', self.repo],
             capture_output=True, text=True,
             cwd=self.repo,

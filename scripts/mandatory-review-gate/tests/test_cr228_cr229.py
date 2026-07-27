@@ -27,7 +27,7 @@ import engine
 
 
 def _make_whitelist(tmpdir, extra_patterns=None):
-    """Create a plumbing-whitelist.yml with pytest/unittest patterns."""
+    """Create a plumbing-whitelist.json with pytest/unittest patterns."""
     rg_dir = os.path.join(tmpdir, '.review-gate')
     os.makedirs(rg_dir, exist_ok=True)
     patterns = [
@@ -57,20 +57,10 @@ def _make_whitelist(tmpdir, extra_patterns=None):
         'plumbing_patterns': patterns,
         'hard_non_exempt': [],
     }
-    # Write as YAML manually (no PyYAML dependency)
-    lines = ['schema_version: 1', '', 'plumbing_patterns:']
-    for p in patterns:
-        lines.append(f"  - pattern: '{p['pattern']}'")
-        lines.append(f"    name: {p['name']}")
-        if 'scope' in p:
-            lines.append(f"    scope: {p['scope']}")
-        if p.get('reviewer_only'):
-            lines.append(f"    reviewer_only: true")
-    lines.append('')
-    lines.append('hard_non_exempt: []')
 
-    with open(os.path.join(rg_dir, 'plumbing-whitelist.yml'), 'w') as f:
-        f.write('\n'.join(lines) + '\n')
+    import json as _json
+    with open(os.path.join(rg_dir, 'plumbing-whitelist.json'), 'w') as f:
+        _json.dump(config, f, indent=2)
     return tmpdir
 
 

@@ -1210,10 +1210,15 @@ _project_config_cache = None  # type: Optional[dict]
 
 
 def load_project_config(workspace_root: str = None) -> dict:
-    """Load .review-gate/config.yml. Cached after first load.
+    """Load .review-gate/config.json. Cached after first load.
 
     Returns parsed dict or empty dict if no config exists.
     Config is optional — the gate works without it (generic defaults).
+
+    Fail-safe: missing or malformed config → warn on stderr + return empty
+    dict (generic defaults apply). The gate never crashes on config problems;
+    it degrades in the safe direction (more gets flagged, nothing silently
+    exempted). (CR-245)
     """
     global _project_config_cache
     if _project_config_cache is not None:
@@ -1222,36 +1227,24 @@ def load_project_config(workspace_root: str = None) -> dict:
     if workspace_root is None:
         workspace_root = WORKSPACE_ROOT
 
-    config_path = os.path.join(workspace_root, '.review-gate', 'config.yml')
+    config_path = os.path.join(workspace_root, '.review-gate', 'config.json')
     if not os.path.isfile(config_path):
         _project_config_cache = {}
         return _project_config_cache
 
     try:
-        # Use yaml if available, fall back to a simple parser
-        try:
-            import yaml
-            with open(config_path, 'r') as f:
-                _project_config_cache = yaml.safe_load(f) or {}
-        except ImportError:
-            # No PyYAML — parse the subset we need manually
-            _project_config_cache = _parse_config_minimal(config_path)
-    except Exception:
+        with open(config_path, 'r') as f:
+            _project_config_cache = json.loads(f.read()) or {}
+    except (json.JSONDecodeError, OSError) as exc:
+        print(
+            f'[review-gate] WARNING: could not parse project config at '
+            f'{config_path}: {exc}\n'
+            f'  Falling back to generic defaults (no project-specific '
+            f'patterns or leak audit).',
+            file=sys.stderr)
         _project_config_cache = {}
 
     return _project_config_cache
-
-
-def _parse_config_minimal(path: str) -> dict:
-    """Minimal YAML-subset parser for config.yml when PyYAML is unavailable.
-
-    Handles the flat structure we need: default_state_path_patterns list,
-    projects map with path_markers and extra_state_path_patterns.
-    Falls back to empty dict on any parse issue — safe degradation.
-    """
-    # Best-effort: if yaml isn't available we still want the gate to work.
-    # The config format is simple enough that we only need top-level keys.
-    return {}
 
 
 def resolve_project(file_path: str, config: dict = None) -> Optional[dict]:
@@ -1333,9 +1326,13 @@ _plumbing_config_cache = None  # type: Optional[dict]
 
 
 def load_plumbing_whitelist(workspace_root: str = None) -> dict:
-    """Load .review-gate/plumbing-whitelist.yml. Cached after first load.
+    """Load .review-gate/plumbing-whitelist.json. Cached after first load.
 
     Returns parsed dict or empty dict if no config exists.
+
+    Fail-safe: missing config → no plumbing exemptions (fail-closed: more
+    gets flagged). Malformed config → warn on stderr + treat as no exemptions.
+    The gate never crashes on config problems. (CR-245)
     """
     global _plumbing_config_cache
     if _plumbing_config_cache is not None:
@@ -1345,70 +1342,23 @@ def load_plumbing_whitelist(workspace_root: str = None) -> dict:
         workspace_root = WORKSPACE_ROOT
 
     config_path = os.path.join(workspace_root, '.review-gate',
-                               'plumbing-whitelist.yml')
+                               'plumbing-whitelist.json')
     if not os.path.isfile(config_path):
         _plumbing_config_cache = {}
         return _plumbing_config_cache
 
     try:
-        try:
-            import yaml
-            with open(config_path, 'r') as f:
-                _plumbing_config_cache = yaml.safe_load(f) or {}
-        except ImportError:
-            _plumbing_config_cache = _parse_plumbing_minimal(config_path)
-    except Exception:
+        with open(config_path, 'r') as f:
+            _plumbing_config_cache = json.loads(f.read()) or {}
+    except (json.JSONDecodeError, OSError) as exc:
+        print(
+            f'[review-gate] WARNING: could not parse plumbing whitelist at '
+            f'{config_path}: {exc}\n'
+            f'  Falling back to NO plumbing exemptions (fail-closed).',
+            file=sys.stderr)
         _plumbing_config_cache = {}
 
     return _plumbing_config_cache
-
-
-def _parse_plumbing_minimal(path: str) -> dict:
-    """Minimal parser for plumbing-whitelist.yml when PyYAML is unavailable.
-
-    Parses the subset we need: plumbing_patterns list and hard_non_exempt list.
-    """
-    result = {'plumbing_patterns': [], 'hard_non_exempt': []}
-    try:
-        with open(path, 'r') as f:
-            content = f.read()
-        # Extract plumbing patterns
-        import re as _re
-        for m in _re.finditer(
-                r"-\s+pattern:\s+['\"](.+?)['\"]\s*\n"
-                r"\s+name:\s+(\S+)",
-                content):
-            entry = {'pattern': m.group(1), 'name': m.group(2)}
-            # Check for scope field on next line
-            scope_m = _re.search(
-                r'name:\s+' + _re.escape(m.group(2)) + r'\s*\n\s+scope:\s+(\S+)',
-                content)
-            if scope_m:
-                entry['scope'] = scope_m.group(1)
-            # Check for reviewer_only field (CR-228)
-            ro_m = _re.search(
-                r'name:\s+' + _re.escape(m.group(2))
-                + r'(?:\s*\n\s+\w+:\s+\S+)*?\s*\n\s+reviewer_only:\s+(true|false)',
-                content)
-            if ro_m and ro_m.group(1) == 'true':
-                entry['reviewer_only'] = True
-            result['plumbing_patterns'].append(entry)
-        # Extract hard_non_exempt
-        in_hard = False
-        for line in content.splitlines():
-            if line.strip() == 'hard_non_exempt:':
-                in_hard = True
-                continue
-            if in_hard:
-                if line.strip().startswith("- '") or line.strip().startswith('- "'):
-                    val = line.strip()[3:-1]  # strip "- '" and trailing "'"
-                    result['hard_non_exempt'].append(val)
-                elif line.strip() and not line.strip().startswith('#'):
-                    if not line.startswith(' ') and not line.startswith('\t'):
-                        break  # new top-level key
-    except Exception:
-        pass
-    return result
 
 
 def _reset_plumbing_cache():
