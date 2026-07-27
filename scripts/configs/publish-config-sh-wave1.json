@@ -1,0 +1,37 @@
+{
+  "client_slug": "s-and-h-contracting",
+  "domain": "https://shcontractingunlimited.com",
+  "wp_user": "oliver",
+  "pages": [
+    {
+      "slug": "panel-upgrade-woodbridge-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/01-panel-upgrade-woodbridge-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4869,
+      "verify_string": "evp-safety-triage"
+    },
+    {
+      "slug": "emergency-electrician-woodbridge-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/02-emergency-electrician-woodbridge-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4894,
+      "verify_string": "evp-safety-triage"
+    },
+    {
+      "slug": "ev-charger-installation-lake-ridge-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/07-ev-charger-installation-lake-ridge-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4898,
+      "verify_string": "evp-hoa-block"
+    },
+    {
+      "slug": "panel-upgrade-manassas-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/09-panel-upgrade-manassas-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4900,
+      "verify_string": "Municipal-utility cost advantage"
+    },
+    {
+      "slug": "panel-upgrade-alexandria-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/23-panel-upgrade-alexandria-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4911,
+      "verify_string": "evp-permit-block"
+    }
+  ]
+}
