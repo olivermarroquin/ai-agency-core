@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "plumbing_patterns": [
+    {
+      "pattern": "/workspace/_scratch/relay/_relay-.*\\.md$",
+      "name": "relay-file"
+    },
+    {
+      "pattern": "/workspace/_scratch/skip/\\.gate-skip.*\\.sh$",
+      "name": "gate-skip-script"
+    },
+    {
+      "pattern": "/workspace/_scratch/launch/\\.pair-launch-.*\\.sh$",
+      "name": "pair-launch-script"
+    },
+    {
+      "pattern": "/workspace/_scratch/spawn/_spawn-.*\\.md$",
+      "name": "spawn-file"
+    },
+    {
+      "pattern": "/workspace/_relay-.*\\.md$",
+      "name": "relay-file-legacy"
+    },
+    {
+      "pattern": "/workspace/\\.gate-skip.*\\.sh$",
+      "name": "gate-skip-script-legacy"
+    },
+    {
+      "pattern": "/workspace/\\.pair-launch-.*\\.sh$",
+      "name": "pair-launch-script-legacy"
+    },
+    {
+      "pattern": "/workspace/_spawn-.*\\.md$",
+      "name": "spawn-file-legacy"
+    },
+    {
+      "pattern": "/workspace/.+/\\.commit\\.sh$",
+      "name": "commit-script"
+    },
+    {
+      "pattern": "execution-log-\\d{4}-\\d{2}-\\d{2}.*\\.md$",
+      "name": "execution-log"
+    },
+    {
+      "pattern": "build-review-firing-xlsx\\.py",
+      "name": "firing-xlsx-regen",
+      "scope": "bash"
+    },
+    {
+      "pattern": "^(python3\\s+-m\\s+)?pytest\\b",
+      "name": "pytest-test-run",
+      "scope": "bash",
+      "reviewer_only": true
+    },
+    {
+      "pattern": "^python3\\s+-m\\s+unittest\\b",
+      "name": "unittest-test-run",
+      "scope": "bash",
+      "reviewer_only": true
+    },
+    {
+      "pattern": "^rm(\\s+-[a-zA-Z]+)*(\\s+\\S*/workspace/_scratch/\\S*)+\\s*$",
+      "name": "scratch-cleanup-rm",
+      "scope": "bash"
+    },
+    {
+      "pattern": "^mv(\\s+-[a-zA-Z]+)*(\\s+\\S*/workspace/_scratch/\\S*)+\\s*$",
+      "name": "scratch-cleanup-mv",
+      "scope": "bash"
+    }
+  ],
+  "hard_non_exempt": [
+    "04_projects/",
+    "05_shared-intelligence/",
+    "skills/",
+    "repos/"
+  ]
+}

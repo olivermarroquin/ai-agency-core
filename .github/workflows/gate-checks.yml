@@ -26,6 +26,18 @@ jobs:
       - name: Install pytest
         run: pip install pytest
 
+      - name: Scaffold workspace structure for tests
+        # Several tests depend on workspace-level files that live outside
+        # ai-agency-core (plumbing whitelist, firing tracker).  This step
+        # populates those paths from CI fixture copies checked into the repo.
+        run: |
+          mkdir -p workspace/.review-gate
+          cp workspace/repos/ai-agency-core/.github/ci-fixtures/plumbing-whitelist.json \
+             workspace/.review-gate/plumbing-whitelist.json
+          mkdir -p workspace/second-brain/_meta/handoffs
+          cp workspace/repos/ai-agency-core/.github/ci-fixtures/firing-tracker-stub.md \
+             workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md
+
       # REVIEW_GATE_STATE_DIR points tests at an ephemeral dir so they don't
       # need the real ~/.review-gate/state/ tree that only exists locally.
       - name: Gate meta-suite
