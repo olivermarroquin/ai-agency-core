@@ -11,12 +11,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          # _paths.py derives WORKSPACE_ROOT by walking 4 levels up from its
-          # own location and asserts basename == "workspace".  Checking out
-          # into this nested path satisfies the assertion without touching
-          # gate code.
-          path: workspace/repos/ai-agency-core
+
+      - name: Set up workspace structure
+        # _paths.py derives WORKSPACE_ROOT via os.path.realpath, walking 4
+        # levels up from its location and asserting basename == "workspace".
+        # Tests use "~/workspace/_scratch/..." in bash commands; the
+        # traversal guard expands ~ via expanduser then compares against
+        # WORKSPACE_ROOT with normpath (which does NOT follow symlinks).
+        #
+        # For both to agree, the repo must physically live at
+        # ~/workspace/repos/ai-agency-core.  We move the checkout there
+        # so _paths.py's realpath derivation equals ~/workspace.
+        run: |
+          mkdir -p ~/workspace/repos
+          cp -a "$GITHUB_WORKSPACE/." ~/workspace/repos/ai-agency-core/
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -26,36 +34,54 @@ jobs:
       - name: Install pytest
         run: pip install pytest
 
-      - name: Scaffold workspace structure for tests
-        # Several tests depend on workspace-level files that live outside
-        # ai-agency-core (plumbing whitelist, firing tracker).  This step
-        # populates those paths from CI fixture copies checked into the repo.
-        #
-        # The ~/workspace symlink ensures that os.path.expanduser("~") + "/workspace"
-        # resolves to the same tree as WORKSPACE_ROOT (derived from _paths.py).
-        # Without it, tests using "~/workspace/_scratch/..." in bash commands fail
-        # the traversal guard because ~ expands to /home/runner, not $GITHUB_WORKSPACE.
+      - name: Scaffold workspace fixtures
+        # Populate workspace-level files that live outside ai-agency-core
+        # (plumbing whitelist, firing tracker, _scratch dirs).
         run: |
-          ln -s "$GITHUB_WORKSPACE/workspace" "$HOME/workspace"
-          mkdir -p workspace/.review-gate
-          cp workspace/repos/ai-agency-core/.github/ci-fixtures/plumbing-whitelist.json \
-             workspace/.review-gate/plumbing-whitelist.json
-          mkdir -p workspace/second-brain/_meta/handoffs
-          cp workspace/repos/ai-agency-core/.github/ci-fixtures/firing-tracker-stub.md \
-             workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md
+          mkdir -p ~/workspace/.review-gate
+          cp ~/workspace/repos/ai-agency-core/.github/ci-fixtures/plumbing-whitelist.json \
+             ~/workspace/.review-gate/plumbing-whitelist.json
+          mkdir -p ~/workspace/second-brain/_meta/handoffs
+          cp ~/workspace/repos/ai-agency-core/.github/ci-fixtures/firing-tracker-stub.md \
+             ~/workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md
+          mkdir -p ~/workspace/_scratch/relay ~/workspace/_scratch/skip \
+                   ~/workspace/_scratch/spawn ~/workspace/_scratch/launch
+
+      - name: Debug workspace paths
+        run: |
+          python3 -c "
+          import os, sys
+          sys.path.insert(0, os.path.expanduser('~/workspace/repos/ai-agency-core/scripts/mandatory-review-gate'))
+          from _paths import WORKSPACE_ROOT
+          home = os.path.expanduser('~')
+          print(f'HOME={home}')
+          print(f'realpath(HOME)={os.path.realpath(home)}')
+          print(f'WORKSPACE_ROOT={WORKSPACE_ROOT}')
+          scratch = os.path.join(WORKSPACE_ROOT, '_scratch')
+          test_path = os.path.normpath(os.path.expanduser('~/workspace/_scratch/skip/.gate-skip-test.sh'))
+          print(f'scratch_prefix={scratch}')
+          print(f'test_path={test_path}')
+          print(f'startswith={test_path.startswith(scratch)}')
+          print(f'ls HOME:', os.listdir(home))
+          ws = os.path.join(home, 'workspace')
+          print(f'isdir(HOME/workspace)={os.path.isdir(ws)}')
+          print(f'islink(HOME/workspace)={os.path.islink(ws)}')
+          if os.path.isdir(ws):
+              print(f'realpath(HOME/workspace)={os.path.realpath(ws)}')
+          "
 
       # REVIEW_GATE_STATE_DIR points tests at an ephemeral dir so they don't
       # need the real ~/.review-gate/state/ tree that only exists locally.
       - name: Gate meta-suite
         env:
           REVIEW_GATE_STATE_DIR: ${{ runner.temp }}/review-gate-state
-        working-directory: workspace/repos/ai-agency-core
+        working-directory: ~/workspace/repos/ai-agency-core
         run: |
           mkdir -p "$REVIEW_GATE_STATE_DIR"
           python3 -m pytest scripts/mandatory-review-gate/ scripts/mandatory-review-gate/tests/ -v
 
       - name: Scaffolder regression suite
-        working-directory: workspace/repos/ai-agency-core
+        working-directory: ~/workspace/repos/ai-agency-core
         run: python3 -m pytest scripts/tests/ -v
 
       # run-coa4b-suite.py lives in ~/workspace/skills/gate-peer-reviewer/
