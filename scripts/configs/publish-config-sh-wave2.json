@@ -1,0 +1,37 @@
+{
+  "client_slug": "s-and-h-contracting",
+  "domain": "https://shcontractingunlimited.com",
+  "wp_user": "oliver",
+  "pages": [
+    {
+      "slug": "light-fixture-installation-manassas-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/12-light-fixture-installation-manassas-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4903,
+      "verify_string": "evp-brand-cards"
+    },
+    {
+      "slug": "emergency-electrician-alexandria-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/24-emergency-electrician-alexandria-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4912,
+      "verify_string": "evp-emergency-routing"
+    },
+    {
+      "slug": "panel-upgrade-stafford-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/28-panel-upgrade-stafford-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4918,
+      "verify_string": "evp-pattern-card"
+    },
+    {
+      "slug": "ev-charger-installation-springfield-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/22-ev-charger-installation-springfield-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4926,
+      "verify_string": "evp-hoa-block"
+    },
+    {
+      "slug": "panel-upgrade-burke-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/26-panel-upgrade-burke-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4935,
+      "verify_string": "Federal Pacific Stab-Lok"
+    }
+  ]
+}

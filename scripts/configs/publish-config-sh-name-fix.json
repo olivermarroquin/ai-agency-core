@@ -1,0 +1,67 @@
+{
+  "client_slug": "s-and-h-contracting",
+  "domain": "https://shcontractingunlimited.com",
+  "wp_user": "oliver",
+  "pages": [
+    {
+      "slug": "panel-upgrade-woodbridge-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/01-panel-upgrade-woodbridge-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4869,
+      "verify_string": "Mohammed Salahuddin"
+    },
+    {
+      "slug": "emergency-electrician-woodbridge-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/02-emergency-electrician-woodbridge-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4894,
+      "verify_string": "Mohammed Salahuddin"
+    },
+    {
+      "slug": "ev-charger-installation-lake-ridge-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/07-ev-charger-installation-lake-ridge-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4898,
+      "verify_string": "Mohammed Salahuddin"
+    },
+    {
+      "slug": "panel-upgrade-manassas-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/09-panel-upgrade-manassas-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4900,
+      "verify_string": "Mohammed Salahuddin"
+    },
+    {
+      "slug": "panel-upgrade-alexandria-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/23-panel-upgrade-alexandria-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4911,
+      "verify_string": "Mohammed Salahuddin"
+    },
+    {
+      "slug": "light-fixture-installation-manassas-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/12-light-fixture-installation-manassas-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4903,
+      "verify_string": "Mohammed Salahuddin"
+    },
+    {
+      "slug": "emergency-electrician-alexandria-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/24-emergency-electrician-alexandria-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4912,
+      "verify_string": "Mohammed Salahuddin"
+    },
+    {
+      "slug": "panel-upgrade-stafford-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/28-panel-upgrade-stafford-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4918,
+      "verify_string": "Mohammed Salahuddin"
+    },
+    {
+      "slug": "ev-charger-installation-springfield-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/22-ev-charger-installation-springfield-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4926,
+      "verify_string": "Mohammed Salahuddin"
+    },
+    {
+      "slug": "panel-upgrade-burke-va",
+      "draft_path": "~/workspace/second-brain/04_projects/clients/_active/s-and-h-contracting/website-archive/new/core-30/26-panel-upgrade-burke-va/draft-v3-WP-WRAPPED.html",
+      "wp_id": 4935,
+      "verify_string": "Mohammed Salahuddin"
+    }
+  ]
+}
