@@ -20,8 +20,7 @@ jobs:
         # WORKSPACE_ROOT with normpath (which does NOT follow symlinks).
         #
         # For both to agree, the repo must physically live at
-        # ~/workspace/repos/ai-agency-core.  We move the checkout there
-        # so _paths.py's realpath derivation equals ~/workspace.
+        # ~/workspace/repos/ai-agency-core.  We copy the checkout there.
         run: |
           mkdir -p ~/workspace/repos
           cp -a "$GITHUB_WORKSPACE/." ~/workspace/repos/ai-agency-core/
@@ -47,42 +46,20 @@ jobs:
           mkdir -p ~/workspace/_scratch/relay ~/workspace/_scratch/skip \
                    ~/workspace/_scratch/spawn ~/workspace/_scratch/launch
 
-      - name: Debug workspace paths
-        run: |
-          python3 -c "
-          import os, sys
-          sys.path.insert(0, os.path.expanduser('~/workspace/repos/ai-agency-core/scripts/mandatory-review-gate'))
-          from _paths import WORKSPACE_ROOT
-          home = os.path.expanduser('~')
-          print(f'HOME={home}')
-          print(f'realpath(HOME)={os.path.realpath(home)}')
-          print(f'WORKSPACE_ROOT={WORKSPACE_ROOT}')
-          scratch = os.path.join(WORKSPACE_ROOT, '_scratch')
-          test_path = os.path.normpath(os.path.expanduser('~/workspace/_scratch/skip/.gate-skip-test.sh'))
-          print(f'scratch_prefix={scratch}')
-          print(f'test_path={test_path}')
-          print(f'startswith={test_path.startswith(scratch)}')
-          print(f'ls HOME:', os.listdir(home))
-          ws = os.path.join(home, 'workspace')
-          print(f'isdir(HOME/workspace)={os.path.isdir(ws)}')
-          print(f'islink(HOME/workspace)={os.path.islink(ws)}')
-          if os.path.isdir(ws):
-              print(f'realpath(HOME/workspace)={os.path.realpath(ws)}')
-          "
-
       # REVIEW_GATE_STATE_DIR points tests at an ephemeral dir so they don't
       # need the real ~/.review-gate/state/ tree that only exists locally.
       - name: Gate meta-suite
         env:
           REVIEW_GATE_STATE_DIR: ${{ runner.temp }}/review-gate-state
-        working-directory: ~/workspace/repos/ai-agency-core
         run: |
+          cd ~/workspace/repos/ai-agency-core
           mkdir -p "$REVIEW_GATE_STATE_DIR"
           python3 -m pytest scripts/mandatory-review-gate/ scripts/mandatory-review-gate/tests/ -v
 
       - name: Scaffolder regression suite
-        working-directory: ~/workspace/repos/ai-agency-core
-        run: python3 -m pytest scripts/tests/ -v
+        run: |
+          cd ~/workspace/repos/ai-agency-core
+          python3 -m pytest scripts/tests/ -v
 
       # run-coa4b-suite.py lives in ~/workspace/skills/gate-peer-reviewer/
       # which is a separate repo not available in this checkout.  It cannot
