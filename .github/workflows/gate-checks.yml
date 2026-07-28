@@ -30,7 +30,13 @@ jobs:
         # Several tests depend on workspace-level files that live outside
         # ai-agency-core (plumbing whitelist, firing tracker).  This step
         # populates those paths from CI fixture copies checked into the repo.
+        #
+        # The ~/workspace symlink ensures that os.path.expanduser("~") + "/workspace"
+        # resolves to the same tree as WORKSPACE_ROOT (derived from _paths.py).
+        # Without it, tests using "~/workspace/_scratch/..." in bash commands fail
+        # the traversal guard because ~ expands to /home/runner, not $GITHUB_WORKSPACE.
         run: |
+          ln -s "$GITHUB_WORKSPACE/workspace" "$HOME/workspace"
           mkdir -p workspace/.review-gate
           cp workspace/repos/ai-agency-core/.github/ci-fixtures/plumbing-whitelist.json \
              workspace/.review-gate/plumbing-whitelist.json
