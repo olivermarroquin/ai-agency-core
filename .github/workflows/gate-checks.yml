@@ -1,0 +1,80 @@
+name: Gate checks
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  gate-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up workspace structure
+        # _paths.py derives WORKSPACE_ROOT via os.path.realpath, walking 4
+        # levels up from its location and asserting basename == "workspace".
+        # Tests use "~/workspace/_scratch/..." in bash commands; the
+        # traversal guard expands ~ via expanduser then compares against
+        # WORKSPACE_ROOT with normpath (which does NOT follow symlinks).
+        #
+        # For both to agree, the repo must physically live at
+        # ~/workspace/repos/ai-agency-core.  We copy the checkout there.
+        run: |
+          mkdir -p ~/workspace/repos
+          cp -a "$GITHUB_WORKSPACE/." ~/workspace/repos/ai-agency-core/
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pytest
+        run: pip install pytest
+
+      - name: Scaffold workspace fixtures
+        # Populate workspace-level files that live outside ai-agency-core
+        # (plumbing whitelist, firing tracker, _scratch dirs).
+        run: |
+          mkdir -p ~/workspace/.review-gate
+          cp ~/workspace/repos/ai-agency-core/.github/ci-fixtures/plumbing-whitelist.json \
+             ~/workspace/.review-gate/plumbing-whitelist.json
+          mkdir -p ~/workspace/second-brain/_meta/handoffs
+          cp ~/workspace/repos/ai-agency-core/.github/ci-fixtures/firing-tracker-stub.md \
+             ~/workspace/second-brain/_meta/handoffs/_review-skill-firing-tracker.md
+          mkdir -p ~/workspace/_scratch/relay ~/workspace/_scratch/skip \
+                   ~/workspace/_scratch/spawn ~/workspace/_scratch/launch
+
+      # REVIEW_GATE_STATE_DIR points tests at an ephemeral dir so they don't
+      # need the real ~/.review-gate/state/ tree that only exists locally.
+      - name: Gate meta-suite
+        env:
+          REVIEW_GATE_STATE_DIR: ${{ runner.temp }}/review-gate-state
+        run: |
+          cd ~/workspace/repos/ai-agency-core
+          mkdir -p "$REVIEW_GATE_STATE_DIR"
+          python3 -m pytest scripts/mandatory-review-gate/ scripts/mandatory-review-gate/tests/ -v
+
+      - name: Scaffolder regression suite
+        run: |
+          cd ~/workspace/repos/ai-agency-core
+          # 9 of 23 scaffolder tests need cross-repo resources unavailable
+          # in a bare checkout: skills/ (SKILL.md, spec-routing-table.md)
+          # and second-brain-tier3/ (Google Maps API key).  Deselected here;
+          # they run locally where the full workspace exists.
+          python3 -m pytest scripts/tests/ -v \
+            --deselect scripts/tests/test_btf3_slice2_internal_links.py::test_oql_routing_restaurant_entry \
+            --deselect scripts/tests/test_btf3_slice3_orchestrator.py::test_routing_section_exists \
+            --deselect scripts/tests/test_btf3_slice3_orchestrator.py::test_routing_covers_both_types \
+            --deselect scripts/tests/test_btf3_slice3_orchestrator.py::test_per_step_routing_table \
+            --deselect scripts/tests/test_btf3_slice3_orchestrator.py::test_version_bump \
+            --deselect scripts/tests/test_btf3_slice3_orchestrator.py::test_routing_references_parameterized_scripts \
+            --deselect scripts/tests/test_btf3_slice3_orchestrator.py::test_honest_limits_documented \
+            --deselect scripts/tests/test_electrician_regression.py::test_electrician_regression \
+            --deselect scripts/tests/test_restaurant_regression.py::test_d_electrician_backward_compat
+
+      # run-coa4b-suite.py lives in ~/workspace/skills/gate-peer-reviewer/
+      # which is a separate repo not available in this checkout.  It cannot
+      # run from a bare ai-agency-core checkout without cross-repo access.
+      # Skipped — tracked in execution log.
