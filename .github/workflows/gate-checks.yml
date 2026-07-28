@@ -1,0 +1,46 @@
+name: Gate checks
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  gate-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # _paths.py derives WORKSPACE_ROOT by walking 4 levels up from its
+          # own location and asserts basename == "workspace".  Checking out
+          # into this nested path satisfies the assertion without touching
+          # gate code.
+          path: workspace/repos/ai-agency-core
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pytest
+        run: pip install pytest
+
+      # REVIEW_GATE_STATE_DIR points tests at an ephemeral dir so they don't
+      # need the real ~/.review-gate/state/ tree that only exists locally.
+      - name: Gate meta-suite
+        env:
+          REVIEW_GATE_STATE_DIR: ${{ runner.temp }}/review-gate-state
+        working-directory: workspace/repos/ai-agency-core
+        run: |
+          mkdir -p "$REVIEW_GATE_STATE_DIR"
+          python3 -m pytest scripts/mandatory-review-gate/ scripts/mandatory-review-gate/tests/ -v
+
+      - name: Scaffolder regression suite
+        working-directory: workspace/repos/ai-agency-core
+        run: python3 -m pytest scripts/tests/ -v
+
+      # run-coa4b-suite.py lives in ~/workspace/skills/gate-peer-reviewer/
+      # which is a separate repo not available in this checkout.  It cannot
+      # run from a bare ai-agency-core checkout without cross-repo access.
+      # Skipped — tracked in execution log.
