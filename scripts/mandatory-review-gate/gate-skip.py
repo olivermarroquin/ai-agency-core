@@ -38,20 +38,38 @@ def classify_unreviewed(unreviewed, workspace_root=None):
     """Classify unreviewed entries as deliverables vs plumbing.
 
     Returns (deliverable_entries, plumbing_entries).
-    Uses the same is_plumbing_exempt logic the Stop hook uses.
+    Uses the same exemption logic as the Stop hook and commit hook:
+      - is_plumbing_exempt (CR-219) with include_reviewer_only=True
+      - is_bookkeeping_entry (CR-161)
+      - is_close_coordination_entry (CR-244)
+    A reviewer writing coordination files (firing-tracker, catch-register,
+    event-log, verdict files, execution logs) is doing the review itself —
+    those writes are plumbing, not deliverables.
     """
+    if workspace_root is None:
+        workspace_root = WORKSPACE_ROOT
     deliverables = []
     plumbing = []
     for e in unreviewed:
         fp = e.get('file_path', '')
         tool = e.get('tool', '')
         bash_cmd = e.get('bash_cmd', e.get('display', ''))
+        # CR-219: plumbing whitelist (include reviewer_only patterns)
         annotation = engine.is_plumbing_exempt(fp, tool, bash_cmd,
-                                                workspace_root)
+                                                workspace_root,
+                                                include_reviewer_only=True)
         if annotation:
             plumbing.append(e)
-        else:
-            deliverables.append(e)
+            continue
+        # CR-161: bookkeeping basenames (firing-tracker, event-log, etc.)
+        if engine.is_bookkeeping_entry(e, workspace_root):
+            plumbing.append(e)
+            continue
+        # CR-244: close-coordination surfaces (execution logs, _scratch/, etc.)
+        if engine.is_close_coordination_entry(e, workspace_root):
+            plumbing.append(e)
+            continue
+        deliverables.append(e)
     return deliverables, plumbing
 
 

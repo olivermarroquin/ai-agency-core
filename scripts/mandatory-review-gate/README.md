@@ -3,6 +3,8 @@
 The enforcement layer for the mandatory pre-land review gate. Substrate-agnostic
 engine + per-substrate adapters + Layer-A deterministic check suite + conformance tests.
 
+**Version:** RGH-CR244 (2026-07-27) — close-friction fix
+
 ## Architecture (RGH-2)
 
 ```
@@ -40,7 +42,8 @@ See `references/substrate-adapter-contract.md` for the full contract.
 | `mandatory-review-gate.py` | Stop | Blocks turn-end if unreviewed dirty entries exist; delegates to `engine.check_gate()` |
 | `log-review-pass.py` | (called by reviewer) | Logs a review-pass marker backed by a verdict file |
 | `gate-status.py` | CLI | Shows what's blocking the gate and why (`--json` for structured output) |
-| `gate-skip.py` | CLI (OPERATOR-ONLY) | Emergency skip with mandatory `--reason`; writes loud event-log + metrics |
+| `gate-skip.py` | CLI (OPERATOR-ONLY) | Emergency skip with mandatory `--reason`; refuses deliverable blocks (CR-224); writes loud event-log + metrics |
+| `operator-clear.py` | CLI (OPERATOR) | One-command operator-dispatched gate clear (CR-256): registers reviewer UUID, builds verdict, logs review-pass in one invocation. For non-CC reviewers (Cowork, strategic chat, manual verification) |
 | `metrics-readout.py` | CLI | Analyzes `metrics.jsonl` — p50/p95/max wall-clock by outcome, slow-invocation flags (RGH-1b) |
 | `gate-canary.py` | CLI / scheduled | Fail-open block-test canary — writes synthetic dirty entry, confirms Stop hook blocks (RGH-1b) |
 
@@ -260,3 +263,39 @@ The Stop hook output schema and sub-agent session-id inheritance are both
 **version-dependent** (captured on CC v2.1.85, 2026-06-12). After every Claude
 Code upgrade, re-run the real-runner mini-check (see prior README version for
 the full 8-step protocol).
+
+## Changelog
+
+### RGH-CR244 (2026-07-27) — Close-friction fix
+
+Five fixes that eliminate close-time operator friction:
+
+1. **CR-244 — Bookkeeping fast-path.** When all deliverable entries in a session
+   have been reviewed PASS, subsequent close-time coordination writes (firing-tracker,
+   catch-register, event-log, _chat-status.md, execution-logs, _scratch/ files)
+   auto-clear with fast-path deterministic checks. Applied to Stop hook,
+   `git_hook_adapter`, and `assert-gate-clear.py`. Guard: only fires when ALL
+   deliverables are PASSed; never clears content files.
+
+2. **CR-255 — Leak-audit own-client whitelist.** `_load_leak_identity_strings`
+   now excludes the identity strings of the project resolved for the file under
+   check. EV Electric's own name appearing in an EV Electric file is not a leak.
+   Supports explicit `own_client_path_markers` config mapping.
+
+3. **CR-256 — One-command operator-dispatched clear.** New `operator-clear.py`:
+   registers a reviewer UUID (--operator-dispatched), builds a schema-valid verdict
+   file with mandate_version, and logs the review-pass in one invocation. Full
+   requirements contract printed on any rejection.
+
+4. **CR-165 — Non-CC reviewer identity path.** Block files and `assert-gate-clear`
+   now document `operator-clear.py` as the path for Cowork/strategic-chat reviewers.
+
+5. **D-09 — Block-message hardening.** When deliverables are present, the block
+   message states "Skip ineligible — deliverables present; relay to reviewer or
+   use operator-clear.py. Do NOT author a gate-skip script (D-09)." The wrong
+   path is never printed as available.
+
+**Tests:** 24 new tests (794 total). Regression test: simulated wave close
+(produce → review PASS → close bookkeeping → commit) with zero operator
+interventions. Safety invariants: gate still blocks unreviewed deliverables,
+producer self-clears, deliverable skips.

@@ -571,6 +571,23 @@ def _is_segment_read_only(segment: str) -> bool:
         if _is_python_inline_read_only(segment):
             return True
         return False  # default: state-changing
+    # CR-253: python3 -m pytest/unittest — test runners are inspection,
+    # not deliverable production. They may create .pytest_cache or __pycache__
+    # but those are never reviewable artifacts. Recognized forms:
+    #   python3 -m pytest [args...]
+    #   python3 -m unittest [args...]
+    _READ_ONLY_PYTHON_MODULES = frozenset({'pytest', 'unittest'})
+    if base in ('python3', 'python'):
+        parts = segment.split()
+        for i, p in enumerate(parts[1:], 1):
+            if p == '-m' and i + 1 < len(parts):
+                mod = parts[i + 1]
+                if mod in _READ_ONLY_PYTHON_MODULES:
+                    return True
+                break  # -m <something-else> — fall through
+            if not p.startswith('-'):
+                break  # reached script arg, no -m found
+
     # RGH-1b item 4: specific test-suite scripts whitelisted by exact basename.
     # CR-012: NO flag-based heuristic — only exact basename whitelist.
     if base in ('python3', 'python'):
@@ -608,6 +625,16 @@ def _is_segment_read_only(segment: str) -> bool:
             if targets and all(t.endswith('.git/index.lock') for t in targets):
                 return True
         return False
+
+    # CR-253: mkdir creates empty directories — no reviewable content artifact.
+    # Idempotent with -p. Produces nothing a reviewer could inspect.
+    # Covers: mkdir -p ~/workspace/_scratch/..., mkdir -p .review-gate/state/
+    if base == 'mkdir':
+        return True
+
+    # CR-253: mktemp creates empty temp files/dirs — infrastructure, not content.
+    if base == 'mktemp':
+        return True
 
     # sed -n (print-only mode) is read-only; sed -i or bare sed can modify files
     if base == 'sed':
@@ -903,7 +930,24 @@ def _is_segment_write_safe(segment: str) -> bool:
                 targets = [p for p in parts[1:] if not p.startswith('-')]
                 if targets and all(t.endswith('.git/index.lock') for t in targets):
                     return True  # stale lock cleanup — write-safe
+        # CR-253: mkdir/mktemp — empty dirs/files, no reviewable content.
+        # Mirrors the carve-out in _is_segment_read_only.
+        if base in ('mkdir', 'mktemp'):
+            return True
         return False
+
+    # CR-253: python3 -m pytest/unittest — test runners are write-safe.
+    # Mirrors the carve-out in _is_segment_read_only.
+    if base in ('python3', 'python'):
+        parts = segment.split()
+        for i, p in enumerate(parts[1:], 1):
+            if p == '-m' and i + 1 < len(parts):
+                mod = parts[i + 1]
+                if mod in ('pytest', 'unittest'):
+                    return True
+                break
+            if not p.startswith('-'):
+                break
 
     # Python inline code with write indicators
     if base in ('python3', 'python'):
@@ -1744,6 +1788,8 @@ BOOKKEEPING_BASENAMES = frozenset({
     '_recently-closed.md',
     '_event-log.md',
     '_review-skill-firing-tracker.md',
+    '_review-gate-catch-register.md',  # CR-244: close-time coordination surface
+    '_chat-status.md',                 # CR-244: close-time coordination surface
 })
 
 # Handoff files: exempt ONLY when the edit is a pure status/consumed flip
@@ -1948,6 +1994,239 @@ def is_bookkeeping_entry(entry_or_path, workspace_root: str) -> bool:
     return False
 
 
+# ============================================================================
+# CR-244: Close-coordination fast-path
+# ============================================================================
+#
+# When ALL deliverable entries in a session have been reviewed PASS, subsequent
+# writes to close-coordination surfaces (firing-tracker, catch-register,
+# event-log, _chat-status, execution-logs, _scratch/ files) auto-clear with
+# fast-path checks. This eliminates the close-time operator friction where
+# mandatory close bookkeeping creates new dirty entries that block the stop
+# AFTER the review is already complete.
+#
+# SAFETY: the fast-path ONLY fires when deliverables are all PASSed. If any
+# deliverable is unreviewed or BLOCKING, close-coordination entries still gate.
+# The close-coordination entry itself still gets fast-path deterministic checks
+# (placeholder sweep, leak audit, link resolution) — it is exempt from
+# requiring a reviewer, not from quality checks.
+
+# Patterns matching close-coordination surfaces beyond BOOKKEEPING_BASENAMES.
+# These are file paths written during close bookkeeping that should auto-clear
+# when deliverables are already PASSed.
+CLOSE_COORDINATION_PATH_PATTERNS = [
+    r'execution-log-\d{4}-\d{2}-\d{2}.*\.md$',  # any execution log
+    r'_chat-status\.md$',
+    r'_review-gate-catch-register\.md$',
+    r'/workspace/_scratch/',  # relay, skip, spawn files
+]
+_CLOSE_COORDINATION_RE = re.compile('|'.join(CLOSE_COORDINATION_PATH_PATTERNS))
+
+
+def is_close_coordination_entry(entry: dict, workspace_root: str) -> bool:
+    """Classify a dirty-ledger entry as close-time coordination.
+
+    Returns True if the entry writes to a known close-coordination surface.
+    This is a SUPERSET of is_bookkeeping_entry — it includes execution logs,
+    _scratch/ files, and other surfaces written only during close bookkeeping.
+
+    Used by the CR-244 fast-path: when all deliverables are PASSed, these
+    entries auto-clear instead of blocking.
+    """
+    file_path = entry.get('file_path', '') if isinstance(entry, dict) else entry
+
+    # BASH entries: check write targets
+    if file_path.startswith('BASH:'):
+        # Bookkeeping BASH (writes to bookkeeping basenames) qualifies
+        if _is_bash_bookkeeping(entry if isinstance(entry, dict) else {'file_path': file_path}):
+            return True
+        # BASH appending to event-log or other coordination targets
+        bash_cmd = entry.get('bash_cmd', entry.get('display', '')) if isinstance(entry, dict) else ''
+        if bash_cmd:
+            cleaned = re.sub(r'2>>&?\d*', '', bash_cmd)
+            cleaned = re.sub(r'2>/dev/null', '', cleaned)
+            cleaned = re.sub(r'2>&\d+', '', cleaned)
+            cleaned = re.sub(r'2>\s*\S+', '', cleaned)
+            targets = re.findall(r'(?<!\d)>{1,2}\s*(\S+)', cleaned)
+            if targets and all(
+                _CLOSE_COORDINATION_RE.search(t.strip("'\""))
+                or os.path.basename(t.strip("'\"")) in BOOKKEEPING_BASENAMES
+                for t in targets
+            ):
+                return True
+        return False
+
+    # Known bookkeeping basenames
+    if _is_bookkeeping_basename(file_path):
+        return True
+
+    # Close-coordination path patterns
+    if _CLOSE_COORDINATION_RE.search(file_path):
+        return True
+
+    # Plumbing-exempt paths (_scratch/ files, commit scripts)
+    # These are already plumbing-exempt in check_gate for reviewer sessions;
+    # the CR-244 fast-path extends this to producer sessions at close time.
+    tool = entry.get('tool', '') if isinstance(entry, dict) else ''
+    bash_cmd = entry.get('bash_cmd', entry.get('display', '')) if isinstance(entry, dict) else ''
+    if is_plumbing_exempt(file_path, tool, bash_cmd, workspace_root):
+        return True
+
+    # Handoff status-only edits
+    if _is_handoff_status_only_edit(file_path, workspace_root):
+        return True
+
+    return False
+
+
+def all_deliverables_passed(dirty_entries: list, reviewed_entries: list,
+                            workspace_root: str) -> bool:
+    """Check if ALL non-coordination dirty entries have been reviewed PASS.
+
+    Returns True if every dirty entry that is NOT a close-coordination surface
+    has a reviewed-ledger PASS marker with timestamp >= the dirty timestamp.
+    Returns False if any deliverable is unreviewed or has only a BLOCKING marker.
+
+    This is the precondition for the CR-244 close-coordination fast-path.
+    """
+    # Build reviewed map: file_path -> (latest_timestamp, verdict)
+    reviewed_map = {}
+    for r in reviewed_entries:
+        fp = r.get('file_path', '')
+        ts = r.get('timestamp', 0)
+        verdict = r.get('verdict', '')
+        if fp not in reviewed_map or ts > reviewed_map[fp][0]:
+            reviewed_map[fp] = (ts, verdict)
+
+    # Check every non-coordination dirty entry
+    for d in dirty_entries:
+        fp = d.get('file_path', '')
+        if is_close_coordination_entry(d, workspace_root):
+            continue  # skip coordination entries — they're what we're clearing
+
+        dirty_ts = d.get('timestamp', 0)
+        reviewed = reviewed_map.get(fp)
+        if not reviewed:
+            return False  # no review marker at all
+        rev_ts, rev_verdict = reviewed
+        if rev_ts < dirty_ts:
+            return False  # review predates the dirty entry (re-edited after review)
+        if rev_verdict not in ('PASS', 'SKIP'):
+            return False  # BLOCKING verdict doesn't count as cleared
+
+    return True
+
+
+def try_close_coordination_auto_clear(unreviewed: list, session_id: str,
+                                       state_dir: str,
+                                       workspace_root: str) -> tuple:
+    """Attempt CR-244 close-coordination auto-clear.
+
+    Precondition: caller has verified all_deliverables_passed() is True
+    AND every entry in `unreviewed` is a close-coordination entry.
+
+    Runs fast-path deterministic checks on file entries. BASH entries
+    that target coordination surfaces pass without file-level checks
+    (they're append commands, not content files).
+
+    Returns (True, '') if auto-cleared.
+    Returns (False, refusal_msg) if checks failed.
+    """
+    all_results = []
+    all_passed = True
+
+    for entry in unreviewed:
+        fp = entry.get('file_path', '')
+        if fp.startswith('BASH:'):
+            # BASH coordination entries: no file-level check needed
+            # (they're appending to event-log, etc.)
+            all_results.append({
+                'file': fp,
+                'checks': [{'name': 'bash-coordination', 'result': 'PASS', 'count': 0}],
+                'passed': True,
+            })
+            continue
+        if not os.path.isfile(fp):
+            # File doesn't exist (yet) or was deleted — pass through
+            all_results.append({
+                'file': fp,
+                'checks': [{'name': 'file-missing', 'result': 'PASS', 'count': 0}],
+                'passed': True,
+            })
+            continue
+        result = run_fast_path_checks(fp)
+        all_results.append(result)
+        if not result['passed']:
+            all_passed = False
+
+    if not all_passed:
+        failures = []
+        for r in all_results:
+            for c in r['checks']:
+                if c.get('result') == 'FAIL':
+                    failures.append(f"{c['name']}: {c.get('count', '?')} hits"
+                                    f" in {os.path.basename(r['file'])}")
+        refusal = ('CR-244 close-coordination auto-clear REFUSED: '
+                   + '; '.join(failures) if failures
+                   else 'CR-244 auto-clear failed (unknown)')
+        return False, refusal
+
+    # All checks passed — write machine-generated verdict + review markers
+    checks_run = []
+    for r in all_results:
+        for c in r['checks']:
+            checks_run.append(c)
+
+    seen = {}
+    for c in checks_run:
+        name = c['name']
+        if name not in seen:
+            seen[name] = {'name': name, 'result': 'PASS', 'count': 0}
+        seen[name]['count'] += c.get('count', 0)
+    deduped_checks = list(seen.values())
+
+    verdict_data = {
+        'verdict': 'PASS',
+        'checks_run': deduped_checks,
+        'catches': [],
+        'cost_usd': 0.0,
+        'auto_clear': True,
+        'generator': 'mandatory-review-gate/close-coordination-auto-clear',
+        'cr': 'CR-244',
+    }
+
+    os.makedirs(state_dir, exist_ok=True)
+    verdict_path = os.path.join(
+        state_dir, f'verdict-cr244-{session_id}-{int(time.time() * 1000)}.json')
+    with open(verdict_path, 'w') as f:
+        json.dump(verdict_data, f)
+
+    # Write review-pass markers
+    now = time.time()
+    iso = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+    evidence = (f'CR-244 close-coordination auto-clear: all deliverables PASSed, '
+                f'{len(unreviewed)} coordination entries cleared with fast-path checks')
+
+    markers = []
+    for entry in unreviewed:
+        fp = entry.get('file_path', '')
+        markers.append({
+            'timestamp': now,
+            'iso_time': iso,
+            'file_path': fp,
+            'verdict': 'PASS',
+            'tier': 'fast-path',
+            'gate_id': 'G-cr244-close-coordination',
+            'evidence': evidence,
+            'verdict_file': verdict_path,
+            'verdict_data': verdict_data,
+            'findings': None,
+        })
+
+    append_reviewed_entries(state_dir, session_id, markers)
+    return True, ''
+
+
 def is_all_protocol_exempt(unreviewed: list, workspace_root: str) -> bool:
     """Return True if every unreviewed entry is a protocol-exempt file."""
     exempt_abspaths = frozenset(
@@ -2022,11 +2301,52 @@ def _strip_safe_content_for_placeholder_sweep(content: str) -> str:
     return content
 
 
+def _resolve_own_client_slug(file_path: str, leak_config: dict) -> Optional[str]:
+    """Resolve which client a file belongs to for own-client exclusion (CR-255).
+
+    Uses `own_client_path_markers` from leak_audit config if present:
+        {"ev-electric-services": ["ev-electric", "04_projects/clients/_active/ev-"],
+         "s-and-h-contracting": ["s-and-h", "04_projects/clients/_active/s-and-h"]}
+
+    Falls back to matching the client-*.json basename slug against the file path.
+    Returns the client slug (e.g. 'ev-electric-services') or None if no match.
+    """
+    # Explicit mapping takes priority
+    markers_map = leak_config.get('own_client_path_markers', {})
+    if markers_map and isinstance(markers_map, dict):
+        for slug, markers in markers_map.items():
+            if isinstance(markers, list):
+                for marker in markers:
+                    if marker in file_path:
+                        return slug
+
+    # Fallback: match client-<slug>.json basename patterns in the file path.
+    # E.g., a file at .../ev-electric-services/... matches client-ev-electric-services.json
+    data_path = leak_config.get('client_data_path', '')
+    file_pattern = leak_config.get('client_file_pattern', 'client-*.json')
+    if data_path:
+        abs_data_path = os.path.join(WORKSPACE_ROOT, data_path)
+        import glob as glob_mod
+        client_files = glob_mod.glob(os.path.join(abs_data_path, file_pattern))
+        for cf in client_files:
+            # Extract slug: client-ev-electric-services.json -> ev-electric-services
+            basename = os.path.basename(cf)
+            slug = basename.replace('client-', '').replace('.json', '')
+            if slug and slug in file_path:
+                return slug
+
+    return None
+
+
 def _load_leak_identity_strings(file_path: str) -> list:
     """Load client identity strings for the leak audit from project config.
 
     Returns a list of identity strings to grep for, or empty list if no
     client data is configured for this file's project.
+
+    CR-255: excludes the own-client's identity strings. When checking a file
+    that belongs to EV Electric, EV Electric's own name/owner naturally appears
+    in it — that's not a leak. Only OTHER clients' strings are checked.
     """
     config = load_project_config()
     proj = resolve_project(file_path, config)
@@ -2054,8 +2374,18 @@ def _load_leak_identity_strings(file_path: str) -> list:
     if not client_files:
         return []
 
+    # CR-255: resolve which client the file belongs to
+    own_slug = _resolve_own_client_slug(file_path, leak_config)
+
     identity_strings = []
     for cf in client_files:
+        # CR-255: skip the own client's file
+        if own_slug:
+            cf_basename = os.path.basename(cf)
+            cf_slug = cf_basename.replace('client-', '').replace('.json', '')
+            if cf_slug == own_slug:
+                continue
+
         try:
             with open(cf, 'r') as f:
                 data = json.load(f)
@@ -2490,6 +2820,30 @@ def check_gate(
             return GateResult(status='auto-cleared', unreviewed=[],
                               tier='fast-path', wall_ms=wall_ms)
         auto_clear_refusal = refusal  # RGH-1b item 1
+
+    # CR-244: Close-coordination fast-path.
+    # When ALL remaining unreviewed entries are close-coordination surfaces
+    # AND all deliverables in the session have been reviewed PASS, auto-clear
+    # the coordination entries with fast-path checks. This eliminates the
+    # close-time friction where mandatory bookkeeping creates new dirty
+    # entries that block the stop after the review is already complete.
+    if attempt_auto_clear and unreviewed:
+        all_coord = all(
+            is_close_coordination_entry(e, workspace_root) for e in unreviewed)
+        if all_coord and all_deliverables_passed(
+                dirty_entries, reviewed_entries, workspace_root):
+            cleared, refusal = try_close_coordination_auto_clear(
+                unreviewed, session_id, state_dir, workspace_root)
+            if cleared:
+                wall_ms = (time.monotonic() - t_start) * 1000
+                log_metrics(state_dir, session_id, 'cr244-close-coordination',
+                            len(unreviewed), 'fast-path', wall_ms)
+                return GateResult(status='auto-cleared', unreviewed=[],
+                                  tier='fast-path', wall_ms=wall_ms)
+            # CR-244 auto-clear failed (fast-path checks found issues) —
+            # fall through to blocked with the refusal reason
+            if refusal:
+                auto_clear_refusal = refusal
 
     # Blocked
     profile = _resolve_entries_profile(unreviewed)

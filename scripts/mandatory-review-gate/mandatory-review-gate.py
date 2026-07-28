@@ -396,12 +396,13 @@ def main():
         tier_e = e.get('tier', '?')
         bullets.append(f'  - {label} ({tier_e})')
 
-    # Decision line
+    # Decision line — D-09 hardening: when deliverables present, explicitly
+    # state skip is ineligible so the wrong path is never printed as available.
     if n_deliverables > 0:
         decision = (
-            f'-> Relay to your reviewer: "Producer blocked on '
-            f'{n_deliverables} deliverables -- verify and log the '
-            f'review-pass marker; full details in the block file."')
+            f'-> Skip ineligible -- {n_deliverables} deliverable(s) present. '
+            f'Relay to your reviewer or use operator-clear.py. '
+            f'Do NOT author a gate-skip script (D-09).')
     else:
         # Plumbing only — write a skip script for the operator
         skip_dir = os.path.join(WORKSPACE_ROOT, '_scratch', 'skip')
@@ -442,30 +443,47 @@ def main():
     if dispatch_findings:
         block_file_content += f'\n## Independent dispatch findings\n{dispatch_findings}\n'
 
+    operator_clear_script = os.path.join(script_dir, 'operator-clear.py')
+
     if needs_independent:
         block_file_content += f"""
 ## Ready-made commands
 
-### For reviewer (log review-pass):
+### Option 1 — CC reviewer (log review-pass):
 ```
 python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-independent --verdict-file <path> --reviewer-type independent --reviewer-session <REVIEWER_SESSION_ID> --run-id <chat-slug>
 ```
+
+Requirements: --reviewer-session must be UUIDv4, registered via register-reviewer-session.py, distinct from --session.
+
+### Option 2 — Non-CC reviewer / operator-dispatched (CR-256, one command):
+For Cowork, strategic-chat, or manual reviews with no CC reviewer session:
+```
+python3 {operator_clear_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-independent
+```
+This registers a reviewer UUID (--operator-dispatched), builds a verdict file with mandate_version, and logs the review-pass in one invocation.
 """
         # CR-229c: omit emergency-skip section when deliverables > 0.
-        # Deliverable blocks must be cleared by the reviewer, not skipped.
-        # gate-skip.py already refuses deliverables (CR-224); printing the
-        # command contradicts the provenance rule.
+        # D-09 hardening: state "skip ineligible" explicitly.
         if n_deliverables == 0:
             block_file_content += f"""
-### For operator (emergency skip):
+### Option 3 — Operator emergency skip (plumbing-only):
 ```
 python3 {skip_script} --session {session_id} --reason "reviewer plumbing"
 ```
+"""
+        else:
+            block_file_content += f"""
+### Skip ineligible
+{n_deliverables} deliverable(s) present — skip is NOT available.
+Deliverables must be cleared by a reviewer (Option 1 or 2 above).
+gate-skip.py mechanically refuses deliverable blocks (CR-224).
 """
         block_file_content += f"""
 ## Protocol
 Full protocol: {MANDATE_PATH}
 Producer cannot self-clear. A sub-agent does NOT count (shares session_id).
+Non-CC reviewers (Cowork, strategic chat): use Option 2 (operator-clear.py).
 """
     else:
         block_file_content += f"""
@@ -478,6 +496,11 @@ python3 {log_script} --session {session_id} --files {files_argv} --verdict PASS 
 
 Verdict file must be a valid gate-peer-reviewer return contract (JSON with verdict, checks_run[], catches[], cost_usd).
 Use --verdict BLOCKING --findings "description" for blocking findings.
+
+### Operator-dispatched (CR-256, one command):
+```
+python3 {operator_clear_script} --session {session_id} --files {files_argv} --verdict PASS --tier {tier} --gate-id G-default
+```
 """
 
     try:

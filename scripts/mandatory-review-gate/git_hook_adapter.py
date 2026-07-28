@@ -154,6 +154,8 @@ def check_staged_files(staged: set, state_dir: str,
         (e.g. _review-skill-firing-tracker.md, _event-log.md) are exempt.
       - Plumbing files (CR-219): paths matching plumbing-whitelist patterns
         (relay files, skip scripts, spawn files) are exempt.
+      - Close-coordination fast-path (CR-244): when all deliverables in a
+        session are PASSed, coordination writes auto-clear.
     These match the same predicates the Stop hook uses — a file that does
     NOT block at turn-end must NOT block at commit-time.
 
@@ -196,6 +198,23 @@ def check_staged_files(staged: set, state_dir: str,
                     include_reviewer_only=True)
                 if annotation:
                     continue  # CR-219: plumbing exempt
+            except Exception:
+                pass  # fail closed — treat as non-exempt
+
+            # CR-244: close-coordination exemption.
+            # If the entry is a close-coordination surface, check if all
+            # deliverables in the entry's source session are already PASSed.
+            try:
+                if engine.is_close_coordination_entry(dirty_entry, workspace_root):
+                    src_sid = dirty_entry.get('_session_id', '')
+                    if src_sid:
+                        src_dirty = engine.load_scoped_dirty(
+                            state_dir, src_sid, included_sources=None)
+                        src_reviewed = engine.read_reviewed_ledger(
+                            state_dir, src_sid)
+                        if engine.all_deliverables_passed(
+                                src_dirty, src_reviewed, workspace_root):
+                            continue  # CR-244: deliverables PASSed, coordination exempt
             except Exception:
                 pass  # fail closed — treat as non-exempt
 
@@ -327,6 +346,7 @@ def main():
 
         script_dir = os.path.dirname(os.path.abspath(__file__))
         log_script = os.path.join(script_dir, 'log-review-pass.py')
+        operator_clear_script = os.path.join(script_dir, 'operator-clear.py')
 
         print('', file=sys.stderr)
         print('=' * 60, file=sys.stderr)
@@ -346,8 +366,7 @@ def main():
                   file=sys.stderr)
         print(f'', file=sys.stderr)
         print(f'To resolve:', file=sys.stderr)
-        print(f'  1. Run the review gate on these files', file=sys.stderr)
-        print(f'  2. Log the review pass:', file=sys.stderr)
+        print(f'  1. Log the review pass (reviewer):', file=sys.stderr)
 
         files_argv = ' '.join(f'"{e["file_path"]}"' for e in unreviewed)
         # Use the session that produced the artifact for the review marker
@@ -358,12 +377,26 @@ def main():
             sid_argv = ' '.join(f'"{e["file_path"]}"' for e in sid_files)
             print(f'     python3 {log_script} --session {sid} '
                   f'--files {sid_argv} --verdict PASS --tier {tier} '
-                  f'--gate-id G-default --verdict-file <verdict.json>',
+                  f'--gate-id G-default --verdict-file <verdict.json> '
+                  f'--reviewer-session <UUID> --reviewer-type independent '
+                  f'--run-id <chat-slug>',
+                  file=sys.stderr)
+
+        # CR-256: operator-dispatched one-command clear
+        print(f'', file=sys.stderr)
+        print(f'  2. Operator-dispatched (CR-256, one command):', file=sys.stderr)
+        for sid in sessions:
+            sid_files = [e for e in unreviewed
+                         if e.get('_session_id') == sid]
+            sid_argv = ' '.join(f'"{e["file_path"]}"' for e in sid_files)
+            print(f'     python3 {operator_clear_script} --session {sid} '
+                  f'--files {sid_argv} --verdict PASS --tier {tier} '
+                  f'--gate-id G-default',
                   file=sys.stderr)
 
         print(f'', file=sys.stderr)
-        print(f'To bypass (operator-only, audited):', file=sys.stderr)
-        print(f'  git commit --no-verify', file=sys.stderr)
+        print(f'  3. Bypass (operator-only, audited):', file=sys.stderr)
+        print(f'     git commit --no-verify', file=sys.stderr)
         print(f'', file=sys.stderr)
 
         sys.exit(1)

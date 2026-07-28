@@ -298,7 +298,8 @@ class TestIsBashEntryWriteSafe(unittest.TestCase):
             'echo "data" | tee output.txt'))
 
     def test_mkdir_command(self):
-        self.assertFalse(self.engine.is_bash_entry_write_safe(
+        # CR-253: mkdir creates empty dirs (no reviewable content) — write-safe.
+        self.assertTrue(self.engine.is_bash_entry_write_safe(
             'mkdir -p /tmp/new-dir'))
 
     def test_rm_command(self):
