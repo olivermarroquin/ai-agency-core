@@ -1,0 +1,86 @@
+{
+  "client_slug": "ev-electric-services",
+  "domain": "https://evelectric.pro",
+  "_source": "Rules are client-dictated or vault-verified. Each carries where it came from. Do not add a rule here on a hunch - an over-broad rule that cries wolf gets the whole sweep ignored.",
+  "rules": [
+    {
+      "name": "'no trip charge' / unpaired offer wording",
+      "pattern": "no trip charge|no service fee|free visit",
+      "_why": "Client text 2026-08-22: 'Let's NOT say no Service fee please, let's say no trip fee (FREE ESTIMATE)'. The phrase never appears alone. Was on 31 of 54 pages until 2026-08-25.",
+      "severity": "BLOCK"
+    },
+    {
+      "name": "free-first-visit framing",
+      "pattern": "(free|complimentary)[^.]{0,70}first visit|first visit[^.]{0,70}(free|complimentary)",
+      "_why": "The free safety inspection happens AFTER the work. Never framed as a free first visit. He charges to diagnose.",
+      "severity": "BLOCK"
+    },
+    {
+      "name": "forbidden diagnostic price",
+      "pattern": "\\$3(49|50)\\b",
+      "_why": "pricing-approved-2026-08-24.md - the $349/$350 diagnostic is never published, anywhere.",
+      "severity": "BLOCK"
+    },
+    {
+      "name": "tax-credit figure published (check tense AND brief)",
+      "pattern": "may cover up to 30%|30% of (the cost|installation)|up to \\$1,000[^.]{0,60}(charger|30C)",
+      "_why": "Section 30C terminated for property placed in service after 2026-06-30 (P.L. 119-21). WARN not BLOCK because this pattern cannot tell 'may cover 30%' (false, blocking) from 'previously covered 30%, expired June 30 2026' (true, past tense). Three EV city pages quote the percentage in correct past tense as of 2026-08-25 - the EV brief says no figure at all, so it is an open judgement call, not a defect. READ EACH HIT.",
+      "severity": "WARN",
+      "show": 3
+    },
+    {
+      "name": "legal address published",
+      "pattern": "12116\\s+Monument",
+      "_why": "Public NAP is 9488 Fairfax Blvd. The legal address is never published.",
+      "severity": "BLOCK"
+    },
+    {
+      "name": "'LLC' in public copy",
+      "pattern": "\\bLLC\\b",
+      "_why": "Client instruction: never 'LLC' in public-facing copy.",
+      "severity": "BLOCK"
+    },
+    {
+      "name": "named competitor",
+      "pattern": "michael\\s*(&amp;|&|and)\\s*son|\\bbeacon\\b",
+      "_why": "Competitors are never named on the site.",
+      "severity": "BLOCK"
+    },
+    {
+      "name": "thermography certification implied",
+      "pattern": "(certified|certification)[^.]{0,45}thermograph|thermograph[^.]{0,45}(certified|certification)",
+      "_why": "He owns and uses a thermal camera. That is the claim. Never a certification.",
+      "severity": "BLOCK"
+    },
+    {
+      "name": "hand-typed review count (CR-200)",
+      "pattern": "\\b\\d{2,3}\\s*(google reviews|customer reviews)",
+      "_why": "Should render via [ev_review_count]/[ev_review_rating], never a typed number. 55 pages hand-type it today; one said 91 while the rest said 105. Until the shortcodes are registered this reports the scale of the debt, not a new defect.",
+      "severity": "WARN",
+      "show": 2
+    },
+    {
+      "name": "unrendered shortcode leaking to readers",
+      "pattern": "\\[ev_review_(count|rating)\\]",
+      "_why": "If this fires, the shortcode is in the copy but not registered - readers see literal brackets. Worse than the hardcoded number.",
+      "severity": "BLOCK"
+    },
+    {
+      "name": "permit exemption asserted that the County does not publish (CR-233)",
+      "pattern": "Like-for-Like Replacement = Generally No Permit|no electrical permit needed in most cases|like-for-like[^.]{0,60}generally do not require a permit|no permit needed",
+      "_why": "Fairfax County publishes NO like-for-like exemption. Verified 2026-08-25 against two County pages: permit-library/electrical-residential requires a permit for 'replacement of electrical equipment or fixtures'; when-permit-required requires one for 'New, repair or relocated electrical fixtures' and exempts only low-voltage (50V max) systems. Do NOT swing to the opposite overclaim either - the County's wording does not support asserting a permit IS required for a specific job. Correct form: state the absence of a published exemption and that the position is established for the address before work starts.",
+      "severity": "BLOCK"
+    }
+  ],
+  "_lifted_rules": [
+    {
+      "rule": "knob-and-tube as a NAMED SERVICE",
+      "lifted": "2026-08-25",
+      "by": "operator, on client confirmation",
+      "quote": "that was on purpose, he said he does it all",
+      "original_reason": "plans/_HANDOFF-track-c-2026-08-24.md line 134 - 'He did not know the term.'",
+      "why_it_was_wrong": "Not recognising a trade term is a vocabulary gap, not a capability gap. The rule was inferred from a vocabulary observation and then enforced as a capability limit for four days. Live copy on /whole-house-rewire-fairfax-va/ and /electrical-troubleshooting/ was correct the whole time.",
+      "do_not_reinstate_without": "a direct statement from the client that he does NOT do this work"
+    }
+  ]
+}
