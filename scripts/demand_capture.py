@@ -431,6 +431,14 @@ def main() -> None:
         help="Skip S7 fresh per-slug GSC pull",
     )
     ap.add_argument(
+        "--volume-keywords", nargs="+", default=None,
+        help=(
+            "Wave-specific volume keywords (overrides config defaults). "
+            "Pass the wave's actual terms so the S3 table is labelled "
+            "correctly and the dossier does not carry stale seed data."
+        ),
+    )
+    ap.add_argument(
         "--dry-run", action="store_true",
         help="Show what would be done without calling APIs",
     )
@@ -513,9 +521,14 @@ def main() -> None:
     # ─── S3: VOLUME + DIFFICULTY ──────────────────────────────────────────
     print("--- S3: Volume + Difficulty ---")
     if dfs_ok:
-        vol_kws = build_volume_keywords(
-            args.service, args.city, args.state, config,
-        )
+        if args.volume_keywords:
+            vol_kws = args.volume_keywords
+            volume_keywords_source = "wave-specific"
+        else:
+            vol_kws = build_volume_keywords(
+                args.service, args.city, args.state, config,
+            )
+            volume_keywords_source = "default"
         vol_ok, vol_path, vol_msg, vol_cost = pull_s3_volume(
             vol_kws, args.location_code, out_dir / "dfs-volume.json",
         )
@@ -539,6 +552,7 @@ def main() -> None:
             "cost": round(vol_cost + diff_cost, 6),
         }
     else:
+        volume_keywords_source = "default"
         source_status["S3"] = {
             "pulled": False,
             "reason": dfs_msg,
@@ -558,15 +572,36 @@ def main() -> None:
         if serp_path:
             artifacts[serp_artifact] = serp_path
 
-        source_status["S1"] = {
-            "pulled": serp_ok, "artifacts": [serp_artifact],
+        # Check for task-level failures inside a successful HTTP response
+        serp_task_failed = False
+        serp_fail_reason = ""
+        if serp_ok and serp_path and serp_path.exists():
+            try:
+                from dfs_demand import parse_serp_response
+                serp_resp = json.loads(serp_path.read_text())
+                parsed = parse_serp_response(serp_resp)
+                if parsed.get("failed_tasks"):
+                    ft = parsed["failed_tasks"][0]
+                    serp_task_failed = True
+                    serp_fail_reason = (
+                        f"Task status {ft['status_code']}: {ft['status_message']}"
+                    )
+                    print(f"  ⚠️  SERP task failed: {serp_fail_reason}")
+            except (json.JSONDecodeError, OSError, ImportError):
+                pass
+
+        serp_actually_ok = serp_ok and not serp_task_failed
+        serp_status: dict[str, Any] = {
+            "pulled": serp_actually_ok,
+            "artifacts": [serp_artifact],
         }
-        source_status["S2"] = {
-            "pulled": serp_ok, "artifacts": [serp_artifact],
-        }
-        source_status["S8"] = {
-            "pulled": serp_ok, "artifacts": [serp_artifact],
-        }
+        if serp_task_failed:
+            serp_status["failed"] = True
+            serp_status["reason"] = serp_fail_reason
+
+        source_status["S1"] = dict(serp_status)
+        source_status["S2"] = dict(serp_status)
+        source_status["S8"] = dict(serp_status)
     else:
         for s in ("S1", "S2", "S8"):
             source_status[s] = {"pulled": False, "reason": dfs_msg}
@@ -703,6 +738,8 @@ def main() -> None:
         "cost_total": round(cost_total, 6),
         "pulled_at": date.today().isoformat(),
         "artifacts": {k: str(v) for k, v in artifacts.items()},
+        "volume_keywords_source": volume_keywords_source
+        if dfs_ok else "default",
     }
 
     # Load raw JSON artifacts for dossier rendering

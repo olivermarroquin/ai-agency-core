@@ -218,6 +218,11 @@ def parse_serp_response(resp: dict) -> dict[str, Any]:
 
     Extracts S1 (PAA questions), S2 (AI Overview flag + cited sources),
     and S8 (organic rankings + local pack).
+
+    If any task has a non-20000 status_code or null/empty result, the
+    returned dict includes failed_tasks with the error details, and the
+    data fields reflect only the tasks that succeeded. Callers MUST
+    check failed_tasks before treating empty fields as measured zeros.
     """
     result: dict[str, Any] = {
         "paa": [],
@@ -225,10 +230,21 @@ def parse_serp_response(resp: dict) -> dict[str, Any]:
         "ai_overview_sources": [],
         "organic": [],
         "local_pack": [],
+        "failed_tasks": [],
     }
 
     for task in resp.get("tasks") or []:
-        for task_result in task.get("result") or []:
+        status_code = task.get("status_code")
+        task_result_list = task.get("result")
+
+        if status_code != 20000 or not task_result_list:
+            result["failed_tasks"].append({
+                "status_code": status_code,
+                "status_message": task.get("status_message", ""),
+            })
+            continue
+
+        for task_result in task_result_list:
             if not isinstance(task_result, dict):
                 continue
             for item in task_result.get("items") or []:

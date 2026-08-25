@@ -115,7 +115,9 @@ def _render_source_status_table(source_status: dict[str, dict]) -> str:
         desc = SOURCE_DESCRIPTIONS.get(source_id, source_id)
         status = source_status.get(source_id, {})
 
-        if status.get("pulled"):
+        if status.get("failed"):
+            status_str = f"FAILED — {status.get('reason', 'unknown error')}"
+        elif status.get("pulled"):
             status_str = "DONE"
         elif status.get("gated"):
             status_str = "GATED (manual)"
@@ -142,8 +144,17 @@ def _render_source_status_table(source_status: dict[str, dict]) -> str:
     return "\n".join(lines)
 
 
-def _render_volume_table(raw_data: dict[str, Any]) -> str:
-    """Render S3 volume data from dfs-volume.json."""
+def _render_volume_table(
+    raw_data: dict[str, Any],
+    volume_keywords_source: str = "default",
+) -> str:
+    """Render S3 volume data from dfs-volume.json.
+
+    volume_keywords_source: "wave-specific" if the caller passed this
+    wave's terms, "default" if using the config's default seed list.
+    When "default", a warning label is prepended so nobody cites
+    default-seed volumes as wave-specific measurements.
+    """
     vol_data = raw_data.get("dfs-volume.json")
     if not vol_data:
         return "_No volume data available._"
@@ -154,10 +165,19 @@ def _render_volume_table(raw_data: dict[str, Any]) -> str:
     if not parsed:
         return "_Volume response contained no keyword data._"
 
-    lines = [
+    lines: list[str] = []
+    if volume_keywords_source != "wave-specific":
+        lines.append(
+            "> **Note:** These volumes are from the **default seed keyword "
+            "list** in the client config, not this wave's specific terms. "
+            "Do not cite this table as wave-specific demand data."
+        )
+        lines.append("")
+
+    lines.extend([
         "| Keyword | Volume | Competition | CPC |",
         "|---------|--------|-------------|-----|",
-    ]
+    ])
     for kw in parsed:
         vol = kw["volume"] if kw["volume"] is not None else "—"
         comp = kw["competition"] if kw["competition"] is not None else "—"
@@ -168,7 +188,11 @@ def _render_volume_table(raw_data: dict[str, Any]) -> str:
 
 
 def _render_serp_summary(raw_data: dict[str, Any], serp_key: str) -> str:
-    """Render SERP summary from serp-*.json."""
+    """Render SERP summary from serp-*.json.
+
+    If the SERP task failed (non-20000 status or null result), renders
+    NOT MEASURED with the error details instead of false negatives.
+    """
     serp_data = raw_data.get(serp_key)
     if not serp_data:
         return "_No SERP data available._"
@@ -178,14 +202,35 @@ def _render_serp_summary(raw_data: dict[str, Any], serp_key: str) -> str:
     parsed = parse_serp_response(serp_data)
     lines: list[str] = []
 
-    lines.append(f"**AI Overview:** {'YES' if parsed['ai_overview'] else 'NO'}")
+    # Check for failed tasks — render NOT MEASURED, never false negatives
+    failed = parsed.get("failed_tasks", [])
+    if failed:
+        for ft in failed:
+            lines.append(
+                f"**SERP SOURCE FAILED** — status_code {ft['status_code']}: "
+                f"{ft['status_message']}"
+            )
+        lines.append("")
+        lines.append("**AI Overview:** NOT MEASURED (API error — do not treat as NO)")
+        lines.append("**PAA:** NOT MEASURED (API error — do not treat as None)")
+        lines.append("**Organic:** NOT MEASURED")
+        if not parsed["organic"] and not parsed["paa"] and not parsed["ai_overview"]:
+            return "\n".join(lines)
+        # If some tasks succeeded and some failed, show both the warning
+        # and the successful data below
+        lines.append("")
+        lines.append("_Partial data from successful tasks shown below:_")
+        lines.append("")
 
-    if parsed["paa"]:
-        lines.append(f"\n**PAA ({len(parsed['paa'])} questions):**")
-        for q in parsed["paa"]:
-            lines.append(f"- {q}")
-    else:
-        lines.append("\n**PAA:** None (thin SERP)")
+    if not failed:
+        lines.append(f"**AI Overview:** {'YES' if parsed['ai_overview'] else 'NO'}")
+
+        if parsed["paa"]:
+            lines.append(f"\n**PAA ({len(parsed['paa'])} questions):**")
+            for q in parsed["paa"]:
+                lines.append(f"- {q}")
+        else:
+            lines.append("\n**PAA:** None (thin SERP)")
 
     if parsed["organic"]:
         lines.append(f"\n**Top Organic (showing {min(len(parsed['organic']), 10)}):**")
@@ -341,6 +386,12 @@ def build_dossier(
         else "_Not pulled._"
     )
 
+    # Detect any failed sources for the top-of-dossier warning
+    failed_sources = [
+        sid for sid, sdata in source_status.items()
+        if sdata.get("failed")
+    ]
+
     md_lines = [
         "---",
         "type: demand-dossier",
@@ -357,6 +408,19 @@ def build_dossier(
         "",
         f"# Demand Dossier — {service_display} × {city} ({state})",
         "",
+    ]
+
+    if failed_sources:
+        failed_list = ", ".join(failed_sources)
+        md_lines.extend([
+            f"> **WARNING: {len(failed_sources)} source(s) FAILED "
+            f"({failed_list}).** Data marked NOT MEASURED below is "
+            f"unmeasured, not measured-as-zero. Do not cite empty "
+            f"fields from failed sources in a brief.",
+            "",
+        ])
+
+    md_lines.extend([
         f"**Client:** {client} | **Domain:** {domain}",
         (
             f"**Pulled:** {dossier_data['pulled_at']} | "
@@ -382,7 +446,12 @@ def build_dossier(
         "",
         "## S3 — Search Volume + Difficulty",
         "",
-        _render_volume_table(raw_data),
+        _render_volume_table(
+            raw_data,
+            volume_keywords_source=dossier_data.get(
+                "volume_keywords_source", "default"
+            ),
+        ),
         "",
         "## S1/S2/S8 — SERP Analysis",
         "",
@@ -406,7 +475,7 @@ def build_dossier(
         "",
         f"See `s5-chatgpt-gemini-{slug}.md` — fill manually via SOP-S5.",
         "",
-    ]
+    ])
 
     md = "\n".join(md_lines)
 
