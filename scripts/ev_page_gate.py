@@ -147,7 +147,7 @@ def gate(path, label, expect_reviewer, forbid_extra=()):
     # ---- pricing: allowlist, not a ban (Ahmad approved 2026-08-24) ----------
     # Source of truth: clients/_active/ev-electric-services/pricing-approved-2026-08-24.md
     # Any dollar figure on a page must be one of these, exactly.
-    APPROVED = {'$5,000', '$7,500', '$300', '$2,400', '$100', '$160'}
+    APPROVED = {'$5,000', '$7,500', '$300', '$2,400', '$100', '$160', '$135', '$250'}
     found    = set(re.findall(r'\$[\d,]+', txt))
     unapprvd = found - APPROVED
     lo       = txt.lower()
@@ -160,6 +160,14 @@ def gate(path, label, expect_reviewer, forbid_extra=()):
     # on an upgrade page without the distinction misprices the job Ahmad sells.
     panel_shown = bool({'$5,000', '$7,500'} & found)
     panel_caveat = ('replacement' in lo) and re.search(r'same amperage|amps as it is|keeping the amps|200[- ]?amp to 200', lo)
+    # $100-$135 is PER ALARM, not per visit. A whole-house set is 5-8 alarms;
+    # a reader who sees $135 and expects that as the job total leaves a one-star review.
+    alarm_shown = '$135' in found
+    alarm_caveat = 'per alarm' in lo
+    # $100-$250 is PER FIXTURE. A six-can recessed lighting room at $250 each
+    # is $1,500; a reader expecting $250 total leaves a one-star review.
+    fixture_shown = '$250' in found
+    fixture_caveat = 'per fixture' in lo
 
     checks = [
       ("only approved prices",         not unapprvd),
@@ -167,6 +175,8 @@ def gate(path, label, expect_reviewer, forbid_extra=()):
       ("no unapproved service fee",    not re.search(r'\$\s?7[05]\b', txt)),
       ("EV price carries unit exclusion", (not ev_shown) or bool(ev_caveat)),
       ("panel price carries replacement-vs-upgrade", (not panel_shown) or bool(panel_caveat)),
+      ("alarm price carries per-alarm qualifier", (not alarm_shown) or alarm_caveat),
+      ("fixture price carries per-fixture qualifier", (not fixture_shown) or fixture_caveat),
       ("prices year-stamped",          (not found) or ('2026' in txt)),
       # Hardened 2026-08-24 after independent review: the old row only asked whether the
       # marker string existed ANYWHERE on the page. 16 of 18 figures on /panel-upgrade/

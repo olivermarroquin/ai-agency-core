@@ -66,6 +66,26 @@
       "severity": "BLOCK"
     },
     {
+      "name": "response-time / availability promise",
+      "pattern": "(?:we|our team|ahmad|he)\\s+(?:\\w+\\s+){0,4}(?:respond|response|arrive|get there|be there|show up)\\s+(?:within|in under|in less than)(?!\\s+one\\s+business\\s+day)|(?:we|our|us)\\b[^.]{0,50}\\bwithin \\d+ hours?|available most days|right away[^.]{0,30}(?:call|service|arrive)|we(?:'ll| will) be there|immediate(?:ly)? availab|(?:we|our)\\s+(?:\\w+\\s+){0,3}promptly",
+      "_why": "Bans a SPECIFIC GUARANTEED WINDOW the business has not committed to - 'within 2 hours', 'we'll be there', 'immediately available'. *** CARVE-OUT ADDED 2026-08-26, OPERATOR DECISION: 'We respond within one business day' is NOT banned. It is true, the client responds to emergencies, and he wants to keep it. It is live on ~36 pages as a sitewide template string and it stays. Do NOT strip it from drafts and do NOT open a backwards sweep for it. The regex now carries a negative lookahead for exactly that phrase. *** The earlier note calling it unvalidated was wrong; it has since been validated with the client. Same-day and emergency availability was never banned either - it is the client's strongest and most under-marketed service, with a Google review on file. Must NOT fire on urgency ratings addressed to the homeowner ('stop using the circuit and call now', 'needs same-day attention') - those are correct and required. The distinction: an invented guaranteed turnaround is banned; one-business-day response, same-day/emergency capability, and how fast the reader should act are all allowed. *** 2026-08-26: scoped 'within N hours' to require a first-person subject within 50 chars. It was firing on 'If it trips again within 24 hours, stop resetting and call an electrician' - a homeowner urgency instruction the rule explicitly must not flag. ***",
+      "severity": "BLOCK",
+      "show": 5,
+      "visible_only": true
+    },
+    {
+      "name": "detection-rate or savings figure",
+      "pattern": "(?:detect(?!ors?\\b)|find|catch|prevent|identify|discover)\\w*[^.]{0,60}(?:\\d+\\s*%|\\$[\\d,]+)|(?:\\d+\\s*%|\\$[\\d,]+)[^.]{0,60}(?:detect(?!ors?\\b)|find|catch|prevent|identif|discover)\\w*|(?:sav(?:e|ing|es))\\s+(?:\\w+\\s+){0,5}(?:\\d+\\s*%|\\$[\\d,]+)|(?:\\d+\\s*%|\\$[\\d,]+)[^.]{0,40}(?:sav(?:e|ing|es))",
+      "_why": "Brief LAYER 2 §2.2 bans detection-rate and savings figures. No source data supports a specific percentage for fault detection or dollar amount for savings. These are unfalsifiable marketing claims.",
+      "severity": "BLOCK"
+    },
+    {
+      "name": "certification not held (extends thermography rule)",
+      "pattern": "(certified|certification|accredited|accreditation)[^.]{0,60}(?:thermograph|infrared|thermal imag)|(?:thermograph|infrared|thermal imag)[^.]{0,60}(certified|certification|accredited|accreditation)|(?:we(?:'re| are)|ahmad is|he is|our)\\s+(?:\\w+\\s+){0,3}(?:certified|accredited)\\b(?![^.]{0,30}(?:master electrician|VA |Virginia|DPOR|2710086216))",
+      "_why": "Brief LAYER 2 §2.2 bans implying certifications not held. The thermography camera is OWNED, not a certification. The only held certification is VA DPOR Master Electrician #2710086216. Any 'certified'/'accredited' claim must reference the DPOR licence specifically; blanket statements are banned. This extends the existing thermography-specific rule to cover the general case.",
+      "severity": "BLOCK"
+    },
+    {
       "name": "permit exemption asserted that the County does not publish (CR-233)",
       "pattern": "Like-for-Like Replacement = Generally No Permit|no electrical permit needed in most cases|like-for-like[^.]{0,60}generally do not require a permit|no permit needed",
       "_why": "Fairfax County publishes NO like-for-like exemption. Verified 2026-08-25 against two County pages: permit-library/electrical-residential requires a permit for 'replacement of electrical equipment or fixtures'; when-permit-required requires one for 'New, repair or relocated electrical fixtures' and exempts only low-voltage (50V max) systems. Do NOT swing to the opposite overclaim either - the County's wording does not support asserting a permit IS required for a specific job. Correct form: state the absence of a published exemption and that the position is established for the address before work starts.",
