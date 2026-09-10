@@ -24,3 +24,6 @@ scripts/output/
 scripts/data/__symlink_probe.json
 scripts/data/client-rev-*.json
 wordpress-plugins/zi5rpQqs
+
+# --- vault cleanup 2026-08-12: raw QC screenshot captures ---
+_scratch/qc-out/

@@ -72,3 +72,20 @@ The cost of fixing the existing wrapped values exceeds the benefit. The values a
 empty keyword/tag arrays with zero functional impact. The guard prevents further
 nesting. If AIOSEO is ever removed or these fields gain actual content, the
 `aioseo_posts` table is the source of truth — not the postmeta shadow.
+
+## Gate "execution log not found" note
+
+The review gate's close-gap check reports "execution log not found" for work done in
+`repos/ai-agency-core`. The gate scans for execution logs at the standard per-repo
+path: `<repo>/.kos/execution-logs/`. This directory does not exist in
+`repos/ai-agency-core` — it has no `.kos/` folder.
+
+Execution logs for client work that touches ai-agency-core scripts live at:
+- `second-brain/04_projects/clients/_active/<client>/execution-log-*.md`
+- `repos/<client-repo>/docs/build-log.md`
+
+Neither path matches what the gate scans. This is a gate-side gap, not a content gap.
+Do not create a `.kos/` in ai-agency-core just to silence it — the fix belongs in the
+gate's path resolution logic.
+
+**Expected path the gate looks for:** `repos/ai-agency-core/.kos/execution-logs/`
