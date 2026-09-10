@@ -4,25 +4,46 @@
   "sitemap_url": "https://evelectric.pro/sitemap_index.xml",
   "wp_rest_base": "https://evelectric.pro",
   "expected_page_count": 58,
-  "flag_threshold": 0.40,
-  "critical_threshold": 0.60,
+  "flag_threshold": 0.4,
+  "critical_threshold": 0.6,
   "output_dir": "/Users/olivermarroquin/workspace/second-brain/04_projects/clients/_active/ev-electric-services",
   "gsc_reason_code_file": null,
   "strip_tokens": {
     "cities": [
-      "vienna", "fairfax", "oakton", "mclean", "tysons",
-      "burke", "annandale", "falls-church", "falls", "church",
-      "bethesda", "chevy-chase", "chevy", "chase",
-      "potomac", "rockville", "washington", "dc", "gaithersburg"
+      "vienna",
+      "fairfax",
+      "oakton",
+      "mclean",
+      "tysons",
+      "burke",
+      "annandale",
+      "falls-church",
+      "falls",
+      "church",
+      "bethesda",
+      "chevy-chase",
+      "chevy",
+      "chase",
+      "potomac",
+      "rockville",
+      "washington",
+      "dc",
+      "gaithersburg"
     ],
     "brand": [
-      "ev", "electric", "evelectric"
+      "ev",
+      "electric",
+      "evelectric"
     ],
     "owner": [
-      "ahmad", "shaban"
+      "ahmad",
+      "shaban"
     ],
     "state": [
-      "va", "md", "virginia", "maryland"
+      "va",
+      "md",
+      "virginia",
+      "maryland"
     ]
   },
   "grouping_rules": {
@@ -35,10 +56,20 @@
       "outlet-installation"
     ],
     "city_suffixes": [
-      "vienna-va", "fairfax-va", "oakton-va", "mclean-va",
-      "tysons-va", "burke-va", "annandale-va", "falls-church-va",
-      "bethesda-md", "chevy-chase-md", "potomac-md",
-      "rockville-md", "washington-dc", "gaithersburg-md"
+      "vienna-va",
+      "fairfax-va",
+      "oakton-va",
+      "mclean-va",
+      "tysons-va",
+      "burke-va",
+      "annandale-va",
+      "falls-church-va",
+      "bethesda-md",
+      "chevy-chase-md",
+      "potomac-md",
+      "rockville-md",
+      "washington-dc",
+      "gaithersburg-md"
     ],
     "hub_slugs": [
       "electrical-troubleshooting",
@@ -66,6 +97,31 @@
       "ceiling-fan-installation-vienna-va",
       "ceiling-fan-installation-oakton-va",
       "ev-charger-installation-fairfax-va"
-    ]
+    ],
+    "extra_groups": {
+      "parent-service-hubs": [
+        "panel-upgrade",
+        "ev-charger-installation",
+        "outlet-installation",
+        "electrical-troubleshooting",
+        "light-fixture-installation",
+        "smoke-alarm-installation"
+      ],
+      "fans-cross-service": [
+        "attic-fan-installation-fairfax-va",
+        "ceiling-fan-installation-fairfax-va",
+        "bathroom-exhaust-fan-installation"
+      ],
+      "attic-fan-cities": [
+        "attic-fan-installation-fairfax-va",
+        "attic-fan-installation-vienna-va",
+        "attic-fan-installation-oakton-va"
+      ],
+      "ceiling-fan-cities": [
+        "ceiling-fan-installation-fairfax-va",
+        "ceiling-fan-installation-vienna-va",
+        "ceiling-fan-installation-oakton-va"
+      ]
+    }
   }
 }

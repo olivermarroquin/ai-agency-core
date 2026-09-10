@@ -39,6 +39,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _load_secrets import load_wp_app_password
 
 
+# Hostinger's WAF returns a BODYLESS 403 to python-requests' default User-Agent.
+# Verified 2026-08-24: same URL, no headers -> 403/0 bytes; with a browser UA -> 200.
+# This is the same trap that forced wp_page_snapshot.py onto a curl subprocess; a UA
+# header is enough here, so requests can stay. Do not remove it.
+BROWSER_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+              "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+
+
 def load_config(config_path: str) -> dict:
     """Load and validate the publish config."""
     path = Path(config_path).expanduser()
@@ -71,6 +79,7 @@ def load_config(config_path: str) -> dict:
 
 def resolve_wp_id(domain: str, slug: str, headers: dict) -> int | None:
     """Resolve a page's WP ID by slug via WP REST API."""
+    headers = {**(headers or {}), 'User-Agent': BROWSER_UA}
     resp = requests.get(
         f"{domain}/wp-json/wp/v2/pages",
         headers=headers,
@@ -92,7 +101,7 @@ def verify_page(domain: str, slug: str, wp_id: int, verify_string: str | None) -
     try:
         resp = requests.get(
             live_url, timeout=30,
-            headers={"User-Agent": "wave-verify/1.0", "Cache-Control": "no-cache"},
+            headers={"User-Agent": BROWSER_UA, "Cache-Control": "no-cache"},
         )
     except Exception as e:
         result["pass"] = False
@@ -159,9 +168,9 @@ def main():
     app_password = load_wp_app_password(client_config)
     token = b64encode(f"{wp_user}:{app_password}".encode()).decode()
     headers = {
+        "User-Agent": BROWSER_UA,
         "Authorization": f"Basic {token}",
         "Content-Type": "application/json",
-        "User-Agent": "publish-differentiation-wave/1.0",
     }
 
     mode_label = "DRY-RUN" if args.dry_run else "PUBLISH"

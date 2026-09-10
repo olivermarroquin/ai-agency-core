@@ -271,6 +271,63 @@ def classify_section(heading_a: str, body_a: str, heading_b: str, body_b: str,
         return "city-varied"
 
 
+# ⚠️ Section pairing is BEST-MATCH, not heading-exact.
+#    Pairing on exact heading string means renaming an H2 while keeping the
+#    paragraph underneath scores as MORE differentiated, not less — and our own
+#    differentiation rule mandates renaming headings, so following the process
+#    made the sensitive check blind. Measured 2026-08-24: three sibling pages
+#    printed 9-11% page-level word similarity (gate is <40%, so: pass) while
+#    carrying a verbatim-identical About block and a 92-97% service-area block.
+#    Never pair sections by heading text again.
+def best_match_sections(sections_a: list[tuple[str, str]],
+                        sections_b: list[tuple[str, str]],
+                        strip_set: set[str],
+                        min_words: int = 25) -> list[dict]:
+    """
+    Pair every section with its highest-scoring counterpart on the other page,
+    regardless of heading text. Sections shorter than min_words are ignored:
+    a two-line CTA scoring 0.9 against another two-line CTA is noise, not a
+    finding. Returns one row per section of A plus unmatched sections of B.
+    """
+    def long_enough(body: str) -> bool:
+        return len(body.split()) >= min_words
+
+    a = [(h, b) for h, b in sections_a if long_enough(b)]
+    b = [(h, b) for h, b in sections_b if long_enough(b)]
+    rows: list[dict] = []
+    if not a or not b:
+        for h, _ in a + b:
+            rows.append({"heading": h, "matched_heading": None,
+                         "similarity": 0.0, "classification": "unique-to-one"})
+        return rows
+
+    matched_b: set[int] = set()
+    for ha, ba in a:
+        best_i, best_sim = 0, -1.0
+        for i, (_, bb) in enumerate(b):
+            sim = word_similarity(ba, bb, strip_set)
+            if sim > best_sim:
+                best_i, best_sim = i, sim
+        hb = b[best_i][0]
+        if best_sim >= 0.95:
+            cls = "identical"
+        elif best_sim >= 0.70:
+            cls = "near-duplicate"
+        else:
+            cls = "city-varied"
+        if cls in ("identical", "near-duplicate"):
+            matched_b.add(best_i)
+        rows.append({"heading": ha, "matched_heading": hb,
+                     "similarity": round(best_sim, 4), "classification": cls})
+
+    for i, (hb, _) in enumerate(b):
+        if i not in matched_b:
+            rows.append({"heading": hb, "matched_heading": None,
+                         "similarity": 0.0, "classification": "unique-to-one",
+                         "side": "b"})
+    return rows
+
+
 # ---------------------------------------------------------------------------
 # Fetching
 # ---------------------------------------------------------------------------
@@ -420,6 +477,17 @@ def group_pages(slugs: list[str], grouping_rules: dict) -> dict[str, list[str]]:
                     if service in service_prefixes:
                         groups[service].append(slug)
                         break
+
+    # ⚠️ extra_groups: comparison must be nearest-TOPIC, not same-prefix.
+    #    Prefix grouping never puts attic-fan next to ceiling-fan (different
+    #    prefixes, each a group of one, silently skipped), and it drops every
+    #    hub_slug on the floor — so the six parent service pages were never
+    #    compared to each other at all. Name those sets explicitly here.
+    #    Slugs listed in extra_groups bypass exclude_slugs and hub_slugs.
+    for gname, gslugs in (grouping_rules.get("extra_groups") or {}).items():
+        present = [sl for sl in gslugs if sl in set(slugs)]
+        if present:
+            groups[gname] = present
 
     return dict(groups)
 
@@ -578,8 +646,13 @@ def run_audit(config: dict, dry_run: bool = False, verbose: bool = False) -> dic
     for group_name, group_slugs in groups.items():
         valid_slugs = [s for s in group_slugs if s in pages and not pages[s].fetch_error]
         if len(valid_slugs) < 2:
-            print(f"  {group_name}: <2 valid pages, skipping")
-            group_summaries[group_name] = {"status": "skipped", "reason": "fewer than 2 valid pages"}
+            # A comparison that did not happen is NOT a comparison that passed.
+            print(f"  [NOT MEASURED] {group_name}: fewer than 2 valid pages — "
+                  f"nothing was compared. This blocks sign-off; add a compare_also "
+                  f"sibling or state explicitly that this page was not measured.")
+            group_summaries[group_name] = {"status": "NOT_MEASURED",
+                                           "reason": "fewer than 2 valid pages — nothing compared",
+                                           "blocks_signoff": True}
             continue
 
         print(f"  {group_name}: comparing {len(valid_slugs)} pages...")
@@ -605,22 +678,12 @@ def run_audit(config: dict, dry_run: bool = False, verbose: bool = False) -> dic
                 shared_og = (page_a.og_image == page_b.og_image and page_a.og_image != "")
 
                 # Evidence 4: Section-level diff
-                section_diffs = []
-                sections_a = {h: b for h, b in page_a.sections}
-                sections_b = {h: b for h, b in page_b.sections}
-                all_headings = list(dict.fromkeys(
-                    [h for h, _ in page_a.sections] + [h for h, _ in page_b.sections]
-                ))
-                for heading in all_headings:
-                    body_a = sections_a.get(heading, "")
-                    body_b = sections_b.get(heading, "")
-                    if body_a and body_b:
-                        classification = classify_section(heading, body_a, heading, body_b, strip_set)
-                    elif body_a or body_b:
-                        classification = "unique-to-one"
-                    else:
-                        classification = "empty"
-                    section_diffs.append({"heading": heading, "classification": classification})
+                section_diffs = best_match_sections(page_a.sections, page_b.sections, strip_set)
+                dup_sections = [d for d in section_diffs
+                                if d["classification"] in ("identical", "near-duplicate")]
+                compared = max(len([1 for _, b in page_a.sections if len(b.split()) >= 25]),
+                               len([1 for _, b in page_b.sections if len(b.split()) >= 25]), 1)
+                section_dup_ratio = round(len(dup_sections) / compared, 4)
 
                 # Evidence 5: Source divergence
                 source_divergence = False
@@ -645,13 +708,28 @@ def run_audit(config: dict, dry_run: bool = False, verbose: bool = False) -> dic
                     "shared_images": shared_imgs[:5],  # cap for readability
                     "shared_og_image": shared_og,
                     "section_diffs": section_diffs,
+                    "duplicated_sections": len(dup_sections),
+                    "sections_compared": compared,
+                    "section_dup_ratio": section_dup_ratio,
                     "source_divergence": source_divergence,
                     "rendered_similarity": round(w_sim, 4),
                     "wp_similarity": round(wp_sim, 4) if wp_sim else None,
+                    # Criterion B is BOTH numbers. The page-level figure alone
+                    # passes pages that carry a verbatim-identical section,
+                    # because difflib rewards long common subsequences and a
+                    # 400-word duplicate inside a 4,000-word page barely moves it.
                     "verdict": (
-                        "CRITICAL" if w_sim >= critical_threshold else
-                        "FLAGGED" if w_sim >= flag_threshold else
+                        "CRITICAL" if (w_sim >= critical_threshold
+                                       or any(d["classification"] == "identical"
+                                              for d in section_diffs)) else
+                        "FLAGGED" if (w_sim >= flag_threshold
+                                      or any(d["classification"] == "near-duplicate"
+                                             for d in section_diffs)) else
                         "OK"
+                    ),
+                    "verdict_driver": (
+                        "page-similarity" if w_sim >= flag_threshold else
+                        "duplicated-section" if dup_sections else "none"
                     ),
                 }
                 group_pairs.append(pair_data)
@@ -809,6 +887,20 @@ def render_markdown(results: dict, config: dict, output_path: Path) -> None:
             lines.append("")
             lines.append(f"- **Group:** {pair['group']}")
             lines.append(f"- **Word similarity:** {pair['word_similarity']:.1%} ({pair['verdict']})")
+            lines.append(
+                f"- **Duplicated sections:** {pair.get('duplicated_sections', 0)}"
+                f"/{pair.get('sections_compared', 0)} "
+                f"({pair.get('section_dup_ratio', 0):.0%}) — best-match pairing, "
+                f"heading text ignored")
+            lines.append(f"- **Verdict driven by:** {pair.get('verdict_driver', 'n/a')}")
+            worst = sorted(
+                (d for d in pair.get("section_diffs", [])
+                 if d["classification"] in ("identical", "near-duplicate")),
+                key=lambda d: d.get("similarity", 0), reverse=True)
+            for d in worst[:8]:
+                lines.append(
+                    f"  - `{d['similarity']:.0%}` **{d['classification']}** — "
+                    f"\"{d['heading'][:60]}\" ≈ \"{(d.get('matched_heading') or '')[:60]}\"")
             lines.append(f"- **Char similarity:** {pair['char_similarity']:.1%} (reported only, not used for verdict)")
             lines.append(f"- **Long sentence share:** {pair['long_sentence_share']:.1%}")
             lines.append(f"- **Shared images:** {pair['shared_images_count']}")
