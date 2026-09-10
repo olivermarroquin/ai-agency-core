@@ -1,0 +1,37 @@
+{
+  "slug": "title-transfer",
+  "slug_es": "transferencia-de-titulo",
+  "name": "Title Transfer",
+  "name_es": "Transferencia de título",
+  "same_day": false,
+  "schema_service_type": "Vehicle title transfer service",
+  "summary": "Buying or selling a car? We transfer the Maryland title correctly the first time — private sale, dealer, or family.",
+  "summary_es": "¿Compras o vendes un carro? Transferimos el título de Maryland correctamente a la primera — venta entre particulares, dealer o familia.",
+  "what_it_is": "A title transfer legally moves ownership to the new owner. Errors in the assignment, missing signatures, or tax mistakes are the #1 cause of stuck paperwork — we prevent them.",
+  "what_it_is_es": "La transferencia de título pasa legalmente la propiedad al nuevo dueño. Errores en la asignación, firmas faltantes o errores de impuestos son la causa #1 de papeles trabados — nosotros los prevenimos.",
+  "documents_checklist": [
+    {"en": "Current title, properly assigned (signed) to the buyer", "es": "Título actual, correctamente asignado (firmado) al comprador"},
+    {"en": "Bill of sale signed by buyer and seller", "es": "Bill of sale (contrato de compraventa) firmado por comprador y vendedor"},
+    {"en": "NOTARIZED bill of sale (form VR-181) if: vehicle under 7 years old AND price at least $500 below book value AND you want tax on the sale price", "es": "Bill of sale NOTARIZADO (formulario VR-181) si: el vehículo tiene menos de 7 años Y el precio está $500+ debajo del valor de libro Y quieres el impuesto sobre el precio de venta", "note": "we provide notary service in-house"},
+    {"en": "Odometer disclosure (on the title assignment or form VR-197)", "es": "Declaración de odómetro (en la asignación del título o formulario VR-197)"},
+    {"en": "MD safety inspection certificate for used vehicles (valid 90 days) — or ask about the 30-day temporary waiver", "es": "Certificado de inspección de seguridad de MD para usados (válido 90 días) — o pregunta por el permiso temporal de 30 días"}
+  ],
+  "process_steps": [
+    {"title_en": "Bring the paperwork", "title_es": "Trae los papeles", "body_en": "We review the title assignment line by line before anything is filed.", "body_es": "Revisamos la asignación del título línea por línea antes de presentar nada."},
+    {"title_en": "Taxes done right", "title_es": "Impuestos bien hechos", "body_en": "Maryland excise tax is 6.5% — with minimum-value rules for vehicles 7+ years old. We calculate it correctly and notarize on-site if needed.", "body_es": "El impuesto de Maryland es 6.5% — con reglas de valor mínimo para vehículos de 7+ años. Lo calculamos correctamente y notarizamos aquí mismo si hace falta."},
+    {"title_en": "New title + tags", "title_es": "Título nuevo + placas", "body_en": "We file the transfer and set up your registration and plates in the same visit.", "body_es": "Presentamos la transferencia y dejamos lista tu registración y placas en la misma visita."}
+  ],
+  "fees_note": "Title fee + 6.5% excise tax + registration fees (vary by vehicle) + our service fee. Clear total quoted before we start.",
+  "fees_note_es": "Tarifa de título + impuesto de 6.5% + tarifas de registración (varían por vehículo) + nuestra tarifa de servicio. Total claro antes de empezar.",
+  "common_problems": [
+    {"problem_en": "Seller signed in the wrong place (open/jumped title)", "problem_es": "El vendedor firmó en el lugar equivocado (título abierto)", "fix_en": "We assess whether it's correctable or needs a duplicate-and-reassign — and handle it.", "fix_es": "Evaluamos si se puede corregir o necesita duplicado y reasignación — y lo resolvemos."},
+    {"problem_en": "Old lien still showing on the title", "problem_es": "Un lien viejo todavía aparece en el título", "fix_en": "We help you get the lien release and clear it with the MVA.", "fix_es": "Te ayudamos a conseguir la liberación del lien y aclararlo con la MVA."}
+  ],
+  "faqs": [
+    {"q_en": "The car was a gift from family — do I pay tax?", "q_es": "El carro fue un regalo de un familiar — ¿pago impuesto?", "a_en": "Certain close-family transfers qualify for excise-tax exemption and may not need inspection (e.g., spouses, parent/child). Bring your IDs and we'll confirm your case.", "a_es": "Ciertas transferencias entre familiares cercanos califican para exención del impuesto y pueden no necesitar inspección (ej. esposos, padres/hijos). Trae tus identificaciones y confirmamos tu caso."},
+    {"q_en": "Can you notarize the bill of sale here?", "q_es": "¿Pueden notarizar el bill of sale aquí?", "a_en": "Yes — notary service is available in-house, same visit.", "a_es": "Sí — tenemos servicio de notaría aquí mismo, en la misma visita."}
+  ],
+  "cta_hook": "Bring the title UNSIGNED if you're unsure where to sign — wrong signatures are the most common (and most expensive) mistake.",
+  "cta_hook_es": "Trae el título SIN FIRMAR si no estás seguro dónde firmar — las firmas equivocadas son el error más común (y más caro).",
+  "_facts_verified": "MVTA Apr-2026 MVA info-page snapshot (6.5% excise, VR-181 3-condition notarization rule, VR-197, 90-day inspection); re-verify at authoring"
+}

@@ -1,0 +1,36 @@
+{
+  "slug": "temporary-tags",
+  "slug_es": "placas-temporales",
+  "name": "Temporary & 30-Day Tags",
+  "name_es": "Placas temporales de 30 días",
+  "same_day": true,
+  "schema_service_type": "Temporary vehicle registration service",
+  "summary": "Need to drive now? 30-day temporary registration gets you on the road legally while the rest of the paperwork catches up.",
+  "summary_es": "¿Necesitas manejar ya? La registración temporal de 30 días te pone en la calle legalmente mientras el resto del papeleo se completa.",
+  "what_it_is": "Maryland's 30-day temporary registration is designed for situations like a used-car purchase where the safety inspection isn't done yet — it uses a temporary inspection waiver (form VR-129).",
+  "what_it_is_es": "La registración temporal de 30 días de Maryland está diseñada para situaciones como la compra de un carro usado cuando la inspección de seguridad aún no está hecha — usa un permiso temporal de inspección (formulario VR-129).",
+  "documents_checklist": [
+    {"en": "Assigned title / proof of ownership", "es": "Título asignado / prueba de propiedad"},
+    {"en": "Valid ID", "es": "Identificación válida"},
+    {"en": "Active Maryland insurance", "es": "Seguro de Maryland activo"},
+    {"en": "Bill of sale (notarized when the tax rules require it — ask us)", "es": "Bill of sale (notarizado cuando las reglas de impuestos lo requieren — pregúntanos)"}
+  ],
+  "process_steps": [
+    {"title_en": "Confirm you qualify", "title_es": "Confirma que calificas", "body_en": "One call — we check your case (note: salvage vehicles cannot get temporary registration until the State Police inspection).", "body_es": "Una llamada — revisamos tu caso (nota: vehículos salvage no pueden obtener registración temporal hasta la inspección de la Policía Estatal)."},
+    {"title_en": "We issue the temporary", "title_es": "Emitimos la temporal", "body_en": "VR-129 waiver + 30-day registration processed same visit.", "body_es": "Permiso VR-129 + registración de 30 días procesados en la misma visita."},
+    {"title_en": "Come back for permanent", "title_es": "Regresa por la permanente", "body_en": "Pass your safety inspection within the window, then we finish your permanent plates.", "body_es": "Pasa tu inspección de seguridad dentro del plazo y terminamos tus placas permanentes."}
+  ],
+  "fees_note": "Temporary registration fee + our service fee; permanent registration fees apply when you convert. Total quoted upfront.",
+  "fees_note_es": "Tarifa de registración temporal + nuestra tarifa de servicio; las tarifas de registración permanente aplican al convertir. Total claro desde el principio.",
+  "common_problems": [
+    {"problem_en": "Bought at auction, car can't be driven to inspection", "problem_es": "Compraste en subasta y el carro no se puede manejar a la inspección", "fix_en": "That's exactly what the waiver route is for — we set it up and tell you your legal options.", "fix_es": "Para eso existe exactamente el permiso — lo tramitamos y te explicamos tus opciones legales."},
+    {"problem_en": "Temporary expired before inspection", "problem_es": "La temporal venció antes de la inspección", "fix_en": "Come see us before driving — we'll lay out the compliant path to finish.", "fix_es": "Ven a vernos antes de manejar — te damos el camino correcto para terminar."}
+  ],
+  "faqs": [
+    {"q_en": "Can I get temporary tags for a salvage vehicle?", "q_es": "¿Puedo sacar placas temporales para un vehículo salvage?", "a_en": "No — salvage vehicles must pass the Maryland State Police inspection before any registration can be issued. We guide you through that process instead.", "a_es": "No — los vehículos salvage deben pasar la inspección de la Policía Estatal de Maryland antes de emitir cualquier registración. Te guiamos por ese proceso."},
+    {"q_en": "How fast is it?", "q_es": "¿Qué tan rápido es?", "a_en": "Same visit, in most cases.", "a_es": "En la misma visita, en la mayoría de los casos."}
+  ],
+  "cta_hook": "Call first — two minutes on the phone tells you if the 30-day route fits your case.",
+  "cta_hook_es": "Llama primero — dos minutos por teléfono te dicen si la ruta de 30 días aplica a tu caso.",
+  "_facts_verified": "MVTA Apr-2026 MVA snapshot (VR-129, 30-day temp, salvage exclusion); re-verify at authoring"
+}

@@ -1,0 +1,116 @@
+{
+  "_comment": "Client-level facts for Latin United Multiservices Inc. CONTENT STATUS: mostly CONFIRMED (cards, storefront, SDAT doc, GBP baseline 2026-07). Remaining placeholders flagged with _notes. First BILINGUAL client — es/en field pairs where copy diverges.",
+  "_content_status": "confirmed-with-flagged-placeholders",
+  "_source": "second-brain/04_projects/clients/_active/latin-united-multiservices/ (README, gbp-baseline, context-brand-assets, context-services, SDAT Articles of Revival D12044145)",
+  "business_type": "tag-title-agency",
+  "languages": [
+    "es",
+    "en"
+  ],
+  "default_language": "es",
+  "client_slug": "latin-united-multiservices",
+  "name": "Latin United Multiservices Inc.",
+  "alternate_name": "Latin United Multiservices",
+  "legal_entity": "LATIN UNITED MULTISERVICES INC.",
+  "sdat_department_id": "D12044145",
+  "owner_name": "Jorge A. Marroquin",
+  "owner_first_name": "Jorge",
+  "owner_title": "President",
+  "website_url": "https://latinunitedmultiservices.com/",
+  "website_url_no_slash": "https://latinunitedmultiservices.com",
+  "_website_note": "OWNED as of 2026-07-30 (recovered into dad's GoDaddy). RENEW + auto-renew ON (exp 2026-11-03). This is the launch domain.",
+  "phone_display": "(301) 343-7495",
+  "phone_tel": "3013437495",
+  "phone_e164": "+1-301-343-7495",
+  "phone_secondary_display": "(301) 717-5746",
+  "_phone_note": "343-7495 = LUM primary (also appears on Marr card — CONFIRM with Jorge which line rings where before citations run).",
+  "email": "latinunitedmultiservices@gmail.com",
+  "primary_color": "#2AA7AE",
+  "primary_deep": "#1E8890",
+  "primary_bright": "#43C2C9",
+  "ink": "#14181A",
+  "paper": "#ECF6F7",
+  "heading_color": "#14181A",
+  "_color_note": "CONFIRMED brand palette — teal/ink/white from business cards + storefront vinyl + office interior. See mockup-homepage-v2-brand-teal.html + design notes.",
+  "address": {
+    "street": "1835 University Blvd East #232",
+    "locality": "Hyattsville",
+    "region": "MD",
+    "postal_code": "20783",
+    "country": "US"
+  },
+  "located_in": "University Plaza",
+  "geo": {
+    "latitude": 38.9873,
+    "longitude": -76.98
+  },
+  "_geo_note": "Approximate for University Plaza / 1835 University Blvd E — pull precise coords from GBP after reinstatement.",
+  "hours": [
+    {
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    }
+  ],
+  "_hours_note": "Oliver 2026-07-27: 9am-6pm confirmed. Days assumed Mon-Sat — CONFIRM Sunday closed with Jorge.",
+  "business_description_schema": "Bilingual (Spanish/English) vehicle tag and title agency in Hyattsville, Maryland. Same-day vehicle registration, renewals, tags, stickers, title transfers, duplicate titles, salvage titles, notary, and MVA paperwork help.",
+  "business_description_schema_es": "Agencia bilingüe de placas y títulos en Hyattsville, Maryland. Registración de vehículos el mismo día, renovaciones, placas, stickers, transferencias de título, títulos duplicados, títulos salvage, notaría y ayuda con trámites de la MVA.",
+  "brand_image_url": "",
+  "brand_logo_url": "",
+  "_image_note": "LU circle monogram exists on business card — need clean/vector file from Jorge or card printer. Photos + hero video per shot list in mockup-v2 design notes. ACCESS-GATED.",
+  "price_range_token": "$$",
+  "review_count": 11,
+  "review_rating": "3.6",
+  "_review_note": "GBP suspended (reinstatement in progress). Do NOT surface count/rating on site until profile is live and healthy; use quote-style testimonials instead (3 real 5-star quotes in mockup v2).",
+  "brand_areas_served": [
+    "Hyattsville",
+    "Langley Park",
+    "Adelphi",
+    "Chillum",
+    "Takoma Park",
+    "Riverdale Park",
+    "College Park",
+    "Mount Rainier"
+  ],
+  "brand_area_county": "Prince George's County, MD",
+  "brand_extended_coverage_phrase": "serving Spanish- and English-speaking drivers across Prince George's County and all of Maryland",
+  "brand_extended_coverage_phrase_es": "sirviendo a conductores de habla hispana e inglesa en todo el condado de Prince George's y Maryland",
+  "sister_business": {
+    "name": "Marr Auto Sales",
+    "url": "https://marrautosales.com",
+    "address": "2801 Wilkens Ave, Baltimore, MD 21223",
+    "phone_display": "(301) 830-3007",
+    "email": "marrautosales@gmail.com",
+    "auctions": [
+      "IAAI",
+      "Manheim",
+      "Copart",
+      "Harrisburg",
+      "Bel Air Auction"
+    ],
+    "_note": "Cross-link both directions (bridge section pattern in mockup v2). Same owner (Jorge Marroquin)."
+  },
+  "owner_bio_paragraphs_es": [
+    "El Sr. Jorge Marroquin atiende a la comunidad desde University Plaza en Hyattsville, resolviendo registraciones, títulos, placas y trámites de la MVA — en tu idioma y sin las filas.",
+    "Los clientes lo recomiendan por nombre en sus reseñas: trámites resueltos el mismo día, atención en español e inglés, y pagos con tarjeta."
+  ],
+  "owner_bio_paragraphs": [
+    "Jorge Marroquin serves the community from University Plaza in Hyattsville, handling registrations, titles, tags, and MVA paperwork — in your language, without the lines.",
+    "Customers recommend him by name in their reviews: same-day paperwork, service in Spanish and English, card payments accepted."
+  ],
+  "_bio_note": "Drafted from real reviews + confirmed facts; polish with Jorge.",
+  "contact_page_path": "/contacto/",
+  "secondary_cta_label": "Cómo llegar",
+  "secondary_cta_label_en": "Get directions",
+  "primary_cta_label_template": "Llámanos: {phone_display}",
+  "primary_cta_label_template_en": "Call {phone_display}",
+  "final_cta_response_promise": "Te decimos exactamente qué documentos traer — una sola vuelta.",
+  "final_cta_response_promise_en": "We tell you exactly which documents to bring — one trip."
+}

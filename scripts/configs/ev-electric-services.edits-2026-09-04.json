@@ -1,0 +1,77 @@
+{
+  "_description": "EV-Electric Services — 2026-09-04 cleanup. Nextdoor into sameAs + sitewide reviewCount 105 -> 106.",
+  "_run": [
+    "cd ~/workspace/repos/ai-agency-core/scripts",
+    "python3 wp_page_snapshot.py backup ev-electric-services 8      # REAL backup first",
+    "python3 wp_surgical_replace.py --config configs/ev-electric-services.edits-2026-09-04.json",
+    "python3 wp_surgical_replace.py --config configs/ev-electric-services.edits-2026-09-04.json --apply",
+    "then: LiteSpeed Cache -> Toolbox -> Purge All",
+    "then: python3 wp_rule_sweep.py --config configs/ev-electric-services.rules.json"
+  ],
+
+  "client_slug": "ev-electric-services",
+  "domain": "https://evelectric.pro",
+  "wp_user": "oliver",
+  "backup_dir": "~/workspace/backups/ev-electric-services/surgical",
+  "validate_jsonld": true,
+
+  "edits": [
+    {
+      "name": "sameAs += Nextdoor (LocalBusiness, homepage)",
+      "_why": "Operator confirmed the URL from his own browser on 2026-09-04. Nextdoor's robots.txt blocks automated verification, so this rests on that confirmation — if the page ever 404s, remove it: a dead URL in sameAs is a negative signal.",
+      "_scope_note": "This only touches the LocalBusiness node, which lives in page content. The Organization node's sameAs lives in AIOSEO -> Social Networks and is NOT reachable from here — add Nextdoor there by hand.",
+      "find": "\"https://www.hotfrog.com/company/f885518f8675e27803a0e5ab8d29ff56\"]",
+      "replace": "\"https://www.hotfrog.com/company/f885518f8675e27803a0e5ab8d29ff56\", \"https://nextdoor.com/page/ev-electric-services-fairfax-va/\"]",
+      "regex": false,
+      "slugs": ["home"],
+      "expect": "1",
+      "skip_if_present": "nextdoor.com/page/ev-electric-services-fairfax-va"
+    },
+
+    {
+      "name": "reviewCount 105 -> 106 (spaced JSON)",
+      "_why": "wp_rule_sweep on 2026-08-25 found the number HAND-TYPED on 55 pages and the shortcodes on zero. Sitewide by design — page 8 alone was never the whole problem.",
+      "find": "\"reviewCount\": \"105\"",
+      "replace": "\"reviewCount\": \"106\"",
+      "regex": false,
+      "slugs": "*",
+      "expect": "*"
+    },
+    {
+      "name": "reviewCount 105 -> 106 (minified JSON)",
+      "find": "\"reviewCount\":\"105\"",
+      "replace": "\"reviewCount\":\"106\"",
+      "regex": false,
+      "slugs": "*",
+      "expect": "*"
+    },
+    {
+      "name": "reviewCount 105 -> 106 (unquoted integer)",
+      "find": "\"reviewCount\": 105",
+      "replace": "\"reviewCount\": 106",
+      "regex": false,
+      "slugs": "*",
+      "expect": "*"
+    }
+  ],
+
+  "forbid_after": [
+    "\"reviewCount\": \"105\"",
+    "\"reviewCount\":\"105\"",
+    "\"reviewCount\": 105"
+  ],
+
+  "_pending_needs_dump_first": [
+    {
+      "_instruction": "Run --dump home, open dump-home-8.html, search for 'Copyright'. Paste the EXACT string into find/replace below, then move this object up into 'edits'. Do NOT guess it — a wrong string aborts the whole run.",
+      "name": "footer copyright -> canonical name",
+      "find": "PASTE THE EXACT STRING FROM THE DUMP",
+      "replace": "Copyright © EV-Electric Services 2026",
+      "regex": false,
+      "slugs": "*",
+      "expect": ">=1",
+      "skip_if_present": "Copyright © EV-Electric Services 2026",
+      "_caveat": "If 'Copyright' does NOT appear in the dump, the footer is theme/Elementor-template output, not page content. It is then NOT editable from this script — see the README, Site Identity section."
+    }
+  ]
+}

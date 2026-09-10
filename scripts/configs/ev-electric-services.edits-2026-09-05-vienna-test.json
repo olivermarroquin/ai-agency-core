@@ -1,0 +1,32 @@
+{
+  "_description": "2026-09-05 — single-page live test of the SERP-intent pattern. Retarget /panel-upgrade-vienna-va/ (WP page ID 6167) toward local-commercial phrasing, per Oliver's approval 2026-09-05. See 05_shared-intelligence/serp-intent-diagnostics/ for the evidence this is testing, and the ev-electric-services execution log dated 2026-08-31 (2026-09-05 entry) for the full run order.",
+  "_run": [
+    "cd ~/workspace/repos/ai-agency-core/scripts",
+    "python3 wp_page_snapshot.py doctor ev-electric-services   # confirm network + auth before anything else",
+    "python3 wp_page_snapshot.py backup ev-electric-services 6167      # REAL backup first",
+    "python3 wp_surgical_replace.py --config configs/ev-electric-services.edits-2026-09-05-vienna-test.json --dump panel-upgrade-vienna-va",
+    "# confirm the dumped H1 still reads exactly 'Panel Upgrade in Vienna, VA' before trusting the find string below",
+    "python3 wp_surgical_replace.py --config configs/ev-electric-services.edits-2026-09-05-vienna-test.json",
+    "python3 wp_surgical_replace.py --config configs/ev-electric-services.edits-2026-09-05-vienna-test.json --apply",
+    "then call the keelworks/v1/aioseo-meta/6167 bridge route separately for the title (not covered by this config — AIOSEO title lives in a DB table, not post_content)"
+  ],
+
+  "client_slug": "ev-electric-services",
+  "domain": "https://evelectric.pro",
+  "wp_user": "oliver",
+  "backup_dir": "~/workspace/backups/ev-electric-services/surgical",
+  "validate_jsonld": true,
+
+  "edits": [
+    {
+      "name": "Vienna panel-upgrade H1: add 'Electrician Near Me' local-commercial phrasing",
+      "_why": "Testing whether retargeting a losing page's H1 toward local-commercial phrasing (the SERP-intent pattern documented in 05_shared-intelligence/serp-intent-diagnostics/) moves real rankings. This page was chosen because it has zero clicks at position 70+ — nothing to lose if it drops further, and any upward movement will be a clean, readable signal.",
+      "find": "Panel Upgrade in Vienna, VA",
+      "replace": "Panel Upgrade Electrician Near Me in Vienna, VA",
+      "regex": false,
+      "slugs": ["panel-upgrade-vienna-va"],
+      "expect": "1",
+      "skip_if_present": "Panel Upgrade Electrician Near Me in Vienna, VA"
+    }
+  ]
+}

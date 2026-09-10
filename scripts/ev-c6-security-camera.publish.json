@@ -1,0 +1,13 @@
+{
+  "client_slug": "ev-electric-services",
+  "domain": "https://evelectric.pro",
+  "wp_user": "oliver",
+  "pages": [
+    {
+      "slug": "security-camera-installation",
+      "draft_path": "/Users/olivermarroquin/workspace/second-brain/04_projects/clients/_active/ev-electric-services/drafts/c6-security-camera-installation-draft-v10-2026-08-25.html",
+      "verify_string": "Who installs security cameras, and what changes with each",
+      "wp_id": 6863
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "slug": "duplicate-title",
+  "slug_es": "titulo-duplicado",
+  "name": "Duplicate Title",
+  "name_es": "Título duplicado",
+  "same_day": false,
+  "schema_service_type": "Duplicate vehicle title service",
+  "summary": "Lost, stolen, or damaged title? We file your Maryland duplicate correctly so you can sell, transfer, or register without delays.",
+  "summary_es": "¿Título perdido, robado o dañado? Tramitamos tu duplicado de Maryland correctamente para que puedas vender, transferir o registrar sin demoras.",
+  "what_it_is": "A duplicate title replaces the original and voids it. It's required before you can sell or transfer a vehicle whose title is missing — and it's also the fix for several stuck-paperwork situations.",
+  "what_it_is_es": "El título duplicado reemplaza al original y lo anula. Es necesario antes de vender o transferir un vehículo cuyo título se perdió — y también es la solución para varios casos de papeleo trabado.",
+  "documents_checklist": [
+    {"en": "Valid ID matching the owner on record", "es": "Identificación válida que coincida con el dueño registrado"},
+    {"en": "Vehicle info (plate or VIN)", "es": "Información del vehículo (placa o VIN)"},
+    {"en": "Lien release, if a paid-off lien still shows", "es": "Liberación del lien, si todavía aparece un lien ya pagado"}
+  ],
+  "process_steps": [
+    {"title_en": "Verify ownership", "title_es": "Verificamos la propiedad", "body_en": "We confirm what the MVA record shows before filing — this catches lien and name-mismatch surprises early.", "body_es": "Confirmamos qué muestra el récord de la MVA antes de presentar — así detectamos sorpresas de liens o nombres a tiempo."},
+    {"title_en": "File the duplicate", "title_es": "Presentamos el duplicado", "body_en": "Application prepared and submitted the same visit.", "body_es": "Solicitud preparada y enviada en la misma visita."},
+    {"title_en": "Title arrives", "title_es": "Llega el título", "body_en": "Your new title comes by mail; if you're selling, we can line up the transfer for when it lands.", "body_es": "Tu título nuevo llega por correo; si vas a vender, dejamos lista la transferencia para cuando llegue."}
+  ],
+  "fees_note": "MVA duplicate-title fee + our service fee. Quoted upfront.",
+  "fees_note_es": "Tarifa de la MVA por duplicado + nuestra tarifa de servicio. Cotizado desde el principio.",
+  "common_problems": [
+    {"problem_en": "Out-of-state title lost while living in MD", "problem_es": "Título de otro estado perdido viviendo en MD", "fix_en": "Different route (duplicate from the issuing state, or MD title path) — we map it for you.", "fix_es": "Es otra ruta (duplicado del estado emisor, o camino al título de MD) — te la trazamos."},
+    {"problem_en": "Owner on record is deceased", "problem_es": "El dueño registrado falleció", "fix_en": "Inherited-vehicle transfers need specific documents — we tell you exactly which for your case.", "fix_es": "Las transferencias por herencia requieren documentos específicos — te decimos exactamente cuáles para tu caso."}
+  ],
+  "faqs": [
+    {"q_en": "Can I sell my car while the duplicate is in process?", "q_es": "¿Puedo vender mi carro mientras el duplicado está en proceso?", "a_en": "You need the title in hand to assign it to a buyer — we help you time the sale correctly.", "a_es": "Necesitas el título en mano para asignarlo al comprador — te ayudamos a coordinar la venta correctamente."},
+    {"q_en": "The old title showed a lien I already paid.", "q_es": "El título viejo mostraba un lien que ya pagué.", "a_en": "Bring any payoff proof you have; we help you obtain the lien release so the duplicate comes out clean.", "a_es": "Trae cualquier prueba de pago que tengas; te ayudamos a conseguir la liberación del lien para que el duplicado salga limpio."}
+  ],
+  "cta_hook": "Bring your ID and the plate or VIN — we can start the ownership check the same visit.",
+  "cta_hook_es": "Trae tu identificación y la placa o el VIN — podemos empezar la verificación de propiedad en la misma visita.",
+  "_facts_verified": "MVTA Apr-2026 MVA snapshot; duplicate-title fee amount NOT hardcoded (verify current fee at authoring)"
+}

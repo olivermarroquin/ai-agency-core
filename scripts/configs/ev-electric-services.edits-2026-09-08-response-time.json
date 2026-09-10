@@ -1,0 +1,22 @@
+{
+  "_description": "EV-Electric Services — 2026-09-08 emergency page response-time reconciliation. Meta description 45-min -> confirmed number; body edit only if needed.",
+  "_run": [
+    "cd ~/workspace/repos/ai-agency-core/scripts",
+    "python3 wp_page_snapshot.py backup ev-electric-services 6547",
+    "python3 wp_surgical_replace.py --config configs/ev-electric-services.edits-2026-09-08-response-time.json --dump emergency-electrician-fairfax-va",
+    "python3 wp_surgical_replace.py --config configs/ev-electric-services.edits-2026-09-08-response-time.json",
+    "python3 wp_surgical_replace.py --config configs/ev-electric-services.edits-2026-09-08-response-time.json --apply",
+    "then: LiteSpeed Cache -> Toolbox -> Purge All",
+    "then: python3 wp_rule_sweep.py --config configs/ev-electric-services.rules.json"
+  ],
+
+  "client_slug": "ev-electric-services",
+  "domain": "https://evelectric.pro",
+  "wp_user": "oliver",
+  "backup_dir": "~/workspace/backups/ev-electric-services/surgical",
+  "validate_jsonld": true,
+
+  "edits": [],
+
+  "_pending_awaiting_confirmed_number": "Oliver is confirming the response-time figure with Ahmad. Once confirmed, add the body edit here if the number differs from what's already in the body ('typically within 10 to 15 minutes for most neighborhoods'). If Ahmad confirms 10-15 min, body needs no edit — only the meta description (AIOSEO bridge, Step 3) changes."
+}

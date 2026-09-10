@@ -1,0 +1,36 @@
+{
+  "slug": "same-day-registration-renewal",
+  "slug_es": "registracion-mismo-dia",
+  "name": "Same-Day Registration & Renewal",
+  "name_es": "Registración y renovación el mismo día",
+  "same_day": true,
+  "schema_service_type": "Vehicle registration service",
+  "summary": "Register or renew your vehicle and walk out the same day with tags and stickers in hand — no MVA lines.",
+  "summary_es": "Registra o renueva tu vehículo y sal el mismo día con placas y stickers en mano — sin filas de la MVA.",
+  "what_it_is": "As an authorized tag & title service, we process your Maryland registration or renewal directly, print your stickers, and hand you your plates in one visit.",
+  "what_it_is_es": "Como servicio autorizado de placas y títulos, procesamos tu registración o renovación de Maryland directamente, imprimimos tus stickers y te entregamos tus placas en una sola visita.",
+  "documents_checklist": [
+    {"en": "Vehicle title (or current registration card for renewals)", "es": "Título del vehículo (o tarjeta de registración actual para renovaciones)"},
+    {"en": "Valid ID", "es": "Identificación válida"},
+    {"en": "Active Maryland insurance", "es": "Seguro de Maryland activo"},
+    {"en": "Maryland safety inspection certificate (used vehicles — valid 90 days)", "es": "Certificado de inspección de seguridad de Maryland (vehículos usados — válido 90 días)", "note": "first-time registration of a used vehicle"}
+  ],
+  "process_steps": [
+    {"title_en": "Call or walk in", "title_es": "Llama o visítanos", "body_en": "Tell us your case — we confirm your exact document list before you come.", "body_es": "Cuéntanos tu caso — te confirmamos la lista exacta de documentos antes de venir."},
+    {"title_en": "We process with the MVA", "title_es": "Procesamos con la MVA", "body_en": "We handle the filing, taxes, and fees on the spot.", "body_es": "Hacemos el trámite, los impuestos y las tarifas en el momento."},
+    {"title_en": "Drive out registered", "title_es": "Sal registrado", "body_en": "Plates and stickers in hand, same day in most cases.", "body_es": "Placas y stickers en mano, el mismo día en la mayoría de los casos."}
+  ],
+  "fees_note": "MVA registration fees vary by vehicle class and weight, plus our service fee. We quote your clear total before we start — no surprises.",
+  "fees_note_es": "Las tarifas de la MVA varían según la clase y el peso del vehículo, más nuestra tarifa de servicio. Te damos el total claro antes de empezar — sin sorpresas.",
+  "common_problems": [
+    {"problem_en": "Registration suspended for an insurance lapse", "problem_es": "Registración suspendida por falta de seguro", "fix_en": "We help you clear the insurance issue with the MVA and re-register.", "fix_es": "Te ayudamos a aclarar el tema del seguro con la MVA y volver a registrar."},
+    {"problem_en": "Lost renewal notice", "problem_es": "Perdiste el aviso de renovación", "fix_en": "No problem — we can process the renewal from your plate and ID.", "fix_es": "No hay problema — procesamos la renovación con tu placa e identificación."}
+  ],
+  "faqs": [
+    {"q_en": "Do I really leave the same day?", "q_es": "¿De verdad salgo el mismo día?", "a_en": "For most registrations, renewals, and stickers, yes — arrive with your documents and leave with plates in hand.", "a_es": "En la mayoría de registraciones, renovaciones y stickers, sí — llega con tus documentos y sal con placas en mano."},
+    {"q_en": "Can I renew for 1 or 2 years?", "q_es": "¿Puedo renovar por 1 o 2 años?", "a_en": "Maryland registrations run on two-year cycles for most vehicle classes; we'll confirm your options when you call.", "a_es": "Las registraciones de Maryland funcionan en ciclos de dos años para la mayoría de clases; te confirmamos tus opciones cuando llames."}
+  ],
+  "cta_hook": "Call before you come — we'll confirm your exact document list so it's one trip, not three.",
+  "cta_hook_es": "Llama antes de venir — te confirmamos tu lista exacta de documentos para que sea una sola vuelta.",
+  "_facts_verified": "MVTA Apr-2026 MVA info-page snapshot; re-verify on mva.maryland.gov at authoring"
+}
