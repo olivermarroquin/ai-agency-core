@@ -87,7 +87,8 @@ def load_gsc_access_token(config: dict[str, Any] | None = None) -> tuple[str, Op
             "  1. Place service account JSON at automation/secrets/gsc-sa-<client>.json\n"
             "  2. Run: gcloud auth application-default login "
             "--scopes=https://www.googleapis.com/auth/cloud-platform,"
-            "https://www.googleapis.com/auth/indexing\n"
+            "https://www.googleapis.com/auth/indexing,"
+            "https://www.googleapis.com/auth/webmasters\n"
             f"(underlying error: {e})"
         ) from e
 
@@ -133,7 +134,8 @@ def verify_gsc_credentials(config: dict[str, Any] | None = None) -> tuple[bool, 
             "  1. Place service account JSON at automation/secrets/gsc-sa-<client>.json\n"
             "  2. Run: gcloud auth application-default login \\\n"
             "    --scopes=https://www.googleapis.com/auth/cloud-platform,"
-            "https://www.googleapis.com/auth/indexing\n"
+            "https://www.googleapis.com/auth/indexing,"
+            "https://www.googleapis.com/auth/webmasters\n"
             f"(underlying error: {e})"
         )
 
@@ -145,7 +147,8 @@ def verify_gsc_credentials(config: dict[str, Any] | None = None) -> tuple[bool, 
             "Re-authenticate:\n"
             "  gcloud auth application-default login \\\n"
             "    --scopes=https://www.googleapis.com/auth/cloud-platform,"
-            "https://www.googleapis.com/auth/indexing\n"
+            "https://www.googleapis.com/auth/indexing,"
+            "https://www.googleapis.com/auth/webmasters\n"
             f"(underlying error: {e})"
         )
 

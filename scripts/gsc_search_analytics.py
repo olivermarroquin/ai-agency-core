@@ -7,8 +7,13 @@ Supports two auth modes (tried in order):
   2. **Application Default Credentials (ADC)** (user-level, expires) — falls
      back to `google.auth.default()` if no service account is configured.
 
-Mirrors the auth pattern in gsc_indexing.py but uses the
-webmasters.readonly scope for read-only Search Analytics access.
+Mirrors the auth pattern in gsc_indexing.py. Uses the full `webmasters`
+scope (NOT webmasters.readonly) so one ADC login covers every GSC script
+on this account (search analytics, indexing, URL inspection) without a
+separate re-auth per script. Corrected 2026-09-10 — this scope constant
+used to say webmasters.readonly, which does not match the account's
+proven working login command (sop-gsc-indexing-api-setup.md Step 4) and
+caused a bad re-auth suggestion. See that SOP for the exact commands.
 
 Public API
 ----------
@@ -33,7 +38,7 @@ except ImportError:
     )
     sys.exit(2)
 
-GSC_SEARCH_ANALYTICS_SCOPE = "https://www.googleapis.com/auth/webmasters.readonly"
+GSC_SEARCH_ANALYTICS_SCOPE = "https://www.googleapis.com/auth/webmasters"  # full scope, not readonly — see sop-gsc-indexing-api-setup.md Step 4
 GSC_SEARCH_ANALYTICS_ENDPOINT = (
     "https://searchconsole.googleapis.com/webmasters/v3"
     "/sites/{property_url}/searchAnalytics/query"
@@ -91,9 +96,11 @@ def _load_access_token(config: dict[str, Any] | None = None) -> tuple[str, Optio
         raise RuntimeError(
             "No GSC credentials found. Options:\n"
             "  1. Place service account JSON at automation/secrets/gsc-sa-<client>.json\n"
-            "  2. Run: gcloud auth application-default login \\\n"
-            "     --scopes=https://www.googleapis.com/auth/cloud-platform,"
-            "https://www.googleapis.com/auth/webmasters.readonly\n"
+            "  2. FULL ADC reauth — run BOTH commands (a fresh login WIPES scopes AND the\n"
+            "     quota project; skipping either causes a 403 later — see\n"
+            "     sop-gsc-indexing-api-setup.md Steps 4-5):\n"
+            "     gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/indexing,https://www.googleapis.com/auth/webmasters\n"
+            "     gcloud auth application-default set-quota-project keelworks-seo-automation\n"
             f"(underlying error: {e})"
         ) from e
 
@@ -215,16 +222,19 @@ def query_search_analytics(
     if resp.status_code == 401:
         raise RuntimeError(
             f"GSC Search Analytics 401 — credentials expired or invalid.\n"
-            f"Re-authenticate: gcloud auth application-default login \\\n"
-            f"  --scopes=https://www.googleapis.com/auth/cloud-platform,"
-            f"https://www.googleapis.com/auth/webmasters.readonly\n"
+            f"Re-authenticate (run BOTH — see sop-gsc-indexing-api-setup.md Steps 4-5):\n"
+            f"  gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/indexing,https://www.googleapis.com/auth/webmasters\n"
+            f"  gcloud auth application-default set-quota-project keelworks-seo-automation\n"
             f"Response: {resp.text[:300]}"
         )
     if resp.status_code == 403:
         raise RuntimeError(
             f"GSC Search Analytics 403 — access denied.\n"
-            f"Confirm Oliver has access to property '{property_url}' and "
-            f"quota project is set (x-goog-user-project: {quota_project_id}).\n"
+            f"Most common cause: incomplete ADC reauth. Run BOTH (fresh login wipes both):\n"
+            f"  gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/indexing,https://www.googleapis.com/auth/webmasters\n"
+            f"  gcloud auth application-default set-quota-project keelworks-seo-automation\n"
+            f"Also confirm Oliver has access to property '{property_url}' "
+            f"(current x-goog-user-project: {quota_project_id}).\n"
             f"Response: {resp.text[:300]}"
         )
     if resp.status_code != 200:
