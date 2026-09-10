@@ -1,11 +1,11 @@
 # scaffold-service-data.py
 
-Builds `data/services/<slug>.json` from a Tier-1 service brief (Phase 2a output). The resulting JSON is what `scaffold-core-30-page.py` reads when it renders Core 30 pages for the service across cities.
+Builds `data/services/<slug>.json` from a Tier-1 service brief (Phase 2a output). The resulting JSON is what `scaffold-page.py` reads when it renders Core 30 pages for the service across cities.
 
 **Sibling scripts in the same Phase 3 toolkit:**
 
 - [`scaffold-client-data.py`](README-scaffold-client-data.md) — Phase 3c. Produces `data/client-<slug>.json` from a Phase 2d client-fact brief.
-- `scaffold-core-30-page.py` — the downstream consumer. Reads the service JSON produced here plus a client + city JSON, renders a Core 30 page.
+- `scaffold-page.py` — the downstream consumer. Reads the service JSON produced here plus a client + city JSON, renders a Core 30 page.
 
 ## What it does
 
@@ -114,7 +114,7 @@ A scaffolded service JSON is rarely shippable as-is. The expected workflow:
 2. **Open the data file.** Grep for `FILL:` — every match is a string the operator (or a follow-on prose-writer step) needs to replace.
 3. **For each FILL, read the cited brief section.** The hint quotes the section number (§4.5A, §7, §6, etc.). Use the brief as the source of truth for the prose direction.
 4. **Add per-service entries to each city file.** Open each `data/cities/<city>.json` and add an entry under `quick_ref_localized_items.<new-service>`, `most_common_problem_paragraph.<new-service>`, and `specific_problems_neighborhood_phrase.<new-service>`. Without these, the rendered page will have empty sections (with `<!-- MISSING: ... -->` comments).
-5. **Render with `scaffold-core-30-page.py --dry-run`** to confirm the JSON parses and the page assembles.
+5. **Render with `scaffold-page.py --dry-run`** to confirm the JSON parses and the page assembles.
 6. **Render for real** once the FILL prose is in.
 
 ## Validation
@@ -129,7 +129,8 @@ External (run after the scaffold to validate the rendered page):
 ```bash
 # Render the page
 export GOOGLE_MAPS_EMBED_API_KEY="..."
-python3 scaffold-core-30-page.py \
+python3 scaffold-page.py \
+    --client  ev-electric-services \
     --service panel-upgrade \
     --city    vienna-va \
     --position 2 \
@@ -175,7 +176,7 @@ Expected. FAQ answers are FILL placeholders by design — the brief carries answ
 
 ### `WARNING: produced JSON has top-level keys NOT in template`
 
-A new field was added to `build_service_data` but the template (default `troubleshooting.json`) doesn't carry it. Either update the template or remove the new field. Either way, `scaffold-core-30-page.py` will need a corresponding extractor in `build_context()` for the new field to actually render.
+A new field was added to `build_service_data` but the template (default `troubleshooting.json`) doesn't carry it. Either update the template or remove the new field. Either way, `scaffold-page.py` will need a corresponding extractor in `build_context()` for the new field to actually render.
 
 ### Existing `data/services/<slug>.json` not overwritten
 
@@ -191,5 +192,5 @@ Every FILL placeholder hint and every generated comment follows the plain-langua
 - Example brief: `~/workspace/second-brain/05_shared-intelligence/research-briefs/services/panel-upgrade.md`
 - Blueprint: `~/workspace/second-brain/05_shared-intelligence/blueprints/client-seo-onboarding-automation.md` (Phase 3a)
 - Reference JSON: `data/services/troubleshooting.json`
-- Downstream consumer: [`README-scaffold-core-30-page.md`](README-scaffold-core-30-page.md)
+- Downstream consumer: [`README-scaffold-page.md`](README-scaffold-page.md)
 - Sibling Phase 3 scaffolder: [`README-scaffold-client-data.md`](README-scaffold-client-data.md)

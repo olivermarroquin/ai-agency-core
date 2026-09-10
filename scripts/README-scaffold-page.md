@@ -1,4 +1,6 @@
-# scaffold-core-30-page.py
+# scaffold-page.py
+
+> **Renamed 2026-09-10.** This script was `scaffold-core-30-page.py` as of the 2026-06-19 zero-hardcoded audit; it was later renamed to `scaffold-page.py` when it became the unified, profile-driven scaffolder (BTF wave, commit `12fd2bf`). Fixed by the SOP command-consistency audit — see `_meta/analysis/audit-sop-command-consistency-2026-09-10.md`.
 
 Generates a finished Core 30 page draft from data files. Replaces the chat-side authoring of `draft-vN-WP-WRAPPED.html` for any new (service, city) page after page 1's design has been locked.
 
@@ -38,7 +40,8 @@ That's it. The scaffolder pulls everything else from local data files.
 ```bash
 export GOOGLE_MAPS_EMBED_API_KEY="AIzaSyD…"
 cd ~/workspace/repos/ai-agency-core/scripts
-python3 scaffold-core-30-page.py \
+python3 scaffold-page.py \
+    --client  ev-electric-services \
     --service troubleshooting \
     --city    mclean-va \
     --position 7
@@ -58,7 +61,8 @@ Then review the draft, optionally polish city-specific phrasing in the hero subh
 ### Dry run (verify substitutions without writing)
 
 ```bash
-python3 scaffold-core-30-page.py \
+python3 scaffold-page.py \
+    --client  ev-electric-services \
     --service troubleshooting \
     --city    mclean-va \
     --position 7 \
@@ -70,14 +74,14 @@ Prints the rendered HTML and markdown sizes, plus the substitution context. No f
 ### Different client
 
 ```bash
-python3 scaffold-core-30-page.py \
+python3 scaffold-page.py \
     --service plumbing-repair \
     --city    fairfax-va \
     --client  sh-contracting \
     --position 1
 ```
 
-Default client is `ev-electric-services`. Override with `--client <slug>`. Requires `data/client-<slug>.json` to exist.
+`--client` is **required** (no default — corrected 2026-09-10; an earlier version of this script defaulted to `ev-electric-services`, but `--client` became `required=True` per `_audit-zero-hardcoded-2026-06-19.md`). Requires `data/client-<slug>.json` to exist.
 
 ## Data model
 
@@ -137,14 +141,14 @@ Some fields are nested by service (e.g. `quick_ref_localized_items`, `most_commo
 1. Copy `data/cities/vienna-va.json` → `data/cities/<new-slug>.json`.
 2. Update: `slug`, `name`, `name_with_state`, `county` (if different), `distance_from_hq_phrase`, `geographic_anchor_paragraph`, `audience_descriptor`, `no_trip_charge_cities`, `neighborhoods`, `housing_patterns`, `other_areas_paragraph`.
 3. For each service the city will have a page for, add an entry under `quick_ref_localized_items`, `most_common_problem_paragraph`, and `specific_problems_neighborhood_phrase`. (Or leave them missing — the scaffolder will report MISSING with a clear instruction.)
-4. Run `scaffold-core-30-page.py --service <s> --city <new-slug> --position <N>`.
+4. Run `scaffold-page.py --client <client-slug> --service <s> --city <new-slug> --position <N>`.
 
 ## Adding a new service
 
 1. Copy `data/services/troubleshooting.json` → `data/services/<new-slug>.json`.
 2. Update everything inside — pricing, problem cards, process steps, FAQs, schema description, AIOSEO templates.
 3. For each existing city file, add the corresponding service entry under `quick_ref_localized_items`, `most_common_problem_paragraph`, and `specific_problems_neighborhood_phrase`. (City files have a per-service sub-dict for these — when you add a new service, you extend each city.)
-4. Run `scaffold-core-30-page.py --service <new-slug> --city <c> --position <N>`.
+4. Run `scaffold-page.py --client <client-slug> --service <new-slug> --city <c> --position <N>`.
 
 ## Adding a new client
 

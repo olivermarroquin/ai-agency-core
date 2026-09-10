@@ -271,6 +271,6 @@ partial coverage is fine — just add cities as you learn them.
 - [Skill: competitor-deep-research](~/workspace/skills/competitor-deep-research/SKILL.md) — the link-map mode that produces the synthesis this script consumes
 - [Synthesis: _synthesis-ev-electric](~/workspace/second-brain/05_shared-intelligence/research-briefs/link-maps/_synthesis-ev-electric.md) — the reference architecture
 - [Blueprint: client-seo-onboarding-automation](~/workspace/second-brain/05_shared-intelligence/blueprints/client-seo-onboarding-automation.md) — Phase 4b context
-- `scaffold-core-30-page.py` — produces the draft HTML this script edits
+- `scaffold-page.py` — produces the draft HTML this script edits
 - `publish-core-30-page.py` — pushes the edited draft to WordPress
 - `data/services/<slug>.json` — `related_cards` data source for Axis B

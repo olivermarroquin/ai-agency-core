@@ -49,7 +49,7 @@ image files). They work unchanged for Next.js, static sites, or any future platf
 ### Content generation layer
 | Component | Artifact | Notes |
 |-----------|----------|-------|
-| `scaffold-core-30-page.py` | `draft-v1.md` + `draft-v1-WP-WRAPPED.html` | Generates page content from data. The `.md` is platform-independent. The `-WP-WRAPPED.html` is a WP-specific wrapper — see below. |
+| `scaffold-page.py` | `draft-v1.md` + `draft-v1-WP-WRAPPED.html` | Generates page content from data. The `.md` is platform-independent. The `-WP-WRAPPED.html` is a WP-specific wrapper — see below. |
 | `bulk-scaffold-pages.py` | Batch of above | Orchestrates multi-page scaffold. Platform-independent orchestration. |
 | `insert-internal-links.py` | Internal link wiring | Works on HTML content. Platform-independent (links are relative paths). |
 | `audit-published-links.py` | Link integrity report | Platform-independent verification. |
@@ -110,7 +110,7 @@ conventions. Each needs a Next.js counterpart for the website-factory.
 ### Content wrapper
 | Component | WP dependency | Next.js equivalent |
 |-----------|---------------|-------------------|
-| `scaffold-core-30-page.py` `-WP-WRAPPED.html` output | Elementor/wp:html Custom HTML block wrappers, WP-specific CSS classes | **React component** — the page template becomes a `.tsx` component consuming the same data JSON; the `draft-v1.md` content is universal |
+| `scaffold-page.py` `-WP-WRAPPED.html` output | Elementor/wp:html Custom HTML block wrappers, WP-specific CSS classes | **React component** — the page template becomes a `.tsx` component consuming the same data JSON; the `draft-v1.md` content is universal |
 
 ## Migration strategy for Next.js website-factory
 

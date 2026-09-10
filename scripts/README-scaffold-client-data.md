@@ -8,7 +8,7 @@ needs to start scaffolding pages.
 
 Run once per new client and you get:
 
-1. **`data/client-<slug>.json`** — the data file `scaffold-core-30-page.py`
+1. **`data/client-<slug>.json`** — the data file `scaffold-page.py`
    reads for brand, owner, address, contact, review, area, and license fields.
    Same shape as the existing `data/client-ev-electric-services.json`.
 

@@ -4,7 +4,7 @@ Phase 3d of the [[client-seo-onboarding-automation]] roadmap. Reads a Core 30 pa
 
 **Sibling scripts in the same toolkit:**
 
-- [`scaffold-core-30-page.py`](README-scaffold-core-30-page.md) — runs upstream. Produces the `draft-v1.md` this script reads for page metadata.
+- [`scaffold-page.py`](README-scaffold-page.md) — runs upstream. Produces the `draft-v1.md` this script reads for page metadata.
 - [`organize-image-downloads.py`](README-generate-maps-iframe.md) — runs downstream. Moves Higgsfield outputs into the page folder once the operator has picked keepers.
 - [`wire-page-images.py`](README-wire-page-images.md) — runs further downstream. Wires the keeper images into the published HTML.
 
@@ -27,7 +27,17 @@ Phase 3d of the [[client-seo-onboarding-automation]] roadmap. Reads a Core 30 pa
 
 ## What it does NOT do
 
-- **Doesn't call Higgsfield.** Higgsfield has no stable public API as of 2026-05. The operator runs Higgsfield in-browser, pastes each prompt, picks the keeper, fills in the placeholders.
+- **Doesn't call Higgsfield** — but that is a limitation of *this script*, not of Higgsfield.
+  ⚠️ **CORRECTED 2026-08-25.** The old text here read *"Higgsfield has no stable public API as of
+  2026-05"* and that is **out of date**. A `higgsfield` CLI exists and is in use — see
+  `_scratch/gen-heroes-v2.sh` and `_scratch/gen-breaker-v3.sh`, which call
+  `higgsfield generate create nano_banana_2 --prompt "..." --aspect_ratio 4:3 --resolution 1k --wait --json`.
+  Higgsfield also ships an MCP & CLI surface. Auth is `hf auth login`; sessions expire, so any script
+  must preflight with `hf auth status` before generating.
+  **This script still only writes prompts.** Wiring it to the CLI is an open improvement.
+  *(Stale-doc cost, 2026-08-24: a Track C run reported "no API exists" to the operator on the strength
+  of this line plus a July memory note, and hand-authored a browser-paste workflow that already
+  existed as a script.)*
 - **Doesn't overwrite an existing log** unless `--overwrite` is passed. Mirrors the non-destructive default of the other Phase 3 scaffolders.
 - **Doesn't pick variants.** Variant selection stays a human-in-the-loop step. The script provides 3 ready-to-paste prompts; the operator does the picking.
 - **Doesn't run the downstream pipeline.** Use `organize-image-downloads.py` and `wire-page-images.py` once keepers are picked.
@@ -150,6 +160,6 @@ Per the [[client-seo-onboarding-automation]] blueprint, once Phase 5's `client-s
 
 - [[sop-ai-imagery-for-core-30-pages]] — the reusable SOP this script implements
 - [[client-seo-onboarding-automation]] — Phase 3d of the roadmap
-- [[scaffold-core-30-page|scaffold-core-30-page.py README]] — upstream sibling that produces `draft-v1.md`
+- [[scaffold-page|scaffold-page.py README]] — upstream sibling that produces `draft-v1.md`
 - [[wire-page-images|wire-page-images.py README]] — downstream sibling that wires keepers into HTML
 - [[organize-image-downloads|organize-image-downloads.py README]] — downstream sibling that organizes Higgsfield downloads

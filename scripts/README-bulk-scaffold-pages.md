@@ -1,10 +1,10 @@
 # bulk-scaffold-pages.py
 
-Scaffold many Core 30 pages in one run. Reads a client's `_build-order.md`, loops `scaffold-core-30-page.py` for every selected row, and reports a summary at the end. Skips publish, skips imagery — just produces the HTML + markdown drafts so a batch authoring session goes from "30 commands typed by hand" to one command.
+Scaffold many Core 30 pages in one run. Reads a client's `_build-order.md`, loops `scaffold-page.py` for every selected row, and reports a summary at the end. Skips publish, skips imagery — just produces the HTML + markdown drafts so a batch authoring session goes from "30 commands typed by hand" to one command.
 
 **Sibling scripts in the same toolkit:**
 
-- [`scaffold-core-30-page.py`](README-scaffold-core-30-page.md) — the per-page workhorse this script calls in a loop.
+- [`scaffold-page.py`](README-scaffold-page.md) — the per-page workhorse this script calls in a loop.
 - [`publish-core-30-page.py`](README-publish-core-30-page.md) — runs after scaffold, per-page.
 - [`wire-page-images.py`](README-wire-page-images.md) — the image pipeline that wires real Higgsfield images into the scaffolded drafts.
 
@@ -20,7 +20,7 @@ Scaffold many Core 30 pages in one run. Reads a client's `_build-order.md`, loop
 5. Pre-flight check for existing output folders:
    - With `--skip-existing` — flags existing folders as `SKIP (exists)`.
    - Without it — aborts the whole batch up front and lists the conflicts so the operator can decide.
-6. Calls `scaffold-core-30-page.py` for each remaining page as a subprocess. A failure on one page doesn't stop the batch; the reason gets captured and the batch continues.
+6. Calls `scaffold-page.py` for each remaining page as a subprocess. A failure on one page doesn't stop the batch; the reason gets captured and the batch continues.
 7. Prints a summary at the end: scaffolded, skipped, failed (with reasons).
 
 ## What it does NOT do
@@ -33,7 +33,7 @@ Scaffold many Core 30 pages in one run. Reads a client's `_build-order.md`, loop
 
 ## Setup
 
-Same environment as `scaffold-core-30-page.py`:
+Same environment as `scaffold-page.py`:
 
 1. Python 3.8+ (stdlib only).
 2. `GOOGLE_MAPS_EMBED_API_KEY` exported from your tier-3 vault (needed by `generate-maps-iframe.py`, which is called transitively per page).
@@ -171,7 +171,7 @@ The page wants a service you haven't authored a `data/services/<slug>.json` for 
 
 ### `KeyError: '<placeholder>'` (surfaced from inside a per-page subprocess)
 
-A service or city file references a placeholder the scaffolder's context dict doesn't include. The per-page failure printout points at which page hit it — go fix the data file or extend `build_context()` in `scaffold-core-30-page.py`.
+A service or city file references a placeholder the scaffolder's context dict doesn't include. The per-page failure printout points at which page hit it — go fix the data file or extend `build_context()` in `scaffold-page.py`.
 
 ## Typical batch authoring session
 
@@ -190,5 +190,5 @@ The bulk scaffolder doesn't change the per-page polish step — the value is rem
 
 - Phase doc: [`phase-4c-bulk-scaffold-pages.md`](../../../second-brain/_meta/handoffs/roadmap-client-seo-onboarding-automation/phase-4c-bulk-scaffold-pages.md)
 - Blueprint: [`client-seo-onboarding-automation.md`](../../../second-brain/05_shared-intelligence/blueprints/client-seo-onboarding-automation.md) — Phase 4c
-- Workhorse: [`scaffold-core-30-page.py`](README-scaffold-core-30-page.md)
+- Workhorse: [`scaffold-page.py`](README-scaffold-page.md)
 - Build-order example: `04_projects/clients/_active/ev-electric-services/website-archive/new/core-30/_build-order.md`

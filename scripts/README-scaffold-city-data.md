@@ -2,7 +2,7 @@
 
 Reads a Phase 2b city research brief plus zero or more Phase 2c
 service-by-city intersection briefs and produces a populated
-`data/cities/<slug>.json` data file that `scaffold-core-30-page.py`
+`data/cities/<slug>.json` data file that `scaffold-page.py`
 consumes when rendering a Core 30 page.
 
 ## What this script does
@@ -138,7 +138,7 @@ for each JSON field with the service slug bracketed in the row label.
 
 ## Symptoms voicing — the tricky bit
 
-The consumer `scaffold-core-30-page.py` reads `housing_patterns[].symptoms`
+The consumer `scaffold-page.py` reads `housing_patterns[].symptoms`
 as a single string per pattern (`c['symptoms']`), not as a dict keyed by
 service. That's the existing JSON shape.
 
@@ -204,5 +204,5 @@ intersection brief's consumption table.
 - Phase 2c template: `~/workspace/second-brain/05_shared-intelligence/research-briefs/_template-intersection-brief.md`
 - Blueprint (Phase 3b section): `~/workspace/second-brain/05_shared-intelligence/blueprints/client-seo-onboarding-automation.md`
 - Reference JSON shape: `data/cities/vienna-va.json`
-- Consumer: `scaffold-core-30-page.py` (see `build_context`, `render_quick_ref_items`, `render_pattern_cards`)
+- Consumer: `scaffold-page.py` (see `build_context`, `render_quick_ref_items`, `render_pattern_cards`)
 - Sibling scaffolder (style/pattern source): `scaffold-client-data.py`

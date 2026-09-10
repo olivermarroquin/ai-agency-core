@@ -153,5 +153,5 @@ Read the full docstring at the top of `refresh-cached-image.py` for the complete
 - [`sop-ai-imagery-for-core-30-pages.md`](../../../second-brain/05_shared-intelligence/workflows/workflow-marketing-seo-engagement/sops/sop-ai-imagery-for-core-30-pages.md) — the operator-facing imagery SOP.
 - [`sop-core-30-page-build.md`](../../../second-brain/05_shared-intelligence/workflows/workflow-marketing-seo-engagement/sops/sop-core-30-page-build.md) — the per-page operator procedure.
 - [`README-publish-core-30-page.md`](README-publish-core-30-page.md) — the downstream republish script.
-- [`README-scaffold-core-30-page.md`](README-scaffold-core-30-page.md) — the upstream page-generation script.
+- [`README-scaffold-page.md`](README-scaffold-page.md) — the upstream page-generation script.
 - [`blueprint-client-seo-onboarding-automation`](../../../second-brain/05_shared-intelligence/blueprints/client-seo-onboarding-automation.md) — the full roadmap this script is Phase 1 of.
