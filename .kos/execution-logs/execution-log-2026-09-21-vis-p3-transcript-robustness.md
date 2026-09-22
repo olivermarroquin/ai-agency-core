@@ -77,6 +77,8 @@ Retry loop fires, logs each attempt, exhausts correctly.
 
 **Worker deploy:** pending Gate #2 (operator runs `wrangler deploy` from `services/yt-transcript/`). Code change + local verification complete and counted as Task B delivered.
 
+> **DEPLOYED 2026-09-22 (operator, Gate #2 complete):** `wrangler deploy` succeeded — Uploaded yt-transcript (11.08 KiB), deployed to `https://yt-transcript.oliver-marroquin31217.workers.dev`. Wrangler re-auth via OAuth was required (prior token expired since the June deploy). The extended error taxonomy (`transcripts_not_available`, `rate_limited`, fixed `video_not_found`) is now LIVE. Phase 3 fully closed — no open items.
+
 ---
 
 ## Task C — typed failure (fetch_youtube_transcript.py)
