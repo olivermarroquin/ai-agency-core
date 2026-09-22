@@ -41,18 +41,37 @@ export default {
     } catch (err) {
       const message = err.message || String(err);
 
-      // Map known error types
+      // Map known error types.
+      // Error strings verified against youtube-transcript npm lib source (dist/esm/index.js):
+      //   YoutubeTranscriptDisabledError    → "Transcript is disabled on this video"
+      //   YoutubeTranscriptNotAvailableError → "No transcripts are available for this video"
+      //   YoutubeTranscriptVideoUnavailableError → "The video is no longer available"
+      //   YoutubeTranscriptTooManyRequestError   → "YouTube is receiving too many requests…captcha"
+      // Note: age-restricted content is not detectable via message sniffing — the InnerTube
+      // Android client path may bypass some age gates silently; when it does fail, it surfaces
+      // as fetch_error (undetectable without additional response context from the library).
       let status = 500;
       let errorType = 'fetch_error';
-      if (message.includes('disabled') || message.includes('Transcript is disabled')) {
+      if (message.includes('Transcript is disabled') || message.includes('disabled')) {
         status = 422;
         errorType = 'transcripts_disabled';
-      } else if (message.includes('not found') || message.includes('Video unavailable')) {
+      } else if (message.includes('No transcripts are available')) {
+        // YoutubeTranscriptNotAvailableError — no captions at all on this video
+        status = 422;
+        errorType = 'transcripts_not_available';
+      } else if (message.includes('no longer available') || message.includes('not found') || message.includes('Video unavailable')) {
+        // YoutubeTranscriptVideoUnavailableError throws "The video is no longer available"
         status = 404;
         errorType = 'video_not_found';
       } else if (message.includes('private')) {
+        // Legacy check — no current library error contains "private";
+        // kept for forward-compatibility with future library versions.
         status = 403;
         errorType = 'video_private';
+      } else if (message.includes('too many requests') || message.includes('captcha')) {
+        // YoutubeTranscriptTooManyRequestError — rate-limited / captcha challenge
+        status = 429;
+        errorType = 'rate_limited';
       }
 
       return Response.json(
